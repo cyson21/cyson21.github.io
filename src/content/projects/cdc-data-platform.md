@@ -39,16 +39,19 @@ signals:
     result: duplicate 1 suppressed
     tone: success
     source: test_lakehouse_smoke.py::test_multi_table_cdc_lineage_writes_joined_rows_with_source_metadata
+    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/feature/cdc-completion-gate/tools/tests/test_lakehouse_smoke.py
   - label: Source coverage
     expression: 4 source tables
     result: applicant · job · evaluation · agent task
     tone: warning
     source: test_lakehouse_smoke.py::test_multi_table_cdc_lineage_writes_joined_rows_with_source_metadata
+    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/feature/cdc-completion-gate/tools/tests/test_lakehouse_smoke.py
   - label: Lineage fixture
     expression: 2 rows → complete 1
     result: incomplete 경로 분리 보고
     tone: danger
     source: test_lakehouse_smoke.py::test_mart_lineage_validation_materializes_expected_rows_and_sql_refs
+    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/feature/cdc-completion-gate/tools/tests/test_lakehouse_smoke.py
 decisions:
   - title: Metadata-derived event ID
     choice: LSN과 source offset을 event ID, replay와 lineage의 기준으로 보존합니다.
@@ -70,7 +73,7 @@ protectionRules:
 codeEvidence:
   - symbol: CanonicalIngestService.ingestRawEnvelope
     displayPath: backend/src/main/java/com/example/cdcplatform/event/CanonicalIngestService.java
-    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/main/backend/src/main/java/com/example/cdcplatform/event/CanonicalIngestService.java
+    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/feature/cdc-completion-gate/backend/src/main/java/com/example/cdcplatform/event/CanonicalIngestService.java
     excerpt: |
       DebeziumEnvelope envelope = DebeziumEnvelope.parse(rawEnvelopeJson);
       CanonicalCdcEvent event = CanonicalCdcEvent.fromEnvelope(envelope);
@@ -79,10 +82,10 @@ codeEvidence:
     proves: Debezium 원본을 표준 이벤트로 정규화하면서 source offset을 보존하고 ledger 결과로 중복을 판정합니다.
     testName: CanonicalIngestServiceTest.duplicateRawEnvelopeDoesNotIncreaseCanonicalEventCount
     testPath: backend/src/test/java/com/example/cdcplatform/event/CanonicalIngestServiceTest.java
-    testUrl: https://github.com/cyson21/cdc-data-platform/blob/main/backend/src/test/java/com/example/cdcplatform/event/CanonicalIngestServiceTest.java
+    testUrl: https://github.com/cyson21/cdc-data-platform/blob/feature/cdc-completion-gate/backend/src/test/java/com/example/cdcplatform/event/CanonicalIngestServiceTest.java
   - symbol: ReplayRequestService.requestReplay
     displayPath: backend/src/main/java/com/example/cdcplatform/replay/ReplayRequestService.java
-    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/main/backend/src/main/java/com/example/cdcplatform/replay/ReplayRequestService.java
+    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/feature/cdc-completion-gate/backend/src/main/java/com/example/cdcplatform/replay/ReplayRequestService.java
     excerpt: |
       DlqEvent dlqEvent = dlqEventRepository.findById(dlqEventId)
           .orElseThrow(() -> new IllegalArgumentException("DLQ event not found: " + dlqEventId));
@@ -90,10 +93,10 @@ codeEvidence:
     proves: 존재하는 DLQ 이벤트만 replay 대상으로 허용하고 요청 추적용 고유 ID를 생성합니다.
     testName: ReplayRequestServiceTest.createsReplayRequestAndMarksDlqEventForReplay
     testPath: backend/src/test/java/com/example/cdcplatform/replay/ReplayRequestServiceTest.java
-    testUrl: https://github.com/cyson21/cdc-data-platform/blob/main/backend/src/test/java/com/example/cdcplatform/replay/ReplayRequestServiceTest.java
+    testUrl: https://github.com/cyson21/cdc-data-platform/blob/feature/cdc-completion-gate/backend/src/test/java/com/example/cdcplatform/replay/ReplayRequestServiceTest.java
   - symbol: IcebergJavaEngine.append
     displayPath: tools/iceberg-engine/src/main/java/com/example/cdcplatform/tools/IcebergJavaEngine.java
-    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/main/tools/iceberg-engine/src/main/java/com/example/cdcplatform/tools/IcebergJavaEngine.java
+    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/feature/cdc-completion-gate/tools/iceberg-engine/src/main/java/com/example/cdcplatform/tools/IcebergJavaEngine.java
     excerpt: |
       DataFile dataFile = writer.toDataFile();
       table.newAppend().appendFile(dataFile).commit();
@@ -102,7 +105,7 @@ codeEvidence:
     proves: Parquet data file을 Iceberg append로 commit하고 현재 snapshot을 다시 조회해 적재 이력을 남깁니다.
     testName: LakehouseSmokeTest.test_iceberg_engine_append_passes_insert_sql_and_writes_data_file
     testPath: tools/tests/test_lakehouse_smoke.py
-    testUrl: https://github.com/cyson21/cdc-data-platform/blob/main/tools/tests/test_lakehouse_smoke.py
+    testUrl: https://github.com/cyson21/cdc-data-platform/blob/feature/cdc-completion-gate/tools/tests/test_lakehouse_smoke.py
 verification:
   - layer: integration
     method: 중복 offset을 포함한 raw event 7건 fixture를 canonical ingest에 전달합니다.
@@ -120,8 +123,8 @@ next:
   - 현재 독립된 CDC runtime, control plane과 lakehouse를 연결한 뒤 종단 전달과 replay 지연을 별도 시나리오로 검증합니다.
 links:
   github: https://github.com/cyson21/cdc-data-platform
-  adr: https://github.com/cyson21/cdc-data-platform/tree/main/docs/adr
-  testReport: https://github.com/cyson21/cdc-data-platform/tree/main/tools/tests
+  design: https://github.com/cyson21/cdc-data-platform/blob/feature/cdc-completion-gate/docs/portfolio/one-pager.md
+  testReport: https://github.com/cyson21/cdc-data-platform/tree/feature/cdc-completion-gate/tools/tests
 visual:
   kind: diagram
   alt: PostgreSQL 변경이 Debezium, Kafka, Canonical ingest와 Iceberg·mart lineage로 이어지는 데이터 흐름 구성도

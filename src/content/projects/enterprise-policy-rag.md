@@ -41,16 +41,19 @@ signals:
     result: 다른 workspace 결과 0건
     tone: success
     source: test_retrieval_permissions.py::test_retrieval_allows_public_owner_and_department_documents_only
+    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_retrieval_permissions.py
   - label: 답변 거절
     expression: evidence 0 → answer null
     result: answer null · citations 0
     tone: warning
     source: test_answer_api.py::test_answer_api_refuses_when_no_evidence_is_available
+    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_answer_api.py
   - label: Citation guard
     expression: restricted citation → excluded
     result: 접근 범위 밖 문서 인용 제외
     tone: danger
     source: test_answer_api.py::test_answer_api_keeps_retrieval_permission_filter_for_citations
+    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_answer_api.py
 decisions:
   - title: Authorization first
     choice: 답변 생성 전에 접근 가능한 Chunk만 검색 후보로 제한합니다.

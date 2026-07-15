@@ -15,7 +15,9 @@ test('preview robots blocks crawling and sitemap exposes no URLs', async ({ requ
 test('custom 404 renders useful content and remains noindex', async ({ page }) => {
   const response = await page.goto('/missing-release-check/');
   expect(response?.status()).toBe(404);
-  await expect(page.locator('h1')).toContainText('검증 가능한 결과가 없습니다');
+  await expect(page.locator('h1')).toContainText('요청한 페이지를 찾을 수 없습니다');
+  await expect(page.getByRole('link', { name: '프로젝트' })).toHaveAttribute('href', '/projects/');
+  await expect(page.getByRole('link', { name: '웹 이력서' })).toHaveAttribute('href', '/resume/');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
 });
 

@@ -1,14 +1,17 @@
 ---
+import { ArrowUpRight } from '@lucide/astro';
+
 interface Props {
   label: string;
   expression: string;
   result: string;
   source?: string;
+  sourceUrl?: string | undefined;
   tone?: 'success' | 'warning' | 'danger';
   compact?: boolean;
 }
 
-const { label, expression, result, source, tone = 'success', compact = false } = Astro.props;
+const { label, expression, result, source, sourceUrl, tone = 'success', compact = false } = Astro.props;
 ---
 
 <article class:list={['signal', `signal--${tone}`, { 'signal--compact': compact }]}> 
@@ -18,7 +21,11 @@ const { label, expression, result, source, tone = 'success', compact = false } =
   </div>
   <p class="signal-expression">{expression}</p>
   <p class="signal-result">{result}</p>
-  {source && <p class="signal-source">근거: {source}</p>}
+  {source && (
+    sourceUrl
+      ? <a class="signal-source" href={sourceUrl} target="_blank" rel="noreferrer" aria-label={`${label} 검증 근거 새 창에서 열기`}>근거: <code>{source}</code><ArrowUpRight size={14} aria-hidden="true" /></a>
+      : <p class="signal-source">근거: <code>{source}</code></p>
+  )}
 </article>
 
 <style>
@@ -97,11 +104,20 @@ const { label, expression, result, source, tone = 'success', compact = false } =
   }
 
   .signal-source {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 5px;
     margin-top: auto;
     color: var(--ink-faint);
     font-family: var(--mono);
     font-size: 0.67rem;
     line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .signal-source code {
+    font: inherit;
   }
 
   @media (max-width: 620px) {

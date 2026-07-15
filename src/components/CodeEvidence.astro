@@ -1,4 +1,6 @@
 ---
+import { ArrowUpRight } from '@lucide/astro';
+
 interface Evidence {
   symbol: string;
   displayPath: string;
@@ -18,100 +20,39 @@ const { items } = Astro.props;
 ---
 
 <div class="evidence-list">
-  {items.map((item, index) => {
-    const uid = `evidence-${index}-${item.symbol.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`;
-    return (
-      <article class="evidence" data-evidence>
-        <header class="evidence-header">
-          <div>
-            <p class="evidence-count">Evidence {String(index + 1).padStart(2, '0')}</p>
-            <h3><code>{item.symbol}</code></h3>
-          </div>
-          <p class="evidence-path">{item.displayPath}</p>
-        </header>
-        <div class="evidence-tabs" role="tablist" aria-label={`${item.symbol} 근거 보기`}>
-          <button type="button" role="tab" id={`${uid}-tab-code`} aria-controls={`${uid}-panel-code`} aria-selected="true" data-evidence-tab="code">구현</button>
-          <button type="button" role="tab" id={`${uid}-tab-rule`} aria-controls={`${uid}-panel-rule`} aria-selected="false" tabindex="-1" data-evidence-tab="rule">보호하는 규칙</button>
-          <button type="button" role="tab" id={`${uid}-tab-test`} aria-controls={`${uid}-panel-test`} aria-selected="false" tabindex="-1" data-evidence-tab="test">연결 테스트</button>
+  {items.map((item, index) => (
+    <article class="evidence">
+      <header class="evidence-header">
+        <div>
+          <p class="evidence-count">코드 근거 {String(index + 1).padStart(2, '0')}</p>
+          <h3><code>{item.symbol}</code></h3>
         </div>
-        <div class="evidence-body">
-          <div role="tabpanel" id={`${uid}-panel-code`} aria-labelledby={`${uid}-tab-code`} data-evidence-panel="code" tabindex={item.sourceUrl ? undefined : 0}>
-            <pre data-overflow-code tabindex="0"><code>{item.excerpt}</code></pre>
-            {item.sourceUrl && <a class="evidence-link" href={item.sourceUrl} target="_blank" rel="noreferrer" aria-label={`${item.symbol} 구현 파일 GitHub에서 보기 (새 창에서 열림)`}>GitHub에서 파일 보기 ↗</a>}
-          </div>
-          <div role="tabpanel" id={`${uid}-panel-rule`} aria-labelledby={`${uid}-tab-rule`} data-evidence-panel="rule" tabindex="0" hidden>
-            <p class="evidence-callout"><span>PROVES</span>{item.proves}</p>
-          </div>
-          <div role="tabpanel" id={`${uid}-panel-test`} aria-labelledby={`${uid}-tab-test`} data-evidence-panel="test" tabindex={item.testUrl ? undefined : 0} hidden>
-            <p class="test-name"><span>TEST</span><code>{item.testName}</code></p>
-            <p class="test-path">{item.testPath}</p>
-            {item.testUrl && <a class="evidence-link" href={item.testUrl} target="_blank" rel="noreferrer" aria-label={`${item.testName} 테스트 GitHub에서 보기 (새 창에서 열림)`}>GitHub에서 테스트 보기 ↗</a>}
-          </div>
+        {item.sourceUrl
+          ? <a class="evidence-path" href={item.sourceUrl} target="_blank" rel="noreferrer" aria-label={`${item.symbol} 구현 파일 새 창에서 열기`}><code>{item.displayPath}</code><ArrowUpRight size={14} aria-hidden="true" /></a>
+          : <p class="evidence-path"><code>{item.displayPath}</code></p>}
+      </header>
+      <div class="evidence-body">
+        <div class="code-panel">
+          <p class="panel-label">구현</p>
+          <pre tabindex="0" aria-label={`${item.symbol} 코드 발췌`}><code>{item.excerpt}</code></pre>
         </div>
-      </article>
-    );
-  })}
+        <div class="evidence-context">
+          <section aria-labelledby={`rule-${index}`}>
+            <h4 id={`rule-${index}`}>보호하는 규칙</h4>
+            <p>{item.proves}</p>
+          </section>
+          <section aria-labelledby={`test-${index}`}>
+            <h4 id={`test-${index}`}>연결 테스트</h4>
+            <code class="test-name">{item.testName}</code>
+            {item.testUrl
+              ? <a class="test-path" href={item.testUrl} target="_blank" rel="noreferrer" aria-label={`${item.testName} 테스트 새 창에서 열기`}><code>{item.testPath}</code><ArrowUpRight size={14} aria-hidden="true" /></a>
+              : <code class="test-path">{item.testPath}</code>}
+          </section>
+        </div>
+      </div>
+    </article>
+  ))}
 </div>
-
-<script>
-  document.querySelectorAll<HTMLElement>('[data-evidence]').forEach((evidence) => {
-    const tabs = Array.from(evidence.querySelectorAll<HTMLButtonElement>('[data-evidence-tab]'));
-    const panels = Array.from(evidence.querySelectorAll<HTMLElement>('[data-evidence-panel]'));
-    const codeBlocks = Array.from(evidence.querySelectorAll<HTMLPreElement>('[data-overflow-code]'));
-
-    const syncPanelFocusability = () => {
-      panels.forEach((panel) => {
-        const hasFocusableChild = panel.querySelector('a[href], button:not([disabled]), [tabindex="0"]');
-        if (hasFocusableChild) panel.removeAttribute('tabindex');
-        else panel.tabIndex = 0;
-      });
-    };
-
-    const syncCodeOverflow = () => {
-      codeBlocks.forEach((block) => {
-        if (block.scrollWidth > block.clientWidth + 1) block.tabIndex = 0;
-        else block.removeAttribute('tabindex');
-      });
-      syncPanelFocusability();
-    };
-
-    const activate = (tab: HTMLButtonElement) => {
-      const id = tab.dataset.evidenceTab;
-      tabs.forEach((item) => {
-        const active = item === tab;
-        item.setAttribute('aria-selected', String(active));
-        item.tabIndex = active ? 0 : -1;
-      });
-      panels.forEach((panel) => {
-        panel.hidden = panel.dataset.evidencePanel !== id;
-      });
-    };
-
-    tabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => activate(tab));
-      tab.addEventListener('keydown', (event) => {
-        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-        event.preventDefault();
-        let nextIndex = index;
-        if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
-        if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
-        if (event.key === 'Home') nextIndex = 0;
-        if (event.key === 'End') nextIndex = tabs.length - 1;
-        const next = tabs[nextIndex];
-        if (next) {
-          activate(next);
-          next.focus();
-        }
-      });
-    });
-
-    const resizeObserver = new ResizeObserver(syncCodeOverflow);
-    codeBlocks.forEach((block) => resizeObserver.observe(block));
-    requestAnimationFrame(syncCodeOverflow);
-    document.fonts?.ready.then(syncCodeOverflow);
-    window.addEventListener('load', syncCodeOverflow, { once: true });
-  });
-</script>
 
 <style>
   .evidence-list {
@@ -128,14 +69,15 @@ const { items } = Astro.props;
 
   .evidence-header {
     display: grid;
-    grid-template-columns: minmax(0, 0.75fr) minmax(260px, 1fr);
+    grid-template-columns: minmax(0, 0.65fr) minmax(280px, 1fr);
     gap: 24px;
     align-items: end;
     padding: 20px;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid #46504b;
   }
 
-  .evidence-count {
+  .evidence-count,
+  .panel-label {
     margin-bottom: 5px;
     color: var(--blue);
     font-family: var(--mono);
@@ -145,12 +87,19 @@ const { items } = Astro.props;
   }
 
   .evidence-header h3 code {
+    overflow-wrap: anywhere;
     font-family: var(--mono);
     font-size: 0.94rem;
   }
 
   .evidence-path,
   .test-path {
+    display: inline-flex;
+    min-width: 0;
+    min-height: 44px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
     color: var(--ink-faint);
     font-family: var(--mono);
     font-size: 0.68rem;
@@ -158,105 +107,122 @@ const { items } = Astro.props;
     text-align: right;
   }
 
-  .evidence-tabs {
-    display: flex;
-    gap: 0;
-    padding-inline: 16px;
-    border-bottom: 1px solid var(--line);
-    background: var(--surface-muted);
-  }
-
-  .evidence-tabs button {
-    min-height: 43px;
-    padding: 9px 13px;
-    border: 0;
-    border-bottom: 3px solid transparent;
-    background: transparent;
-    color: var(--ink-soft);
-    font-size: 0.75rem;
-    font-weight: 800;
-    cursor: pointer;
-  }
-
-  .evidence-tabs button[aria-selected='true'] {
-    border-bottom-color: var(--blue);
-    color: var(--ink);
+  .evidence-path code,
+  .test-path code,
+  code.test-path {
+    overflow-wrap: anywhere;
+    font: inherit;
   }
 
   .evidence-body {
-    min-height: 215px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
     background: #101417;
-    color: #eef2f0;
+    color: #f5f8f6;
   }
 
-  .evidence-body [role='tabpanel'] {
+  .code-panel,
+  .evidence-context {
+    min-width: 0;
     padding: 20px;
   }
 
-  .evidence-body pre {
+  .code-panel {
+    border-right: 1px solid #46504b;
+  }
+
+  .code-panel .panel-label {
+    margin-bottom: 14px;
+    color: #8ab9ff;
+  }
+
+  pre {
     max-width: 100%;
     margin: 0;
     overflow-x: auto;
-    color: #dce7e2;
+    border-radius: 3px;
+    color: #e5eee9;
     font-family: var(--mono);
     font-size: 0.78rem;
     line-height: 1.68;
     white-space: pre;
   }
 
-  .evidence-link {
-    display: inline-block;
-    margin-top: 18px;
-    color: #91bcff;
-    font-size: 0.74rem;
-    font-weight: 800;
+  pre:focus-visible {
+    outline: 3px solid #ffcf70;
+    outline-offset: 5px;
+    background: #1c2420;
   }
 
-  .evidence-callout,
-  .test-name {
+  .evidence-context {
     display: grid;
-    gap: 12px;
-    max-width: 700px;
-    font-size: 1rem;
+    gap: 0;
+    align-content: start;
   }
 
-  .evidence-callout span,
-  .test-name span {
-    color: #65d6ac;
+  .evidence-context section {
+    display: grid;
+    gap: 10px;
+    padding-block: 4px 20px;
+  }
+
+  .evidence-context section + section {
+    padding-block: 20px 4px;
+    border-top: 1px solid #46504b;
+  }
+
+  .evidence-context h4 {
+    color: #72e0b6;
     font-family: var(--mono);
-    font-size: 0.65rem;
-    font-weight: 800;
+    font-size: 0.68rem;
   }
 
-  .test-name code {
+  .evidence-context p {
+    color: #e5eae7;
+    font-size: 0.88rem;
+  }
+
+  .test-name {
     overflow-wrap: anywhere;
+    color: #ffffff;
     font-family: var(--mono);
-    font-size: 0.84rem;
+    font-size: 0.78rem;
   }
 
-  .evidence-body .test-path {
-    margin-top: 14px;
-    color: #a9b2ae;
+  .evidence-context .test-path {
+    justify-content: flex-start;
+    color: #bfc9c4;
     text-align: left;
   }
 
-  @media (max-width: 680px) {
-    .evidence-header {
+  .evidence-context a:hover {
+    color: #a9cbff;
+  }
+
+  @media (max-width: 760px) {
+    .evidence-header,
+    .evidence-body {
       grid-template-columns: 1fr;
-      gap: 10px;
+    }
+
+    .evidence-header {
+      gap: 8px;
+      padding: 16px;
     }
 
     .evidence-path {
+      justify-content: flex-start;
       text-align: left;
     }
 
-    .evidence-tabs {
-      overflow-x: auto;
-      padding-inline: 8px;
+    .code-panel {
+      border-right: 0;
+      border-bottom: 1px solid #46504b;
     }
 
-    .evidence-tabs button {
-      flex: 1 0 auto;
+    .code-panel,
+    .evidence-context {
+      padding: 16px;
     }
   }
 </style>

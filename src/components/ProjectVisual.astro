@@ -27,7 +27,7 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join('에서 ')}
         href={visual.src}
         target="_blank"
         rel="noreferrer"
-        aria-label={`${name} 이미지 원본 새 탭에서 보기`}
+        aria-label={`${name} 이미지 원본 새 창에서 열기`}
       >
         <Maximize2 size={16} aria-hidden="true" />
         <span>원본 보기</span>
@@ -36,7 +36,7 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join('에서 ')}
   ) : (
     <div class="diagram-viewport" role="region" aria-label={`${name} 구성도. 가로로 스크롤할 수 있습니다.`} tabindex="0">
       <div class="generated-diagram" aria-labelledby={titleId} aria-describedby={descriptionId}>
-        <div class="diagram-title"><span id={titleId}>{name}</span><small>verified flow</small></div>
+        <div class="diagram-title"><span id={titleId}>{name}</span><small>요청 처리 흐름</small></div>
         <ol role="list">
           {flow.map((step, index) => (
             <li role="listitem">
@@ -82,7 +82,7 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join('에서 ')}
   .original-link {
     display: inline-flex;
     justify-self: end;
-    min-height: 40px;
+    min-height: 44px;
     align-items: center;
     gap: 7px;
     margin-top: 10px;
@@ -99,6 +99,11 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join('에서 ')}
   .diagram-viewport {
     overflow-x: auto;
     overscroll-behavior-inline: contain;
+  }
+
+  .diagram-viewport:focus-visible {
+    outline: 3px solid #ffcf70;
+    outline-offset: 4px;
   }
 
   .generated-diagram {

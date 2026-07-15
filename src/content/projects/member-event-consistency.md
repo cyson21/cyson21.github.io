@@ -41,16 +41,19 @@ signals:
     result: 7 rejected · duplicate 0
     tone: success
     source: FirstLoginRewardDbConcurrencyIT.uniqueRewardIssueConstraintAllowsOnlyOneFirstLoginRewardPerMemberUnderConcurrentAttempts
+    sourceUrl: https://github.com/cyson21/member-event-consistency/blob/feature/review/remediation-hardening/backend/src/test/java/com/example/consistency/integration/FirstLoginRewardDbConcurrencyIT.java
   - label: 포인트 차감
     expression: 100 - (2 × 60) → 40
     result: 1 success · negative 0
     tone: warning
     source: PointSpendDbConcurrencyIT.rowLockSpendAllowsOnlyOneConcurrentDebitWhenBalanceCanCoverOneRequest
+    sourceUrl: https://github.com/cyson21/member-event-consistency/blob/feature/review/remediation-hardening/backend/src/test/java/com/example/consistency/integration/PointSpendDbConcurrencyIT.java
   - label: 쿠폰 용량
     expression: capacity 3 / requests 8
     result: issued 3 · rejected 5
     tone: danger
     source: MvpLiveInfrastructureIT.rabbitMqCouponCampaignRouteRunsOnlyWhenLiveDependenciesAreHealthy
+    sourceUrl: https://github.com/cyson21/member-event-consistency/blob/feature/review/remediation-hardening/backend/src/test/java/com/example/consistency/integration/MvpLiveInfrastructureIT.java
 decisions:
   - title: DB is final guard
     choice: Unique·Check·조건부 갱신·row lock으로 최종 불변식을 보호합니다.
@@ -71,7 +74,7 @@ protectionRules:
 codeEvidence:
   - symbol: SqlCouponCampaignRepository.issueWithCapacityGuard
     displayPath: backend/src/main/java/com/example/consistency/coupon/SqlCouponCampaignRepository.java
-    sourceUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/main/java/com/example/consistency/coupon/SqlCouponCampaignRepository.java
+    sourceUrl: https://github.com/cyson21/member-event-consistency/blob/feature/review/remediation-hardening/backend/src/main/java/com/example/consistency/coupon/SqlCouponCampaignRepository.java
     excerpt: |
       where id = ?
         and status = 'ACTIVE'
@@ -80,10 +83,10 @@ codeEvidence:
     proves: 캠페인 행 잠금과 용량 조건을 한 SQL 흐름에서 판정해 동시 요청의 초과 발급을 차단합니다.
     testName: SqlCouponCampaignRepositoryTest.issueWithCapacityGuardUsesSingleStatementWithCampaignRowLock
     testPath: backend/src/test/java/com/example/consistency/coupon/SqlCouponCampaignRepositoryTest.java
-    testUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/test/java/com/example/consistency/coupon/SqlCouponCampaignRepositoryTest.java
+    testUrl: https://github.com/cyson21/member-event-consistency/blob/feature/review/remediation-hardening/backend/src/test/java/com/example/consistency/coupon/SqlCouponCampaignRepositoryTest.java
   - symbol: SqlPointSpendRepository.tryDebit
     displayPath: backend/src/main/java/com/example/consistency/point/SqlPointSpendRepository.java
-    sourceUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/main/java/com/example/consistency/point/SqlPointSpendRepository.java
+    sourceUrl: https://github.com/cyson21/member-event-consistency/blob/feature/review/remediation-hardening/backend/src/main/java/com/example/consistency/point/SqlPointSpendRepository.java
     excerpt: |
       version = version + 1,
       updated_at = now()
@@ -92,10 +95,10 @@ codeEvidence:
     proves: 잔액이 지출액 이상일 때만 원자적으로 차감해 동시 요청에서도 음수 잔액을 허용하지 않습니다.
     testName: SqlPointSpendRepositoryTest.conditionalDebitKeepsBalanceNonNegative
     testPath: backend/src/test/java/com/example/consistency/point/SqlPointSpendRepositoryTest.java
-    testUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/test/java/com/example/consistency/point/SqlPointSpendRepositoryTest.java
+    testUrl: https://github.com/cyson21/member-event-consistency/blob/feature/review/remediation-hardening/backend/src/test/java/com/example/consistency/point/SqlPointSpendRepositoryTest.java
   - symbol: CouponCampaignRabbitMqWorker.handle
     displayPath: backend/src/main/java/com/example/consistency/web/CouponCampaignRabbitMqWorker.java
-    sourceUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/main/java/com/example/consistency/web/CouponCampaignRabbitMqWorker.java
+    sourceUrl: https://github.com/cyson21/member-event-consistency/blob/feature/review/remediation-hardening/backend/src/main/java/com/example/consistency/web/CouponCampaignRabbitMqWorker.java
     excerpt: |
       @RabbitListener(queues = COMMAND_QUEUE, concurrency = "1")
       public void handle(CouponCampaignRabbitMqCommand command) {
@@ -105,7 +108,7 @@ codeEvidence:
     proves: 단일 consumer로 hot campaign을 직렬화하고 종료된 실행의 메시지를 무시합니다.
     testName: MvpLiveInfrastructureIT.rabbitMqCouponCampaignRouteRunsOnlyWhenLiveDependenciesAreHealthy
     testPath: backend/src/test/java/com/example/consistency/integration/MvpLiveInfrastructureIT.java
-    testUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/test/java/com/example/consistency/integration/MvpLiveInfrastructureIT.java
+    testUrl: https://github.com/cyson21/member-event-consistency/blob/feature/review/remediation-hardening/backend/src/test/java/com/example/consistency/integration/MvpLiveInfrastructureIT.java
 verification:
   - layer: container-smoke
     method: PostgreSQL Testcontainers에 최초 보상 동시 요청 8건을 전달합니다.
@@ -123,8 +126,8 @@ next:
   - 전략별 처리량과 tail latency를 같은 부하 조건에서 비교합니다.
 links:
   github: https://github.com/cyson21/member-event-consistency
-  adr: https://github.com/cyson21/member-event-consistency/tree/main/docs/adr
-  testReport: https://github.com/cyson21/member-event-consistency/tree/main/backend/src/test
+  design: https://github.com/cyson21/member-event-consistency/blob/feature/review/remediation-hardening/docs/portfolio/one-pager.md
+  testReport: https://github.com/cyson21/member-event-consistency/tree/feature/review/remediation-hardening/backend/src/test
 visual:
   kind: diagram
   alt: 이벤트 시나리오별 불변식을 PostgreSQL guard와 Redis·RabbitMQ 비교 경로로 연결한 구성도

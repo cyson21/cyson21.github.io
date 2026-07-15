@@ -160,7 +160,8 @@ h2,
 h3,
 h4,
 p {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: keep-all;
 }
 
 h1,
@@ -249,7 +250,7 @@ p {
 }
 
 .button--text {
-  min-height: 38px;
+  min-height: 44px;
   padding-inline: 4px;
   border-color: transparent;
   background: transparent;

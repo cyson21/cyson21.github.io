@@ -8,20 +8,22 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
-  image?: string;
+  image?: string | undefined;
   imageAlt?: string;
   article?: boolean;
+  updatedAt?: Date;
   robots?: 'noindex,nofollow' | 'noindex,follow';
 }
 
-const { title, description, image, imageAlt = '손찬양 백엔드 개발자 포트폴리오', article = false, robots } = Astro.props;
+const { title, description, image, imageAlt = '손찬양 백엔드 개발자 포트폴리오', article = false, updatedAt, robots } = Astro.props;
 const siteUrl = getReleaseOrigin(import.meta.env);
 const isPublicRelease = Boolean(siteUrl);
 const robotsContent = robots ?? (isPublicRelease ? 'index,follow,max-image-preview:large' : 'noindex,nofollow');
 const canonical = siteUrl && !robotsContent.startsWith('noindex') ? `${siteUrl}${Astro.url.pathname}` : undefined;
-const socialImage = image ?? '/media/profile.png';
-const imageUrl = siteUrl ? `${siteUrl}${socialImage}` : undefined;
-const pageTitle = title === '손찬양' ? title : `${title} | 손찬양`;
+const socialImage = image ?? (article ? undefined : '/media/profile.png');
+const imageUrl = siteUrl && socialImage ? `${siteUrl}${socialImage}` : undefined;
+const socialImageAlt = image ? imageAlt : '손찬양 Java/Spring 백엔드 개발자 프로필';
+const pageTitle = title === '손찬양' ? '손찬양 | Java/Spring 백엔드 개발자' : `${title} | 손찬양 백엔드 포트폴리오`;
 const structuredData = title === '손찬양'
   ? {
       '@context': 'https://schema.org',
@@ -36,6 +38,7 @@ const structuredData = title === '손찬양'
         image: imageUrl,
         sameAs: [profile.github],
       },
+      dateModified: profile.updatedAt,
     }
   : article
     ? {
@@ -49,12 +52,15 @@ const structuredData = title === '손찬양'
           name: profile.name,
           sameAs: profile.github,
         },
+        dateModified: updatedAt?.toISOString(),
+        mainEntityOfPage: canonical,
+        url: canonical,
       }
     : undefined;
 ---
 
 <!doctype html>
-<html lang="ko">
+<html lang="ko" class="no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -65,20 +71,22 @@ const structuredData = title === '손찬양'
     {canonical && <link rel="canonical" href={canonical} />}
     <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
     <title>{pageTitle}</title>
+    <script is:inline>document.documentElement.classList.replace('no-js', 'js');</script>
 
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:type" content={article ? 'article' : 'website'} />
-    <meta property="og:site_name" content="손찬양 기술 포트폴리오" />
+    <meta property="og:site_name" content="손찬양 백엔드 포트폴리오" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
+    {article && updatedAt && <meta property="article:modified_time" content={updatedAt.toISOString()} />}
     {canonical && <meta property="og:url" content={canonical} />}
     {imageUrl && <meta property="og:image" content={imageUrl} />}
-    {imageUrl && <meta property="og:image:alt" content={imageAlt} />}
+    {imageUrl && <meta property="og:image:alt" content={socialImageAlt} />}
     <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     {imageUrl && <meta name="twitter:image" content={imageUrl} />}
-    {imageUrl && <meta name="twitter:image:alt" content={imageAlt} />}
+    {imageUrl && <meta name="twitter:image:alt" content={socialImageAlt} />}
     {structuredData && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
   </head>
   <body>

@@ -41,16 +41,19 @@ signals:
     result: 중복 후속 이벤트 0건
     tone: success
     source: OrderSagaEventHandlerIntegrationTest.ignores_duplicate_inventory_event
+    sourceUrl: https://github.com/cyson21/stockrush/blob/main/services/order-service/src/test/java/com/stockrush/order/application/OrderSagaEventHandlerIntegrationTest.java
   - label: 종료 상태 보호
     expression: late approval → ignored
     result: 취소 주문 상태 유지
     tone: warning
     source: OrderSagaEventHandlerIntegrationTest.ignores_payment_authorized_for_cancelled_order
+    sourceUrl: https://github.com/cyson21/stockrush/blob/main/services/order-service/src/test/java/com/stockrush/order/application/OrderSagaEventHandlerIntegrationTest.java
   - label: Relay retry
     expression: 5 attempts → FAILED
     result: 실패 상태와 재처리 경로 보존
     tone: danger
     source: OutboxRelayServiceIntegrationTest.marks_failed_when_publish_retry_count_is_exhausted
+    sourceUrl: https://github.com/cyson21/stockrush/blob/main/services/order-service/src/test/java/com/stockrush/order/infra/outbox/OutboxRelayServiceIntegrationTest.java
 decisions:
   - title: Saga orchestration
     choice: 주문 서비스가 재고·결제·쿠폰·출고 상태 전이를 조율합니다.

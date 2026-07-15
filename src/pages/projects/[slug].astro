@@ -7,6 +7,7 @@ import VerificationSignal from '../../components/VerificationSignal.astro';
 import DecisionGrid from '../../components/DecisionGrid.astro';
 import CodeEvidence from '../../components/CodeEvidence.astro';
 import ProjectVisual from '../../components/ProjectVisual.astro';
+import { formatDate } from '../../data/site';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -48,7 +49,14 @@ const toc = [
 ];
 ---
 
-<BaseLayout title={data.seo.title} description={data.seo.description} article={true}>
+<BaseLayout
+  title={data.seo.title}
+  description={data.seo.description}
+  image={data.visual.kind === 'image' ? data.visual.src : undefined}
+  imageAlt={data.visual.alt}
+  article={true}
+  updatedAt={data.updatedAt}
+>
   <header class="project-hero">
     <div class="container project-hero-grid">
       <div class="project-heading">
@@ -57,9 +65,9 @@ const toc = [
         <h1>{data.name}</h1>
         <p class="project-lede">{data.summary}</p>
         <div class="button-row project-actions">
-          {data.links.github && <a class="button" href={data.links.github} target="_blank" rel="noreferrer"><CodeXml size={17} aria-hidden="true" /> GitHub</a>}
-          {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer">Demo <ArrowUpRight size={17} aria-hidden="true" /></a>}
-          {!data.links.github && <span class="scope-badge"><CircleAlert size={16} aria-hidden="true" /> Case study only</span>}
+          {data.links.github && <a class="button" href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}><CodeXml size={17} aria-hidden="true" /> GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
+          {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer" aria-label={`${data.name} 데모 새 창에서 열기`}>Demo <ArrowUpRight size={17} aria-hidden="true" /></a>}
+          {data.publicationState === 'case-study-only' && <span class="scope-badge"><CircleAlert size={16} aria-hidden="true" /> Case study only</span>}
         </div>
       </div>
       <dl class="project-meta">
@@ -67,16 +75,14 @@ const toc = [
         <div><dt>PERIOD</dt><dd>{data.period}</dd></div>
         <div><dt>DOMAIN</dt><dd>{data.domain}</dd></div>
         <div><dt>EVIDENCE</dt><dd>{data.codeEvidence.length} code · {data.codeEvidence.length} tests</dd></div>
+        <div><dt>UPDATED</dt><dd><time datetime={data.updatedAt.toISOString()}>{formatDate(data.updatedAt)}</time></dd></div>
       </dl>
-    </div>
-    <div class="container visual-wrap">
-      <ProjectVisual name={data.name} visual={data.visual} flow={data.flow.normal} />
     </div>
   </header>
 
   <div class="container project-layout">
     <aside class="project-toc no-print">
-      <p id="project-toc-title">On this page</p>
+      <p id="project-toc-title">페이지 목차</p>
       <nav aria-labelledby="project-toc-title">
         {toc.map(([id, label], index) => <a href={`#${id}`} aria-current={index === 0 ? 'location' : undefined}><span>{String(index + 1).padStart(2, '0')}</span>{label}</a>)}
       </nav>
@@ -85,6 +91,10 @@ const toc = [
         <ul class="tag-list">{data.stack.map((item) => <li class="tag">{item}</li>)}</ul>
       </div>
     </aside>
+
+    <div class="visual-wrap">
+      <ProjectVisual name={data.name} visual={data.visual} flow={data.flow.normal} />
+    </div>
 
     <article class="project-content">
       <section id="overview" class="project-section" tabindex="-1">
@@ -107,7 +117,7 @@ const toc = [
       <section id="decisions" class="project-section project-section--wide" tabindex="-1">
         <p class="eyebrow">Design decisions</p>
         <h2>선택한 구조와 제외한 대안</h2>
-        <p class="section-lede">기술 이름이 아니라 어떤 위험을 줄이기 위해 해당 구조를 선택했는지 기록했습니다.</p>
+        <p class="section-lede">보상 순서, 저장 원자성, 권한과 재처리 위치를 기준으로 선택한 구조와 제외한 대안을 비교합니다.</p>
         <DecisionGrid items={data.decisions} />
       </section>
 
@@ -120,15 +130,15 @@ const toc = [
       </section>
 
       <section id="evidence" class="project-section project-section--wide" tabindex="-1">
-        <p class="eyebrow">Representative code evidence</p>
+        <p class="eyebrow">구현 파일 · 보호 규칙 · 회귀 테스트</p>
         <h2>대표 코드, 보호 규칙과 연결 테스트</h2>
-        <p class="section-lede">파일 경로와 짧은 핵심 발췌만 보여주고, 각 코드가 보호하는 규칙과 그 규칙을 고정하는 테스트를 함께 연결합니다.</p>
+        <p class="section-lede">각 구현 파일에서 상태를 보호하는 핵심 코드와 같은 규칙을 고정하는 테스트를 함께 확인할 수 있습니다.</p>
         <CodeEvidence items={data.codeEvidence} />
       </section>
 
       <section id="verification" class="project-section project-section--wide" tabindex="-1">
-        <p class="eyebrow">Verification layers</p>
-        <h2>확인한 환경과 결과를 분리합니다.</h2>
+        <p class="eyebrow">테스트 실행 환경과 결과</p>
+        <h2>실행한 입력과 확인한 상태</h2>
         <table class="verification-table">
           <caption class="visually-hidden">{data.name} 검증 결과</caption>
           <thead>
@@ -148,23 +158,24 @@ const toc = [
 
       <section id="scope" class="project-section scope-grid" tabindex="-1">
         <div>
-          <p class="eyebrow">Current boundary</p>
+          <p class="eyebrow">아직 검증하지 않은 범위</p>
           <h2>현재 검증 범위</h2>
           <ul class="rule-list">{data.limitations.map((item) => <li>{item}</li>)}</ul>
         </div>
         <div>
-          <p class="eyebrow">Next proof</p>
+          <p class="eyebrow">다음 검증 단계</p>
           <h2>다음 검증 단계</h2>
           <ul class="rule-list">{data.next.map((item) => <li>{item}</li>)}</ul>
         </div>
       </section>
 
-      {(data.links.adr || data.links.testReport) && (
+      {(data.links.adr || data.links.design || data.links.testReport) && (
         <section class="project-resources" aria-label="프로젝트 외부 자료">
-          <p>MORE EVIDENCE</p>
+          <p>외부 근거</p>
           <div>
-            {data.links.adr && <a href={data.links.adr} target="_blank" rel="noreferrer">ADR <ArrowUpRight size={15} aria-hidden="true" /></a>}
-            {data.links.testReport && <a href={data.links.testReport} target="_blank" rel="noreferrer">Test source <ArrowUpRight size={15} aria-hidden="true" /></a>}
+            {data.links.adr && <a href={data.links.adr} target="_blank" rel="noreferrer" aria-label={`${data.name} ADR 새 창에서 열기`}>ADR <ArrowUpRight size={15} aria-hidden="true" /></a>}
+            {data.links.design && <a href={data.links.design} target="_blank" rel="noreferrer" aria-label={`${data.name} 설계 문서 새 창에서 열기`}>설계 문서 <ArrowUpRight size={15} aria-hidden="true" /></a>}
+            {data.links.testReport && <a href={data.links.testReport} target="_blank" rel="noreferrer" aria-label={`${data.name} 테스트 소스 새 창에서 열기`}>테스트 소스 <ArrowUpRight size={15} aria-hidden="true" /></a>}
           </div>
         </section>
       )}
@@ -181,21 +192,40 @@ const toc = [
 
 <script>
   const sectionLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.project-toc a[href^="#"]'));
+  const sections = sectionLinks.flatMap((link) => {
+    const section = document.getElementById(link.hash.slice(1));
+    return section ? [section] : [];
+  });
+
+  const setCurrent = (id: string, scrollLink = false) => {
+    sectionLinks.forEach((link) => {
+      const active = link.hash === `#${id}`;
+      if (active) {
+        link.setAttribute('aria-current', 'location');
+        if (scrollLink) link.scrollIntoView({ block: 'nearest', inline: 'center' });
+      } else link.removeAttribute('aria-current');
+    });
+  };
 
   const focusFragment = () => {
     const id = decodeURIComponent(window.location.hash.slice(1));
     if (!id) return;
     const target = document.getElementById(id);
     if (!target) return;
-    sectionLinks.forEach((link) => {
-      if (link.hash === `#${id}`) link.setAttribute('aria-current', 'location');
-      else link.removeAttribute('aria-current');
-    });
+    setCurrent(id, true);
     window.requestAnimationFrame(() => target.focus({ preventScroll: true }));
   };
 
   window.addEventListener('hashchange', focusFragment);
   focusFragment();
+
+  const observer = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+    if (visible?.target.id) setCurrent(visible.target.id, true);
+  }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, 0.1] });
+  sections.forEach((section) => observer.observe(section));
 </script>
 
 <style>
@@ -223,6 +253,7 @@ const toc = [
 
   .back-link {
     display: inline-flex;
+    min-height: 44px;
     align-items: center;
     gap: 6px;
     margin-bottom: 42px;
@@ -250,7 +281,7 @@ const toc = [
 
   .scope-badge {
     display: inline-flex;
-    min-height: 42px;
+    min-height: 44px;
     align-items: center;
     gap: 7px;
     padding: 8px 12px;
@@ -288,10 +319,6 @@ const toc = [
     font-size: 0.8rem;
   }
 
-  .visual-wrap {
-    margin-top: 58px;
-  }
-
   .project-layout {
     display: grid;
     grid-template-columns: 220px minmax(0, 1fr);
@@ -303,6 +330,7 @@ const toc = [
   .project-toc {
     position: sticky;
     top: calc(var(--header-height) + 28px);
+    grid-row: 1 / span 2;
   }
 
   .project-toc > p,
@@ -348,7 +376,14 @@ const toc = [
   }
 
   .project-content {
+    grid-column: 2;
     min-width: 0;
+  }
+
+  .visual-wrap {
+    grid-column: 2;
+    min-width: 0;
+    margin-bottom: 72px;
   }
 
   .project-section {
@@ -528,6 +563,7 @@ const toc = [
 
   .project-resources a {
     display: inline-flex;
+    min-height: 44px;
     align-items: center;
     gap: 5px;
     font-size: 0.78rem;
@@ -621,6 +657,8 @@ const toc = [
       border: 0;
       overscroll-behavior-inline: contain;
       scrollbar-width: thin;
+      scroll-snap-type: inline proximity;
+      mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 34px), transparent 100%);
     }
 
     .project-toc nav a {
@@ -629,11 +667,14 @@ const toc = [
       grid-template-columns: none;
       align-items: center;
       gap: 6px;
-      min-height: 40px;
+      min-height: 44px;
       padding: 7px 10px;
       border: 1px solid var(--line);
       border-radius: 3px;
       background: var(--surface);
+      line-height: 1;
+      white-space: nowrap;
+      scroll-snap-align: start;
     }
 
     .project-toc nav a[aria-current='location'] {
@@ -647,6 +688,15 @@ const toc = [
 
     .project-section {
       scroll-margin-top: calc(var(--header-height) + 92px);
+    }
+
+    .visual-wrap,
+    .project-content {
+      grid-column: 1;
+    }
+
+    .visual-wrap {
+      margin-bottom: 56px;
     }
   }
 
@@ -678,7 +728,7 @@ const toc = [
     }
 
     .visual-wrap {
-      margin-top: 34px;
+      margin-bottom: 42px;
     }
 
     .project-section h2 {

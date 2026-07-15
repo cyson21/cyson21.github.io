@@ -1,39 +1,58 @@
 ---
 import { ArrowRight, ArrowUpRight } from '@lucide/astro';
 import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../data/site';
 
 interface Props {
   project: CollectionEntry<'projects'>;
   index?: number;
+  headingLevel?: 2 | 3;
+  compact?: boolean;
 }
 
-const { project, index } = Astro.props;
+const { project, index, headingLevel = 3, compact = false } = Astro.props;
 const data = project.data;
 const primarySignal = data.signals[0];
+const thumbnail = data.visual.kind === 'image' ? data.visual.src : undefined;
 ---
 
-<article class="project-row">
+<article class:list={['project-row', { 'project-row--compact': compact }]}>
   <div class="project-index" aria-hidden="true">{String(index ?? data.order).padStart(2, '0')}</div>
-  <div class="project-main">
-    <div class="project-title-line">
-      <div>
-        <p class="eyebrow">{data.eyebrow}</p>
-        <h3><a href={`/projects/${project.id}/`}>{data.name}</a></h3>
+  <div class:list={['project-main', { 'project-main--visual': thumbnail }]}>
+    {thumbnail && (
+      <a class="project-thumbnail" href={`/projects/${project.id}/`} aria-label={`${data.name} 프로젝트 상세 보기`} tabindex="-1">
+        <img src={thumbnail} alt="" loading="lazy" decoding="async" />
+      </a>
+    )}
+    <div class="project-copy">
+      <div class="project-title-line">
+        <div>
+          <p class="eyebrow">{data.eyebrow}</p>
+          {headingLevel === 2
+            ? <h2><a href={`/projects/${project.id}/`}>{data.name}</a></h2>
+            : <h3><a href={`/projects/${project.id}/`}>{data.name}</a></h3>}
+        </div>
+        <div class="project-status">
+          <span class="domain">{data.domain}</span>
+          {data.publicationState === 'case-study-only' && <span class="case-study">Case study only</span>}
+        </div>
       </div>
-      <span class="domain">{data.domain}</span>
+      <p class="project-summary">{data.summary}</p>
+      <div class="project-footnote">
+        <ul class="tag-list" aria-label={`${data.name} 기술`}>
+          {data.stack.slice(0, 5).map((item) => <li class="tag">{item}</li>)}
+        </ul>
+        <time datetime={data.updatedAt.toISOString()}>최근 수정 {formatDate(data.updatedAt)}</time>
+      </div>
     </div>
-    <p class="project-summary">{data.summary}</p>
-    <ul class="tag-list" aria-label={`${data.name} 기술`}>
-      {data.stack.slice(0, 5).map((item) => <li class="tag">{item}</li>)}
-    </ul>
   </div>
   {primarySignal && <div class="project-proof">
-    <p class="proof-label">검증 신호</p>
+    <p class="proof-label">{primarySignal.label} 결과</p>
     <strong>{primarySignal.expression}</strong>
     <span>{primarySignal.result}</span>
     <div class="project-links">
       <a href={`/projects/${project.id}/`} aria-label={`${data.name} 프로젝트 상세 보기`}>상세 <ArrowRight size={16} aria-hidden="true" /></a>
-      {data.links.github && <a href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 (새 창에서 열림)`}>GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
+      {data.links.github && <a href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}>GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
     </div>
   </div>}
 </article>
@@ -41,7 +60,7 @@ const primarySignal = data.signals[0];
 <style>
   .project-row {
     display: grid;
-    grid-template-columns: 54px minmax(0, 1fr) minmax(220px, 0.34fr);
+    grid-template-columns: 42px minmax(0, 1fr) minmax(220px, 0.34fr);
     gap: 24px;
     padding-block: 34px;
     border-top: 1px solid var(--line);
@@ -59,13 +78,36 @@ const primarySignal = data.signals[0];
   }
 
   .project-main,
+  .project-copy,
   .project-proof {
     min-width: 0;
   }
 
-  .project-main {
+  .project-main--visual {
     display: grid;
-    gap: 16px;
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .project-thumbnail {
+    display: block;
+    align-self: start;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    background: var(--surface);
+  }
+
+  .project-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .project-copy {
+    display: grid;
+    gap: 14px;
   }
 
   .project-title-line {
@@ -75,12 +117,28 @@ const primarySignal = data.signals[0];
     gap: 20px;
   }
 
-  .project-title-line h3 a {
+  .project-title-line h2,
+  .project-title-line h3 {
+    font-size: 1.7rem;
+  }
+
+  .project-title-line :is(h2, h3) a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
     text-decoration: none;
   }
 
-  .domain {
+  .project-status {
+    display: flex;
     flex: 0 0 auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  .domain,
+  .case-study {
     padding: 3px 7px;
     border: 1px solid var(--line-strong);
     border-radius: 3px;
@@ -90,9 +148,29 @@ const primarySignal = data.signals[0];
     font-weight: 800;
   }
 
+  .case-study {
+    border-color: var(--amber);
+    background: var(--amber-soft);
+    color: var(--amber);
+  }
+
   .project-summary {
     max-width: 760px;
     color: var(--ink-soft);
+  }
+
+  .project-footnote {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .project-footnote time {
+    flex: 0 0 auto;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.64rem;
   }
 
   .project-proof {
@@ -112,6 +190,7 @@ const primarySignal = data.signals[0];
   }
 
   .project-proof strong {
+    overflow-wrap: anywhere;
     font-family: var(--mono);
     font-size: 0.98rem;
     line-height: 1.45;
@@ -125,22 +204,32 @@ const primarySignal = data.signals[0];
   .project-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 9px;
+    gap: 8px;
+    margin-top: 5px;
   }
 
   .project-links a {
     display: inline-flex;
+    min-height: 44px;
     align-items: center;
     gap: 4px;
+    padding-inline: 4px;
     color: var(--ink);
     font-size: 0.76rem;
     font-weight: 800;
   }
 
-  @media (max-width: 840px) {
+  .project-row--compact {
+    padding-block: 26px;
+  }
+
+  .project-row--compact .tag-list {
+    display: none;
+  }
+
+  @media (max-width: 920px) {
     .project-row {
-      grid-template-columns: 38px minmax(0, 1fr);
+      grid-template-columns: 34px minmax(0, 1fr);
     }
 
     .project-proof {
@@ -148,15 +237,11 @@ const primarySignal = data.signals[0];
     }
   }
 
-  @media (max-width: 560px) {
+  @media (max-width: 620px) {
     .project-row {
-      grid-template-columns: 26px minmax(0, 1fr);
-      gap: 10px 12px;
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: 10px;
       padding-block: 22px;
-    }
-
-    .project-index {
-      grid-column: 1;
     }
 
     .project-main,
@@ -164,12 +249,28 @@ const primarySignal = data.signals[0];
       grid-column: 2;
     }
 
-    .project-main {
+    .project-main--visual {
+      grid-template-columns: 84px minmax(0, 1fr);
       gap: 12px;
     }
 
     .project-title-line {
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .project-title-line h2,
+    .project-title-line h3 {
+      font-size: 1.3rem;
+    }
+
+    .project-status {
+      justify-content: flex-start;
+    }
+
+    .project-footnote {
+      align-items: start;
+      flex-direction: column;
       gap: 8px;
     }
 
@@ -178,9 +279,9 @@ const primarySignal = data.signals[0];
       padding: 12px 14px;
     }
 
-    .project-links {
-      gap: 10px;
-      margin-top: 4px;
+    .project-row--compact .project-summary,
+    .project-row--compact .project-footnote {
+      display: none;
     }
   }
 </style>

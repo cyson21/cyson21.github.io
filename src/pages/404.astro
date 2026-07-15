@@ -1,5 +1,5 @@
 ---
-import { ArrowLeft } from '@lucide/astro';
+import { ArrowLeft, BriefcaseBusiness, FileText } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const layoutProps = {
@@ -13,9 +13,13 @@ const layoutProps = {
   <section class="not-found">
     <div class="container">
       <p class="eyebrow">404 · Not found</p>
-      <h1>이 경로에는<br />검증 가능한 결과가 없습니다.</h1>
+      <h1>요청한 페이지를 찾을 수 없습니다</h1>
       <p>주소가 바뀌었거나 공개 범위에서 제외된 페이지입니다.</p>
-      <a class="button" href="/"><ArrowLeft size={17} aria-hidden="true" /> 홈으로 돌아가기</a>
+      <div class="button-row">
+        <a class="button" href="/"><ArrowLeft size={17} aria-hidden="true" /> 홈</a>
+        <a class="button button--secondary" href="/projects/"><BriefcaseBusiness size={17} aria-hidden="true" /> 프로젝트</a>
+        <a class="button button--secondary" href="/resume/"><FileText size={17} aria-hidden="true" /> 웹 이력서</a>
+      </div>
     </div>
   </section>
 </BaseLayout>

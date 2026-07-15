@@ -3,6 +3,10 @@ import { getCollection } from 'astro:content';
 import { experiences, profile, skillGroups } from '../../data/site';
 
 const projects = await getCollection('projects');
+const [primaryExperience, previousExperience] = experiences;
+if (!primaryExperience || !previousExperience) {
+  throw new Error('이력서 출력에는 경력 항목이 두 개 이상 필요합니다.');
+}
 const projectMap = new Map(projects.map((project) => [project.id, project]));
 const selectedIds = ['stockrush', 'member-event-consistency', 'enterprise-policy-rag', 'ai-gateway', 'cdc-data-platform'];
 const representativeProjects = selectedIds
@@ -67,12 +71,12 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
           <div class="section-title"><p class="label">EXPERIENCE</p><h2>경력</h2></div>
           <article class="job">
             <header>
-              <div><h3>{experiences[0].company}</h3><p>{experiences[0].role}</p></div>
-              <time>{experiences[0].period}</time>
+              <div><h3>{primaryExperience.company}</h3><p>{primaryExperience.role}</p></div>
+              <time>{primaryExperience.period}</time>
             </header>
-            <p class="context">{experiences[0].context}</p>
+            <p class="context">{primaryExperience.context}</p>
             <div class="highlight-list">
-              {experiences[0].highlights.map((highlight) => (
+              {primaryExperience.highlights.map((highlight) => (
                 <div><strong>{highlight.title}</strong><p>{highlight.action} {highlight.result}</p></div>
               ))}
             </div>
@@ -89,12 +93,12 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
           <div class="section-title"><p class="label">EARLIER EXPERIENCE</p><h2>이전 경력</h2></div>
           <article class="job">
             <header>
-              <div><h3>{experiences[1].company}</h3><p>{experiences[1].role}</p></div>
-              <time>{experiences[1].period}</time>
+              <div><h3>{previousExperience.company}</h3><p>{previousExperience.role}</p></div>
+              <time>{previousExperience.period}</time>
             </header>
-            <p class="context">{experiences[1].context}</p>
+            <p class="context">{previousExperience.context}</p>
             <div class="highlight-list highlight-list--compact">
-              {experiences[1].highlights.map((highlight) => (
+              {previousExperience.highlights.map((highlight) => (
                 <div><strong>{highlight.title}</strong><p>{highlight.action} {highlight.result}</p></div>
               ))}
             </div>
@@ -163,7 +167,7 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
   h1,
   h2,
   h3,
-  p { margin: 0; overflow-wrap: anywhere; }
+  p { margin: 0; overflow-wrap: normal; word-break: keep-all; }
 
   h1 { margin-top: 1.5mm; font-size: 31pt; line-height: 1.05; }
   h2 { font-size: 15pt; line-height: 1.25; }

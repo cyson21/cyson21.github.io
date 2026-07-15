@@ -45,16 +45,19 @@ signals:
     result: quota → input guard → cache → route → dispatch → fallback → output guard → record
     tone: success
     source: backend/src/main/java/com/example/gateway/api/GatewayPipeline.java
+    sourceUrl: https://github.com/cyson21/ai-gateway/blob/main/backend/src/main/java/com/example/gateway/api/GatewayPipeline.java
   - label: Pipeline modes
     expression: 4 modes
     result: passthrough · cache only · routed · routed resilient
     tone: warning
     source: backend/src/main/java/com/example/gateway/api/PipelineMode.java
+    sourceUrl: https://github.com/cyson21/ai-gateway/blob/main/backend/src/main/java/com/example/gateway/api/PipelineMode.java
   - label: Response interface
     expression: JSON + SSE
     result: buffered · streaming · tool call
     tone: danger
     source: ChatCompletionControllerTest · ToolCallPassthroughTest
+    sourceUrl: https://github.com/cyson21/ai-gateway/blob/main/backend/src/test/java/com/example/gateway/web/ChatCompletionControllerTest.java
 decisions:
   - title: Compatible entry
     choice: OpenAI 호환 /v1/chat/completions를 공통 진입점으로 사용합니다.
@@ -128,7 +131,7 @@ next:
   - 실제 provider를 opt-in 경로로 연결하고 정책별 비용·지연 데이터를 분리해 측정합니다.
 links:
   github: https://github.com/cyson21/ai-gateway
-  adr: https://github.com/cyson21/ai-gateway/tree/main/docs/adr
+  design: https://github.com/cyson21/ai-gateway/blob/main/docs/portfolio-one-pager.md
   testReport: https://github.com/cyson21/ai-gateway/tree/main/backend/src/test
 visual:
   kind: diagram

@@ -20,7 +20,7 @@ const uid = `flow-${Math.random().toString(36).slice(2, 9)}`;
 <section class="flow-explorer" data-flow-explorer>
   <div class="flow-header">
     <div>
-      <p class="eyebrow">Interactive architecture</p>
+      <p class="eyebrow">요청 · 실패 · 복구 경로</p>
       <h3>{title}</h3>
     </div>
     <div class="flow-tabs" role="tablist" aria-label={`${title} 모드`}>
@@ -40,7 +40,7 @@ const uid = `flow-${Math.random().toString(36).slice(2, 9)}`;
     </div>
   </div>
 
-  {modes.map((mode, index) => (
+  {modes.map((mode) => (
     <div
       class:list={['flow-panel', `flow-panel--${mode.tone}`]}
       role="tabpanel"
@@ -48,7 +48,6 @@ const uid = `flow-${Math.random().toString(36).slice(2, 9)}`;
       aria-labelledby={`${uid}-tab-${mode.id}`}
       data-flow-panel={mode.id}
       tabindex="0"
-      hidden={index !== 0}
     >
       <ol class="flow-track">
         {mode.steps.map((step, stepIndex) => (
@@ -102,6 +101,7 @@ const uid = `flow-${Math.random().toString(36).slice(2, 9)}`;
         }
       });
     });
+    if (tabs[0]) activate(tabs[0]);
   });
 </script>
 
@@ -132,7 +132,7 @@ const uid = `flow-${Math.random().toString(36).slice(2, 9)}`;
   }
 
   .flow-tabs button {
-    min-height: 38px;
+    min-height: 44px;
     padding: 7px 11px;
     border: 0;
     border-radius: 3px;
@@ -152,6 +152,14 @@ const uid = `flow-${Math.random().toString(36).slice(2, 9)}`;
   .flow-panel {
     padding: 28px 22px 20px;
     background: var(--blue-soft);
+  }
+
+  .flow-panel + .flow-panel {
+    border-top: 1px solid var(--line);
+  }
+
+  :global(html.no-js) .flow-tabs {
+    display: none;
   }
 
   .flow-panel--red {

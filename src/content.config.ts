@@ -28,6 +28,7 @@ const signalSchema = z.object({
   result: z.string(),
   tone: z.enum(['success', 'warning', 'danger']).default('success'),
   source: z.string(),
+  sourceUrl: httpsUrlSchema.optional(),
 });
 
 const codeEvidenceSchema = z.object({
@@ -85,6 +86,7 @@ const projectCollection = defineCollection({
       github: httpsUrlSchema.optional(),
       demo: httpsUrlSchema.optional(),
       adr: httpsUrlSchema.optional(),
+      design: httpsUrlSchema.optional(),
       testReport: httpsUrlSchema.optional(),
     }),
     visual: visualSchema,

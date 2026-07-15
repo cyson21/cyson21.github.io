@@ -30,7 +30,7 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
         href="https://github.com/cyson21"
         target="_blank"
         rel="noreferrer"
-        aria-label="손찬양 GitHub 프로필 (새 창에서 열림)"
+        aria-label="손찬양 GitHub 프로필 새 창에서 열기"
       >
         GitHub <ArrowUpRight size={15} aria-hidden="true" />
       </a>
@@ -42,7 +42,7 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
     </button>
   </div>
 
-  <nav id="mobile-nav" class="mobile-nav" aria-label="모바일 탐색" hidden>
+  <nav id="mobile-nav" class="mobile-nav" aria-label="모바일 탐색">
     <div class="container mobile-nav-inner">
       {links.map((link) => (
         <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>{link.label}</a>
@@ -51,7 +51,7 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
         href="https://github.com/cyson21"
         target="_blank"
         rel="noreferrer"
-        aria-label="손찬양 GitHub 프로필 (새 창에서 열림)"
+        aria-label="손찬양 GitHub 프로필 새 창에서 열기"
       >GitHub <ArrowUpRight size={18} aria-hidden="true" /></a>
     </div>
   </nav>
@@ -60,6 +60,7 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
 <script>
   const button = document.querySelector<HTMLButtonElement>('.menu-button');
   const nav = document.querySelector<HTMLElement>('#mobile-nav');
+  if (nav) nav.hidden = true;
 
   const closeMenu = (restoreFocus = false) => {
     if (!button || !nav) return;
@@ -111,6 +112,7 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
 
   .wordmark {
     display: inline-flex;
+    min-height: 44px;
     align-items: center;
     gap: 10px;
     font-weight: 900;
@@ -175,8 +177,8 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
 
   .menu-button {
     display: none;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     place-items: center;
     padding: 0;
     border: 1px solid var(--line-strong);
@@ -198,6 +200,7 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
   }
 
   .mobile-nav {
+    display: none;
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line-strong);
     background: var(--surface);
@@ -227,8 +230,16 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
       display: none;
     }
 
-    .menu-button {
+    :global(html.js) .menu-button {
       display: grid;
+    }
+
+    :global(html.js) .mobile-nav:not([hidden]) {
+      display: block;
+    }
+
+    :global(html.no-js) .mobile-nav {
+      display: block;
     }
   }
 </style>
