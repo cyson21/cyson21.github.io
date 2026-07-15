@@ -35,30 +35,30 @@ const homeSignals = [
           <a class="button button--text" href={profile.github} target="_blank" rel="noreferrer" aria-label="손찬양 GitHub 프로필 새 창에서 열기">GitHub <ArrowUpRight size={17} aria-hidden="true" /></a>
         </div>
       </div>
-      <div class="hero-aside" aria-label="백엔드 문제 해결 결과">
-        <p class="console-title">상태를 보호하는 세 가지 기준</p>
-        <ol>
-          <li><span>01</span><strong>중복 주문은 하나로 수렴</strong><em>멱등 키와 Outbox가 저장 경계를 함께 보호합니다.</em></li>
-          <li><span>02</span><strong>늦은 이벤트는 종료 상태를 유지</strong><em>조건부 갱신이 취소·확정 상태의 재전이를 막습니다.</em></li>
-          <li><span>03</span><strong>권한 밖 문서는 검색 전에 제외</strong><em>답변과 인용이 같은 접근 범위를 사용합니다.</em></li>
-        </ol>
-      </div>
     </div>
   </section>
 
-  <section class="section section--surface" aria-labelledby="proof-title">
+  <section class="section section--surface" aria-labelledby="experience-title">
     <div class="container">
-      <div class="section-heading section-heading--indexed">
+      <div class="section-heading section-heading--indexed experience-heading">
         <span class="section-number">01</span>
         <div>
-          <h2 id="proof-title">검증 결과</h2>
-          <p class="section-deck">중복, 동시 요청과 근거 없는 답변을 차단했습니다.</p>
+          <h2 id="experience-title">경력</h2>
+          <p class="section-deck">실무에서 맡은 역할과 책임 범위입니다.</p>
         </div>
-        <p class="lede">동일 이벤트 재처리, 잔액 동시 차감과 근거 없는 답변을 실제 테스트 입력으로 재현해 저장 결과와 응답을 확인했습니다.</p>
+        <div>
+          <p class="lede">2021년부터 공공·실시간 데이터 서비스와 기업용 플랫폼의 백엔드를 개발·운영했습니다.</p>
+          <a class="section-link" href="/experience/">경력 상세 보기 <ArrowRight size={18} aria-hidden="true" /></a>
+        </div>
       </div>
-      <div class="signal-grid">
-        {homeSignals.map((signal) => <VerificationSignal {...signal} />)}
-      </div>
+      <ol class="career-list">
+        {experiences.map((experience) => (
+          <li>
+            <time>{experience.period}</time>
+            <div><strong>{experience.company}</strong><span>{experience.role}</span><p>{experience.context}</p></div>
+          </li>
+        ))}
+      </ol>
     </div>
   </section>
 
@@ -68,10 +68,10 @@ const homeSignals = [
         <span class="section-number">02</span>
         <div>
           <h2 id="featured-title">대표 프로젝트</h2>
-          <p class="section-deck">주문, 권한과 동시성 문제를 시스템 경계에서 해결했습니다.</p>
+          <p class="section-deck">실무에서 마주친 문제를 별도 시스템으로 확장해 검증했습니다.</p>
         </div>
         <div>
-          <p class="lede">주문 상태 수렴, 문서 접근 제어와 동시 요청 불변식을 코드와 연결 테스트로 확인할 수 있습니다.</p>
+          <p class="lede">분산 상태, 동시 요청, 접근 제어처럼 장애 시 영향이 큰 조건을 구현과 테스트 근거로 정리했습니다.</p>
           <a class="section-link" href="/projects/">6개 프로젝트 전체 보기 <ArrowRight size={18} aria-hidden="true" /></a>
         </div>
       </div>
@@ -88,10 +88,26 @@ const homeSignals = [
     </div>
   </section>
 
-  <section class="section capabilities" aria-labelledby="capability-title">
+  <section class="section section--surface" aria-labelledby="proof-title">
     <div class="container">
       <div class="section-heading section-heading--indexed">
         <span class="section-number">03</span>
+        <div>
+          <h2 id="proof-title">프로젝트 검증 결과</h2>
+          <p class="section-deck">프로젝트마다 핵심 실패 조건을 재현했습니다.</p>
+        </div>
+        <p class="lede">중복 이벤트, 동시 요청, 권한 없는 검색을 테스트 입력으로 재현해 저장 결과와 응답을 확인했습니다.</p>
+      </div>
+      <div class="signal-grid">
+        {homeSignals.map((signal) => <VerificationSignal {...signal} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section capabilities" aria-labelledby="capability-title">
+    <div class="container">
+      <div class="section-heading section-heading--indexed">
+        <span class="section-number">04</span>
         <div>
           <h2 id="capability-title">문제 해결 방식</h2>
           <p class="section-deck">재현하고 경계를 좁힌 뒤 테스트로 고정합니다.</p>
@@ -108,30 +124,6 @@ const homeSignals = [
           </article>
         ))}
       </div>
-    </div>
-  </section>
-
-  <section class="section section--surface" aria-labelledby="experience-title">
-    <div class="container">
-      <div class="section-heading section-heading--indexed experience-heading">
-        <span class="section-number">04</span>
-        <div>
-          <h2 id="experience-title">경력</h2>
-          <p class="section-deck">데이터 파이프라인에서 운영 백엔드로 책임 범위를 확장했습니다.</p>
-        </div>
-        <div>
-          <p class="lede">데이터 수집·API 구현과 배포 경험에서 시작해, 기업용 플랫폼의 운영 장애·정합성·의존성 전환과 테스트 기반 개선을 담당했습니다.</p>
-          <a class="section-link" href="/experience/">경력 상세 보기 <ArrowRight size={18} aria-hidden="true" /></a>
-        </div>
-      </div>
-      <ol class="career-list">
-        {experiences.map((experience) => (
-          <li>
-            <time>{experience.period}</time>
-            <div><strong>{experience.company}</strong><span>{experience.role}</span><p>{experience.context}</p></div>
-          </li>
-        ))}
-      </ol>
     </div>
   </section>
 
@@ -155,21 +147,27 @@ const homeSignals = [
   }
 
   .hero-inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1.12fr) minmax(340px, 0.72fr);
-    gap: 64px;
-    align-items: center;
+    display: block;
   }
 
   .hero-copy {
+    display: grid;
+    max-width: 1080px;
     min-width: 0;
+    grid-template-areas:
+      "person statement"
+      "name statement"
+      ". actions";
+    grid-template-columns: minmax(270px, 0.72fr) minmax(0, 1.28fr);
+    gap: 16px 64px;
+    align-items: start;
   }
 
   .hero-person {
+    grid-area: person;
     display: flex;
     align-items: center;
     gap: 18px;
-    margin-bottom: 20px;
   }
 
   .hero-person img {
@@ -205,12 +203,14 @@ const homeSignals = [
   }
 
   .hero h1 {
+    grid-area: name;
     font-size: 3.65rem;
   }
 
   .hero-statement {
+    grid-area: statement;
     max-width: 800px;
-    margin-top: 20px;
+    margin-top: 6px;
     color: var(--ink-soft);
     font-size: 1.22rem;
     font-weight: 580;
@@ -218,55 +218,8 @@ const homeSignals = [
   }
 
   .hero-actions {
-    margin-top: 26px;
-  }
-
-  .hero-aside {
-    border-top: 3px solid var(--blue);
-    border-bottom: 1px solid var(--line-strong);
-    background: var(--surface);
-  }
-
-  .console-title {
-    padding: 14px 16px;
-    border-inline: 1px solid var(--line-strong);
-    color: var(--blue);
-    font-family: var(--mono);
-    font-size: 0.84rem;
-    font-weight: 760;
-  }
-
-  .hero-aside ol {
-    margin: 0;
-    padding: 0;
-    border-left: 1px solid var(--line-strong);
-    list-style: none;
-  }
-
-  .hero-aside li {
-    display: grid;
-    grid-template-columns: 28px 1fr;
-    gap: 5px 12px;
-    padding: 16px;
-    border-top: 1px solid var(--line);
-    border-right: 1px solid var(--line-strong);
-  }
-
-  .hero-aside li > span {
-    grid-row: 1 / 3;
-    color: var(--ink-faint);
-    font-family: var(--mono);
-    font-size: 0.82rem;
-  }
-
-  .hero-aside strong {
-    font-size: 0.98rem;
-  }
-
-  .hero-aside em {
-    color: var(--ink-soft);
-    font-size: 0.85rem;
-    font-style: normal;
+    grid-area: actions;
+    margin-top: 4px;
   }
 
   .signal-grid {
@@ -440,13 +393,21 @@ const homeSignals = [
   }
 
   @media (max-width: 980px) {
-    .hero-inner {
-      grid-template-columns: 1fr;
-      gap: 40px;
+    .hero-copy {
+      display: block;
+      max-width: 800px;
     }
 
-    .hero-aside {
-      max-width: 680px;
+    .hero-person {
+      margin-bottom: 20px;
+    }
+
+    .hero-statement {
+      margin-top: 20px;
+    }
+
+    .hero-actions {
+      margin-top: 26px;
     }
 
     .capability-grid {
@@ -468,24 +429,12 @@ const homeSignals = [
       font-size: 1.12rem;
     }
 
-    .hero-inner {
-      gap: 28px;
-    }
-
-    .hero-aside {
-      display: block;
-    }
-
     .hero-person {
       margin-bottom: 14px;
     }
 
     .hero-actions {
       margin-top: 18px;
-    }
-
-    .hero-aside li {
-      padding: 12px 14px;
     }
 
     .signal-grid {
