@@ -1,0 +1,234 @@
+---
+import { ArrowUpRight, Menu, X } from '@lucide/astro';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const links = [
+  { href: '/projects/', label: 'Projects' },
+  { href: '/experience/', label: 'Experience' },
+  { href: '/resume/', label: 'Resume' },
+];
+const isActive = (href: string) => currentPath === href || (href !== '/' && currentPath.startsWith(href));
+---
+
+<header class="site-header">
+  <div class="header-inner container">
+    <a class="wordmark" href="/" aria-label="손찬양 포트폴리오 홈">
+      <span class="wordmark-mark" aria-hidden="true">SC</span>
+      <span class="wordmark-name">손찬양</span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="주요 탐색">
+      {links.map((link) => (
+        <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>{link.label}</a>
+      ))}
+      <a
+        class="github-link"
+        href="https://github.com/cyson21"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="손찬양 GitHub 프로필 (새 창에서 열림)"
+      >
+        GitHub <ArrowUpRight size={15} aria-hidden="true" />
+      </a>
+    </nav>
+
+    <button class="menu-button" type="button" aria-label="탐색 메뉴 열기" aria-expanded="false" aria-controls="mobile-nav" title="메뉴">
+      <Menu class="menu-open-icon" size={23} aria-hidden="true" />
+      <X class="menu-close-icon" size={23} aria-hidden="true" />
+    </button>
+  </div>
+
+  <nav id="mobile-nav" class="mobile-nav" aria-label="모바일 탐색" hidden>
+    <div class="container mobile-nav-inner">
+      {links.map((link) => (
+        <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>{link.label}</a>
+      ))}
+      <a
+        href="https://github.com/cyson21"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="손찬양 GitHub 프로필 (새 창에서 열림)"
+      >GitHub <ArrowUpRight size={18} aria-hidden="true" /></a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('.menu-button');
+  const nav = document.querySelector<HTMLElement>('#mobile-nav');
+
+  const closeMenu = (restoreFocus = false) => {
+    if (!button || !nav) return;
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-label', '탐색 메뉴 열기');
+    nav.hidden = true;
+    document.body.classList.remove('menu-open');
+    if (restoreFocus) button.focus();
+  };
+
+  button?.addEventListener('click', () => {
+    if (!nav) return;
+    const open = button.getAttribute('aria-expanded') !== 'true';
+    button.setAttribute('aria-expanded', String(open));
+    button.setAttribute('aria-label', open ? '탐색 메뉴 닫기' : '탐색 메뉴 열기');
+    nav.hidden = !open;
+    document.body.classList.toggle('menu-open', open);
+  });
+
+  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => closeMenu()));
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || button?.getAttribute('aria-expanded') !== 'true') return;
+    event.preventDefault();
+    closeMenu(true);
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 760) closeMenu();
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    min-height: var(--header-height);
+    border-bottom: 1px solid rgba(157, 167, 162, 0.72);
+    background: rgba(247, 248, 246, 0.94);
+    backdrop-filter: blur(14px);
+  }
+
+  .header-inner {
+    display: flex;
+    min-height: var(--header-height);
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+  }
+
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 900;
+    text-decoration: none;
+  }
+
+  .wordmark:hover {
+    color: var(--ink);
+  }
+
+  .wordmark-mark {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 1px solid var(--ink);
+    border-radius: 3px;
+    background: var(--ink);
+    color: white;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+  }
+
+  .wordmark-name {
+    font-size: 0.92rem;
+  }
+
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .desktop-nav a {
+    position: relative;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .desktop-nav a:hover,
+  .desktop-nav a[aria-current='page'] {
+    color: var(--ink);
+  }
+
+  .desktop-nav a[aria-current='page']::after {
+    position: absolute;
+    right: 0;
+    bottom: -23px;
+    left: 0;
+    height: 3px;
+    background: var(--blue);
+    content: "";
+  }
+
+  .desktop-nav .github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .menu-button {
+    display: none;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  .menu-close-icon {
+    display: none;
+  }
+
+  .menu-button[aria-expanded='true'] .menu-open-icon {
+    display: none;
+  }
+
+  .menu-button[aria-expanded='true'] .menu-close-icon {
+    display: block;
+  }
+
+  .mobile-nav {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .mobile-nav-inner {
+    display: grid;
+    padding-block: 10px 16px;
+  }
+
+  .mobile-nav a {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .mobile-nav a:last-child {
+    border-bottom: 0;
+  }
+
+  @media (max-width: 760px) {
+    .desktop-nav {
+      display: none;
+    }
+
+    .menu-button {
+      display: grid;
+    }
+  }
+</style>

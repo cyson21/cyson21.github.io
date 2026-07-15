@@ -1,0 +1,251 @@
+---
+interface Props {
+  title?: string;
+  flow: {
+    normal: string[];
+    failure: string[];
+    recovery: string[];
+  };
+}
+
+const { title = '시스템 흐름', flow } = Astro.props;
+const modes = [
+  { id: 'normal', label: '정상 흐름', tone: 'blue', steps: flow.normal },
+  { id: 'failure', label: '실패 발생', tone: 'red', steps: flow.failure },
+  { id: 'recovery', label: '보호·복구', tone: 'green', steps: flow.recovery },
+];
+const uid = `flow-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<section class="flow-explorer" data-flow-explorer>
+  <div class="flow-header">
+    <div>
+      <p class="eyebrow">Interactive architecture</p>
+      <h3>{title}</h3>
+    </div>
+    <div class="flow-tabs" role="tablist" aria-label={`${title} 모드`}>
+      {modes.map((mode, index) => (
+        <button
+          type="button"
+          role="tab"
+          id={`${uid}-tab-${mode.id}`}
+          aria-controls={`${uid}-panel-${mode.id}`}
+          aria-selected={index === 0 ? 'true' : 'false'}
+          tabindex={index === 0 ? 0 : -1}
+          data-flow-tab={mode.id}
+        >
+          {mode.label}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {modes.map((mode, index) => (
+    <div
+      class:list={['flow-panel', `flow-panel--${mode.tone}`]}
+      role="tabpanel"
+      id={`${uid}-panel-${mode.id}`}
+      aria-labelledby={`${uid}-tab-${mode.id}`}
+      data-flow-panel={mode.id}
+      tabindex="0"
+      hidden={index !== 0}
+    >
+      <ol class="flow-track">
+        {mode.steps.map((step, stepIndex) => (
+          <li>
+            <span class="step-index">{String(stepIndex + 1).padStart(2, '0')}</span>
+            <strong>{step}</strong>
+            {stepIndex < mode.steps.length - 1 && <span class="flow-connector" aria-hidden="true">→</span>}
+          </li>
+        ))}
+      </ol>
+      <p class="flow-caption">
+        {mode.id === 'normal' && '요청이 성공할 때의 책임 경계를 보여줍니다.'}
+        {mode.id === 'failure' && '부분 실패나 중복 입력이 발생하는 지점을 표시합니다.'}
+        {mode.id === 'recovery' && '상태를 보호하고 다시 수렴시키는 경로를 표시합니다.'}
+      </p>
+    </div>
+  ))}
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-flow-explorer]').forEach((explorer) => {
+    const tabs = Array.from(explorer.querySelectorAll<HTMLButtonElement>('[data-flow-tab]'));
+    const panels = Array.from(explorer.querySelectorAll<HTMLElement>('[data-flow-panel]'));
+
+    const activate = (tab: HTMLButtonElement) => {
+      const id = tab.dataset.flowTab;
+      tabs.forEach((item) => {
+        const active = item === tab;
+        item.setAttribute('aria-selected', String(active));
+        item.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.flowPanel !== id;
+      });
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activate(tab));
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        let nextIndex = index;
+        if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+        if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === 'Home') nextIndex = 0;
+        if (event.key === 'End') nextIndex = tabs.length - 1;
+        const next = tabs[nextIndex];
+        if (next) {
+          activate(next);
+          next.focus();
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .flow-explorer {
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .flow-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .flow-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--surface-muted);
+  }
+
+  .flow-tabs button {
+    min-height: 38px;
+    padding: 7px 11px;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 0.75rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .flow-tabs button[aria-selected='true'] {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 1px 4px rgba(23, 26, 29, 0.16);
+  }
+
+  .flow-panel {
+    padding: 28px 22px 20px;
+    background: var(--blue-soft);
+  }
+
+  .flow-panel--red {
+    background: var(--red-soft);
+  }
+
+  .flow-panel--green {
+    background: var(--green-soft);
+  }
+
+  .flow-track {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(138px, 1fr));
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .flow-track li {
+    position: relative;
+    display: grid;
+    min-height: 106px;
+    align-content: space-between;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid rgba(23, 105, 224, 0.35);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.88);
+  }
+
+  .flow-panel--red li {
+    border-color: rgba(180, 35, 24, 0.35);
+  }
+
+  .flow-panel--green li {
+    border-color: rgba(8, 122, 85, 0.35);
+  }
+
+  .flow-connector {
+    position: absolute;
+    top: 50%;
+    right: -16px;
+    z-index: 1;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    transform: translateY(-50%);
+  }
+
+  .step-index {
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+  }
+
+  .flow-track strong {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .flow-caption {
+    margin-top: 18px;
+    color: var(--ink-soft);
+    font-size: 0.77rem;
+  }
+
+  @media (max-width: 700px) {
+    .flow-header {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .flow-tabs {
+      overflow-x: auto;
+    }
+
+    .flow-tabs button {
+      flex: 1 0 auto;
+    }
+
+    .flow-track {
+      grid-template-columns: 1fr;
+    }
+
+    .flow-track li {
+      min-height: 78px;
+    }
+
+    .flow-connector {
+      top: auto;
+      right: 50%;
+      bottom: -19px;
+      transform: translateX(50%) rotate(90deg);
+    }
+  }
+</style>

@@ -1,0 +1,35 @@
+{
+  "name": "portfolio-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.1.3",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "check:types": "astro check",
+    "check:content": "node scripts/check-content-invariants.mjs",
+    "check": "pnpm check:types && pnpm check:content && pnpm test:unit",
+    "build:raw": "astro build",
+    "build": "pnpm check && pnpm build:raw && pnpm test:privacy && pnpm test:links",
+    "preview": "astro preview",
+    "generate:resume": "node scripts/generate-public-resume.mjs",
+    "test:privacy": "node scripts/check-public-safety.mjs dist",
+    "test:links": "node scripts/check-links.mjs dist",
+    "test:unit": "node --test tests/unit/*.test.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:release": "playwright test tests/e2e/release.spec.ts --project=desktop",
+    "verify": "pnpm build && pnpm test:e2e"
+  },
+  "dependencies": {
+    "@lucide/astro": "1.24.0",
+    "astro": "7.0.9"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.9",
+    "@axe-core/playwright": "4.12.1",
+    "@playwright/test": "1.61.1",
+    "@types/node": "22.20.1",
+    "typescript": "6.0.3"
+  }
+}

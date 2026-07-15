@@ -1,0 +1,186 @@
+---
+import { ArrowRight, ArrowUpRight } from '@lucide/astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  index?: number;
+}
+
+const { project, index } = Astro.props;
+const data = project.data;
+const primarySignal = data.signals[0];
+---
+
+<article class="project-row">
+  <div class="project-index" aria-hidden="true">{String(index ?? data.order).padStart(2, '0')}</div>
+  <div class="project-main">
+    <div class="project-title-line">
+      <div>
+        <p class="eyebrow">{data.eyebrow}</p>
+        <h3><a href={`/projects/${project.id}/`}>{data.name}</a></h3>
+      </div>
+      <span class="domain">{data.domain}</span>
+    </div>
+    <p class="project-summary">{data.summary}</p>
+    <ul class="tag-list" aria-label={`${data.name} 기술`}>
+      {data.stack.slice(0, 5).map((item) => <li class="tag">{item}</li>)}
+    </ul>
+  </div>
+  {primarySignal && <div class="project-proof">
+    <p class="proof-label">검증 신호</p>
+    <strong>{primarySignal.expression}</strong>
+    <span>{primarySignal.result}</span>
+    <div class="project-links">
+      <a href={`/projects/${project.id}/`} aria-label={`${data.name} 프로젝트 상세 보기`}>상세 <ArrowRight size={16} aria-hidden="true" /></a>
+      {data.links.github && <a href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 (새 창에서 열림)`}>GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
+    </div>
+  </div>}
+</article>
+
+<style>
+  .project-row {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr) minmax(220px, 0.34fr);
+    gap: 24px;
+    padding-block: 34px;
+    border-top: 1px solid var(--line);
+  }
+
+  .project-row:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .project-index {
+    padding-top: 4px;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.76rem;
+  }
+
+  .project-main,
+  .project-proof {
+    min-width: 0;
+  }
+
+  .project-main {
+    display: grid;
+    gap: 16px;
+  }
+
+  .project-title-line {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .project-title-line h3 a {
+    text-decoration: none;
+  }
+
+  .domain {
+    flex: 0 0 auto;
+    padding: 3px 7px;
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 800;
+  }
+
+  .project-summary {
+    max-width: 760px;
+    color: var(--ink-soft);
+  }
+
+  .project-proof {
+    display: grid;
+    align-content: start;
+    gap: 7px;
+    padding: 18px;
+    border-left: 3px solid var(--green);
+    background: var(--green-soft);
+  }
+
+  .proof-label {
+    color: var(--green);
+    font-family: var(--mono);
+    font-size: 0.67rem;
+    font-weight: 800;
+  }
+
+  .project-proof strong {
+    font-family: var(--mono);
+    font-size: 0.98rem;
+    line-height: 1.45;
+  }
+
+  .project-proof > span {
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+  }
+
+  .project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 9px;
+  }
+
+  .project-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--ink);
+    font-size: 0.76rem;
+    font-weight: 800;
+  }
+
+  @media (max-width: 840px) {
+    .project-row {
+      grid-template-columns: 38px minmax(0, 1fr);
+    }
+
+    .project-proof {
+      grid-column: 2;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .project-row {
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 10px 12px;
+      padding-block: 22px;
+    }
+
+    .project-index {
+      grid-column: 1;
+    }
+
+    .project-main,
+    .project-proof {
+      grid-column: 2;
+    }
+
+    .project-main {
+      gap: 12px;
+    }
+
+    .project-title-line {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .project-proof {
+      gap: 4px;
+      padding: 12px 14px;
+    }
+
+    .project-links {
+      gap: 10px;
+      margin-top: 4px;
+    }
+  }
+</style>

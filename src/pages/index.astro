@@ -1,0 +1,468 @@
+---
+import { getCollection } from 'astro:content';
+import { ArrowDown, ArrowRight, CodeXml, Download, Mail } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SystemMap from '../components/SystemMap.astro';
+import VerificationSignal from '../components/VerificationSignal.astro';
+import ProjectRow from '../components/ProjectRow.astro';
+import { capabilities, experiences, profile } from '../data/site';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const featured = projects.filter((project) => project.data.featured);
+const extended = projects.filter((project) => !project.data.featured);
+const homeSignals = [
+  projects.find((project) => project.id === 'stockrush')?.data.signals[0],
+  projects.find((project) => project.id === 'member-event-consistency')?.data.signals[0],
+  projects.find((project) => project.id === 'enterprise-policy-rag')?.data.signals[1],
+].filter((signal): signal is NonNullable<typeof signal> => Boolean(signal));
+---
+
+<BaseLayout title="손찬양" description="상태 정합성, 장애 복구와 데이터 흐름을 코드와 재현 가능한 테스트 근거로 설명하는 Java/Spring 백엔드 개발자 손찬양의 포트폴리오입니다.">
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <div class="hero-person">
+          <img src="/media/profile.png" alt="손찬양 프로필 사진" width="112" height="112" />
+          <div>
+            <p class="eyebrow">Java / Spring Backend Engineer</p>
+            <p class="availability"><span aria-hidden="true"></span>Backend systems · Seoul</p>
+          </div>
+        </div>
+        <h1>손찬양</h1>
+        <p class="hero-statement">{profile.statement}</p>
+        <div class="button-row hero-actions">
+          <a class="button" href="#featured-projects">대표 프로젝트 <ArrowDown size={18} aria-hidden="true" /></a>
+          <a class="button button--secondary" href={profile.resumePath}>이력서 PDF <Download size={17} aria-hidden="true" /></a>
+          <a class="button button--text" href={profile.github} target="_blank" rel="noreferrer">GitHub <CodeXml size={17} aria-hidden="true" /></a>
+        </div>
+      </div>
+      <div class="hero-aside" aria-label="작업 방식 요약">
+        <p class="console-title">SYSTEMS UNDER FAILURE</p>
+        <ol>
+          <li><span>01</span><strong>상태를 바꾸기 전에</strong><em>보호할 불변식을 먼저 정의합니다.</em></li>
+          <li><span>02</span><strong>실패를 숨기지 않고</strong><em>재시도·거절·복구 경로를 분리합니다.</em></li>
+          <li><span>03</span><strong>주장을 끝내지 않고</strong><em>코드 경로와 연결 테스트를 함께 둡니다.</em></li>
+        </ol>
+      </div>
+    </div>
+    <div class="container hero-map"><SystemMap /></div>
+  </section>
+
+  <section class="section section--surface" aria-labelledby="proof-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Measured evidence</p>
+          <h2 id="proof-title">숙련도 점수 대신<br />실행 결과를 보여줍니다.</h2>
+        </div>
+        <p class="lede">각 수치는 프로젝트 테스트가 보호하는 규칙과 연결됩니다. 로컬 통합 테스트, 컨테이너 smoke, 정적 데모와 live 경로를 같은 수준으로 합치지 않습니다.</p>
+      </div>
+      <div class="signal-grid">
+        {homeSignals.map((signal) => <VerificationSignal {...signal} />)}
+      </div>
+    </div>
+  </section>
+
+  <section id="featured-projects" class="section" aria-labelledby="featured-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Featured case studies</p>
+          <h2 id="featured-title">실패 조건이 선명한<br />세 가지 백엔드 문제</h2>
+        </div>
+        <div>
+          <p class="lede">기술 이름보다 부분 실패, 동시 요청과 권한 경계에서 어떤 상태를 보호했는지부터 확인할 수 있습니다.</p>
+          <a class="section-link" href="/projects/">6개 프로젝트 전체 보기 <ArrowRight size={18} aria-hidden="true" /></a>
+        </div>
+      </div>
+      <div class="project-list">
+        {featured.map((project, index) => <ProjectRow project={project} index={index + 1} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section capabilities" aria-labelledby="capability-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Engineering practice</p>
+          <h2 id="capability-title">반복해서 사용하는<br />문제 해결 방식</h2>
+        </div>
+        <p class="lede">운영 이슈와 개인 프로젝트를 같은 경험처럼 섞지 않습니다. 실무에서는 분석·수정·검증 범위를, 프로젝트에서는 재현 가능한 코드와 테스트 근거를 구분해 제공합니다.</p>
+      </div>
+      <div class="capability-grid">
+        {capabilities.map((item) => (
+          <article>
+            <span>{item.id}</span>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+            <code>{item.signal}</code>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--surface" aria-labelledby="experience-title">
+    <div class="container experience-preview">
+      <div>
+        <p class="eyebrow">Experience</p>
+        <h2 id="experience-title">운영 백엔드에서<br />검증 가능한 시스템으로</h2>
+        <p class="lede">데이터 수집·API 구현과 배포 경험에서 시작해, 기업용 플랫폼의 운영 장애·정합성·의존성 전환과 테스트 기반 개선으로 책임 범위를 확장했습니다.</p>
+        <a class="section-link" href="/experience/">경력 상세 보기 <ArrowRight size={18} aria-hidden="true" /></a>
+      </div>
+      <ol class="career-list">
+        {experiences.map((experience) => (
+          <li>
+            <time>{experience.period}</time>
+            <div><strong>{experience.company}</strong><span>{experience.role}</span><p>{experience.context}</p></div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="extended-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Extended systems</p>
+          <h2 id="extended-title">AI Backend · Data Platform<br />· Personalization</h2>
+        </div>
+        <p class="lede">LLM 정책 경계, 변경 이벤트 lineage와 행동 이벤트 기반 추천 snapshot으로 같은 검증 방식을 확장했습니다.</p>
+      </div>
+      <div class="project-list">
+        {extended.map((project) => <ProjectRow project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-band">
+    <div class="container contact-inner">
+      <div><p class="eyebrow">Contact</p><h2>전체 맥락은 이력서에서,<br />구현 근거는 프로젝트에서 확인하세요.</h2></div>
+      <div class="button-row">
+        <a class="button" href={profile.resumePath}>이력서 PDF <Download size={17} aria-hidden="true" /></a>
+        <a class="button button--secondary" href={`mailto:${profile.email}`}>이메일 <Mail size={17} aria-hidden="true" /></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: 70px 88px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.68fr);
+    gap: 72px;
+    align-items: end;
+  }
+
+  .hero-copy {
+    min-width: 0;
+  }
+
+  .hero-person {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+
+  .hero-person img {
+    width: 82px;
+    height: 82px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    object-fit: cover;
+    filter: grayscale(15%);
+  }
+
+  .availability {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+  }
+
+  .availability span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  .hero h1 {
+    font-size: 5.4rem;
+  }
+
+  .hero-statement {
+    max-width: 800px;
+    margin-top: 20px;
+    color: var(--ink-soft);
+    font-size: 1.35rem;
+    font-weight: 650;
+    line-height: 1.65;
+  }
+
+  .hero-actions {
+    margin-top: 34px;
+  }
+
+  .hero-aside {
+    border-top: 5px solid var(--blue);
+    border-bottom: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .console-title {
+    padding: 14px 16px;
+    border-inline: 1px solid var(--line-strong);
+    color: var(--blue);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 800;
+  }
+
+  .hero-aside ol {
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid var(--line-strong);
+    list-style: none;
+  }
+
+  .hero-aside li {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 5px 12px;
+    padding: 16px;
+    border-top: 1px solid var(--line);
+    border-right: 1px solid var(--line-strong);
+  }
+
+  .hero-aside li > span {
+    grid-row: 1 / 3;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+  }
+
+  .hero-aside strong {
+    font-size: 0.9rem;
+  }
+
+  .hero-aside em {
+    color: var(--ink-soft);
+    font-size: 0.77rem;
+    font-style: normal;
+  }
+
+  .hero-map {
+    margin-top: 56px;
+  }
+
+  .signal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .section-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    font-size: 0.86rem;
+    font-weight: 900;
+  }
+
+  .capabilities {
+    border-block: 1px solid #303634;
+    background: #171a1d;
+    color: white;
+  }
+
+  .capabilities .eyebrow {
+    color: #8ab9ff;
+  }
+
+  .capabilities .lede {
+    color: #c0c8c4;
+  }
+
+  .capability-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid #4a514e;
+    border-left: 1px solid #4a514e;
+  }
+
+  .capability-grid article {
+    display: grid;
+    min-height: 270px;
+    align-content: start;
+    gap: 16px;
+    padding: 22px;
+    border-right: 1px solid #4a514e;
+    border-bottom: 1px solid #4a514e;
+  }
+
+  .capability-grid article > span,
+  .capability-grid code {
+    color: #8ab9ff;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+  }
+
+  .capability-grid p {
+    color: #bdc5c1;
+    font-size: 0.86rem;
+  }
+
+  .capability-grid code {
+    margin-top: auto;
+    color: #65d6ac;
+  }
+
+  .experience-preview {
+    display: grid;
+    grid-template-columns: minmax(0, 0.78fr) minmax(400px, 1fr);
+    gap: 72px;
+    align-items: start;
+  }
+
+  .experience-preview > div:first-child {
+    position: sticky;
+    top: calc(var(--header-height) + 34px);
+  }
+
+  .experience-preview .lede {
+    margin-top: 22px;
+  }
+
+  .career-list {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line-strong);
+    list-style: none;
+  }
+
+  .career-list li {
+    display: grid;
+    grid-template-columns: 125px 1fr;
+    gap: 24px;
+    padding-block: 28px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .career-list time {
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+  }
+
+  .career-list div {
+    display: grid;
+    gap: 5px;
+  }
+
+  .career-list span,
+  .career-list p {
+    color: var(--ink-soft);
+  }
+
+  .career-list span {
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  .career-list p {
+    margin-top: 10px;
+    font-size: 0.9rem;
+  }
+
+  .contact-band {
+    padding-block: 72px;
+    border-top: 1px solid var(--line-strong);
+    background: var(--amber-soft);
+  }
+
+  .contact-inner {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  @media (max-width: 980px) {
+    .hero-inner,
+    .experience-preview {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .hero-aside {
+      max-width: 680px;
+    }
+
+    .capability-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .experience-preview > div:first-child {
+      position: static;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero {
+      padding-block: 46px 58px;
+    }
+
+    .hero h1 {
+      font-size: 3.55rem;
+    }
+
+    .hero-statement {
+      font-size: 1.12rem;
+    }
+
+    .signal-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-inner {
+      align-items: stretch;
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero-person img {
+      width: 66px;
+      height: 66px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+    }
+
+    .capability-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .capability-grid article {
+      min-height: 0;
+    }
+
+    .career-list li {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+</style>

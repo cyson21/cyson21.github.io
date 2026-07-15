@@ -1,0 +1,56 @@
+[
+  {
+    "output": "public/media/profile.png",
+    "sourceProject": "resumes",
+    "sourcePath": "source/assets/profile.png",
+    "sha256": "bf9c7b8450cc5bb2c774450b58d7adeb0252e2b48bb9475f94bb2b9925ba0124",
+    "owner": "Son Chanyang",
+    "usage": "Public portfolio profile image",
+    "approvedAt": "2026-07-14"
+  },
+  {
+    "output": "public/media/stockrush-architecture.png",
+    "sourceProject": "stockrush",
+    "sourcePath": "projects/01-stockrush/assets/stockrush-architecture.png",
+    "sha256": "af9614344aef6845a544a9bd78e2a600461d2af44805e4e5534ea49229f79469",
+    "owner": "Son Chanyang",
+    "usage": "StockRush project architecture",
+    "approvedAt": "2026-07-14"
+  },
+  {
+    "output": "public/media/stockrush-saga-flow.png",
+    "sourceProject": "stockrush",
+    "sourcePath": "projects/01-stockrush/assets/stockrush-saga-flow.png",
+    "sha256": "a64ba0c10e54c7a6c8cf782e8f00278b44048a392d4fdf823f9c9386335b5490",
+    "owner": "Son Chanyang",
+    "usage": "StockRush Saga flow",
+    "approvedAt": "2026-07-14"
+  },
+  {
+    "output": "public/media/rag-operations.jpg",
+    "sourceProject": "enterprise-policy-rag",
+    "sourcePath": "docs/assets/operations-demo-ko-v13-desktop.jpg",
+    "sha256": "e776d7d0525691cc4eb09914c523f9013073bc41a5a4fd02990480bbf9012ad8",
+    "owner": "Son Chanyang",
+    "usage": "Enterprise Policy RAG operations UI",
+    "approvedAt": "2026-07-14"
+  },
+  {
+    "output": "public/downloads/resume.pdf",
+    "sourceProject": "portfolio-web",
+    "sourcePath": "/resume/print/",
+    "sha256": "d179f1e836ce7ee60580cbca5be692f74b8f36456d483e1054d36e48df55506e",
+    "owner": "Son Chanyang",
+    "usage": "Public two-page resume download",
+    "approvedAt": "2026-07-15"
+  },
+  {
+    "output": "public/icons/favicon.svg",
+    "sourceProject": "portfolio-web",
+    "sourcePath": "public/icons/favicon.svg",
+    "sha256": "cc75f11dcf1bc7159bc8fdd8efd80f017a3e280bacdf6cf0326da707681961c6",
+    "owner": "Son Chanyang",
+    "usage": "Public portfolio browser icon",
+    "approvedAt": "2026-07-15"
+  }
+]

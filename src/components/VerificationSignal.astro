@@ -1,0 +1,117 @@
+---
+interface Props {
+  label: string;
+  expression: string;
+  result: string;
+  source?: string;
+  tone?: 'success' | 'warning' | 'danger';
+  compact?: boolean;
+}
+
+const { label, expression, result, source, tone = 'success', compact = false } = Astro.props;
+---
+
+<article class:list={['signal', `signal--${tone}`, { 'signal--compact': compact }]}> 
+  <div class="signal-topline">
+    <span class="signal-dot" aria-hidden="true"></span>
+    <span class="signal-label">{label}</span>
+  </div>
+  <p class="signal-expression">{expression}</p>
+  <p class="signal-result">{result}</p>
+  {source && <p class="signal-source">근거: {source}</p>}
+</article>
+
+<style>
+  .signal {
+    display: grid;
+    min-height: 190px;
+    align-content: start;
+    gap: 10px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--green);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .signal--warning {
+    border-top-color: var(--amber);
+  }
+
+  .signal--danger {
+    border-top-color: var(--red);
+  }
+
+  .signal--compact {
+    min-height: 0;
+    padding: 16px;
+  }
+
+  .signal-topline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .signal-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  .signal--warning .signal-dot {
+    background: var(--amber);
+  }
+
+  .signal--danger .signal-dot {
+    background: var(--red);
+  }
+
+  .signal-label {
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .signal-expression {
+    font-family: var(--mono);
+    font-size: 1.42rem;
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
+  .signal-result {
+    color: var(--green);
+    font-size: 0.88rem;
+    font-weight: 800;
+  }
+
+  .signal--warning .signal-result {
+    color: var(--amber);
+  }
+
+  .signal--danger .signal-result {
+    color: var(--red);
+  }
+
+  .signal-source {
+    margin-top: auto;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.67rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 620px) {
+    .signal {
+      min-height: 0;
+      padding: 18px;
+    }
+
+    .signal-expression {
+      font-size: 1.22rem;
+    }
+  }
+</style>

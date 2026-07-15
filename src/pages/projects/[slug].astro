@@ -1,0 +1,766 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { ArrowLeft, ArrowRight, ArrowUpRight, CircleAlert, CodeXml } from '@lucide/astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FlowExplorer from '../../components/FlowExplorer.astro';
+import VerificationSignal from '../../components/VerificationSignal.astro';
+import DecisionGrid from '../../components/DecisionGrid.astro';
+import CodeEvidence from '../../components/CodeEvidence.astro';
+import ProjectVisual from '../../components/ProjectVisual.astro';
+
+export async function getStaticPaths() {
+  const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+  return projects.map((project, index) => ({
+    params: { slug: project.id },
+    props: {
+      project,
+      previous: projects[index - 1] ?? null,
+      next: projects[index + 1] ?? null,
+    },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  previous: CollectionEntry<'projects'> | null;
+  next: CollectionEntry<'projects'> | null;
+}
+
+const { project, previous, next } = Astro.props;
+const data = project.data;
+await render(project);
+const layerLabel: Record<string, string> = {
+  unit: 'Unit',
+  integration: 'Integration',
+  'container-smoke': 'Container smoke',
+  'static-demo': 'Static demo',
+  'live-demo': 'Live demo',
+  cloud: 'Cloud',
+};
+const toc = [
+  ['overview', '문제와 담당 범위'],
+  ['flow', '시스템 흐름'],
+  ['decisions', '설계 판단'],
+  ['rules', '보호 규칙'],
+  ['evidence', '대표 코드 근거'],
+  ['verification', '검증 결과'],
+  ['scope', '현재 범위'],
+];
+---
+
+<BaseLayout title={data.seo.title} description={data.seo.description} article={true}>
+  <header class="project-hero">
+    <div class="container project-hero-grid">
+      <div class="project-heading">
+        <a class="back-link" href="/projects/"><ArrowLeft size={17} aria-hidden="true" /> 프로젝트 전체</a>
+        <p class="eyebrow">Project {String(data.order).padStart(2, '0')} · {data.eyebrow}</p>
+        <h1>{data.name}</h1>
+        <p class="project-lede">{data.summary}</p>
+        <div class="button-row project-actions">
+          {data.links.github && <a class="button" href={data.links.github} target="_blank" rel="noreferrer"><CodeXml size={17} aria-hidden="true" /> GitHub</a>}
+          {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer">Demo <ArrowUpRight size={17} aria-hidden="true" /></a>}
+          {!data.links.github && <span class="scope-badge"><CircleAlert size={16} aria-hidden="true" /> Case study only</span>}
+        </div>
+      </div>
+      <dl class="project-meta">
+        <div><dt>ROLE</dt><dd>{data.role}</dd></div>
+        <div><dt>PERIOD</dt><dd>{data.period}</dd></div>
+        <div><dt>DOMAIN</dt><dd>{data.domain}</dd></div>
+        <div><dt>EVIDENCE</dt><dd>{data.codeEvidence.length} code · {data.codeEvidence.length} tests</dd></div>
+      </dl>
+    </div>
+    <div class="container visual-wrap">
+      <ProjectVisual name={data.name} visual={data.visual} flow={data.flow.normal} />
+    </div>
+  </header>
+
+  <div class="container project-layout">
+    <aside class="project-toc no-print">
+      <p id="project-toc-title">On this page</p>
+      <nav aria-labelledby="project-toc-title">
+        {toc.map(([id, label], index) => <a href={`#${id}`} aria-current={index === 0 ? 'location' : undefined}><span>{String(index + 1).padStart(2, '0')}</span>{label}</a>)}
+      </nav>
+      <div class="toc-stack">
+        <p>STACK</p>
+        <ul class="tag-list">{data.stack.map((item) => <li class="tag">{item}</li>)}</ul>
+      </div>
+    </aside>
+
+    <article class="project-content">
+      <section id="overview" class="project-section" tabindex="-1">
+        <p class="eyebrow">Problem & ownership</p>
+        <h2>해결한 문제와 직접 담당한 범위</h2>
+        <p class="section-lede">{data.problem}</p>
+        <div class="responsibility-list">
+          {data.responsibilities.map((item, index) => <div><span>{String(index + 1).padStart(2, '0')}</span><p>{item}</p></div>)}
+        </div>
+      </section>
+
+      <section id="flow" class="project-section project-section--wide" tabindex="-1">
+        <h2 class="visually-hidden">시스템 흐름</h2>
+        <FlowExplorer title={`${data.name} 시스템 흐름`} flow={data.flow} />
+        <div class="signal-detail-grid">
+          {data.signals.map((signal) => <VerificationSignal {...signal} />)}
+        </div>
+      </section>
+
+      <section id="decisions" class="project-section project-section--wide" tabindex="-1">
+        <p class="eyebrow">Design decisions</p>
+        <h2>선택한 구조와 제외한 대안</h2>
+        <p class="section-lede">기술 이름이 아니라 어떤 위험을 줄이기 위해 해당 구조를 선택했는지 기록했습니다.</p>
+        <DecisionGrid items={data.decisions} />
+      </section>
+
+      <section id="rules" class="project-section" tabindex="-1">
+        <p class="eyebrow">Protected invariants</p>
+        <h2>시스템이 반드시 지켜야 하는 규칙</h2>
+        <ol class="protection-list">
+          {data.protectionRules.map((rule, index) => <li><span>R{String(index + 1).padStart(2, '0')}</span><strong>{rule}</strong></li>)}
+        </ol>
+      </section>
+
+      <section id="evidence" class="project-section project-section--wide" tabindex="-1">
+        <p class="eyebrow">Representative code evidence</p>
+        <h2>대표 코드, 보호 규칙과 연결 테스트</h2>
+        <p class="section-lede">파일 경로와 짧은 핵심 발췌만 보여주고, 각 코드가 보호하는 규칙과 그 규칙을 고정하는 테스트를 함께 연결합니다.</p>
+        <CodeEvidence items={data.codeEvidence} />
+      </section>
+
+      <section id="verification" class="project-section project-section--wide" tabindex="-1">
+        <p class="eyebrow">Verification layers</p>
+        <h2>확인한 환경과 결과를 분리합니다.</h2>
+        <table class="verification-table">
+          <caption class="visually-hidden">{data.name} 검증 결과</caption>
+          <thead>
+            <tr><th scope="col">LEVEL</th><th scope="col">METHOD</th><th scope="col">RESULT</th></tr>
+          </thead>
+          <tbody>
+            {data.verification.map((item) => (
+              <tr>
+                <th scope="row" class="level" data-label="LEVEL">{layerLabel[item.layer]}</th>
+                <td data-label="METHOD">{item.method}</td>
+                <td data-label="RESULT">{item.result}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      <section id="scope" class="project-section scope-grid" tabindex="-1">
+        <div>
+          <p class="eyebrow">Current boundary</p>
+          <h2>현재 검증 범위</h2>
+          <ul class="rule-list">{data.limitations.map((item) => <li>{item}</li>)}</ul>
+        </div>
+        <div>
+          <p class="eyebrow">Next proof</p>
+          <h2>다음 검증 단계</h2>
+          <ul class="rule-list">{data.next.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      </section>
+
+      {(data.links.adr || data.links.testReport) && (
+        <section class="project-resources" aria-label="프로젝트 외부 자료">
+          <p>MORE EVIDENCE</p>
+          <div>
+            {data.links.adr && <a href={data.links.adr} target="_blank" rel="noreferrer">ADR <ArrowUpRight size={15} aria-hidden="true" /></a>}
+            {data.links.testReport && <a href={data.links.testReport} target="_blank" rel="noreferrer">Test source <ArrowUpRight size={15} aria-hidden="true" /></a>}
+          </div>
+        </section>
+      )}
+    </article>
+  </div>
+
+  <nav class="project-pagination" aria-label="프로젝트 이전 다음">
+    <div class="container pagination-grid">
+      {previous ? <a href={`/projects/${previous.id}/`}><span><ArrowLeft size={16} aria-hidden="true" /> Previous</span><strong>{previous.data.name}</strong></a> : <span></span>}
+      {next ? <a class="next" href={`/projects/${next.id}/`}><span>Next <ArrowRight size={16} aria-hidden="true" /></span><strong>{next.data.name}</strong></a> : <a class="next" href="/projects/"><span>Back to</span><strong>All projects</strong></a>}
+    </div>
+  </nav>
+</BaseLayout>
+
+<script>
+  const sectionLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.project-toc a[href^="#"]'));
+
+  const focusFragment = () => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (!target) return;
+    sectionLinks.forEach((link) => {
+      if (link.hash === `#${id}`) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+    window.requestAnimationFrame(() => target.focus({ preventScroll: true }));
+  };
+
+  window.addEventListener('hashchange', focusFragment);
+  focusFragment();
+</script>
+
+<style>
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .project-hero {
+    padding-block: 62px 72px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .project-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.42fr);
+    gap: 70px;
+    align-items: end;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 42px;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .project-heading h1 {
+    max-width: 950px;
+    font-size: 4.7rem;
+  }
+
+  .project-lede {
+    max-width: 850px;
+    margin-top: 24px;
+    color: var(--ink-soft);
+    font-size: 1.25rem;
+    line-height: 1.72;
+  }
+
+  .project-actions {
+    margin-top: 30px;
+  }
+
+  .scope-badge {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    border: 1px solid var(--amber);
+    border-radius: 4px;
+    background: var(--amber-soft);
+    color: var(--amber);
+    font-size: 0.77rem;
+    font-weight: 800;
+  }
+
+  .project-meta {
+    margin: 0;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .project-meta div {
+    display: grid;
+    grid-template-columns: 78px 1fr;
+    gap: 14px;
+    padding-block: 13px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .project-meta dt {
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 800;
+  }
+
+  .project-meta dd {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+
+  .visual-wrap {
+    margin-top: 58px;
+  }
+
+  .project-layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 72px;
+    align-items: start;
+    padding-block: 84px;
+  }
+
+  .project-toc {
+    position: sticky;
+    top: calc(var(--header-height) + 28px);
+  }
+
+  .project-toc > p,
+  .toc-stack > p {
+    margin-bottom: 12px;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .project-toc nav {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+
+  .project-toc nav a {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 8px;
+    padding-block: 9px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-size: 0.73rem;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .project-toc nav a span {
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+  }
+
+  .project-toc nav a[aria-current='location'] {
+    color: var(--blue);
+    font-weight: 850;
+  }
+
+  .toc-stack {
+    margin-top: 34px;
+  }
+
+  .project-content {
+    min-width: 0;
+  }
+
+  .project-section {
+    width: min(100%, var(--reading));
+    padding-block: 0 88px;
+    scroll-margin-top: calc(var(--header-height) + 25px);
+  }
+
+  .project-section + .project-section {
+    padding-top: 6px;
+  }
+
+  .project-section--wide {
+    width: 100%;
+  }
+
+  .project-section h2 {
+    margin-bottom: 24px;
+    font-size: 2.45rem;
+  }
+
+  .section-lede {
+    max-width: 810px;
+    margin-bottom: 30px;
+    color: var(--ink-soft);
+    font-size: 1.04rem;
+  }
+
+  .responsibility-list {
+    display: grid;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .responsibility-list > div {
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 14px;
+    padding-block: 18px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .responsibility-list span {
+    color: var(--blue);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+  }
+
+  .signal-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .protection-list {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--ink);
+    list-style: none;
+  }
+
+  .protection-list li {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 18px;
+    align-items: start;
+    padding-block: 20px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .protection-list span {
+    color: var(--blue);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+  }
+
+  .protection-list strong {
+    font-size: 0.98rem;
+  }
+
+  .verification-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid var(--line-strong);
+    border-left: 1px solid var(--line-strong);
+  }
+
+  .verification-table th,
+  .verification-table td {
+    padding: 14px;
+    border-right: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .verification-table thead {
+    background: var(--ink);
+    color: white;
+  }
+
+  .verification-table thead th {
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    font-weight: 800;
+  }
+
+  .verification-table tbody tr {
+    background: var(--surface);
+  }
+
+  .verification-table td {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+  }
+
+  .verification-table .level {
+    width: 150px;
+    color: var(--green);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 800;
+  }
+
+  .verification-table [data-label]::before {
+    display: none;
+  }
+
+  .scope-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .scope-grid > div {
+    padding: 24px;
+    border-top: 4px solid var(--amber);
+    background: var(--amber-soft);
+  }
+
+  .scope-grid > div:last-child {
+    border-top-color: var(--blue);
+    background: var(--blue-soft);
+  }
+
+  .scope-grid h2 {
+    font-size: 1.4rem;
+  }
+
+  .scope-grid .rule-list {
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+  }
+
+  .project-resources {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .project-resources > p {
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 800;
+  }
+
+  .project-resources > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .project-resources a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .project-pagination {
+    border-top: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .pagination-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pagination-grid > a {
+    display: grid;
+    gap: 7px;
+    min-height: 130px;
+    align-content: center;
+    padding: 28px 0;
+    text-decoration: none;
+  }
+
+  .pagination-grid > a:first-child {
+    padding-right: 28px;
+    border-right: 1px solid var(--line-strong);
+  }
+
+  .pagination-grid .next {
+    padding-left: 28px;
+    text-align: right;
+  }
+
+  .pagination-grid a span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 800;
+  }
+
+  .pagination-grid .next span {
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 960px) {
+    .project-hero-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .project-meta {
+      max-width: 640px;
+    }
+
+    .project-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+      padding-top: 0;
+    }
+
+    .project-toc {
+      position: sticky;
+      top: var(--header-height);
+      z-index: 5;
+      display: block;
+      margin-bottom: 48px;
+      padding-block: 10px;
+      border-bottom: 1px solid var(--line-strong);
+      background: var(--paper);
+    }
+
+    .project-toc,
+    .project-toc nav {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .project-toc > p {
+      margin-bottom: 7px;
+    }
+
+    .project-toc nav {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      border: 0;
+      overscroll-behavior-inline: contain;
+      scrollbar-width: thin;
+    }
+
+    .project-toc nav a {
+      display: inline-flex;
+      flex: 0 0 auto;
+      grid-template-columns: none;
+      align-items: center;
+      gap: 6px;
+      min-height: 40px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: var(--surface);
+    }
+
+    .project-toc nav a[aria-current='location'] {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .toc-stack {
+      display: none;
+    }
+
+    .project-section {
+      scroll-margin-top: calc(var(--header-height) + 92px);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .project-hero {
+      padding-block: 34px 42px;
+    }
+
+    .project-hero-grid {
+      gap: 28px;
+    }
+
+    .back-link {
+      margin-bottom: 24px;
+    }
+
+    .project-heading h1 {
+      font-size: 3rem;
+    }
+
+    .project-lede {
+      margin-top: 16px;
+      font-size: 1.05rem;
+      line-height: 1.55;
+    }
+
+    .project-actions {
+      margin-top: 20px;
+    }
+
+    .visual-wrap {
+      margin-top: 34px;
+    }
+
+    .project-section h2 {
+      font-size: 2rem;
+    }
+
+    .signal-detail-grid,
+    .scope-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .verification-table {
+      display: block;
+      border-left: 0;
+    }
+
+    .verification-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+    }
+
+    .verification-table tbody {
+      display: grid;
+      gap: 14px;
+    }
+
+    .verification-table tbody tr {
+      display: grid;
+      grid-template-columns: 1fr;
+      border: 1px solid var(--line-strong);
+    }
+
+    .verification-table th,
+    .verification-table td {
+      display: grid;
+      width: 100%;
+      grid-template-columns: 68px minmax(0, 1fr);
+      gap: 12px;
+      border-right: 0;
+    }
+
+    .verification-table [data-label]::before {
+      display: block;
+      color: var(--ink-faint);
+      content: attr(data-label);
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      font-weight: 800;
+    }
+
+    .project-resources {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .project-heading h1 {
+      font-size: 2.55rem;
+    }
+
+    .project-meta div {
+      grid-template-columns: 72px minmax(0, 1fr);
+      gap: 10px;
+    }
+
+    .pagination-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .pagination-grid > a:first-child {
+      padding-right: 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .pagination-grid .next {
+      padding-left: 0;
+    }
+  }
+</style>

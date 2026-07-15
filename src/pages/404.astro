@@ -1,0 +1,46 @@
+---
+import { ArrowLeft } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const layoutProps = {
+  title: '페이지를 찾을 수 없습니다',
+  description: '요청한 포트폴리오 페이지를 찾을 수 없습니다.',
+  robots: 'noindex,nofollow',
+} as const;
+---
+
+<BaseLayout {...layoutProps}>
+  <section class="not-found">
+    <div class="container">
+      <p class="eyebrow">404 · Not found</p>
+      <h1>이 경로에는<br />검증 가능한 결과가 없습니다.</h1>
+      <p>주소가 바뀌었거나 공개 범위에서 제외된 페이지입니다.</p>
+      <a class="button" href="/"><ArrowLeft size={17} aria-hidden="true" /> 홈으로 돌아가기</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    min-height: 70vh;
+    align-items: center;
+    padding-block: 70px;
+  }
+
+  .not-found h1 {
+    max-width: 900px;
+    font-size: 4.3rem;
+  }
+
+  .not-found p:not(.eyebrow) {
+    margin-block: 22px 32px;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 640px) {
+    .not-found h1 {
+      font-size: 2.8rem;
+    }
+  }
+</style>

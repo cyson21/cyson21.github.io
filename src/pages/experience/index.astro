@@ -1,0 +1,319 @@
+---
+import { ArrowRight } from '@lucide/astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import { experiences } from '../../data/site';
+---
+
+<BaseLayout title="Experience" description="기업용 플랫폼 운영 백엔드와 공공·실시간 데이터 파이프라인에서 담당한 문제, 기술적 조치와 검증 범위를 정리합니다.">
+  <PageIntro eyebrow="Professional experience" title="운영에서 시작해 검증으로 끝냅니다." description="업무 항목을 나열하기보다 어떤 문제가 있었고, 어느 범위를 직접 바꾸었으며, 무엇으로 결과를 확인했는지 중심으로 경력을 설명합니다. 개인 프로젝트의 테스트 수치와 실무 경험은 서로 섞지 않습니다." />
+
+  <section class="section experience-section">
+    <div class="container experience-layout">
+      <aside class="career-summary">
+        <p class="eyebrow">Career timeline</p>
+        <strong>2021.07 → 현재</strong>
+        <p>데이터 수집과 API 구현에서 기업용 플랫폼의 장애 분석, 상태 정합성, 플랫폼 전환과 테스트 기반 개선으로 책임 범위를 확장했습니다.</p>
+        <a href="/resume/">웹 이력서 보기 <ArrowRight size={17} aria-hidden="true" /></a>
+      </aside>
+
+      <div class="experience-list">
+        {experiences.map((experience, experienceIndex) => (
+          <article class="experience-entry">
+            <header>
+              <div>
+                <span class="entry-index">0{experienceIndex + 1}</span>
+                <p class="eyebrow">{experience.period}</p>
+                <h2>{experience.company}</h2>
+                <p class="role">{experience.role}</p>
+              </div>
+              <p class="context">{experience.context}</p>
+            </header>
+
+            <div class="experience-cases">
+              {experience.highlights.map((highlight, index) => (
+                <section>
+                  <div class="case-title"><span>{String(index + 1).padStart(2, '0')}</span><h3>{highlight.title}</h3></div>
+                  <dl>
+                    <div><dt>문제</dt><dd>{highlight.problem}</dd></div>
+                    <div><dt>조치</dt><dd>{highlight.action}</dd></div>
+                    <div><dt>확인</dt><dd>{highlight.result}</dd></div>
+                  </dl>
+                </section>
+              ))}
+            </div>
+
+            <div class="experience-stack">
+              <span>사용 범위</span>
+              <ul class="tag-list">{experience.stack.map((item) => <li class="tag">{item}</li>)}</ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--surface work-principles" aria-labelledby="work-principles-title">
+    <h2 id="work-principles-title" class="visually-hidden">업무 원칙</h2>
+    <div class="container principle-grid">
+      <div><p class="eyebrow">01 · Reproduce</p><h3>현상을 먼저 고정합니다.</h3><p>로그 한 줄로 결론을 내리지 않고 시간대, 상태 변화, 요청 조합과 저장 결과를 함께 재현합니다.</p></div>
+      <div><p class="eyebrow">02 · Bound</p><h3>수정 경계를 좁힙니다.</h3><p>영향받는 API, 저장소와 외부 의존성을 분리하고 정상 경로와 차단 경로를 같은 기준으로 검토합니다.</p></div>
+      <div><p class="eyebrow">03 · Verify</p><h3>결과를 여러 층에서 확인합니다.</h3><p>단위·통합 테스트, 의존성·산출물 검사와 스테이징 QA가 각자 무엇을 증명하는지 구분합니다.</p></div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .experience-layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 72px;
+    align-items: start;
+  }
+
+  .career-summary {
+    position: sticky;
+    top: calc(var(--header-height) + 30px);
+    display: grid;
+    gap: 18px;
+    padding-top: 18px;
+    border-top: 4px solid var(--blue);
+  }
+
+  .career-summary > strong {
+    font-family: var(--mono);
+    font-size: 1.15rem;
+  }
+
+  .career-summary > p:not(.eyebrow) {
+    color: var(--ink-soft);
+    font-size: 0.87rem;
+  }
+
+  .career-summary a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-weight: 900;
+  }
+
+  .experience-list {
+    display: grid;
+    gap: 94px;
+  }
+
+  .experience-entry header {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(300px, 1fr);
+    gap: 44px;
+    align-items: end;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .entry-index {
+    display: block;
+    margin-bottom: 20px;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+  }
+
+  .experience-entry h2 {
+    font-size: 2.55rem;
+  }
+
+  .role {
+    margin-top: 8px;
+    color: var(--ink-soft);
+    font-weight: 800;
+  }
+
+  .context {
+    color: var(--ink-soft);
+    font-size: 0.94rem;
+  }
+
+  .experience-cases {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-left: 1px solid var(--line-strong);
+  }
+
+  .experience-cases section {
+    padding: 24px;
+    border-right: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .case-title {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .case-title span {
+    color: var(--blue);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+  }
+
+  .case-title h3 {
+    font-size: 1.12rem;
+  }
+
+  .experience-cases dl {
+    display: grid;
+    gap: 14px;
+    margin: 22px 0 0;
+  }
+
+  .experience-cases dl > div {
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 10px;
+  }
+
+  .experience-cases dt {
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 800;
+  }
+
+  .experience-cases dd {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+  }
+
+  .experience-stack {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 18px;
+    padding-top: 20px;
+  }
+
+  .experience-stack > span {
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 800;
+  }
+
+  .principle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--line-strong);
+    border-left: 1px solid var(--line-strong);
+  }
+
+  .principle-grid > div {
+    padding: 24px;
+    border-right: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .principle-grid h3 {
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+  }
+
+  .principle-grid p:last-child {
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+  }
+
+  @media (max-width: 940px) {
+    .experience-layout {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+
+    .career-summary {
+      position: static;
+      max-width: 700px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    :global(.page-intro.page-intro) {
+      padding-block: 36px 32px;
+    }
+
+    :global(.page-intro .intro-grid) {
+      gap: 14px;
+    }
+
+    .experience-section {
+      padding-block: 38px;
+    }
+
+    .experience-layout {
+      gap: 30px;
+    }
+
+    .career-summary {
+      gap: 10px;
+      padding-top: 12px;
+    }
+
+    .experience-list {
+      gap: 48px;
+    }
+
+    .experience-entry header,
+    .experience-cases,
+    .principle-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .experience-entry header {
+      gap: 14px;
+      padding-bottom: 18px;
+    }
+
+    .entry-index {
+      margin-bottom: 10px;
+    }
+
+    .experience-entry h2 {
+      font-size: 1.85rem;
+    }
+
+    .context {
+      font-size: 0.86rem;
+    }
+
+    .experience-cases section,
+    .principle-grid > div {
+      padding: 16px;
+    }
+
+    .experience-cases dl {
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .experience-stack {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding-top: 14px;
+    }
+
+    .work-principles {
+      padding-block: 40px;
+    }
+  }
+</style>

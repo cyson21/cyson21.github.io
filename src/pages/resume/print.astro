@@ -1,0 +1,246 @@
+---
+import { getCollection } from 'astro:content';
+import { experiences, profile, skillGroups } from '../../data/site';
+
+const projects = await getCollection('projects');
+const projectMap = new Map(projects.map((project) => [project.id, project]));
+const selectedIds = ['stockrush', 'member-event-consistency', 'enterprise-policy-rag', 'ai-gateway', 'cdc-data-platform'];
+const representativeProjects = selectedIds
+  .map((id) => projectMap.get(id))
+  .filter((project): project is NonNullable<typeof project> => Boolean(project));
+const featuredProjects = representativeProjects.slice(0, 3);
+const additionalProjects = representativeProjects.slice(3);
+const verificationLabels = {
+  unit: '단위 테스트',
+  integration: '통합 테스트',
+  'container-smoke': '컨테이너 smoke',
+  'static-demo': '정적 데모',
+  'live-demo': 'live 실행',
+  cloud: '클라우드 실행',
+} as const;
+const firstVerificationLabel = (project: (typeof representativeProjects)[number]) => {
+  const verification = project.data.verification.at(0);
+  return verification ? verificationLabels[verification.layer] : '검증 기록';
+};
+const firstSignalResult = (project: (typeof representativeProjects)[number]) => project.data.signals.at(0)?.result ?? '상세 페이지 참고';
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Resume | 손찬양</title>
+  </head>
+  <body>
+    <main>
+      <section class="sheet sheet--first" aria-label="이력서 1페이지">
+        <header class="masthead">
+          <div>
+            <p class="label">JAVA / SPRING BACKEND ENGINEER</p>
+            <h1>{profile.name}</h1>
+            <p class="statement">{profile.statement}</p>
+          </div>
+          <img src="/media/profile.png" alt="손찬양 프로필 사진" width="116" height="116" />
+        </header>
+
+        <div class="contact-row">
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+          <a href={profile.github}>github.com/cyson21</a>
+          <span>Seoul, Korea</span>
+        </div>
+
+        <section class="summary block">
+          <p class="label">PROFILE</p>
+          <h2>운영에서 발견한 문제를 재현 가능한 검증으로 남깁니다.</h2>
+          <p>기업용 플랫폼의 API와 이벤트 모듈을 Java와 Spring으로 개발·운영하며 요구사항 분석부터 API·저장소 설계, 구현, 회귀 테스트와 스테이징 검증까지 담당했습니다. 상태 정합성, 날짜 경계와 의존성 전환 문제를 코드 경로와 테스트 근거로 설명합니다.</p>
+        </section>
+
+        <section class="focus-grid block" aria-label="핵심 역량">
+          <article><span>01</span><strong>운영 장애 분석</strong><p>로그·API 흐름·DB 상태를 함께 추적해 재현 조건과 수정 범위를 좁힙니다.</p></article>
+          <article><span>02</span><strong>상태 정합성</strong><p>트랜잭션·멱등 처리·조건부 갱신으로 중복과 상태 역전을 방지합니다.</p></article>
+          <article><span>03</span><strong>플랫폼 전환</strong><p>의존성 영향 범위와 활성 경로를 테스트·산출물·스테이징에서 확인합니다.</p></article>
+        </section>
+
+        <section class="experience block">
+          <div class="section-title"><p class="label">EXPERIENCE</p><h2>경력</h2></div>
+          <article class="job">
+            <header>
+              <div><h3>{experiences[0].company}</h3><p>{experiences[0].role}</p></div>
+              <time>{experiences[0].period}</time>
+            </header>
+            <p class="context">{experiences[0].context}</p>
+            <div class="highlight-list">
+              {experiences[0].highlights.map((highlight) => (
+                <div><strong>{highlight.title}</strong><p>{highlight.action} {highlight.result}</p></div>
+              ))}
+            </div>
+          </article>
+        </section>
+
+        <footer><span>SON CHANYANG · RESUME</span><span>01 / 02</span></footer>
+      </section>
+
+      <section class="sheet" aria-label="이력서 2페이지">
+        <header class="page-header"><strong>{profile.name}</strong><span>{profile.role}</span></header>
+
+        <section class="experience block block--second">
+          <div class="section-title"><p class="label">EARLIER EXPERIENCE</p><h2>이전 경력</h2></div>
+          <article class="job">
+            <header>
+              <div><h3>{experiences[1].company}</h3><p>{experiences[1].role}</p></div>
+              <time>{experiences[1].period}</time>
+            </header>
+            <p class="context">{experiences[1].context}</p>
+            <div class="highlight-list highlight-list--compact">
+              {experiences[1].highlights.map((highlight) => (
+                <div><strong>{highlight.title}</strong><p>{highlight.action} {highlight.result}</p></div>
+              ))}
+            </div>
+          </article>
+        </section>
+
+        <section class="projects block">
+          <div class="section-title"><p class="label">SELECTED PROJECTS</p><h2>대표 프로젝트</h2></div>
+          <div class="project-list">
+            {featuredProjects.map((project, index) => (
+              <article>
+                <span>0{index + 1}</span>
+                <div>
+                  <h3>{project.data.name}</h3>
+                  <em>{project.data.eyebrow}</em>
+                  <p>{project.data.summary}</p>
+                  <small>{firstVerificationLabel(project)} · {firstSignalResult(project)} · /projects/{project.id}/</small>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div class="additional-projects">
+            <strong>Additional systems</strong>
+            {additionalProjects.map((project) => (
+              <span>{project.data.name} · {firstVerificationLabel(project)}</span>
+            ))}
+          </div>
+        </section>
+
+        <div class="lower-grid block">
+          <section>
+            <div class="section-title"><p class="label">SKILLS</p><h2>기술</h2></div>
+            <div class="skills">
+              {skillGroups.map((group) => <div><strong>{group.label}</strong><p>{group.items.join(' · ')}</p></div>)}
+            </div>
+          </section>
+          <section>
+            <div class="section-title"><p class="label">EDUCATION</p><h2>학력</h2></div>
+            <div class="education"><strong>서울과학기술대학교</strong><p>영어영문학 학사</p><span>2018 졸업</span></div>
+          </section>
+        </div>
+
+        <footer><span>PORTFOLIO · github.com/cyson21</span><span>02 / 02</span></footer>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  @page { size: A4; margin: 0; }
+
+  * { box-sizing: border-box; }
+
+  html,
+  body { margin: 0; background: #dfe3e1; color: #171a1d; font-family: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif; letter-spacing: 0; }
+
+  body { font-size: 9pt; line-height: 1.54; }
+
+  a { color: inherit; text-decoration: none; }
+
+  main { display: grid; justify-content: center; gap: 10mm; padding-block: 10mm; }
+
+  .sheet { position: relative; width: 210mm; height: 297mm; overflow: hidden; padding: 12mm 14mm 11mm; background: #fff; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+
+  h1,
+  h2,
+  h3,
+  p { margin: 0; overflow-wrap: anywhere; }
+
+  h1 { margin-top: 1.5mm; font-size: 31pt; line-height: 1.05; }
+  h2 { font-size: 15pt; line-height: 1.25; }
+  h3 { font-size: 11.2pt; line-height: 1.25; }
+
+  .label { color: #0e5fcf; font-family: "SFMono-Regular", Consolas, monospace; font-size: 7.3pt; font-weight: 800; letter-spacing: 0.08em; }
+  .block { margin-top: 8mm; }
+
+  .masthead { display: grid; grid-template-columns: 1fr 29mm; gap: 9mm; align-items: center; }
+  .masthead img { width: 29mm; height: 29mm; border: 0.4mm solid #9da7a2; border-radius: 1.4mm; object-fit: cover; }
+  .statement { max-width: 130mm; margin-top: 2.4mm; color: #4f575e; font-size: 10.2pt; font-weight: 650; }
+
+  .contact-row { display: flex; gap: 8mm; margin-top: 4.6mm; padding-block: 2.6mm; border-block: 0.25mm solid #cfd5d2; color: #4f575e; font-family: "SFMono-Regular", Consolas, monospace; font-size: 7.6pt; font-weight: 700; }
+
+  .summary { display: grid; grid-template-columns: 30mm 1fr; gap: 2mm 7mm; }
+  .summary .label { grid-row: 1 / 3; padding-top: 1.1mm; }
+  .summary > p:last-child { margin-top: 2mm; color: #4f575e; font-size: 9pt; line-height: 1.62; }
+
+  .focus-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-block: 0.3mm solid #9da7a2; }
+  .focus-grid article { min-height: 31mm; padding: 4.8mm 4.2mm; border-right: 0.25mm solid #cfd5d2; }
+  .focus-grid article:last-child { border-right: 0; }
+  .focus-grid span { display: block; color: #0e5fcf; font-family: "SFMono-Regular", Consolas, monospace; font-size: 7pt; }
+  .focus-grid strong { display: block; margin-top: 1.8mm; font-size: 9.4pt; }
+  .focus-grid p { margin-top: 1.5mm; color: #4f575e; font-size: 8.2pt; line-height: 1.55; }
+
+  .section-title { display: flex; align-items: baseline; gap: 4mm; margin-bottom: 3.2mm; }
+  .section-title .label { width: 30mm; flex: 0 0 30mm; }
+
+  .job { border-top: 0.4mm solid #171a1d; }
+  .job > header { display: flex; justify-content: space-between; gap: 8mm; padding-top: 3.5mm; }
+  .job > header p,
+  .job time { margin-top: 0.7mm; color: #4f575e; font-size: 8pt; }
+  .job time { flex: 0 0 auto; font-family: "SFMono-Regular", Consolas, monospace; }
+  .context { margin-top: 2.6mm; color: #4f575e; font-size: 8.5pt; line-height: 1.58; }
+  .highlight-list { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm 6mm; margin-top: 4.8mm; }
+  .highlight-list > div { min-height: 27mm; padding-left: 3.5mm; border-left: 0.8mm solid #0e5fcf; }
+  .highlight-list strong { font-size: 8.8pt; }
+  .highlight-list p { margin-top: 1.2mm; color: #4f575e; font-size: 8.25pt; line-height: 1.58; }
+
+  footer { position: absolute; right: 14mm; bottom: 7mm; left: 14mm; display: flex; justify-content: space-between; padding-top: 2.2mm; border-top: 0.25mm solid #cfd5d2; color: #737c83; font-family: "SFMono-Regular", Consolas, monospace; font-size: 6.5pt; }
+
+  .page-header { display: flex; justify-content: space-between; padding-bottom: 3mm; border-bottom: 0.4mm solid #171a1d; }
+  .page-header strong { font-size: 12pt; }
+  .page-header span { color: #4f575e; font-family: "SFMono-Regular", Consolas, monospace; font-size: 7.2pt; }
+  .block--second { margin-top: 6.5mm; }
+  .highlight-list--compact { grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+  .highlight-list--compact > div { min-height: 0; }
+
+  .project-list { border-top: 0.4mm solid #171a1d; }
+  .project-list article { display: grid; grid-template-columns: 9mm 1fr; gap: 2mm; padding-block: 3mm; border-bottom: 0.25mm solid #cfd5d2; }
+  .project-list article > span { color: #0e5fcf; font-family: "SFMono-Regular", Consolas, monospace; font-size: 7.3pt; font-weight: 800; }
+  .project-list h3 { display: inline; margin-right: 2.4mm; font-size: 9.7pt; }
+  .project-list em { color: #0e5fcf; font-size: 7.2pt; font-style: normal; font-weight: 800; }
+  .project-list p { margin-top: 1.2mm; color: #4f575e; font-size: 8.2pt; line-height: 1.5; }
+  .project-list small { display: block; margin-top: 1mm; color: #087a55; font-size: 7.4pt; font-weight: 750; }
+  .additional-projects { display: flex; flex-wrap: wrap; gap: 1.4mm 5mm; padding: 2.6mm 0; border-bottom: 0.25mm solid #cfd5d2; color: #4f575e; font-size: 7.7pt; }
+  .additional-projects strong { color: #171a1d; }
+
+  .lower-grid { display: grid; grid-template-columns: 1.35fr 0.65fr; gap: 10mm; margin-top: 6.5mm; }
+  .lower-grid > section { min-width: 0; }
+  .skills { border-top: 0.4mm solid #171a1d; }
+  .skills > div { display: grid; grid-template-columns: 25mm 1fr; gap: 3mm; padding-block: 2.2mm; border-bottom: 0.25mm solid #cfd5d2; }
+  .skills strong { font-size: 8pt; }
+  .skills p { color: #4f575e; font-size: 8pt; }
+  .education { padding-top: 3mm; border-top: 0.4mm solid #171a1d; }
+  .education strong { font-size: 8.7pt; }
+  .education p,
+  .education span { display: block; margin-top: 1mm; color: #4f575e; font-size: 8pt; }
+
+  @media screen {
+    .sheet { box-shadow: 0 6mm 14mm rgba(23, 26, 29, 0.12); }
+  }
+
+  @media print {
+    html,
+    body { background: #fff; }
+    main { display: block; padding: 0; }
+    .sheet { box-shadow: none; }
+  }
+</style>
