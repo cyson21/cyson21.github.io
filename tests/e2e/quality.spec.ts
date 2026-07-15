@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-const routes = ['/', '/projects/', '/projects/stockrush/', '/experience/', '/resume/'];
+const routes = ['/', '/projects/', '/projects/stockrush/', '/projects/enterprise-policy-rag/', '/experience/', '/resume/'];
 
 for (const route of routes) {
   test(`${route} has no horizontal document overflow`, async ({ page }) => {
