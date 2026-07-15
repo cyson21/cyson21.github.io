@@ -85,25 +85,21 @@ export const profile = {
 
 export const capabilities = [
   {
-    id: '01',
     title: '운영 장애 분석',
     description: '로그, API 흐름과 DB 상태를 함께 추적해 재현 조건을 찾고 회귀 테스트와 스테이징 검증으로 수정 범위를 확인합니다.',
     signal: 'reproduce → isolate → verify',
   },
   {
-    id: '02',
     title: '상태 정합성',
     description: '트랜잭션, 멱등 처리, 조건부 갱신과 종료 상태 규칙으로 중복·지연·동시 요청 뒤에도 상태를 보호합니다.',
     signal: 'invariant → guard → convergence',
   },
   {
-    id: '03',
     title: '데이터 흐름',
     description: '수집, 표준화, 이벤트 발행과 재처리 경계를 분리하고 source부터 결과까지 추적 가능한 근거를 남깁니다.',
     signal: 'source → event → lineage',
   },
   {
-    id: '04',
     title: '플랫폼 전환',
     description: '구형 의존성을 교체하고 공통 테스트 기반을 적용한 뒤 빌드 결과와 실제 연동 기능을 함께 확인합니다.',
     signal: 'impact → migrate → prove',

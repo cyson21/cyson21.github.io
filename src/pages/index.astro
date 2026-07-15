@@ -40,8 +40,7 @@ const homeSignals = [
 
   <section class="section section--surface" aria-labelledby="experience-title">
     <div class="container">
-      <div class="section-heading section-heading--indexed experience-heading">
-        <span class="section-number">01</span>
+      <div class="section-heading experience-heading">
         <div>
           <h2 id="experience-title">경력</h2>
           <p class="section-deck">실무에서 맡은 역할과 책임 범위입니다.</p>
@@ -64,8 +63,7 @@ const homeSignals = [
 
   <section id="featured-projects" class="section" aria-labelledby="featured-title">
     <div class="container">
-      <div class="section-heading section-heading--indexed">
-        <span class="section-number">02</span>
+      <div class="section-heading">
         <div>
           <h2 id="featured-title">대표 프로젝트</h2>
           <p class="section-deck">실무에서 마주친 문제를 별도 시스템으로 확장해 검증했습니다.</p>
@@ -90,8 +88,7 @@ const homeSignals = [
 
   <section class="section section--surface" aria-labelledby="proof-title">
     <div class="container">
-      <div class="section-heading section-heading--indexed">
-        <span class="section-number">03</span>
+      <div class="section-heading">
         <div>
           <h2 id="proof-title">프로젝트 검증 결과</h2>
           <p class="section-deck">프로젝트마다 핵심 실패 조건을 재현했습니다.</p>
@@ -106,8 +103,7 @@ const homeSignals = [
 
   <section class="section capabilities" aria-labelledby="capability-title">
     <div class="container">
-      <div class="section-heading section-heading--indexed">
-        <span class="section-number">04</span>
+      <div class="section-heading">
         <div>
           <h2 id="capability-title">문제 해결 방식</h2>
           <p class="section-deck">재현하고 경계를 좁힌 뒤 테스트로 고정합니다.</p>
@@ -117,7 +113,6 @@ const homeSignals = [
       <div class="capability-grid">
         {capabilities.map((item) => (
           <article>
-            <span>{item.id}</span>
             <h3>{item.title}</h3>
             <p>{item.description}</p>
             <code>{item.signal}</code>
@@ -267,10 +262,6 @@ const homeSignals = [
     color: white;
   }
 
-  .capabilities .section-number {
-    color: #8fc8b4;
-  }
-
   .capabilities .section-deck,
   .capabilities .lede {
     color: #d1d8d5;
@@ -284,29 +275,20 @@ const homeSignals = [
   }
 
   .capability-grid article {
-    display: grid;
     min-height: 210px;
-    grid-template-columns: 42px minmax(0, 1fr);
-    align-content: start;
-    gap: 12px 18px;
     padding: 26px;
     border-right: 1px solid #4a514e;
     border-bottom: 1px solid #4a514e;
   }
 
-  .capability-grid article > span,
   .capability-grid code {
     color: #8fc8b4;
     font-family: var(--mono);
     font-size: 0.82rem;
   }
 
-  .capability-grid article > span {
-    grid-row: 1 / 4;
-  }
-
-  .capability-grid article > :not(span) {
-    grid-column: 2;
+  .capability-grid h3 {
+    margin-bottom: 12px;
   }
 
   .capability-grid p {
@@ -315,7 +297,8 @@ const homeSignals = [
   }
 
   .capability-grid code {
-    margin-top: 4px;
+    display: block;
+    margin-top: 16px;
     color: #65d6ac;
   }
 
