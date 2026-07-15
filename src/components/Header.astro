@@ -7,9 +7,9 @@ interface Props {
 
 const { currentPath } = Astro.props;
 const links = [
-  { href: '/projects/', label: 'Projects' },
-  { href: '/experience/', label: 'Experience' },
-  { href: '/resume/', label: 'Resume' },
+  { href: '/projects/', label: '프로젝트' },
+  { href: '/experience/', label: '경력' },
+  { href: '/resume/', label: '이력서' },
 ];
 const isActive = (href: string) => currentPath === href || (href !== '/' && currentPath.startsWith(href));
 ---
@@ -17,8 +17,8 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
 <header class="site-header">
   <div class="header-inner container">
     <a class="wordmark" href="/" aria-label="손찬양 포트폴리오 홈">
-      <span class="wordmark-mark" aria-hidden="true">SC</span>
       <span class="wordmark-name">손찬양</span>
+      <span class="wordmark-role">Backend Engineer</span>
     </a>
 
     <nav class="desktop-nav" aria-label="주요 탐색">
@@ -114,8 +114,8 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
     display: inline-flex;
     min-height: 44px;
     align-items: center;
-    gap: 10px;
-    font-weight: 900;
+    gap: 12px;
+    font-weight: 800;
     text-decoration: none;
   }
 
@@ -123,21 +123,24 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
     color: var(--ink);
   }
 
-  .wordmark-mark {
-    display: grid;
-    width: 34px;
-    height: 34px;
-    place-items: center;
-    border: 1px solid var(--ink);
-    border-radius: 3px;
-    background: var(--ink);
-    color: white;
-    font-family: var(--mono);
-    font-size: 0.72rem;
+  .wordmark::before {
+    width: 4px;
+    height: 28px;
+    background: var(--blue);
+    content: "";
   }
 
   .wordmark-name {
-    font-size: 0.92rem;
+    font-size: 1rem;
+  }
+
+  .wordmark-role {
+    padding-left: 12px;
+    border-left: 1px solid var(--line);
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 0.84rem;
+    font-weight: 650;
   }
 
   .desktop-nav {
@@ -149,8 +152,8 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
   .desktop-nav a {
     position: relative;
     color: var(--ink-soft);
-    font-size: 0.82rem;
-    font-weight: 800;
+    font-size: 0.9rem;
+    font-weight: 720;
     text-decoration: none;
   }
 
@@ -226,6 +229,10 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
   }
 
   @media (max-width: 760px) {
+    .wordmark-role {
+      display: none;
+    }
+
     .desktop-nav {
       display: none;
     }

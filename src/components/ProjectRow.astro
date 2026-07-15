@@ -34,7 +34,7 @@ const thumbnail = data.visual.kind === 'image' ? data.visual.src : undefined;
         </div>
         <div class="project-status">
           <span class="domain">{data.domain}</span>
-          {data.publicationState === 'case-study-only' && <span class="case-study">Case study only</span>}
+          {data.publicationState === 'case-study-only' && <span class="case-study">사례 문서</span>}
         </div>
       </div>
       <p class="project-summary">{data.summary}</p>
@@ -74,7 +74,7 @@ const thumbnail = data.visual.kind === 'image' ? data.visual.src : undefined;
     padding-top: 4px;
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.76rem;
+    font-size: 0.84rem;
   }
 
   .project-main,
@@ -144,7 +144,7 @@ const thumbnail = data.visual.kind === 'image' ? data.visual.src : undefined;
     border-radius: 3px;
     color: var(--ink-soft);
     font-family: var(--mono);
-    font-size: 0.65rem;
+    font-size: 0.82rem;
     font-weight: 800;
   }
 
@@ -170,7 +170,7 @@ const thumbnail = data.visual.kind === 'image' ? data.visual.src : undefined;
     flex: 0 0 auto;
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.64rem;
+    font-size: 0.82rem;
   }
 
   .project-proof {
@@ -185,7 +185,7 @@ const thumbnail = data.visual.kind === 'image' ? data.visual.src : undefined;
   .proof-label {
     color: var(--green);
     font-family: var(--mono);
-    font-size: 0.67rem;
+    font-size: 0.82rem;
     font-weight: 800;
   }
 
@@ -198,7 +198,7 @@ const thumbnail = data.visual.kind === 'image' ? data.visual.src : undefined;
 
   .project-proof > span {
     color: var(--ink-soft);
-    font-size: 0.78rem;
+    font-size: 0.88rem;
   }
 
   .project-links {
@@ -215,7 +215,7 @@ const thumbnail = data.visual.kind === 'image' ? data.visual.src : undefined;
     gap: 4px;
     padding-inline: 4px;
     color: var(--ink);
-    font-size: 0.76rem;
+    font-size: 0.88rem;
     font-weight: 800;
   }
 
@@ -279,9 +279,8 @@ const thumbnail = data.visual.kind === 'image' ? data.visual.src : undefined;
       padding: 12px 14px;
     }
 
-    .project-row--compact .project-summary,
     .project-row--compact .project-footnote {
-      display: none;
+      margin-top: 2px;
     }
   }
 </style>
