@@ -22,7 +22,7 @@ responsibilities:
   - 검색·지식 관리·운영 화면과 정적 데모 검증 경로를 구성했습니다.
 flow:
   normal:
-    - 문서 등록·Chunking
+    - 문서 등록 및 Chunking
     - Workspace 권한 필터
     - 관련 Chunk 검색
     - Citation 답변 생성

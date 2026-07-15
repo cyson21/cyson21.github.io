@@ -12,6 +12,11 @@ interface Props {
 }
 
 const { label, expression, result, source, sourceUrl, tone = 'success', compact = false } = Astro.props;
+const sourceParts = source?.split('::') ?? [];
+const sourceFile = sourceParts[0] ?? '';
+const sourceTest = sourceParts.slice(1).join('::');
+const sourceFileSegments = sourceFile.match(/[^_]+_?/g) ?? [];
+const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
 ---
 
 <article class:list={['signal', `signal--${tone}`, { 'signal--compact': compact }]}> 
@@ -23,8 +28,44 @@ const { label, expression, result, source, sourceUrl, tone = 'success', compact 
   <p class="signal-result">{result}</p>
   {source && (
     sourceUrl
-      ? <a class="signal-source" href={sourceUrl} target="_blank" rel="noreferrer" aria-label={`${label} 검증 근거 새 창에서 열기`}>근거: <code>{source}</code><ArrowUpRight size={14} aria-hidden="true" /></a>
-      : <p class="signal-source">근거: <code>{source}</code></p>
+      ? (
+        <a
+          class="signal-source"
+          href={sourceUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`${label} 검증 근거 새 창에서 열기`}
+          title={source}
+        >
+          <span class="signal-source-label">근거</span>
+          <code>
+            <span class="source-file">
+              {sourceFileSegments.map((segment) => <>{segment}<wbr /></>)}
+            </span>
+            {sourceTest && (
+              <span class="source-test">
+                {sourceTestSegments.map((segment) => <>{segment}<wbr /></>)}
+              </span>
+            )}
+          </code>
+          <ArrowUpRight class="source-icon" size={14} aria-hidden="true" />
+        </a>
+      )
+      : (
+        <p class="signal-source" title={source}>
+          <span class="signal-source-label">근거</span>
+          <code>
+            <span class="source-file">
+              {sourceFileSegments.map((segment) => <>{segment}<wbr /></>)}
+            </span>
+            {sourceTest && (
+              <span class="source-test">
+                {sourceTestSegments.map((segment) => <>{segment}<wbr /></>)}
+              </span>
+            )}
+          </code>
+        </p>
+      )
   )}
 </article>
 
@@ -33,8 +74,8 @@ const { label, expression, result, source, sourceUrl, tone = 'success', compact 
     display: grid;
     min-height: 184px;
     align-content: start;
-    gap: 10px;
-    padding: 22px;
+    gap: 9px;
+    padding: 20px;
     border: 1px solid var(--line);
     border-top: 4px solid var(--green);
     border-radius: var(--radius);
@@ -84,9 +125,10 @@ const { label, expression, result, source, sourceUrl, tone = 'success', compact 
 
   .signal-expression {
     font-family: var(--mono);
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: 800;
-    line-height: 1.35;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
   }
 
   .signal-result {
@@ -104,20 +146,55 @@ const { label, expression, result, source, sourceUrl, tone = 'success', compact 
   }
 
   .signal-source {
-    display: inline-flex;
-    min-height: 44px;
-    align-items: center;
-    gap: 5px;
+    position: relative;
+    display: block;
     margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
     color: var(--ink-faint);
-    font-family: var(--mono);
     font-size: 0.82rem;
-    line-height: 1.5;
-    overflow-wrap: anywhere;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .signal-source-label {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    font-weight: 800;
   }
 
   .signal-source code {
-    font: inherit;
+    display: grid;
+    min-width: 0;
+    gap: 2px;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+  }
+
+  .source-file,
+  .source-test {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .source-file {
+    color: var(--ink-soft);
+    font-weight: 700;
+  }
+
+  .source-test {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .source-icon {
+    position: absolute;
+    top: 12px;
+    right: 0;
   }
 
   @media (max-width: 620px) {
@@ -127,7 +204,7 @@ const { label, expression, result, source, sourceUrl, tone = 'success', compact 
     }
 
     .signal-expression {
-      font-size: 1.22rem;
+      font-size: 1rem;
     }
   }
 </style>
