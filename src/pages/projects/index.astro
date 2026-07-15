@@ -11,10 +11,11 @@ const counts = {
   Data: projects.filter((project) => project.data.domain === 'Data').length,
   AI: projects.filter((project) => project.data.domain === 'AI').length,
 };
+const domainLabels: Record<string, string> = { All: '전체', Backend: '백엔드', Data: '데이터', AI: 'AI' };
 ---
 
 <BaseLayout title="Projects" description="분산 정합성, AI 백엔드, 데이터 플랫폼과 개인화 시스템을 문제, 설계 판단, 코드 근거와 연결 테스트로 설명합니다.">
-  <PageIntro eyebrow="Backend · Data · AI" title="실패 뒤 상태를 복구한 프로젝트" description="중복 요청, 메시지 지연, 권한 누락과 데이터 재처리 문제를 저장 규칙과 테스트로 해결한 여섯 개 시스템입니다." />
+  <PageIntro eyebrow="프로젝트 아카이브" title="프로젝트" description="중복 요청, 메시지 지연, 권한 누락과 데이터 재처리 문제를 저장 규칙과 테스트로 해결한 여섯 개 시스템을 정리했습니다." />
 
   <section class="section">
     <div class="container">
@@ -24,7 +25,7 @@ const counts = {
           {Object.entries(counts).map(([domain, count], index) => (
             <label>
               <input type="radio" name="project-domain" value={domain} data-project-filter checked={index === 0} />
-              <span class="filter-option">{domain}<span>{count}</span></span>
+              <span class="filter-option">{domainLabels[domain]}<span>{count}</span></span>
             </label>
           ))}
         </fieldset>
@@ -44,7 +45,7 @@ const counts = {
 
   <section class="section section--surface archive-note">
     <div class="container archive-note-grid">
-      <h2>테스트가 확인한 실행 환경</h2>
+      <div><p class="eyebrow">검증 범위</p><h2>테스트가 확인한 실행 환경</h2></div>
       <div>
         <p>단위 테스트부터 실제 컨테이너와 공개 데모까지 각 결과가 실행된 환경을 표시합니다. 운영 규모 부하나 외부 인프라가 빠진 경우에는 현재 범위에 남깁니다.</p>
         <ul class="tag-list" aria-label="검증 수준">
@@ -121,7 +122,7 @@ const counts = {
     border-radius: 3px;
     background: transparent;
     color: var(--ink-soft);
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     font-weight: 850;
     cursor: pointer;
   }
@@ -140,7 +141,7 @@ const counts = {
   .filter-option > span {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.65rem;
+    font-size: 0.82rem;
   }
 
   .visually-hidden {
@@ -156,7 +157,7 @@ const counts = {
   #filter-status {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.72rem;
+    font-size: 0.84rem;
   }
 
   .archive-note-grid {
@@ -170,6 +171,10 @@ const counts = {
     display: grid;
     gap: 22px;
     color: var(--ink-soft);
+  }
+
+  .archive-note-grid h2 {
+    font-size: 1.8rem;
   }
 
   @media (max-width: 760px) {

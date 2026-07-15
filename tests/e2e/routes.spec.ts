@@ -30,7 +30,7 @@ for (const route of routes) {
 
 test('project filter works and code evidence keeps rules and tests visible', async ({ page }) => {
   await page.goto('/projects/');
-  await page.getByRole('radio', { name: /^Backend/ }).check();
+  await page.getByRole('radio', { name: /^백엔드/ }).check();
   await expect(page.locator('[data-project-domain="Backend"]')).toHaveCount(2);
   await expect(page.locator('[data-project-domain="AI"]:visible')).toHaveCount(0);
   await expect(page.locator('#filter-status')).toHaveText('Backend 2개 프로젝트');

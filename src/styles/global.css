@@ -1,29 +1,38 @@
 :root {
   color-scheme: light;
-  --paper: #f7f8f6;
-  --surface: #ffffff;
-  --surface-muted: #eef1ef;
-  --ink: #171a1d;
-  --ink-soft: #4f575e;
-  --ink-faint: #596269;
-  --line: #cfd5d2;
-  --line-strong: #9da7a2;
-  --blue: #0e5fcf;
-  --blue-soft: #e8f1ff;
-  --green: #087a55;
-  --green-soft: #e5f5ed;
-  --amber: #9b5c00;
-  --amber-soft: #fff2d8;
-  --red: #b42318;
-  --red-soft: #ffebe8;
-  --focus: #0b57d0;
-  --shadow: 0 18px 50px rgba(23, 26, 29, 0.08);
-  --radius: 6px;
-  --container: 1180px;
-  --reading: 760px;
-  --header-height: 68px;
+  --paper: #f2f4f1;
+  --surface: #fbfcfa;
+  --surface-muted: #e8ece8;
+  --ink: #1a211f;
+  --ink-soft: #46524e;
+  --ink-faint: #59645f;
+  --line: #c8d0cb;
+  --line-strong: #8f9b95;
+  --blue: #215b94;
+  --blue-soft: #e5edf7;
+  --green: #177052;
+  --green-soft: #e2f0e9;
+  --amber: #91541f;
+  --amber-soft: #f5eadb;
+  --red: #a33a31;
+  --red-soft: #f7e5e2;
+  --focus: #174f9b;
+  --graphite: #202725;
+  --graphite-soft: #313a37;
+  --shadow: 0 12px 34px rgba(26, 33, 31, 0.07);
+  --radius: 4px;
+  --container: 1160px;
+  --reading: 780px;
+  --header-height: 72px;
   --sans: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", Inter, system-ui, sans-serif;
   --mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  --text-label: 0.875rem;
+  --text-small: 0.9rem;
+  --text-body: 1rem;
+  --text-lede: 1.125rem;
+  --text-h3: 1.45rem;
+  --text-h2: 2.25rem;
+  --text-h1: 3.5rem;
 }
 
 * {
@@ -42,8 +51,8 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 17px;
-  line-height: 1.72;
+  font-size: 18px;
+  line-height: 1.68;
   letter-spacing: 0;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -108,7 +117,7 @@ textarea {
 }
 
 .container {
-  width: min(calc(100% - 48px), var(--container));
+  width: min(calc(100% - 56px), var(--container));
   margin-inline: auto;
 }
 
@@ -121,11 +130,11 @@ textarea {
 }
 
 .section {
-  padding-block: 88px;
+  padding-block: 80px;
 }
 
 .section--compact {
-  padding-block: 56px;
+  padding-block: 48px;
 }
 
 .section--surface {
@@ -135,24 +144,45 @@ textarea {
 
 .section-heading {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.64fr);
-  gap: 48px;
-  align-items: end;
-  margin-bottom: 40px;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.68fr);
+  gap: 44px;
+  align-items: start;
+  margin-bottom: 36px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line-strong);
 }
 
 .section-heading > * {
   min-width: 0;
 }
 
-.eyebrow {
-  margin: 0 0 10px;
+.section-heading--indexed {
+  grid-template-columns: 48px minmax(0, 1fr) minmax(300px, 0.68fr);
+  gap: 24px 32px;
+}
+
+.section-number {
   color: var(--blue);
   font-family: var(--mono);
-  font-size: 0.77rem;
-  font-weight: 800;
-  line-height: 1.4;
-  text-transform: uppercase;
+  font-size: 0.9rem;
+  font-weight: 780;
+}
+
+.section-deck {
+  max-width: 620px;
+  margin-top: 9px;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--blue);
+  font-family: var(--sans);
+  font-size: var(--text-label);
+  font-weight: 760;
+  line-height: 1.5;
 }
 
 h1,
@@ -169,24 +199,27 @@ h2,
 h3,
 h4 {
   margin: 0;
-  line-height: 1.26;
+  line-height: 1.28;
   letter-spacing: 0;
 }
 
 h1 {
-  font-size: 5.4rem;
+  font-size: var(--text-h1);
+  font-weight: 780;
 }
 
 h2 {
-  font-size: 3.25rem;
+  font-size: var(--text-h2);
+  font-weight: 760;
 }
 
 h3 {
-  font-size: 1.7rem;
+  font-size: var(--text-h3);
+  font-weight: 750;
 }
 
 h4 {
-  font-size: 1rem;
+  font-size: 1.05rem;
 }
 
 p {
@@ -195,8 +228,8 @@ p {
 
 .lede {
   color: var(--ink-soft);
-  font-size: 1.28rem;
-  line-height: 1.72;
+  font-size: var(--text-lede);
+  line-height: 1.7;
 }
 
 .muted {
@@ -222,11 +255,11 @@ p {
   gap: 8px;
   padding: 9px 15px;
   border: 1px solid var(--ink);
-  border-radius: 4px;
+  border-radius: var(--radius);
   background: var(--ink);
   color: white;
-  font-size: 0.9rem;
-  font-weight: 800;
+  font-size: 0.92rem;
+  font-weight: 760;
   line-height: 1.2;
   text-decoration: none;
 }
@@ -274,7 +307,7 @@ p {
 
 .tag {
   display: inline-flex;
-  min-height: 30px;
+  min-height: 32px;
   align-items: center;
   padding: 4px 9px;
   border: 1px solid var(--line);
@@ -282,8 +315,8 @@ p {
   background: var(--surface);
   color: var(--ink-soft);
   font-family: var(--mono);
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.82rem;
+  font-weight: 680;
   line-height: 1.3;
 }
 
@@ -293,7 +326,7 @@ p {
   gap: 7px;
   color: var(--ink-soft);
   font-family: var(--mono);
-  font-size: 0.74rem;
+  font-size: 0.82rem;
   font-weight: 700;
 }
 
@@ -344,21 +377,30 @@ p {
 
 @media (max-width: 900px) {
   h1 {
-    font-size: 4rem;
+    font-size: 3rem;
   }
 
   h2 {
-    font-size: 2.65rem;
+    font-size: 2rem;
   }
 
   .section-heading {
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 16px;
     align-items: start;
   }
 
+  .section-heading--indexed {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .section-heading--indexed > .lede,
+  .section-heading--indexed > div:last-child:not(:nth-child(2)) {
+    grid-column: 2;
+  }
+
   .section {
-    padding-block: 70px;
+    padding-block: 64px;
   }
 }
 
@@ -368,35 +410,49 @@ p {
   }
 
   body {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 
   h2 {
-    font-size: 2.15rem;
+    font-size: 1.85rem;
   }
 
   h3 {
-    font-size: 1.35rem;
+    font-size: 1.3rem;
   }
 
   .lede {
-    font-size: 1.08rem;
+    font-size: 1.04rem;
   }
 
   .container {
-    width: min(calc(100% - 28px), var(--container));
+    width: min(calc(100% - 32px), var(--container));
   }
 
   .section {
-    padding-block: 54px;
+    padding-block: 52px;
   }
 
   .section--compact {
-    padding-block: 40px;
+    padding-block: 36px;
+  }
+
+  .section-heading--indexed {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .section-heading--indexed > .lede,
+  .section-heading--indexed > div:last-child:not(:nth-child(2)) {
+    grid-column: 1 / -1;
+  }
+
+  .section-deck {
+    font-size: 0.98rem;
   }
 
   .button-row {

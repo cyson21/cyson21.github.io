@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight, Download, Mail } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import VerificationSignal from '../components/VerificationSignal.astro';
 import ProjectRow from '../components/ProjectRow.astro';
+import SystemMap from '../components/SystemMap.astro';
 import { capabilities, experiences, profile } from '../data/site';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -22,8 +23,8 @@ const homeSignals = [
         <div class="hero-person">
           <img src="/media/profile.png" alt="손찬양 프로필 사진" width="112" height="112" />
           <div>
-            <p class="eyebrow">Java / Spring Backend Engineer</p>
-            <p class="availability"><span aria-hidden="true"></span>Backend systems · Seoul</p>
+            <p class="hero-role">Java / Spring Backend Engineer</p>
+            <p class="availability"><span aria-hidden="true"></span>Seoul · Backend systems</p>
           </div>
         </div>
         <h1>손찬양</h1>
@@ -35,7 +36,7 @@ const homeSignals = [
         </div>
       </div>
       <div class="hero-aside" aria-label="백엔드 문제 해결 결과">
-        <p class="console-title">실패 뒤에도 유지한 결과</p>
+        <p class="console-title">상태를 보호하는 세 가지 기준</p>
         <ol>
           <li><span>01</span><strong>중복 주문은 하나로 수렴</strong><em>멱등 키와 Outbox가 저장 경계를 함께 보호합니다.</em></li>
           <li><span>02</span><strong>늦은 이벤트는 종료 상태를 유지</strong><em>조건부 갱신이 취소·확정 상태의 재전이를 막습니다.</em></li>
@@ -47,10 +48,11 @@ const homeSignals = [
 
   <section class="section section--surface" aria-labelledby="proof-title">
     <div class="container">
-      <div class="section-heading">
+      <div class="section-heading section-heading--indexed">
+        <span class="section-number">01</span>
         <div>
-          <p class="eyebrow">동시성 · 복구 · 권한 검증</p>
-          <h2 id="proof-title">중복과 지연 뒤에도 보호된 상태</h2>
+          <h2 id="proof-title">검증 결과</h2>
+          <p class="section-deck">중복, 동시 요청과 근거 없는 답변을 차단했습니다.</p>
         </div>
         <p class="lede">동일 이벤트 재처리, 잔액 동시 차감과 근거 없는 답변을 실제 테스트 입력으로 재현해 저장 결과와 응답을 확인했습니다.</p>
       </div>
@@ -62,10 +64,11 @@ const homeSignals = [
 
   <section id="featured-projects" class="section" aria-labelledby="featured-title">
     <div class="container">
-      <div class="section-heading">
+      <div class="section-heading section-heading--indexed">
+        <span class="section-number">02</span>
         <div>
-          <p class="eyebrow">주문 · 권한 · 동시성</p>
-          <h2 id="featured-title">부분 실패를 다룬 백엔드 시스템</h2>
+          <h2 id="featured-title">대표 프로젝트</h2>
+          <p class="section-deck">주문, 권한과 동시성 문제를 시스템 경계에서 해결했습니다.</p>
         </div>
         <div>
           <p class="lede">주문 상태 수렴, 문서 접근 제어와 동시 요청 불변식을 코드와 연결 테스트로 확인할 수 있습니다.</p>
@@ -75,15 +78,23 @@ const homeSignals = [
       <div class="project-list">
         {featured.map((project, index) => <ProjectRow project={project} index={index + 1} compact />)}
       </div>
+      <div class="project-map">
+        <div class="project-map-heading">
+          <h3>여섯 프로젝트의 문제 지도</h3>
+          <p>각 프로젝트가 보호하는 상태와 실패 지점을 한 흐름으로 연결했습니다.</p>
+        </div>
+        <SystemMap />
+      </div>
     </div>
   </section>
 
   <section class="section capabilities" aria-labelledby="capability-title">
     <div class="container">
-      <div class="section-heading">
+      <div class="section-heading section-heading--indexed">
+        <span class="section-number">03</span>
         <div>
-          <p class="eyebrow">운영 장애에서 회귀 테스트까지</p>
-          <h2 id="capability-title">재현하고 경계를 좁혀 수정합니다</h2>
+          <h2 id="capability-title">문제 해결 방식</h2>
+          <p class="section-deck">재현하고 경계를 좁힌 뒤 테스트로 고정합니다.</p>
         </div>
         <p class="lede">로그·API·DB 상태로 재현 조건을 찾고, 저장 규칙과 외부 의존성의 변경 범위를 좁힌 뒤 정상·차단 경로를 회귀 테스트로 고정합니다.</p>
       </div>
@@ -101,12 +112,17 @@ const homeSignals = [
   </section>
 
   <section class="section section--surface" aria-labelledby="experience-title">
-    <div class="container experience-preview">
-      <div>
-        <p class="eyebrow">Experience</p>
-        <h2 id="experience-title">운영 백엔드와 데이터 파이프라인</h2>
-        <p class="lede">데이터 수집·API 구현과 배포 경험에서 시작해, 기업용 플랫폼의 운영 장애·정합성·의존성 전환과 테스트 기반 개선으로 책임 범위를 확장했습니다.</p>
-        <a class="section-link" href="/experience/">경력 상세 보기 <ArrowRight size={18} aria-hidden="true" /></a>
+    <div class="container">
+      <div class="section-heading section-heading--indexed experience-heading">
+        <span class="section-number">04</span>
+        <div>
+          <h2 id="experience-title">경력</h2>
+          <p class="section-deck">데이터 파이프라인에서 운영 백엔드로 책임 범위를 확장했습니다.</p>
+        </div>
+        <div>
+          <p class="lede">데이터 수집·API 구현과 배포 경험에서 시작해, 기업용 플랫폼의 운영 장애·정합성·의존성 전환과 테스트 기반 개선을 담당했습니다.</p>
+          <a class="section-link" href="/experience/">경력 상세 보기 <ArrowRight size={18} aria-hidden="true" /></a>
+        </div>
       </div>
       <ol class="career-list">
         {experiences.map((experience) => (
@@ -121,7 +137,7 @@ const homeSignals = [
 
   <section class="contact-band">
     <div class="container contact-inner">
-      <div><p class="eyebrow">Resume & contact</p><h2>경력과 프로젝트를 한 흐름으로 확인하세요</h2></div>
+      <div><h2>이력서와 전체 프로젝트 보기</h2><p>경력 요약은 이력서에서, 설계와 검증 근거는 프로젝트 상세에서 확인할 수 있습니다.</p></div>
       <div class="button-row">
         <a class="button" href="/resume/">웹 이력서 <ArrowRight size={17} aria-hidden="true" /></a>
         <a class="button button--secondary" href={profile.resumePath}>PDF <Download size={17} aria-hidden="true" /></a>
@@ -133,15 +149,16 @@ const homeSignals = [
 
 <style>
   .hero {
-    padding-block: 52px 62px;
+    padding-block: 56px 64px;
     border-bottom: 1px solid var(--line);
+    background: var(--surface);
   }
 
   .hero-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.68fr);
-    gap: 54px;
-    align-items: end;
+    grid-template-columns: minmax(0, 1.12fr) minmax(340px, 0.72fr);
+    gap: 64px;
+    align-items: center;
   }
 
   .hero-copy {
@@ -156,12 +173,19 @@ const homeSignals = [
   }
 
   .hero-person img {
-    width: 82px;
-    height: 82px;
+    width: 92px;
+    height: 92px;
     border: 1px solid var(--line-strong);
     border-radius: 50%;
     object-fit: cover;
     filter: grayscale(15%);
+  }
+
+  .hero-role {
+    margin-bottom: 6px;
+    color: var(--blue);
+    font-size: 0.96rem;
+    font-weight: 780;
   }
 
   .availability {
@@ -170,7 +194,7 @@ const homeSignals = [
     gap: 7px;
     color: var(--ink-soft);
     font-family: var(--mono);
-    font-size: 0.72rem;
+    font-size: 0.82rem;
   }
 
   .availability span {
@@ -181,16 +205,16 @@ const homeSignals = [
   }
 
   .hero h1 {
-    font-size: 5.4rem;
+    font-size: 3.65rem;
   }
 
   .hero-statement {
     max-width: 800px;
     margin-top: 20px;
     color: var(--ink-soft);
-    font-size: 1.35rem;
-    font-weight: 650;
-    line-height: 1.65;
+    font-size: 1.22rem;
+    font-weight: 580;
+    line-height: 1.7;
   }
 
   .hero-actions {
@@ -198,7 +222,7 @@ const homeSignals = [
   }
 
   .hero-aside {
-    border-top: 5px solid var(--blue);
+    border-top: 3px solid var(--blue);
     border-bottom: 1px solid var(--line-strong);
     background: var(--surface);
   }
@@ -208,8 +232,8 @@ const homeSignals = [
     border-inline: 1px solid var(--line-strong);
     color: var(--blue);
     font-family: var(--mono);
-    font-size: 0.68rem;
-    font-weight: 800;
+    font-size: 0.84rem;
+    font-weight: 760;
   }
 
   .hero-aside ol {
@@ -232,23 +256,23 @@ const homeSignals = [
     grid-row: 1 / 3;
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.68rem;
+    font-size: 0.82rem;
   }
 
   .hero-aside strong {
-    font-size: 0.9rem;
+    font-size: 0.98rem;
   }
 
   .hero-aside em {
     color: var(--ink-soft);
-    font-size: 0.77rem;
+    font-size: 0.85rem;
     font-style: normal;
   }
 
   .signal-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
+    gap: 16px;
   }
 
   .section-link {
@@ -257,98 +281,122 @@ const homeSignals = [
     align-items: center;
     gap: 6px;
     margin-top: 16px;
-    font-size: 0.86rem;
-    font-weight: 900;
+    font-size: 0.92rem;
+    font-weight: 760;
+  }
+
+  .project-map {
+    margin-top: 52px;
+    padding-top: 30px;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .project-map-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: 18px;
+  }
+
+  .project-map-heading h3 {
+    font-size: 1.35rem;
+  }
+
+  .project-map-heading p {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
   }
 
   .capabilities {
     border-block: 1px solid #303634;
-    background: #171a1d;
+    background: var(--graphite);
     color: white;
   }
 
-  .capabilities .eyebrow {
-    color: #8ab9ff;
+  .capabilities .section-number {
+    color: #8fc8b4;
   }
 
+  .capabilities .section-deck,
   .capabilities .lede {
-    color: #c0c8c4;
+    color: #d1d8d5;
   }
 
   .capability-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     border-top: 1px solid #4a514e;
     border-left: 1px solid #4a514e;
   }
 
   .capability-grid article {
     display: grid;
-    min-height: 270px;
+    min-height: 210px;
+    grid-template-columns: 42px minmax(0, 1fr);
     align-content: start;
-    gap: 16px;
-    padding: 22px;
+    gap: 12px 18px;
+    padding: 26px;
     border-right: 1px solid #4a514e;
     border-bottom: 1px solid #4a514e;
   }
 
   .capability-grid article > span,
   .capability-grid code {
-    color: #8ab9ff;
+    color: #8fc8b4;
     font-family: var(--mono);
-    font-size: 0.68rem;
+    font-size: 0.82rem;
+  }
+
+  .capability-grid article > span {
+    grid-row: 1 / 4;
+  }
+
+  .capability-grid article > :not(span) {
+    grid-column: 2;
   }
 
   .capability-grid p {
     color: #bdc5c1;
-    font-size: 0.86rem;
+    font-size: 0.94rem;
   }
 
   .capability-grid code {
-    margin-top: auto;
+    margin-top: 4px;
     color: #65d6ac;
   }
 
-  .experience-preview {
-    display: grid;
-    grid-template-columns: minmax(0, 0.78fr) minmax(400px, 1fr);
-    gap: 72px;
-    align-items: start;
-  }
-
-  .experience-preview > div:first-child {
-    position: sticky;
-    top: calc(var(--header-height) + 34px);
-  }
-
-  .experience-preview .lede {
-    margin-top: 22px;
+  .experience-heading {
+    margin-bottom: 28px;
   }
 
   .career-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin: 0;
     padding: 0;
     border-top: 1px solid var(--line-strong);
+    border-left: 1px solid var(--line-strong);
     list-style: none;
   }
 
   .career-list li {
-    display: grid;
-    grid-template-columns: 125px 1fr;
-    gap: 24px;
-    padding-block: 28px;
+    display: block;
+    padding: 26px;
+    border-right: 1px solid var(--line-strong);
     border-bottom: 1px solid var(--line-strong);
   }
 
   .career-list time {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.68rem;
+    font-size: 0.82rem;
   }
 
   .career-list div {
     display: grid;
-    gap: 5px;
+    gap: 6px;
+    margin-top: 14px;
   }
 
   .career-list span,
@@ -357,31 +405,42 @@ const homeSignals = [
   }
 
   .career-list span {
-    font-size: 0.82rem;
-    font-weight: 800;
+    font-size: 0.9rem;
+    font-weight: 720;
   }
 
   .career-list p {
     margin-top: 10px;
-    font-size: 0.9rem;
+    font-size: 0.94rem;
   }
 
   .contact-band {
-    padding-block: 72px;
-    border-top: 1px solid var(--line-strong);
-    background: var(--amber-soft);
+    padding-block: 54px;
+    border-top: 3px solid var(--amber);
+    background: var(--surface-muted);
   }
 
   .contact-inner {
-    display: flex;
-    align-items: end;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
     justify-content: space-between;
     gap: 40px;
   }
 
+  .contact-inner h2 {
+    font-size: 1.85rem;
+  }
+
+  .contact-inner > div:first-child p {
+    max-width: 680px;
+    margin-top: 9px;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
   @media (max-width: 980px) {
-    .hero-inner,
-    .experience-preview {
+    .hero-inner {
       grid-template-columns: 1fr;
       gap: 40px;
     }
@@ -394,9 +453,6 @@ const homeSignals = [
       grid-template-columns: repeat(2, 1fr);
     }
 
-    .experience-preview > div:first-child {
-      position: static;
-    }
   }
 
   @media (max-width: 720px) {
@@ -405,7 +461,7 @@ const homeSignals = [
     }
 
     .hero h1 {
-      font-size: 3.55rem;
+      font-size: 2.8rem;
     }
 
     .hero-statement {
@@ -417,7 +473,7 @@ const homeSignals = [
     }
 
     .hero-aside {
-      display: none;
+      display: block;
     }
 
     .hero-person {
@@ -438,7 +494,13 @@ const homeSignals = [
 
     .contact-inner {
       align-items: stretch;
+      grid-template-columns: 1fr;
+    }
+
+    .project-map-heading {
+      align-items: start;
       flex-direction: column;
+      gap: 8px;
     }
   }
 
@@ -449,10 +511,11 @@ const homeSignals = [
     }
 
     .hero h1 {
-      font-size: 3rem;
+      font-size: 2.55rem;
     }
 
-    .capability-grid {
+    .capability-grid,
+    .career-list {
       grid-template-columns: 1fr;
     }
 

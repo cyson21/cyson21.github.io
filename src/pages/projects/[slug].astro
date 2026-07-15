@@ -61,21 +61,21 @@ const toc = [
     <div class="container project-hero-grid">
       <div class="project-heading">
         <a class="back-link" href="/projects/"><ArrowLeft size={17} aria-hidden="true" /> 프로젝트 전체</a>
-        <p class="eyebrow">Project {String(data.order).padStart(2, '0')} · {data.eyebrow}</p>
+        <p class="eyebrow">프로젝트 {String(data.order).padStart(2, '0')} · {data.eyebrow}</p>
         <h1>{data.name}</h1>
         <p class="project-lede">{data.summary}</p>
         <div class="button-row project-actions">
           {data.links.github && <a class="button" href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}><CodeXml size={17} aria-hidden="true" /> GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
           {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer" aria-label={`${data.name} 데모 새 창에서 열기`}>Demo <ArrowUpRight size={17} aria-hidden="true" /></a>}
-          {data.publicationState === 'case-study-only' && <span class="scope-badge"><CircleAlert size={16} aria-hidden="true" /> Case study only</span>}
+          {data.publicationState === 'case-study-only' && <span class="scope-badge"><CircleAlert size={16} aria-hidden="true" /> 사례 문서</span>}
         </div>
       </div>
       <dl class="project-meta">
-        <div><dt>ROLE</dt><dd>{data.role}</dd></div>
-        <div><dt>PERIOD</dt><dd>{data.period}</dd></div>
-        <div><dt>DOMAIN</dt><dd>{data.domain}</dd></div>
-        <div><dt>EVIDENCE</dt><dd>{data.codeEvidence.length} code · {data.codeEvidence.length} tests</dd></div>
-        <div><dt>UPDATED</dt><dd><time datetime={data.updatedAt.toISOString()}>{formatDate(data.updatedAt)}</time></dd></div>
+        <div><dt>역할</dt><dd>{data.role}</dd></div>
+        <div><dt>기간</dt><dd>{data.period}</dd></div>
+        <div><dt>영역</dt><dd>{data.domain}</dd></div>
+        <div><dt>근거</dt><dd>코드 {data.codeEvidence.length}개 · 테스트 {data.codeEvidence.length}개</dd></div>
+        <div><dt>수정일</dt><dd><time datetime={data.updatedAt.toISOString()}>{formatDate(data.updatedAt)}</time></dd></div>
       </dl>
     </div>
   </header>
@@ -87,7 +87,7 @@ const toc = [
         {toc.map(([id, label], index) => <a href={`#${id}`} aria-current={index === 0 ? 'location' : undefined}><span>{String(index + 1).padStart(2, '0')}</span>{label}</a>)}
       </nav>
       <div class="toc-stack">
-        <p>STACK</p>
+        <p>사용 기술</p>
         <ul class="tag-list">{data.stack.map((item) => <li class="tag">{item}</li>)}</ul>
       </div>
     </aside>
@@ -98,7 +98,7 @@ const toc = [
 
     <article class="project-content">
       <section id="overview" class="project-section" tabindex="-1">
-        <p class="eyebrow">Problem & ownership</p>
+        <p class="eyebrow">문제와 담당 범위</p>
         <h2>해결한 문제와 직접 담당한 범위</h2>
         <p class="section-lede">{data.problem}</p>
         <div class="responsibility-list">
@@ -115,14 +115,14 @@ const toc = [
       </section>
 
       <section id="decisions" class="project-section project-section--wide" tabindex="-1">
-        <p class="eyebrow">Design decisions</p>
+        <p class="eyebrow">설계 판단</p>
         <h2>선택한 구조와 제외한 대안</h2>
         <p class="section-lede">보상 순서, 저장 원자성, 권한과 재처리 위치를 기준으로 선택한 구조와 제외한 대안을 비교합니다.</p>
         <DecisionGrid items={data.decisions} />
       </section>
 
       <section id="rules" class="project-section" tabindex="-1">
-        <p class="eyebrow">Protected invariants</p>
+        <p class="eyebrow">보호 규칙</p>
         <h2>시스템이 반드시 지켜야 하는 규칙</h2>
         <ol class="protection-list">
           {data.protectionRules.map((rule, index) => <li><span>R{String(index + 1).padStart(2, '0')}</span><strong>{rule}</strong></li>)}
@@ -142,14 +142,14 @@ const toc = [
         <table class="verification-table">
           <caption class="visually-hidden">{data.name} 검증 결과</caption>
           <thead>
-            <tr><th scope="col">LEVEL</th><th scope="col">METHOD</th><th scope="col">RESULT</th></tr>
+            <tr><th scope="col">검증 수준</th><th scope="col">실행 방법</th><th scope="col">확인 결과</th></tr>
           </thead>
           <tbody>
             {data.verification.map((item) => (
               <tr>
-                <th scope="row" class="level" data-label="LEVEL">{layerLabel[item.layer]}</th>
-                <td data-label="METHOD">{item.method}</td>
-                <td data-label="RESULT">{item.result}</td>
+                <th scope="row" class="level" data-label="수준">{layerLabel[item.layer]}</th>
+                <td data-label="방법">{item.method}</td>
+                <td data-label="결과">{item.result}</td>
               </tr>
             ))}
           </tbody>
@@ -158,12 +158,12 @@ const toc = [
 
       <section id="scope" class="project-section scope-grid" tabindex="-1">
         <div>
-          <p class="eyebrow">아직 검증하지 않은 범위</p>
-          <h2>현재 검증 범위</h2>
+          <p class="eyebrow">제외 범위</p>
+          <h2>아직 검증하지 않은 것</h2>
           <ul class="rule-list">{data.limitations.map((item) => <li>{item}</li>)}</ul>
         </div>
         <div>
-          <p class="eyebrow">다음 검증 단계</p>
+          <p class="eyebrow">후속 계획</p>
           <h2>다음 검증 단계</h2>
           <ul class="rule-list">{data.next.map((item) => <li>{item}</li>)}</ul>
         </div>
@@ -184,8 +184,8 @@ const toc = [
 
   <nav class="project-pagination" aria-label="프로젝트 이전 다음">
     <div class="container pagination-grid">
-      {previous ? <a href={`/projects/${previous.id}/`}><span><ArrowLeft size={16} aria-hidden="true" /> Previous</span><strong>{previous.data.name}</strong></a> : <span></span>}
-      {next ? <a class="next" href={`/projects/${next.id}/`}><span>Next <ArrowRight size={16} aria-hidden="true" /></span><strong>{next.data.name}</strong></a> : <a class="next" href="/projects/"><span>Back to</span><strong>All projects</strong></a>}
+      {previous ? <a href={`/projects/${previous.id}/`}><span><ArrowLeft size={16} aria-hidden="true" /> 이전 프로젝트</span><strong>{previous.data.name}</strong></a> : <span></span>}
+      {next ? <a class="next" href={`/projects/${next.id}/`}><span>다음 프로젝트 <ArrowRight size={16} aria-hidden="true" /></span><strong>{next.data.name}</strong></a> : <a class="next" href="/projects/"><span>목록으로</span><strong>전체 프로젝트</strong></a>}
     </div>
   </nav>
 </BaseLayout>
@@ -258,20 +258,20 @@ const toc = [
     gap: 6px;
     margin-bottom: 42px;
     color: var(--ink-soft);
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     font-weight: 800;
   }
 
   .project-heading h1 {
     max-width: 950px;
-    font-size: 4.7rem;
+    font-size: 3.4rem;
   }
 
   .project-lede {
     max-width: 850px;
     margin-top: 24px;
     color: var(--ink-soft);
-    font-size: 1.25rem;
+    font-size: 1.14rem;
     line-height: 1.72;
   }
 
@@ -289,7 +289,7 @@ const toc = [
     border-radius: 4px;
     background: var(--amber-soft);
     color: var(--amber);
-    font-size: 0.77rem;
+    font-size: 0.86rem;
     font-weight: 800;
   }
 
@@ -309,14 +309,14 @@ const toc = [
   .project-meta dt {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.65rem;
+    font-size: 0.82rem;
     font-weight: 800;
   }
 
   .project-meta dd {
     margin: 0;
     color: var(--ink-soft);
-    font-size: 0.8rem;
+    font-size: 0.92rem;
   }
 
   .project-layout {
@@ -338,9 +338,8 @@ const toc = [
     margin-bottom: 12px;
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.65rem;
+    font-size: 0.82rem;
     font-weight: 800;
-    text-transform: uppercase;
   }
 
   .project-toc nav {
@@ -355,7 +354,7 @@ const toc = [
     padding-block: 9px;
     border-bottom: 1px solid var(--line);
     color: var(--ink-soft);
-    font-size: 0.73rem;
+    font-size: 0.86rem;
     font-weight: 750;
     text-decoration: none;
   }
@@ -363,7 +362,7 @@ const toc = [
   .project-toc nav a span {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.62rem;
+    font-size: 0.82rem;
   }
 
   .project-toc nav a[aria-current='location'] {
@@ -402,7 +401,7 @@ const toc = [
 
   .project-section h2 {
     margin-bottom: 24px;
-    font-size: 2.45rem;
+    font-size: 2.05rem;
   }
 
   .section-lede {
@@ -428,7 +427,7 @@ const toc = [
   .responsibility-list span {
     color: var(--blue);
     font-family: var(--mono);
-    font-size: 0.68rem;
+    font-size: 0.82rem;
   }
 
   .signal-detail-grid {
@@ -457,11 +456,11 @@ const toc = [
   .protection-list span {
     color: var(--blue);
     font-family: var(--mono);
-    font-size: 0.7rem;
+    font-size: 0.82rem;
   }
 
   .protection-list strong {
-    font-size: 0.98rem;
+    font-size: 1rem;
   }
 
   .verification-table {
@@ -487,7 +486,7 @@ const toc = [
 
   .verification-table thead th {
     font-family: var(--mono);
-    font-size: 0.64rem;
+    font-size: 0.82rem;
     font-weight: 800;
   }
 
@@ -497,14 +496,14 @@ const toc = [
 
   .verification-table td {
     color: var(--ink-soft);
-    font-size: 0.82rem;
+    font-size: 0.92rem;
   }
 
   .verification-table .level {
     width: 150px;
     color: var(--green);
     font-family: var(--mono);
-    font-size: 0.7rem;
+    font-size: 0.82rem;
     font-weight: 800;
   }
 
@@ -536,7 +535,7 @@ const toc = [
 
   .scope-grid .rule-list {
     color: var(--ink-soft);
-    font-size: 0.86rem;
+    font-size: 0.94rem;
   }
 
   .project-resources {
@@ -551,7 +550,7 @@ const toc = [
   .project-resources > p {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.65rem;
+    font-size: 0.82rem;
     font-weight: 800;
   }
 
@@ -566,7 +565,7 @@ const toc = [
     min-height: 44px;
     align-items: center;
     gap: 5px;
-    font-size: 0.78rem;
+    font-size: 0.88rem;
     font-weight: 800;
   }
 
@@ -605,7 +604,7 @@ const toc = [
     gap: 5px;
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.66rem;
+    font-size: 0.82rem;
     font-weight: 800;
   }
 
@@ -779,7 +778,7 @@ const toc = [
       color: var(--ink-faint);
       content: attr(data-label);
       font-family: var(--mono);
-      font-size: 0.62rem;
+      font-size: 0.82rem;
       font-weight: 800;
     }
 

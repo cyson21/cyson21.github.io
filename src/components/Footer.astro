@@ -5,12 +5,12 @@ import { formatDate, profile } from '../data/site';
 
 <footer class="site-footer">
   <div class="container footer-grid">
-    <div>
-      <p class="eyebrow">Backend systems</p>
-      <h2>상태 정합성과 복구를 코드로 증명합니다</h2>
+    <div class="footer-identity">
+      <p><strong>손찬양</strong><span>Backend Engineer</span></p>
+      <h2>운영 문제를 재현 가능한 수정으로 남깁니다.</h2>
     </div>
     <div class="footer-contact">
-      <p>백엔드 시스템의 상태 정합성, 복구, 데이터 흐름을 코드와 테스트로 설명합니다.</p>
+      <p>경력, 설계 판단과 테스트 근거를 한 사이트에서 확인할 수 있습니다.</p>
       <div class="button-row">
         <a class="button button--secondary" href="mailto:cyson21@kakao.com" aria-label="손찬양에게 이메일 보내기"><Mail size={17} aria-hidden="true" /> 이메일</a>
         <a
@@ -31,31 +31,49 @@ import { formatDate, profile } from '../data/site';
 
 <style>
   .site-footer {
-    padding-block: 72px 28px;
+    padding-block: 58px 28px;
     border-top: 1px solid var(--ink);
-    background: var(--ink);
+    background: var(--graphite);
     color: white;
-  }
-
-  .site-footer .eyebrow {
-    color: #8ab9ff;
   }
 
   .footer-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.62fr);
-    gap: 64px;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.55fr);
+    gap: 56px;
     align-items: start;
   }
 
+  .footer-identity > p {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .footer-identity > p strong {
+    font-size: 1rem;
+  }
+
+  .footer-identity > p span {
+    padding-left: 14px;
+    border-left: 1px solid #5b6662;
+    color: #b8c1bd;
+    font-family: var(--mono);
+    font-size: 0.84rem;
+  }
+
   .footer-grid h2 {
-    max-width: 650px;
+    max-width: 620px;
+    font-size: 2rem;
+    font-weight: 700;
   }
 
   .footer-contact {
     display: grid;
     gap: 22px;
     color: #d7dcda;
+    font-size: 0.95rem;
   }
 
   .site-footer .button--secondary {
@@ -82,7 +100,7 @@ import { formatDate, profile } from '../data/site';
     border-top: 1px solid #424846;
     color: #aeb5b2;
     font-family: var(--mono);
-    font-size: 0.72rem;
+    font-size: 0.84rem;
   }
 
   @media (max-width: 760px) {
