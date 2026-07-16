@@ -12,8 +12,7 @@ const layoutProps = {
 <BaseLayout {...layoutProps}>
   <section class="not-found">
     <div class="container">
-      <p class="eyebrow">404 · 페이지 없음</p>
-      <h1>요청한 페이지를 찾을 수 없습니다</h1>
+      <h1>404 · 요청한 페이지를 찾을 수 없습니다</h1>
       <p>주소가 바뀌었거나 공개 범위에서 제외된 페이지입니다.</p>
       <div class="button-row">
         <a class="button" href="/"><ArrowLeft size={17} aria-hidden="true" /> 홈</a>
@@ -34,7 +33,7 @@ const layoutProps = {
 
   .not-found h1 {
     max-width: 900px;
-    font-size: 2.9rem;
+    font-size: var(--text-h1);
   }
 
   .not-found p:not(.eyebrow) {
@@ -42,9 +41,4 @@ const layoutProps = {
     color: var(--ink-soft);
   }
 
-  @media (max-width: 639px) {
-    .not-found h1 {
-      font-size: 2.8rem;
-    }
-  }
 </style>

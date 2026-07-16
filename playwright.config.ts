@@ -7,7 +7,7 @@ const canonicalSuites = /(?:responsive-quality|visual-regression)\.spec\.ts/;
 export default defineConfig({
   testDir: './tests/e2e',
   outputDir: './artifacts/playwright',
-  snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{arg}-{projectName}{ext}',
+  snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{arg}-{platform}-{projectName}{ext}',
   reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]],
   fullyParallel: true,
   forbidOnly: true,

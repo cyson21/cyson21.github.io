@@ -1,12 +1,12 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
-import { canonicalRoutes, gotoCanonicalRoute } from './fixtures/canonical';
+import { gotoAuditRoute, publicAuditRoutes } from './fixtures/canonical';
 
 const wcagTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
-for (const route of canonicalRoutes) {
+for (const route of publicAuditRoutes) {
   test(`${route.path} has no WCAG A or AA axe violations`, async ({ page }, testInfo) => {
-    await gotoCanonicalRoute(page, route.path);
+    await gotoAuditRoute(page, route);
     const results = await new AxeBuilder({ page }).withTags([...wcagTags, 'best-practice']).analyze();
     const blocking = results.violations.filter((violation) => violation.tags.some((tag) => wcagTags.includes(tag)));
     const bestPractice = results.violations.filter((violation) => !blocking.includes(violation));

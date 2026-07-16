@@ -31,9 +31,9 @@ for (const route of routes) {
 test('project filter works and code evidence keeps rules and tests visible', async ({ page }) => {
   await page.goto('/projects/');
   await page.getByRole('radio', { name: /^백엔드/ }).check();
-  await expect(page.locator('[data-project-domain="Backend"]')).toHaveCount(2);
+  await expect(page.locator('[data-project-domain="Backend"]')).toHaveCount(3);
   await expect(page.locator('[data-project-domain="AI"]:visible')).toHaveCount(0);
-  await expect(page.locator('#filter-status')).toHaveText('Backend 2개 프로젝트');
+  await expect(page.locator('#filter-status')).toHaveText('Backend 3개 프로젝트');
 
   await page.goto('/projects/stockrush/');
   const firstEvidence = page.locator('.evidence').first();
@@ -64,7 +64,7 @@ test('navigation, document flow, and code evidence remain readable without JavaS
     '설계 판단',
     '대표 코드 근거',
     '검증 결과',
-    '현재 범위',
+    '검증 범위',
   ]);
   await expect(page.locator('.visual-wrap')).toBeVisible();
   await expect(page.locator('.evidence').first().getByText('보호하는 규칙')).toBeVisible();

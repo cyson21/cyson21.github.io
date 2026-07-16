@@ -17,16 +17,20 @@ const additionalProjects = representativeProjects.slice(3);
 const verificationLabels = {
   unit: '단위 테스트',
   integration: '통합 테스트',
-  'container-smoke': '컨테이너 smoke',
+  'container-smoke': '컨테이너 스모크 테스트',
   'static-demo': '정적 데모',
-  'live-demo': 'live 실행',
+  'live-demo': '공개 데모',
   cloud: '클라우드 실행',
 } as const;
 const firstVerificationLabel = (project: (typeof representativeProjects)[number]) => {
   const verification = project.data.verification.at(0);
   return verification ? verificationLabels[verification.layer] : '검증 기록';
 };
-const firstSignalResult = (project: (typeof representativeProjects)[number]) => project.data.signals.at(0)?.result ?? '상세 페이지 참고';
+const firstSignalResult = (project: (typeof representativeProjects)[number]) => {
+  const signal = project.data.signals.at(0);
+  if (!signal) throw new Error(`${project.id} 프로젝트에 검증 결과가 없습니다.`);
+  return signal.result;
+};
 ---
 
 <!doctype html>
@@ -35,15 +39,15 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
-    <title>Resume | 손찬양</title>
+    <title>손찬양 이력서</title>
   </head>
   <body>
     <main>
       <section class="sheet sheet--first" aria-label="이력서 1페이지">
         <header class="masthead">
           <div>
-            <p class="label">JAVA / SPRING BACKEND ENGINEER</p>
             <h1>{profile.name}</h1>
+            <p class="role-line">Java·Spring 백엔드 개발자</p>
             <p class="statement">{profile.statement}</p>
           </div>
           <img src="/media/profile.png" alt="손찬양 프로필 사진" width="116" height="116" />
@@ -52,21 +56,20 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
         <div class="contact-row">
           <a href={`mailto:${profile.email}`}>{profile.email}</a>
           <a href={profile.github}>github.com/cyson21</a>
-          <span>Seoul, Korea</span>
+          <span>서울</span>
         </div>
 
         <section class="summary block">
-          <p class="label">PROFILE</p>
-          <h2>운영에서 발견한 문제를 재현 가능한 검증으로 남깁니다.</h2>
-          <p>기업용 플랫폼의 API와 이벤트 기능을 Java와 Spring으로 개발·운영하며 요구사항 분석부터 API와 데이터 저장 구조 설계, 구현, 회귀 테스트와 스테이징 검증까지 담당했습니다. 상태 충돌, 시간대 변환과 구형 의존성 문제를 코드 경로와 테스트 근거로 설명합니다.</p>
+          <h2>요약</h2>
+          <div><strong>기업용 플랫폼 API와 이벤트 기능을 Java·Spring으로 개발·운영했습니다.</strong><p>저장 전 상태 충돌, UTC/KST 날짜 경계와 구형 AWS SDK 문제를 재현해 수정하고 회귀 테스트를 보강했습니다.</p></div>
         </section>
 
         <section class="focus-list block" aria-label="핵심 역량">
-          <p class="label">CORE STRENGTHS</p>
+          <h2>핵심 역량</h2>
           <div>
             <article><strong>운영 장애 분석</strong><p>로그·API 흐름·DB 상태를 함께 추적해 재현 조건과 수정 범위를 좁힙니다.</p></article>
             <article><strong>상태 정합성</strong><p>트랜잭션·멱등 처리·조건부 갱신으로 중복과 상태 역전을 방지합니다.</p></article>
-            <article><strong>플랫폼 전환</strong><p>구형 의존성을 교체하고 빌드 결과와 실제 연동 기능을 함께 확인합니다.</p></article>
+            <article><strong>플랫폼 전환</strong><p>구형 의존성을 교체하고 모듈 테스트와 빌드 산출물로 변경 범위를 확인합니다.</p></article>
           </div>
         </section>
 
@@ -86,7 +89,7 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
           </article>
         </section>
 
-        <footer><span>SON CHANYANG · RESUME</span><span>01 / 02</span></footer>
+        <footer><span>손찬양 · 이력서</span><span>01 / 02</span></footer>
       </section>
 
       <section class="sheet" aria-label="이력서 2페이지">
@@ -116,12 +119,12 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
                 <h3>{project.data.name}</h3>
                 <em>{project.data.eyebrow}</em>
                 <p>{project.data.summary}</p>
-                <small>{firstVerificationLabel(project)} · {firstSignalResult(project)} · /projects/{project.id}/</small>
+                <small>{firstVerificationLabel(project)} · {firstSignalResult(project)}</small>
               </article>
             ))}
           </div>
           <div class="additional-projects">
-            <strong>Additional systems</strong>
+            <strong>추가 프로젝트</strong>
             {additionalProjects.map((project) => (
               <span>{project.data.name} · {firstVerificationLabel(project)}</span>
             ))}
@@ -141,7 +144,7 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
           </section>
         </div>
 
-        <footer><a href={profile.github}>PORTFOLIO · github.com/cyson21</a><span>02 / 02</span></footer>
+        <footer><a href={profile.github}>포트폴리오 · github.com/cyson21</a><span>02 / 02</span></footer>
       </section>
     </main>
   </body>
@@ -179,15 +182,16 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
   .masthead { display: grid; grid-template-columns: 1fr 27mm; gap: 8mm; align-items: center; }
   .masthead img { width: 27mm; height: 27mm; border: 0.3mm solid #818b86; border-radius: 1.4mm; object-fit: cover; }
   .statement { max-width: 132mm; margin-top: 2mm; color: #4d5752; font-size: 10pt; font-weight: 650; line-height: 1.5; }
+  .role-line { margin-top: 1.5mm; color: #1c5d99; font-size: 9.5pt; font-weight: 800; }
 
   .contact-row { display: flex; gap: 7mm; margin-top: 4mm; padding-block: 3mm; border-block: 0.25mm solid #cbd2cd; color: #4d5752; font-family: "SFMono-Regular", Consolas, monospace; font-size: 8.5pt; font-weight: 700; }
 
-  .summary { display: grid; grid-template-columns: 29mm 1fr; gap: 2mm 6mm; }
-  .summary .label { grid-row: 1 / 3; padding-top: 1mm; }
-  .summary > p:last-child { margin-top: 1.8mm; color: #4d5752; font-size: 10pt; line-height: 1.55; }
+  .summary { display: grid; grid-template-columns: 29mm 1fr; gap: 6mm; }
+  .summary > div > strong { font-size: 10pt; line-height: 1.5; }
+  .summary > div > p { margin-top: 1.8mm; color: #4d5752; font-size: 10pt; line-height: 1.55; }
 
   .focus-list { display: grid; grid-template-columns: 29mm 1fr; gap: 6mm; padding-block: 4mm; border-block: 0.3mm solid #818b86; }
-  .focus-list > .label { padding-top: 0.5mm; }
+  .focus-list > h2 { padding-top: 0.5mm; }
   .focus-list > div { display: grid; gap: 1.5mm; }
   .focus-list article { display: grid; grid-template-columns: 29mm 1fr; gap: 4mm; }
   .focus-list strong { font-size: 9.5pt; }
@@ -242,6 +246,33 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
 
   @media screen {
     .sheet { box-shadow: 0 6mm 14mm rgba(23, 26, 29, 0.12); }
+  }
+
+  @media screen and (max-width: 839px) {
+    main { display: block; padding: 12px; }
+    .sheet {
+      width: 100%;
+      height: auto;
+      min-height: 297mm;
+      margin-bottom: 16px;
+      overflow: visible;
+      padding: 24px 20px 64px;
+    }
+    .masthead { grid-template-columns: minmax(0, 1fr) 84px; gap: 16px; }
+    .masthead > div,
+    .summary > div,
+    .job > header > div { min-width: 0; }
+    .masthead img { width: 84px; height: 84px; }
+    .contact-row { flex-wrap: wrap; gap: 8px 20px; }
+    .contact-row a { overflow-wrap: anywhere; }
+    .summary,
+    .focus-list { grid-template-columns: 1fr; gap: 12px; }
+    .focus-list article,
+    .sheet--first .highlight-list > div { grid-template-columns: 1fr; gap: 6px; }
+    .highlight-list,
+    .highlight-list--compact,
+    .lower-grid { grid-template-columns: 1fr; }
+    footer { right: 20px; bottom: 20px; left: 20px; }
   }
 
   @media print {

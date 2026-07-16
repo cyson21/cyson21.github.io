@@ -29,7 +29,7 @@ const { items } = Astro.props;
 <style>
   .decision-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     border-top: 1px solid var(--line-strong);
     border-left: 1px solid var(--line-strong);
   }
@@ -66,20 +66,20 @@ const { items } = Astro.props;
   }
 
   .decision-item dd {
+    min-width: 0;
     margin: 0;
     color: var(--ink-soft);
     font-size: var(--text-dense);
+    overflow-wrap: anywhere;
   }
 
   @media (min-width: 960px) {
-    .decision-grid[data-count='3'] {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 639px) {
     .decision-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .decision-grid[data-count='3'] .decision-item:last-child {
+      grid-column: 1 / -1;
     }
   }
 </style>
