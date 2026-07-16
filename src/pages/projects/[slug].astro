@@ -632,8 +632,12 @@ const toc = [
 
   @media (max-width: 959px) {
     .project-hero-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 40px;
+    }
+
+    .project-heading {
+      min-width: 0;
     }
 
     .project-meta {
@@ -718,6 +722,10 @@ const toc = [
 
     .back-link {
       margin-bottom: 12px;
+    }
+
+    .project-heading h1 {
+      overflow-wrap: anywhere;
     }
 
     .project-lede {
