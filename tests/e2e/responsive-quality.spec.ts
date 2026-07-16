@@ -1,10 +1,14 @@
 import { expect, test } from '@playwright/test';
 import {
+  boundaryViewports,
   canonicalRoutes,
   canonicalTypeScale,
   canonicalViewports,
   expectNoHorizontalDocumentOverflow,
+  gotoAuditRoute,
   gotoCanonicalRoute,
+  publicAuditRoutes,
+  supplementalAuditRoutes,
 } from './fixtures/canonical';
 
 type TypeRole = 'h1' | 'h2' | 'h3' | 'lede' | 'control' | 'label' | 'code' | 'path' | 'dense';
@@ -180,5 +184,25 @@ for (const viewport of canonicalViewports.filter(({ width }) => width <= 390)) {
     const heroHeight = await page.locator('.project-hero').evaluate((element) => element.getBoundingClientRect().height);
     const limit = Math.min(640, viewport.height * 0.7);
     expect(heroHeight, `Project introduction ${heroHeight}px exceeds ${limit}px`).toBeLessThanOrEqual(limit);
+  });
+}
+
+for (const route of supplementalAuditRoutes) {
+  for (const viewport of canonicalViewports) {
+    test(`${route.path} reflows without horizontal overflow at ${viewport.width}px`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await gotoAuditRoute(page, route);
+      await expectNoHorizontalDocumentOverflow(page);
+    });
+  }
+}
+
+for (const viewport of boundaryViewports) {
+  test(`all public pages reflow at the ${viewport.width}px layout boundary`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    for (const route of publicAuditRoutes) {
+      await gotoAuditRoute(page, route);
+      await expectNoHorizontalDocumentOverflow(page);
+    }
   });
 }

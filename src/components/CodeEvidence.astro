@@ -53,7 +53,7 @@ const { items, results = [] } = Astro.props;
             {item.testUrl
               ? <a class="test-path" href={item.testUrl} target="_blank" rel="noreferrer" aria-label={`${item.testName} 테스트 새 창에서 열기`}><code>{item.testPath}</code><ArrowUpRight size={14} aria-hidden="true" /></a>
               : <code class="test-path">{item.testPath}</code>}
-            {results[index] && <p class="test-result"><strong>실행 결과</strong>{results[index]}</p>}
+            {results[index] && <p class="test-result"><strong>실행 결과</strong><span>{results[index]}</span></p>}
           </section>
         </div>
       </div>
@@ -287,7 +287,7 @@ const { items, results = [] } = Astro.props;
     color: #a9cbff;
   }
 
-  @media (max-width: 639px) {
+  @media (max-width: 959px) {
     .evidence-header,
     .evidence-body {
       grid-template-columns: 1fr;

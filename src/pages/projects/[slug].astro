@@ -30,19 +30,19 @@ const { project, previous, next } = Astro.props;
 const data = project.data;
 await render(project);
 const layerLabel: Record<string, string> = {
-  unit: 'Unit',
-  integration: 'Integration',
-  'container-smoke': 'Container smoke',
-  'static-demo': 'Static demo',
-  'live-demo': 'Live demo',
-  cloud: 'Cloud',
+  unit: '단위 테스트',
+  integration: '통합 테스트',
+  'container-smoke': '컨테이너 스모크 테스트',
+  'static-demo': '정적 데모',
+  'live-demo': '공개 데모',
+  cloud: '클라우드 실행',
 };
 const toc = [
   ['overview', '문제와 담당 범위'],
   ['decisions', '설계 판단'],
   ['evidence', '대표 코드 근거'],
   ['verification', '검증 결과'],
-  ['scope', '현재 범위'],
+  ['scope', '검증 범위'],
 ];
 ---
 
@@ -58,13 +58,12 @@ const toc = [
     <div class="container project-hero-grid">
       <div class="project-heading">
         <a class="back-link" href="/projects/"><ArrowLeft size={17} aria-hidden="true" /> 프로젝트 전체</a>
-        <p class="eyebrow">{data.eyebrow}</p>
         <h1>{data.name}</h1>
         <p class="project-lede">{data.summary}</p>
         <p class="project-meta-compact">{data.role} · {data.period} · {data.domain}</p>
         <div class="button-row project-actions">
           {data.links.github && <a class="button" href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}><CodeXml size={17} aria-hidden="true" /> GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
-          {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer" aria-label={`${data.name} 데모 새 창에서 열기`}>Demo <ArrowUpRight size={17} aria-hidden="true" /></a>}
+          {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer" aria-label={`${data.name} 데모 새 창에서 열기`}>데모 <ArrowUpRight size={17} aria-hidden="true" /></a>}
           {data.publicationState === 'case-study-only' && <span class="scope-badge"><CircleAlert size={16} aria-hidden="true" /> 사례 문서</span>}
         </div>
       </div>
@@ -92,7 +91,7 @@ const toc = [
 
     <article class="project-content">
       <section id="overview" class="project-section" tabindex="-1">
-        <h2>해결한 문제와 직접 담당한 범위</h2>
+        <h2>해결한 문제와 담당 범위</h2>
         <p class="section-lede">{data.problem}</p>
         <div class="responsibility-list">
           {data.responsibilities.map((item) => <p>{item}</p>)}
@@ -111,13 +110,12 @@ const toc = [
 
       <section id="decisions" class="project-section project-section--wide" tabindex="-1">
         <h2>선택한 구조와 제외한 대안</h2>
-        <p class="section-lede">보상 순서, 저장 원자성, 권한과 재처리 위치를 기준으로 선택한 구조와 제외한 대안을 비교합니다.</p>
         <DecisionGrid items={data.decisions} />
       </section>
 
       <section id="evidence" class="project-section project-section--wide" tabindex="-1">
         <h2>대표 코드, 보호 규칙과 연결 테스트</h2>
-        <p class="section-lede">각 구현 파일에서 상태를 보호하는 핵심 코드와 같은 규칙을 고정하는 테스트를 함께 확인할 수 있습니다.</p>
+        <p class="section-lede">핵심 구현이 보호하는 규칙과 이를 검증한 테스트입니다.</p>
         <CodeEvidence items={data.codeEvidence} results={data.verification.map((item) => item.result)} />
       </section>
 
@@ -160,7 +158,7 @@ const toc = [
 
       {(data.links.adr || data.links.design || data.links.testReport) && (
         <section class="project-resources" aria-label="프로젝트 외부 자료">
-          <p>외부 근거</p>
+          <p>관련 자료</p>
           <div>
             {data.links.adr && <a href={data.links.adr} target="_blank" rel="noreferrer" aria-label={`${data.name} ADR 새 창에서 열기`}>ADR <ArrowUpRight size={15} aria-hidden="true" /></a>}
             {data.links.design && <a href={data.links.design} target="_blank" rel="noreferrer" aria-label={`${data.name} 설계 문서 새 창에서 열기`}>설계 문서 <ArrowUpRight size={15} aria-hidden="true" /></a>}

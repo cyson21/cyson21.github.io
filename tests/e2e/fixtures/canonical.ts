@@ -9,12 +9,35 @@ export const canonicalRoutes = [
   { id: 'resume', path: '/resume/' },
 ] as const;
 
+export const supplementalAuditRoutes = [
+  { id: 'project-member-event-consistency', path: '/projects/member-event-consistency/' },
+  { id: 'project-ai-gateway', path: '/projects/ai-gateway/' },
+  { id: 'project-cdc-data-platform', path: '/projects/cdc-data-platform/' },
+  { id: 'project-fashion-personalization-platform', path: '/projects/fashion-personalization-platform/' },
+  { id: 'resume-print', path: '/resume/print/' },
+  { id: 'not-found', path: '/missing-release-check/', expectedStatus: 404 },
+] as const;
+
+export const publicAuditRoutes = [
+  ...canonicalRoutes,
+  ...supplementalAuditRoutes,
+] as const;
+
 export const canonicalViewports = [
   { width: 320, height: 800 },
   { width: 390, height: 844 },
   { width: 768, height: 1024 },
   { width: 1024, height: 768 },
   { width: 1440, height: 1000 },
+] as const;
+
+export const boundaryViewports = [
+  { width: 639, height: 900 },
+  { width: 640, height: 900 },
+  { width: 959, height: 900 },
+  { width: 960, height: 900 },
+  { width: 1279, height: 900 },
+  { width: 1280, height: 900 },
 ] as const;
 
 export type CanonicalTypeScale = {
@@ -32,9 +55,20 @@ export function canonicalTypeScale(width: number): CanonicalTypeScale {
 }
 
 export async function gotoCanonicalRoute(page: Page, route: string): Promise<void> {
+  await gotoAuditRoute(page, { path: route });
+}
+
+export async function gotoAuditRoute(
+  page: Page,
+  route: { path: string; expectedStatus?: number },
+): Promise<void> {
   await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
-  const response = await page.goto(route, { waitUntil: 'networkidle' });
-  expect(response?.ok(), `${route} should return a successful response`).toBeTruthy();
+  const response = await page.goto(route.path, { waitUntil: 'networkidle' });
+  if (route.expectedStatus) {
+    expect(response?.status(), `${route.path} should return ${route.expectedStatus}`).toBe(route.expectedStatus);
+  } else {
+    expect(response?.ok(), `${route.path} should return a successful response`).toBeTruthy();
+  }
   await page.evaluate(async () => {
     await document.fonts.ready;
     await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
