@@ -6,7 +6,7 @@ import { careerPeriod, experiences } from '../../data/site';
 ---
 
 <BaseLayout title="Experience" description="기업용 플랫폼 운영 백엔드와 공공·실시간 데이터 파이프라인에서 담당한 문제, 기술적 조치와 검증 범위를 정리합니다.">
-  <PageIntro eyebrow="경력 기록" title="경력" description="데이터 수집과 API 구현에서 시작해 기업용 플랫폼의 운영 장애, 상태 정합성, 의존성 전환과 테스트 기반 개선으로 책임 범위를 확장했습니다." />
+  <PageIntro title="경력" description="데이터 수집과 API 구현에서 시작해 기업용 플랫폼의 운영 장애, 상태 정합성, 의존성 전환과 테스트 기반 개선으로 책임 범위를 확장했습니다." />
 
   <section class="section experience-section">
     <div class="container experience-layout">
@@ -17,11 +17,10 @@ import { careerPeriod, experiences } from '../../data/site';
       </div>
 
       <div class="experience-list">
-        {experiences.map((experience, experienceIndex) => (
+        {experiences.map((experience) => (
           <article class="experience-entry">
             <header>
               <div>
-                <span class="entry-index">0{experienceIndex + 1}</span>
                 <p class="eyebrow">{experience.period}</p>
                 <h2>{experience.company}</h2>
                 <p class="role">{experience.role}</p>
@@ -29,10 +28,10 @@ import { careerPeriod, experiences } from '../../data/site';
               <p class="context">{experience.context}</p>
             </header>
 
-            <div class="experience-cases">
-              {experience.highlights.map((highlight, index) => (
+            <div class="experience-cases" data-count={experience.highlights.length}>
+              {experience.highlights.map((highlight) => (
                 <section>
-                  <div class="case-title"><span>{String(index + 1).padStart(2, '0')}</span><h3>{highlight.title}</h3></div>
+                  <div class="case-title"><h3>{highlight.title}</h3></div>
                   <dl>
                     <div><dt>문제</dt><dd>{highlight.problem}</dd></div>
                     <div><dt>조치</dt><dd>{highlight.action}</dd></div>
@@ -52,19 +51,6 @@ import { careerPeriod, experiences } from '../../data/site';
     </div>
   </section>
 
-  <section class="section section--surface work-principles" aria-labelledby="work-principles-title">
-    <div class="container">
-      <div class="section-heading">
-        <div><h2 id="work-principles-title">업무 원칙</h2><p class="section-deck">재현, 경계 설정과 검증을 분리해 기록합니다.</p></div>
-        <p class="lede">무엇을 고쳤는지보다 어떤 현상을 재현했고, 수정 범위를 어디까지 좁혔으며, 각 검증이 무엇을 증명하는지 구분합니다.</p>
-      </div>
-      <div class="principle-grid">
-        <div><p class="eyebrow">01 · 재현</p><h3>현상을 먼저 고정합니다.</h3><p>로그 한 줄로 결론을 내리지 않고 시간대, 상태 변화, 요청 조합과 저장 결과를 함께 재현합니다.</p></div>
-        <div><p class="eyebrow">02 · 경계</p><h3>수정 범위를 좁힙니다.</h3><p>영향받는 API, 저장소와 외부 의존성을 분리하고 정상 경로와 차단 경로를 같은 기준으로 검토합니다.</p></div>
-        <div><p class="eyebrow">03 · 검증</p><h3>결과를 여러 층에서 확인합니다.</h3><p>단위·통합 테스트, 의존성·산출물 검사와 스테이징 QA가 각자 무엇을 증명하는지 구분합니다.</p></div>
-      </div>
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
@@ -101,18 +87,18 @@ import { careerPeriod, experiences } from '../../data/site';
 
   .career-summary span {
     color: var(--blue);
-    font-size: 0.86rem;
+    font-size: var(--text-label);
     font-weight: 780;
   }
 
   .career-summary strong {
     font-family: var(--mono);
-    font-size: 1.05rem;
+    font-size: var(--text-body);
   }
 
   .career-summary > p {
     color: var(--ink-soft);
-    font-size: 0.96rem;
+    font-size: var(--text-dense);
   }
 
   .career-summary a {
@@ -120,13 +106,13 @@ import { careerPeriod, experiences } from '../../data/site';
     min-height: 44px;
     align-items: center;
     gap: 5px;
-    font-size: 0.9rem;
+    font-size: 16px;
     font-weight: 900;
   }
 
   .experience-list {
     display: grid;
-    gap: 72px;
+    gap: 64px;
   }
 
   .experience-entry header {
@@ -138,16 +124,8 @@ import { careerPeriod, experiences } from '../../data/site';
     border-bottom: 1px solid var(--ink);
   }
 
-  .entry-index {
-    display: block;
-    margin-bottom: 20px;
-    color: var(--ink-faint);
-    font-family: var(--mono);
-    font-size: 0.84rem;
-  }
-
   .experience-entry h2 {
-    font-size: 2.1rem;
+    font-size: var(--text-h2);
   }
 
   .role {
@@ -158,7 +136,7 @@ import { careerPeriod, experiences } from '../../data/site';
 
   .context {
     color: var(--ink-soft);
-    font-size: 0.94rem;
+    font-size: var(--text-dense);
   }
 
   .experience-cases {
@@ -179,14 +157,8 @@ import { careerPeriod, experiences } from '../../data/site';
     gap: 12px;
   }
 
-  .case-title span {
-    color: var(--blue);
-    font-family: var(--mono);
-    font-size: 0.82rem;
-  }
-
   .case-title h3 {
-    font-size: 1.2rem;
+    font-size: var(--text-h3);
   }
 
   .experience-cases dl {
@@ -204,14 +176,14 @@ import { careerPeriod, experiences } from '../../data/site';
   .experience-cases dt {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
   .experience-cases dd {
     margin: 0;
     color: var(--ink-soft);
-    font-size: 0.94rem;
+    font-size: var(--text-dense);
   }
 
   .experience-stack {
@@ -224,34 +196,11 @@ import { careerPeriod, experiences } from '../../data/site';
   .experience-stack > span {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
-  .principle-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    border-top: 1px solid var(--line-strong);
-    border-left: 1px solid var(--line-strong);
-  }
-
-  .principle-grid > div {
-    padding: 24px;
-    border-right: 1px solid var(--line-strong);
-    border-bottom: 1px solid var(--line-strong);
-  }
-
-  .principle-grid h3 {
-    margin-bottom: 15px;
-    font-size: 1.3rem;
-  }
-
-  .principle-grid p:last-child {
-    color: var(--ink-soft);
-    font-size: 0.94rem;
-  }
-
-  @media (max-width: 940px) {
+  @media (max-width: 959px) {
     .career-summary {
       grid-template-columns: 160px minmax(0, 1fr);
     }
@@ -261,17 +210,15 @@ import { careerPeriod, experiences } from '../../data/site';
     }
   }
 
-  @media (max-width: 720px) {
-    :global(.page-intro.page-intro) {
-      padding-block: 36px 32px;
+  @media (min-width: 960px) {
+    .experience-cases[data-count='3'] {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+  }
 
-    :global(.page-intro .intro-grid) {
-      gap: 14px;
-    }
-
+  @media (max-width: 639px) {
     .experience-section {
-      padding-block: 38px;
+      padding-block: 48px;
     }
 
     .experience-layout {
@@ -293,8 +240,7 @@ import { careerPeriod, experiences } from '../../data/site';
     }
 
     .experience-entry header,
-    .experience-cases,
-    .principle-grid {
+    .experience-cases {
       grid-template-columns: 1fr;
     }
 
@@ -303,21 +249,8 @@ import { careerPeriod, experiences } from '../../data/site';
       padding-bottom: 18px;
     }
 
-    .entry-index {
-      margin-bottom: 10px;
-    }
-
-    .experience-entry h2 {
-      font-size: 1.85rem;
-    }
-
-    .context {
-      font-size: 0.94rem;
-    }
-
-    .experience-cases section,
-    .principle-grid > div {
-      padding: 16px;
+    .experience-cases section {
+      padding: 20px;
     }
 
     .experience-cases dl {
@@ -329,10 +262,6 @@ import { careerPeriod, experiences } from '../../data/site';
       grid-template-columns: 1fr;
       gap: 8px;
       padding-top: 14px;
-    }
-
-    .work-principles {
-      padding-block: 40px;
     }
   }
 </style>

@@ -119,13 +119,13 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
 
   .signal-label {
     color: var(--ink-soft);
-    font-size: 0.88rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
   .signal-expression {
     font-family: var(--mono);
-    font-size: 1rem;
+    font-size: var(--text-dense);
     font-weight: 800;
     line-height: 1.45;
     overflow-wrap: anywhere;
@@ -133,7 +133,7 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
 
   .signal-result {
     color: var(--green);
-    font-size: 0.94rem;
+    font-size: var(--text-dense);
     font-weight: 800;
   }
 
@@ -152,7 +152,7 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
     padding-top: 10px;
     border-top: 1px solid var(--line);
     color: var(--ink-faint);
-    font-size: 0.82rem;
+    font-size: var(--text-code);
     line-height: 1.4;
     text-decoration: none;
   }
@@ -161,7 +161,7 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
     display: block;
     margin-bottom: 4px;
     color: var(--ink-soft);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
@@ -170,7 +170,8 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
     min-width: 0;
     gap: 2px;
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-code);
+    line-height: 1.55;
   }
 
   .source-file,
@@ -185,10 +186,7 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
   }
 
   .source-test {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    display: block;
   }
 
   .source-icon {
@@ -197,14 +195,14 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
     right: 0;
   }
 
-  @media (max-width: 620px) {
+  @media (max-width: 639px) {
     .signal {
       min-height: 0;
       padding: 18px;
     }
 
     .signal-expression {
-      font-size: 1rem;
+      font-size: var(--text-dense);
     }
   }
 </style>

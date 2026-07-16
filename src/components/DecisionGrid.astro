@@ -13,10 +13,9 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-<div class="decision-grid">
-  {items.map((item, index) => (
+<div class="decision-grid" data-count={items.length}>
+  {items.map((item) => (
     <article class="decision-item">
-      <span class="decision-index">D{String(index + 1).padStart(2, '0')}</span>
       <h3>{item.title}</h3>
       <dl>
         <div><dt>선택</dt><dd>{item.choice}</dd></div>
@@ -43,16 +42,8 @@ const { items } = Astro.props;
     background: var(--surface);
   }
 
-  .decision-index {
-    color: var(--blue);
-    font-family: var(--mono);
-    font-size: 0.82rem;
-    font-weight: 800;
-  }
-
   .decision-item h3 {
-    margin-top: 8px;
-    font-size: 1.2rem;
+    font-size: var(--text-h3);
   }
 
   .decision-item dl {
@@ -70,17 +61,23 @@ const { items } = Astro.props;
   .decision-item dt {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
   .decision-item dd {
     margin: 0;
     color: var(--ink-soft);
-    font-size: 0.94rem;
+    font-size: var(--text-dense);
   }
 
-  @media (max-width: 720px) {
+  @media (min-width: 960px) {
+    .decision-grid[data-count='3'] {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 639px) {
     .decision-grid {
       grid-template-columns: 1fr;
     }

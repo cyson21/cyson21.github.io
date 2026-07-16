@@ -2,18 +2,11 @@
 import { getCollection } from 'astro:content';
 import { ArrowRight, ArrowUpRight, Download, Mail } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import VerificationSignal from '../components/VerificationSignal.astro';
 import ProjectRow from '../components/ProjectRow.astro';
-import SystemMap from '../components/SystemMap.astro';
-import { capabilities, experiences, profile } from '../data/site';
+import { experiences, profile } from '../data/site';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const featured = projects.filter((project) => project.data.featured);
-const homeSignals = [
-  projects.find((project) => project.id === 'stockrush')?.data.signals[0],
-  projects.find((project) => project.id === 'member-event-consistency')?.data.signals[0],
-  projects.find((project) => project.id === 'enterprise-policy-rag')?.data.signals[1],
-].filter((signal): signal is NonNullable<typeof signal> => Boolean(signal));
 ---
 
 <BaseLayout title="손찬양" description="상태 정합성, 장애 복구와 데이터 흐름을 코드와 재현 가능한 테스트 근거로 설명하는 Java/Spring 백엔드 개발자 손찬양의 포트폴리오입니다.">
@@ -74,50 +67,7 @@ const homeSignals = [
         </div>
       </div>
       <div class="project-list">
-        {featured.map((project, index) => <ProjectRow project={project} index={index + 1} compact />)}
-      </div>
-      <div class="project-map">
-        <div class="project-map-heading">
-          <h3>여섯 프로젝트의 문제 지도</h3>
-          <p>각 프로젝트가 보호하는 상태와 실패 지점을 한 흐름으로 연결했습니다.</p>
-        </div>
-        <SystemMap />
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--surface" aria-labelledby="proof-title">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <h2 id="proof-title">프로젝트 검증 결과</h2>
-          <p class="section-deck">프로젝트마다 핵심 실패 조건을 재현했습니다.</p>
-        </div>
-        <p class="lede">중복 이벤트, 동시 요청, 권한 없는 검색을 테스트 입력으로 재현해 저장 결과와 응답을 확인했습니다.</p>
-      </div>
-      <div class="signal-grid">
-        {homeSignals.map((signal) => <VerificationSignal {...signal} />)}
-      </div>
-    </div>
-  </section>
-
-  <section class="section capabilities" aria-labelledby="capability-title">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <h2 id="capability-title">문제 해결 방식</h2>
-          <p class="section-deck">재현하고 경계를 좁힌 뒤 테스트로 고정합니다.</p>
-        </div>
-        <p class="lede">로그·API·DB 상태로 재현 조건을 찾고, 저장 규칙과 외부 의존성의 변경 범위를 좁힌 뒤 정상·차단 경로를 회귀 테스트로 고정합니다.</p>
-      </div>
-      <div class="capability-grid">
-        {capabilities.map((item) => (
-          <article>
-            <h3>{item.title}</h3>
-            <p>{item.description}</p>
-            <code>{item.signal}</code>
-          </article>
-        ))}
+        {featured.map((project) => <ProjectRow project={project} compact />)}
       </div>
     </div>
   </section>
@@ -177,7 +127,7 @@ const homeSignals = [
   .hero-role {
     margin-bottom: 6px;
     color: var(--blue);
-    font-size: 0.96rem;
+    font-size: var(--text-dense);
     font-weight: 780;
   }
 
@@ -187,7 +137,7 @@ const homeSignals = [
     gap: 7px;
     color: var(--ink-soft);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
   }
 
   .availability span {
@@ -199,28 +149,22 @@ const homeSignals = [
 
   .hero h1 {
     grid-area: name;
-    font-size: 3.65rem;
+    font-size: var(--text-h1);
   }
 
   .hero-statement {
     grid-area: statement;
-    max-width: 800px;
+    max-width: min(760px, 40ic);
     margin-top: 6px;
     color: var(--ink-soft);
-    font-size: 1.22rem;
+    font-size: var(--text-lede);
     font-weight: 580;
-    line-height: 1.7;
+    line-height: 1.6;
   }
 
   .hero-actions {
     grid-area: actions;
     margin-top: 4px;
-  }
-
-  .signal-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
   }
 
   .section-link {
@@ -229,77 +173,8 @@ const homeSignals = [
     align-items: center;
     gap: 6px;
     margin-top: 16px;
-    font-size: 0.92rem;
+    font-size: 16px;
     font-weight: 760;
-  }
-
-  .project-map {
-    margin-top: 52px;
-    padding-top: 30px;
-    border-top: 1px solid var(--line-strong);
-  }
-
-  .project-map-heading {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 28px;
-    margin-bottom: 18px;
-  }
-
-  .project-map-heading h3 {
-    font-size: 1.35rem;
-  }
-
-  .project-map-heading p {
-    color: var(--ink-soft);
-    font-size: 0.92rem;
-  }
-
-  .capabilities {
-    border-block: 1px solid #303634;
-    background: var(--graphite);
-    color: white;
-  }
-
-  .capabilities .section-deck,
-  .capabilities .lede {
-    color: #d1d8d5;
-  }
-
-  .capability-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    border-top: 1px solid #4a514e;
-    border-left: 1px solid #4a514e;
-  }
-
-  .capability-grid article {
-    min-height: 210px;
-    padding: 26px;
-    border-right: 1px solid #4a514e;
-    border-bottom: 1px solid #4a514e;
-  }
-
-  .capability-grid code {
-    color: #8fc8b4;
-    font-family: var(--mono);
-    font-size: 0.82rem;
-  }
-
-  .capability-grid h3 {
-    margin-bottom: 12px;
-  }
-
-  .capability-grid p {
-    color: #bdc5c1;
-    font-size: 0.94rem;
-  }
-
-  .capability-grid code {
-    display: block;
-    margin-top: 16px;
-    color: #65d6ac;
   }
 
   .experience-heading {
@@ -307,32 +182,30 @@ const homeSignals = [
   }
 
   .career-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin: 0;
     padding: 0;
     border-top: 1px solid var(--line-strong);
-    border-left: 1px solid var(--line-strong);
     list-style: none;
   }
 
   .career-list li {
-    display: block;
-    padding: 26px;
-    border-right: 1px solid var(--line-strong);
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 24px;
+    padding-block: 24px;
     border-bottom: 1px solid var(--line-strong);
   }
 
   .career-list time {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
   }
 
   .career-list div {
     display: grid;
     gap: 6px;
-    margin-top: 14px;
+    margin-top: 0;
   }
 
   .career-list span,
@@ -341,13 +214,13 @@ const homeSignals = [
   }
 
   .career-list span {
-    font-size: 0.9rem;
+    font-size: var(--text-dense);
     font-weight: 720;
   }
 
   .career-list p {
     margin-top: 10px;
-    font-size: 0.94rem;
+    font-size: var(--text-body);
   }
 
   .contact-band {
@@ -365,17 +238,17 @@ const homeSignals = [
   }
 
   .contact-inner h2 {
-    font-size: 1.85rem;
+    font-size: var(--text-h2);
   }
 
   .contact-inner > div:first-child p {
     max-width: 680px;
     margin-top: 9px;
     color: var(--ink-soft);
-    font-size: 0.95rem;
+    font-size: var(--text-dense);
   }
 
-  @media (max-width: 980px) {
+  @media (max-width: 959px) {
     .hero-copy {
       display: block;
       max-width: 800px;
@@ -393,23 +266,11 @@ const homeSignals = [
       margin-top: 26px;
     }
 
-    .capability-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
   }
 
-  @media (max-width: 720px) {
+  @media (max-width: 639px) {
     .hero {
       padding-block: 30px 36px;
-    }
-
-    .hero h1 {
-      font-size: 2.8rem;
-    }
-
-    .hero-statement {
-      font-size: 1.12rem;
     }
 
     .hero-person {
@@ -420,39 +281,17 @@ const homeSignals = [
       margin-top: 18px;
     }
 
-    .signal-grid {
-      grid-template-columns: 1fr;
-    }
-
     .contact-inner {
       align-items: stretch;
       grid-template-columns: 1fr;
     }
 
-    .project-map-heading {
-      align-items: start;
-      flex-direction: column;
-      gap: 8px;
-    }
   }
 
-  @media (max-width: 560px) {
+  @media (max-width: 639px) {
     .hero-person img {
       width: 66px;
       height: 66px;
-    }
-
-    .hero h1 {
-      font-size: 2.55rem;
-    }
-
-    .capability-grid,
-    .career-list {
-      grid-template-columns: 1fr;
-    }
-
-    .capability-grid article {
-      min-height: 0;
     }
 
     .career-list li {

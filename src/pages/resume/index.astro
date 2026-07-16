@@ -6,33 +6,17 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
 ---
 
 <BaseLayout title="Resume" description="Java/Spring 백엔드 개발자 손찬양의 웹 이력서입니다. 운영 장애 분석, 상태 정합성, 플랫폼 전환과 데이터 파이프라인 경험을 요약합니다.">
-  <PageIntro eyebrow="웹 이력서" title="손찬양" description="Java와 Spring으로 운영 API, 상태 정합성과 데이터 흐름을 구현하고 검증하는 백엔드 엔지니어입니다." />
+  <PageIntro title="손찬양" description="Java와 Spring으로 운영 API, 상태 정합성과 데이터 흐름을 구현하고 검증하는 백엔드 엔지니어입니다." />
 
   <section class="section resume-section">
     <div class="container resume-layout">
-      <aside class="resume-sidebar">
-        <img src="/media/profile.png" alt="손찬양 프로필 사진" width="220" height="220" />
-        <div>
-          <p class="eyebrow">연락처</p>
-          <a href={`mailto:${profile.email}`}><Mail size={16} aria-hidden="true" /> {profile.email}</a>
-          <a href={profile.github} target="_blank" rel="noreferrer" aria-label="손찬양 GitHub 프로필 새 창에서 열기"><ArrowUpRight size={16} aria-hidden="true" /> github.com/cyson21</a>
-        </div>
-        <div class="button-stack">
-          <a class="button" href={profile.resumePath}><Download size={17} aria-hidden="true" /> PDF 다운로드</a>
-          <a class="button button--secondary" href="/projects/">프로젝트 보기 <ArrowRight size={17} aria-hidden="true" /></a>
-        </div>
-        <p class="updated">최근 수정 <time datetime={profile.updatedAt}>{formatDate(profile.updatedAt)}</time></p>
-      </aside>
-
       <article class="resume-content">
         <section class="resume-summary">
-          <p class="eyebrow">경력 요약</p>
           <h2>요약</h2>
           <p>기업용 플랫폼의 API·이벤트 모듈을 개발·운영하며 상태 재검증, UTC/KST 날짜 경계, AWS SDK 전환과 저장소 테스트 표준화를 요구사항 분석부터 스테이징 검증까지 담당했습니다.</p>
         </section>
 
         <section class="resume-experience">
-          <p class="eyebrow">경력 기록</p>
           <h2>경력</h2>
           {experiences.map((experience) => (
             <div class="resume-job">
@@ -46,21 +30,33 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
         </section>
 
         <section class="resume-skills">
-          <p class="eyebrow">사용 기술</p>
           <h2>기술</h2>
           <div class="skill-groups">
             {skillGroups.map((group) => (
-              <div><h3>{group.label}</h3><ul class="tag-list">{group.items.map((item) => <li class="tag">{item}</li>)}</ul></div>
+              <div><p class="skill-label">{group.label}</p><ul class="tag-list">{group.items.map((item) => <li class="tag">{item}</li>)}</ul></div>
             ))}
           </div>
         </section>
 
         <section class="resume-education">
-          <p class="eyebrow">학력 사항</p>
           <h2>학력</h2>
           <div><strong>서울과학기술대학교</strong><span>영어영문학 학사 · 2018 졸업</span></div>
         </section>
       </article>
+
+      <aside class="resume-sidebar">
+        <img src="/media/profile.png" alt="손찬양 프로필 사진" width="220" height="220" />
+        <div>
+          <p class="eyebrow">연락처</p>
+          <a href={`mailto:${profile.email}`}><Mail size={16} aria-hidden="true" /> {profile.email}</a>
+          <a href={profile.github} target="_blank" rel="noreferrer" aria-label="손찬양 GitHub 프로필 새 창에서 열기"><ArrowUpRight size={16} aria-hidden="true" /> github.com/cyson21</a>
+        </div>
+        <div class="button-stack">
+          <a class="button" href={profile.resumePath}><Download size={17} aria-hidden="true" /> PDF 다운로드</a>
+          <a class="button button--secondary" href="/projects/">프로젝트 보기 <ArrowRight size={17} aria-hidden="true" /></a>
+        </div>
+        <p class="updated">최근 수정 <time datetime={profile.updatedAt}>{formatDate(profile.updatedAt)}</time></p>
+      </aside>
     </div>
   </section>
 </BaseLayout>
@@ -77,6 +73,8 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
     position: sticky;
     top: calc(var(--header-height) + 30px);
     display: grid;
+    grid-column: 1;
+    grid-row: 1;
     gap: 26px;
   }
 
@@ -99,7 +97,7 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
     align-items: center;
     gap: 7px;
     color: var(--ink-soft);
-    font-size: 0.88rem;
+    font-size: var(--text-dense);
     font-weight: 750;
   }
 
@@ -111,10 +109,12 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
   .updated {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
   }
 
   .resume-content {
+    grid-column: 2;
+    grid-row: 1;
     min-width: 0;
   }
 
@@ -126,13 +126,13 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
 
   .resume-content h2 {
     margin-bottom: 28px;
-    font-size: 1.9rem;
+    font-size: var(--text-h2);
   }
 
   .resume-summary > p:not(.eyebrow) {
-    max-width: 820px;
+    max-width: min(760px, 40ic);
     color: var(--ink-soft);
-    font-size: 1.02rem;
+    font-size: var(--text-body);
   }
 
   .resume-summary > p + p {
@@ -156,13 +156,13 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
   }
 
   .resume-job h3 {
-    font-size: 1.28rem;
+    font-size: var(--text-h3);
   }
 
   .resume-job header p,
   .resume-job time {
     color: var(--ink-soft);
-    font-size: 0.86rem;
+    font-size: var(--text-label);
   }
 
   .resume-job time {
@@ -173,7 +173,7 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
   .job-context {
     margin-top: 16px;
     color: var(--ink-soft);
-    font-size: 0.95rem;
+    font-size: var(--text-dense);
   }
 
   .resume-job ul {
@@ -193,12 +193,12 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
   }
 
   .resume-job li strong {
-    font-size: 0.92rem;
+    font-size: var(--text-dense);
   }
 
   .resume-job li span {
     color: var(--ink-soft);
-    font-size: 0.94rem;
+    font-size: var(--text-dense);
   }
 
   .skill-groups {
@@ -214,8 +214,9 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
     border-top: 1px solid var(--line);
   }
 
-  .skill-groups h3 {
-    font-size: 0.92rem;
+  .skill-label {
+    font-size: var(--text-dense);
+    font-weight: 800;
   }
 
   .resume-education > div {
@@ -228,10 +229,10 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
 
   .resume-education span {
     color: var(--ink-soft);
-    font-size: 0.92rem;
+    font-size: var(--text-dense);
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 959px) {
     .resume-layout {
       grid-template-columns: 1fr;
       gap: 42px;
@@ -239,6 +240,8 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
 
     .resume-sidebar {
       position: static;
+      grid-column: 1;
+      grid-row: auto;
       grid-template-columns: 150px minmax(0, 1fr);
       gap: 18px 24px;
       align-items: start;
@@ -249,19 +252,16 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
       height: 150px;
       grid-row: 1 / 4;
     }
+
+    .resume-content {
+      grid-column: 1;
+      grid-row: auto;
+    }
   }
 
-  @media (max-width: 620px) {
-    :global(.page-intro.page-intro) {
-      padding-block: 36px 32px;
-    }
-
-    :global(.page-intro .intro-grid) {
-      gap: 14px;
-    }
-
+  @media (max-width: 639px) {
     .resume-section {
-      padding-block: 36px;
+      padding-block: 48px;
     }
 
     .resume-layout {
@@ -285,7 +285,7 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
     }
 
     .resume-sidebar a:not(.button) {
-      font-size: 0.82rem;
+      font-size: var(--text-label);
     }
 
     .button-stack {
@@ -297,7 +297,7 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
     .button-stack .button {
       min-height: 44px;
       padding: 7px 9px;
-      font-size: 0.86rem;
+      font-size: 16px;
     }
 
     .updated {
@@ -312,11 +312,6 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
 
     .resume-content h2 {
       margin-bottom: 18px;
-      font-size: 1.75rem;
-    }
-
-    .resume-summary > p:not(.eyebrow) {
-      font-size: 1rem;
     }
 
     .resume-job {
@@ -329,7 +324,7 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
 
     .job-context {
       margin-top: 10px;
-      font-size: 0.92rem;
+      font-size: var(--text-dense);
     }
 
     .resume-job ul {
@@ -361,7 +356,7 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
     }
   }
 
-  @media (max-width: 430px) {
+  @media (max-width: 639px) {
     .resume-job header {
       align-items: start;
       flex-direction: column;

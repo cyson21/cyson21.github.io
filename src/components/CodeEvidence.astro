@@ -14,26 +14,32 @@ interface Evidence {
 
 interface Props {
   items: Evidence[];
+  results?: string[];
 }
 
-const { items } = Astro.props;
+const { items, results = [] } = Astro.props;
 ---
 
 <div class="evidence-list">
   {items.map((item, index) => (
-    <article class="evidence">
-      <header class="evidence-header">
+    <details class="evidence" open={index === 0}>
+      <summary class="evidence-header">
         <div>
-          <p class="evidence-count">코드 근거 {String(index + 1).padStart(2, '0')}</p>
+          <p class="evidence-count">{index === 0 ? '대표 구현 근거' : '추가 구현 근거'}</p>
           <h3><code>{item.symbol}</code></h3>
         </div>
-        {item.sourceUrl
-          ? <a class="evidence-path" href={item.sourceUrl} target="_blank" rel="noreferrer" aria-label={`${item.symbol} 구현 파일 새 창에서 열기`}><code>{item.displayPath}</code><ArrowUpRight size={14} aria-hidden="true" /></a>
-          : <p class="evidence-path"><code>{item.displayPath}</code></p>}
-      </header>
+        <p class="evidence-path"><code>{item.displayPath}</code></p>
+      </summary>
       <div class="evidence-body">
         <div class="code-panel">
-          <p class="panel-label">구현</p>
+          <div class="code-panel-header">
+            <p class="panel-label">구현</p>
+            {item.sourceUrl && (
+              <a class="source-link" href={item.sourceUrl} target="_blank" rel="noreferrer" aria-label={`${item.symbol} 구현 파일 새 창에서 열기`}>
+                소스 파일 열기 <ArrowUpRight size={15} aria-hidden="true" />
+              </a>
+            )}
+          </div>
           <pre tabindex="0" aria-label={`${item.symbol} 코드 발췌`}><code>{item.excerpt}</code></pre>
         </div>
         <div class="evidence-context">
@@ -47,10 +53,11 @@ const { items } = Astro.props;
             {item.testUrl
               ? <a class="test-path" href={item.testUrl} target="_blank" rel="noreferrer" aria-label={`${item.testName} 테스트 새 창에서 열기`}><code>{item.testPath}</code><ArrowUpRight size={14} aria-hidden="true" /></a>
               : <code class="test-path">{item.testPath}</code>}
+            {results[index] && <p class="test-result"><strong>실행 결과</strong>{results[index]}</p>}
           </section>
         </div>
       </div>
-    </article>
+    </details>
   ))}
 </div>
 
@@ -67,13 +74,46 @@ const { items } = Astro.props;
     background: var(--surface);
   }
 
+  .evidence > summary {
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .evidence > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .evidence:not([open]) .evidence-header {
+    border-bottom: 0;
+  }
+
+  .evidence:not([open]) .evidence-header::after {
+    content: "열기 +";
+  }
+
+  .evidence-header::after {
+    align-self: center;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    color: var(--blue);
+    content: "접기 −";
+    font-size: 16px;
+    font-weight: 800;
+  }
+
   .evidence-header {
     display: grid;
-    grid-template-columns: minmax(0, 0.65fr) minmax(280px, 1fr);
-    gap: 24px;
-    align-items: end;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 24px;
+    align-items: start;
     padding: 20px;
     border-bottom: 1px solid #46504b;
+  }
+
+  .evidence-header > div {
+    grid-column: 1;
+    grid-row: 1;
   }
 
   .evidence-count,
@@ -81,17 +121,28 @@ const { items } = Astro.props;
     margin-bottom: 5px;
     color: var(--blue);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
   .evidence-header h3 code {
     overflow-wrap: anywhere;
     font-family: var(--mono);
-    font-size: 1rem;
+    font-size: var(--text-dense);
   }
 
-  .evidence-path,
+  .evidence-path {
+    display: block;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-width: 0;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: var(--text-code);
+    line-height: 1.55;
+    text-align: left;
+  }
+
   .test-path {
     display: inline-flex;
     min-width: 0;
@@ -101,8 +152,8 @@ const { items } = Astro.props;
     gap: 6px;
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.82rem;
-    line-height: 1.5;
+    font-size: var(--text-code);
+    line-height: 1.55;
     text-align: right;
   }
 
@@ -130,9 +181,32 @@ const { items } = Astro.props;
     border-right: 1px solid #46504b;
   }
 
-  .code-panel .panel-label {
+  .code-panel-header {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
     margin-bottom: 14px;
+  }
+
+  .code-panel .panel-label {
+    margin-bottom: 0;
     color: #8ab9ff;
+  }
+
+  .source-link {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 6px;
+    color: #d8e7ff;
+    font-size: var(--text-dense);
+    font-weight: 800;
+  }
+
+  .source-link:hover {
+    color: #ffffff;
   }
 
   pre {
@@ -142,8 +216,8 @@ const { items } = Astro.props;
     border-radius: 3px;
     color: #e5eee9;
     font-family: var(--mono);
-    font-size: 0.84rem;
-    line-height: 1.68;
+    font-size: var(--text-code);
+    line-height: 1.55;
     white-space: pre;
   }
 
@@ -173,19 +247,34 @@ const { items } = Astro.props;
   .evidence-context h4 {
     color: #72e0b6;
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
   }
 
   .evidence-context p {
     color: #e5eae7;
-    font-size: 0.95rem;
+    font-size: var(--text-dense);
   }
 
   .test-name {
     overflow-wrap: anywhere;
     color: #ffffff;
     font-family: var(--mono);
-    font-size: 0.84rem;
+    font-size: var(--text-code);
+    line-height: 1.55;
+  }
+
+  .test-result {
+    display: grid;
+    gap: 4px;
+    padding-top: 12px;
+    border-top: 1px solid #46504b;
+    color: #e5eae7;
+    font-size: var(--text-dense);
+  }
+
+  .test-result strong {
+    color: #72e0b6;
+    font-size: var(--text-label);
   }
 
   .evidence-context .test-path {
@@ -198,7 +287,7 @@ const { items } = Astro.props;
     color: #a9cbff;
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 639px) {
     .evidence-header,
     .evidence-body {
       grid-template-columns: 1fr;
@@ -222,6 +311,12 @@ const { items } = Astro.props;
     .code-panel,
     .evidence-context {
       padding: 16px;
+    }
+
+    .code-panel-header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 4px;
     }
   }
 </style>

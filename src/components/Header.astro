@@ -87,7 +87,7 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
     closeMenu(true);
   });
   window.addEventListener('resize', () => {
-    if (window.innerWidth > 760) closeMenu();
+    if (window.innerWidth > 639) closeMenu();
   });
 </script>
 
@@ -139,7 +139,7 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
     border-left: 1px solid var(--line);
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.84rem;
+    font-size: var(--text-label);
     font-weight: 650;
   }
 
@@ -152,8 +152,9 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
   .desktop-nav a {
     position: relative;
     color: var(--ink-soft);
-    font-size: 0.9rem;
+    font-size: 16px;
     font-weight: 720;
+    line-height: 1.35;
     text-decoration: none;
   }
 
@@ -221,6 +222,7 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
     justify-content: space-between;
     border-bottom: 1px solid var(--line);
     font-weight: 800;
+    line-height: 1.35;
     text-decoration: none;
   }
 
@@ -228,7 +230,7 @@ const isActive = (href: string) => currentPath === href || (href !== '/' && curr
     border-bottom: 0;
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 639px) {
     .wordmark-role {
       display: none;
     }
