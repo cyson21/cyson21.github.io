@@ -31,8 +31,12 @@ test('resume page links to a valid two-page PDF', async ({ page, request }) => {
   expect(response.headers()['content-type']).toContain('application/pdf');
   const bytes = await response.body();
   expect(bytes.subarray(0, 5).toString('ascii')).toBe('%PDF-');
-  expect(bytes.toString('latin1').match(/\/Type\s*\/Page\b/g)).toHaveLength(2);
-  expect(bytes.toString('latin1')).toContain('%%EOF');
+  const pdfSource = bytes.toString('latin1');
+  expect(pdfSource.match(/\/Type\s*\/Page\b/g)).toHaveLength(2);
+  expect(pdfSource).toContain('/StructTreeRoot');
+  expect(pdfSource).toContain('/Lang (ko-KR)');
+  expect(pdfSource.match(/\/Subtype\s*\/Link\b/g)?.length ?? 0).toBeGreaterThanOrEqual(3);
+  expect(pdfSource).toContain('%%EOF');
 });
 
 test('print resume exposes exactly two ready sheets and stays noindex', async ({ page }) => {

@@ -2,7 +2,6 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { ArrowLeft, ArrowRight, ArrowUpRight, CircleAlert, CodeXml } from '@lucide/astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FlowExplorer from '../../components/FlowExplorer.astro';
 import VerificationSignal from '../../components/VerificationSignal.astro';
 import DecisionGrid from '../../components/DecisionGrid.astro';
 import CodeEvidence from '../../components/CodeEvidence.astro';
@@ -40,9 +39,7 @@ const layerLabel: Record<string, string> = {
 };
 const toc = [
   ['overview', '문제와 담당 범위'],
-  ['flow', '시스템 흐름'],
   ['decisions', '설계 판단'],
-  ['rules', '보호 규칙'],
   ['evidence', '대표 코드 근거'],
   ['verification', '검증 결과'],
   ['scope', '현재 범위'],
@@ -61,9 +58,10 @@ const toc = [
     <div class="container project-hero-grid">
       <div class="project-heading">
         <a class="back-link" href="/projects/"><ArrowLeft size={17} aria-hidden="true" /> 프로젝트 전체</a>
-        <p class="eyebrow">프로젝트 {String(data.order).padStart(2, '0')} · {data.eyebrow}</p>
+        <p class="eyebrow">{data.eyebrow}</p>
         <h1>{data.name}</h1>
         <p class="project-lede">{data.summary}</p>
+        <p class="project-meta-compact">{data.role} · {data.period} · {data.domain}</p>
         <div class="button-row project-actions">
           {data.links.github && <a class="button" href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}><CodeXml size={17} aria-hidden="true" /> GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
           {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer" aria-label={`${data.name} 데모 새 창에서 열기`}>Demo <ArrowUpRight size={17} aria-hidden="true" /></a>}
@@ -84,7 +82,7 @@ const toc = [
     <aside class="project-toc no-print">
       <p id="project-toc-title">페이지 목차</p>
       <nav aria-labelledby="project-toc-title">
-        {toc.map(([id, label], index) => <a href={`#${id}`} aria-current={index === 0 ? 'location' : undefined}><span>{String(index + 1).padStart(2, '0')}</span>{label}</a>)}
+        {toc.map(([id, label], index) => <a href={`#${id}`} aria-current={index === 0 ? 'location' : undefined}>{label}</a>)}
       </nav>
       <div class="toc-stack">
         <p>사용 기술</p>
@@ -92,79 +90,70 @@ const toc = [
       </div>
     </aside>
 
-    <div class="visual-wrap">
-      <ProjectVisual name={data.name} visual={data.visual} flow={data.flow.normal} />
-    </div>
-
     <article class="project-content">
       <section id="overview" class="project-section" tabindex="-1">
-        <p class="eyebrow">문제와 담당 범위</p>
         <h2>해결한 문제와 직접 담당한 범위</h2>
         <p class="section-lede">{data.problem}</p>
         <div class="responsibility-list">
-          {data.responsibilities.map((item, index) => <div><span>{String(index + 1).padStart(2, '0')}</span><p>{item}</p></div>)}
+          {data.responsibilities.map((item) => <p>{item}</p>)}
+        </div>
+        <div class="overview-rules">
+          <h3>이 구현이 보호하는 기준</h3>
+          <ul class="protection-list">
+            {data.protectionRules.map((rule) => <li><strong>{rule}</strong></li>)}
+          </ul>
         </div>
       </section>
 
-      <section id="flow" class="project-section project-section--wide" tabindex="-1">
-        <h2 class="visually-hidden">시스템 흐름</h2>
-        <FlowExplorer title={`${data.name} 시스템 흐름`} flow={data.flow} />
-        <div class="signal-detail-grid">
-          {data.signals.map((signal) => <VerificationSignal {...signal} />)}
-        </div>
-      </section>
+      <div class="visual-wrap">
+        <ProjectVisual name={data.name} visual={data.visual} flow={data.flow.normal} />
+      </div>
 
       <section id="decisions" class="project-section project-section--wide" tabindex="-1">
-        <p class="eyebrow">설계 판단</p>
         <h2>선택한 구조와 제외한 대안</h2>
         <p class="section-lede">보상 순서, 저장 원자성, 권한과 재처리 위치를 기준으로 선택한 구조와 제외한 대안을 비교합니다.</p>
         <DecisionGrid items={data.decisions} />
       </section>
 
-      <section id="rules" class="project-section" tabindex="-1">
-        <p class="eyebrow">보호 규칙</p>
-        <h2>시스템이 반드시 지켜야 하는 규칙</h2>
-        <ol class="protection-list">
-          {data.protectionRules.map((rule, index) => <li><span>R{String(index + 1).padStart(2, '0')}</span><strong>{rule}</strong></li>)}
-        </ol>
-      </section>
-
       <section id="evidence" class="project-section project-section--wide" tabindex="-1">
-        <p class="eyebrow">구현 파일 · 보호 규칙 · 회귀 테스트</p>
         <h2>대표 코드, 보호 규칙과 연결 테스트</h2>
         <p class="section-lede">각 구현 파일에서 상태를 보호하는 핵심 코드와 같은 규칙을 고정하는 테스트를 함께 확인할 수 있습니다.</p>
-        <CodeEvidence items={data.codeEvidence} />
+        <CodeEvidence items={data.codeEvidence} results={data.verification.map((item) => item.result)} />
       </section>
 
       <section id="verification" class="project-section project-section--wide" tabindex="-1">
-        <p class="eyebrow">테스트 실행 환경과 결과</p>
         <h2>실행한 입력과 확인한 상태</h2>
-        <table class="verification-table">
-          <caption class="visually-hidden">{data.name} 검증 결과</caption>
-          <thead>
-            <tr><th scope="col">검증 수준</th><th scope="col">실행 방법</th><th scope="col">확인 결과</th></tr>
-          </thead>
-          <tbody>
-            {data.verification.map((item) => (
-              <tr>
-                <th scope="row" class="level" data-label="수준">{layerLabel[item.layer]}</th>
-                <td data-label="방법">{item.method}</td>
-                <td data-label="결과">{item.result}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div class="signal-detail-grid">
+          {data.signals.map((signal) => <VerificationSignal {...signal} />)}
+        </div>
+        <details class="verification-details">
+          <summary>실행 환경과 방법 상세 보기</summary>
+          <table class="verification-table">
+            <caption class="visually-hidden">{data.name} 검증 결과</caption>
+            <thead>
+              <tr><th scope="col">검증 수준</th><th scope="col">실행 방법</th><th scope="col">확인 결과</th></tr>
+            </thead>
+            <tbody>
+              {data.verification.map((item) => (
+                <tr>
+                  <th scope="row" class="level" data-label="수준">{layerLabel[item.layer]}</th>
+                  <td data-label="방법">{item.method}</td>
+                  <td data-label="결과">{item.result}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </details>
       </section>
 
       <section id="scope" class="project-section scope-grid" tabindex="-1">
+        <h2>현재 검증 범위</h2>
         <div>
-          <p class="eyebrow">제외 범위</p>
-          <h2>아직 검증하지 않은 것</h2>
+          <h3>아직 검증하지 않은 것</h3>
           <ul class="rule-list">{data.limitations.map((item) => <li>{item}</li>)}</ul>
         </div>
         <div>
-          <p class="eyebrow">후속 계획</p>
-          <h2>다음 검증 단계</h2>
+          <h3>다음 검증 단계</h3>
           <ul class="rule-list">{data.next.map((item) => <li>{item}</li>)}</ul>
         </div>
       </section>
@@ -240,14 +229,14 @@ const toc = [
   }
 
   .project-hero {
-    padding-block: 62px 72px;
+    padding-block: 48px 64px;
     border-bottom: 1px solid var(--line-strong);
   }
 
   .project-hero-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(300px, 0.42fr);
-    gap: 70px;
+    gap: 64px;
     align-items: end;
   }
 
@@ -258,25 +247,29 @@ const toc = [
     gap: 6px;
     margin-bottom: 42px;
     color: var(--ink-soft);
-    font-size: 0.9rem;
+    font-size: 16px;
     font-weight: 800;
   }
 
   .project-heading h1 {
     max-width: 950px;
-    font-size: 3.4rem;
+    font-size: var(--text-h1);
   }
 
   .project-lede {
-    max-width: 850px;
+    max-width: min(760px, 40ic);
     margin-top: 24px;
     color: var(--ink-soft);
-    font-size: 1.14rem;
-    line-height: 1.72;
+    font-size: var(--text-lede);
+    line-height: 1.6;
   }
 
   .project-actions {
     margin-top: 30px;
+  }
+
+  .project-meta-compact {
+    display: none;
   }
 
   .scope-badge {
@@ -289,7 +282,7 @@ const toc = [
     border-radius: 4px;
     background: var(--amber-soft);
     color: var(--amber);
-    font-size: 0.86rem;
+    font-size: var(--text-dense);
     font-weight: 800;
   }
 
@@ -309,22 +302,22 @@ const toc = [
   .project-meta dt {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
   .project-meta dd {
     margin: 0;
     color: var(--ink-soft);
-    font-size: 0.92rem;
+    font-size: var(--text-dense);
   }
 
   .project-layout {
     display: grid;
-    grid-template-columns: 220px minmax(0, 1fr);
-    gap: 72px;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 64px;
     align-items: start;
-    padding-block: 84px;
+    padding-block: 64px;
   }
 
   .project-toc {
@@ -338,7 +331,7 @@ const toc = [
     margin-bottom: 12px;
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
@@ -348,21 +341,13 @@ const toc = [
   }
 
   .project-toc nav a {
-    display: grid;
-    grid-template-columns: 28px 1fr;
-    gap: 8px;
+    display: block;
     padding-block: 9px;
     border-bottom: 1px solid var(--line);
     color: var(--ink-soft);
-    font-size: 0.86rem;
+    font-size: 16px;
     font-weight: 750;
     text-decoration: none;
-  }
-
-  .project-toc nav a span {
-    color: var(--ink-faint);
-    font-family: var(--mono);
-    font-size: 0.82rem;
   }
 
   .project-toc nav a[aria-current='location'] {
@@ -380,14 +365,13 @@ const toc = [
   }
 
   .visual-wrap {
-    grid-column: 2;
     min-width: 0;
-    margin-bottom: 72px;
+    margin-bottom: 64px;
   }
 
   .project-section {
     width: min(100%, var(--reading));
-    padding-block: 0 88px;
+    padding-block: 0 64px;
     scroll-margin-top: calc(var(--header-height) + 25px);
   }
 
@@ -400,15 +384,16 @@ const toc = [
   }
 
   .project-section h2 {
-    margin-bottom: 24px;
-    font-size: 2.05rem;
+    margin-bottom: 20px;
+    font-size: var(--text-h2);
   }
 
   .section-lede {
-    max-width: 810px;
-    margin-bottom: 30px;
+    max-width: min(760px, 40ic);
+    margin-bottom: 24px;
     color: var(--ink-soft);
-    font-size: 1.04rem;
+    font-size: var(--text-lede);
+    line-height: 1.6;
   }
 
   .responsibility-list {
@@ -417,24 +402,39 @@ const toc = [
   }
 
   .responsibility-list > div {
-    display: grid;
-    grid-template-columns: 38px 1fr;
-    gap: 14px;
-    padding-block: 18px;
+    padding-block: 16px;
     border-bottom: 1px solid var(--line-strong);
   }
 
-  .responsibility-list span {
-    color: var(--blue);
-    font-family: var(--mono);
-    font-size: 0.82rem;
+  .responsibility-list > p {
+    position: relative;
+    padding: 16px 0 16px 24px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .responsibility-list > p::before {
+    position: absolute;
+    top: 1.85em;
+    left: 2px;
+    width: 8px;
+    height: 2px;
+    background: var(--blue);
+    content: "";
+  }
+
+  .overview-rules {
+    margin-top: 40px;
+  }
+
+  .overview-rules h3 {
+    margin-bottom: 16px;
   }
 
   .signal-detail-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
-    margin-top: 20px;
+    margin-bottom: 24px;
   }
 
   .protection-list {
@@ -445,22 +445,23 @@ const toc = [
   }
 
   .protection-list li {
-    display: grid;
-    grid-template-columns: 54px 1fr;
-    gap: 18px;
-    align-items: start;
-    padding-block: 20px;
+    position: relative;
+    padding: 16px 0 16px 24px;
     border-bottom: 1px solid var(--line-strong);
   }
 
-  .protection-list span {
-    color: var(--blue);
-    font-family: var(--mono);
-    font-size: 0.82rem;
+  .protection-list li::before {
+    position: absolute;
+    top: 1.85em;
+    left: 2px;
+    width: 8px;
+    height: 2px;
+    background: var(--blue);
+    content: "";
   }
 
   .protection-list strong {
-    font-size: 1rem;
+    font-size: var(--text-body);
   }
 
   .verification-table {
@@ -468,6 +469,19 @@ const toc = [
     border-collapse: collapse;
     border-top: 1px solid var(--line-strong);
     border-left: 1px solid var(--line-strong);
+  }
+
+  .verification-details {
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .verification-details summary {
+    min-height: 44px;
+    padding-block: 12px;
+    color: var(--blue);
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
   }
 
   .verification-table th,
@@ -486,7 +500,7 @@ const toc = [
 
   .verification-table thead th {
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
@@ -496,14 +510,14 @@ const toc = [
 
   .verification-table td {
     color: var(--ink-soft);
-    font-size: 0.92rem;
+    font-size: var(--text-dense);
   }
 
   .verification-table .level {
     width: 150px;
     color: var(--green);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
@@ -518,6 +532,11 @@ const toc = [
     gap: 32px;
   }
 
+  .scope-grid > h2 {
+    grid-column: 1 / -1;
+    margin-bottom: -8px;
+  }
+
   .scope-grid > div {
     padding: 24px;
     border-top: 4px solid var(--amber);
@@ -529,13 +548,14 @@ const toc = [
     background: var(--blue-soft);
   }
 
-  .scope-grid h2 {
-    font-size: 1.4rem;
+  .scope-grid h3 {
+    margin-bottom: 16px;
+    font-size: var(--text-h3);
   }
 
   .scope-grid .rule-list {
     color: var(--ink-soft);
-    font-size: 0.94rem;
+    font-size: var(--text-dense);
   }
 
   .project-resources {
@@ -550,7 +570,7 @@ const toc = [
   .project-resources > p {
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
@@ -565,7 +585,7 @@ const toc = [
     min-height: 44px;
     align-items: center;
     gap: 5px;
-    font-size: 0.88rem;
+    font-size: 16px;
     font-weight: 800;
   }
 
@@ -604,7 +624,7 @@ const toc = [
     gap: 5px;
     color: var(--ink-faint);
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
     font-weight: 800;
   }
 
@@ -612,7 +632,7 @@ const toc = [
     justify-content: flex-end;
   }
 
-  @media (max-width: 960px) {
+  @media (max-width: 959px) {
     .project-hero-grid {
       grid-template-columns: 1fr;
       gap: 40px;
@@ -629,12 +649,11 @@ const toc = [
     }
 
     .project-toc {
-      position: sticky;
-      top: var(--header-height);
-      z-index: 5;
+      position: static;
       display: block;
-      margin-bottom: 48px;
-      padding-block: 10px;
+      margin-bottom: 40px;
+      padding-block: 20px;
+      border-top: 1px solid var(--line-strong);
       border-bottom: 1px solid var(--line-strong);
       background: var(--paper);
     }
@@ -651,34 +670,26 @@ const toc = [
 
     .project-toc nav {
       display: flex;
-      gap: 6px;
-      overflow-x: auto;
+      flex-wrap: wrap;
+      gap: 8px 20px;
       border: 0;
-      overscroll-behavior-inline: contain;
-      scrollbar-width: thin;
-      scroll-snap-type: inline proximity;
-      mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 34px), transparent 100%);
     }
 
     .project-toc nav a {
       display: inline-flex;
       flex: 0 0 auto;
-      grid-template-columns: none;
       align-items: center;
       gap: 6px;
       min-height: 44px;
-      padding: 7px 10px;
-      border: 1px solid var(--line);
-      border-radius: 3px;
-      background: var(--surface);
-      line-height: 1;
-      white-space: nowrap;
-      scroll-snap-align: start;
+      padding: 4px 0;
+      border: 0;
+      background: transparent;
+      line-height: 1.35;
     }
 
     .project-toc nav a[aria-current='location'] {
-      border-color: var(--blue);
-      background: var(--blue-soft);
+      color: var(--blue);
+      text-decoration: underline;
     }
 
     .toc-stack {
@@ -686,10 +697,9 @@ const toc = [
     }
 
     .project-section {
-      scroll-margin-top: calc(var(--header-height) + 92px);
+      scroll-margin-top: calc(var(--header-height) + 24px);
     }
 
-    .visual-wrap,
     .project-content {
       grid-column: 1;
     }
@@ -699,39 +709,44 @@ const toc = [
     }
   }
 
-  @media (max-width: 720px) {
+  @media (max-width: 639px) {
     .project-hero {
-      padding-block: 34px 42px;
+      padding-block: 24px 32px;
     }
 
     .project-hero-grid {
-      gap: 28px;
+      gap: 20px;
     }
 
     .back-link {
-      margin-bottom: 24px;
-    }
-
-    .project-heading h1 {
-      font-size: 3rem;
+      margin-bottom: 12px;
     }
 
     .project-lede {
       margin-top: 16px;
-      font-size: 1.05rem;
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
     .project-actions {
       margin-top: 20px;
     }
 
-    .visual-wrap {
-      margin-bottom: 42px;
+    .project-meta-compact {
+      display: block;
+      margin-top: 12px;
+      color: var(--ink-faint);
+      font-family: var(--mono);
+      font-size: var(--text-dense);
+      font-weight: 700;
+      line-height: 1.5;
     }
 
-    .project-section h2 {
-      font-size: 2rem;
+    .project-meta {
+      display: none;
+    }
+
+    .visual-wrap {
+      margin-bottom: 42px;
     }
 
     .signal-detail-grid,
@@ -778,7 +793,7 @@ const toc = [
       color: var(--ink-faint);
       content: attr(data-label);
       font-family: var(--mono);
-      font-size: 0.82rem;
+      font-size: var(--text-label);
       font-weight: 800;
     }
 
@@ -788,11 +803,7 @@ const toc = [
     }
   }
 
-  @media (max-width: 520px) {
-    .project-heading h1 {
-      font-size: 2.55rem;
-    }
-
+  @media (max-width: 639px) {
     .project-meta div {
       grid-template-columns: 72px minmax(0, 1fr);
       gap: 10px;

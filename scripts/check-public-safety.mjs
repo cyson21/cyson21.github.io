@@ -6,6 +6,7 @@ import {
   readFileSync,
   readdirSync,
 } from 'node:fs';
+import { homedir } from 'node:os';
 import { extname, join, relative, resolve, sep } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
@@ -17,8 +18,16 @@ const textExtensions = new Set(['.html', '.css', '.js', '.mjs', '.ts', '.tsx', '
 const approvedBinaryExtensions = new Set(['.gif', '.ico', '.jpeg', '.jpg', '.pdf', '.png', '.webp']);
 const allowedEmails = new Set(['cyson21@kakao.com']);
 const manifestFields = new Set(['output', 'sourceProject', 'sourcePath', 'sha256', 'owner', 'usage', 'approvedAt']);
-const pdfTextBinary = process.env.PDFTOTEXT_BIN?.trim() || 'pdftotext';
 const findings = [];
+
+const bundledPython = resolve(
+  homedir(),
+  '.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3',
+);
+const pdfTextPython = String.raw`from pypdf import PdfReader
+import sys
+reader = PdfReader(sys.argv[1])
+print("\n".join(page.extract_text() or "" for page in reader.pages))`;
 
 const banned = [
   { label: 'local absolute path', pattern: /\/Users\//g },
@@ -68,6 +77,31 @@ function scanText(path) {
   scanTextContent(path, readFileSync(path, 'utf8'));
 }
 
+function extractPdfText(path) {
+  const binary = process.env.PDFTOTEXT_BIN?.trim() || 'pdftotext';
+  const extraction = spawnSync(binary, [path, '-'], {
+    encoding: 'utf8',
+    maxBuffer: 16 * 1024 * 1024,
+  });
+  if (!extraction.error) return { ...extraction, extractor: binary };
+  if (extraction.error.code !== 'ENOENT') return { ...extraction, extractor: binary };
+
+  const pythonCandidates = [process.env.PYTHON_BIN?.trim(), 'python3', bundledPython]
+    .filter((candidate, index, items) => candidate && items.indexOf(candidate) === index);
+  for (const python of pythonCandidates) {
+    if (python === bundledPython && !existsSync(python)) continue;
+    const fallback = spawnSync(python, ['-c', pdfTextPython, path], {
+      encoding: 'utf8',
+      maxBuffer: 16 * 1024 * 1024,
+    });
+    if (!fallback.error && fallback.status === 0) {
+      return { ...fallback, extractor: `${python} + pypdf` };
+    }
+  }
+
+  return { ...extraction, extractor: binary };
+}
+
 function scanPdf(path) {
   const bytes = readFileSync(path);
   if (bytes.length < 1024 || bytes.subarray(0, 5).toString('ascii') !== '%PDF-') {
@@ -75,19 +109,16 @@ function scanPdf(path) {
     return;
   }
 
-  const extraction = spawnSync(pdfTextBinary, [path, '-'], {
-    encoding: 'utf8',
-    maxBuffer: 16 * 1024 * 1024,
-  });
+  const extraction = extractPdfText(path);
   if (extraction.error) {
-    findings.push(`${displayPath(path)}: PDF text extraction failed via ${pdfTextBinary}: ${extraction.error.code ?? extraction.error.message}`);
+    findings.push(`${displayPath(path)}: PDF text extraction failed via ${extraction.extractor}: ${extraction.error.code ?? extraction.error.message}`);
     return;
   }
   if (extraction.status !== 0 || extraction.signal) {
     const detail = extraction.signal
       ? `signal ${extraction.signal}`
       : `exit ${extraction.status}: ${(extraction.stderr || '').trim().split('\n')[0] || 'no error output'}`;
-    findings.push(`${displayPath(path)}: PDF text extraction failed via ${pdfTextBinary}: ${detail}`);
+    findings.push(`${displayPath(path)}: PDF text extraction failed via ${extraction.extractor}: ${detail}`);
     return;
   }
   if (!extraction.stdout.trim()) {

@@ -15,7 +15,7 @@ const { name, visual, flow } = Astro.props;
 const visualId = `project-visual-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'detail'}`;
 const titleId = `${visualId}-title`;
 const descriptionId = `${visualId}-description`;
-const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join('에서 ')} 순서로 이어집니다.`;
+const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join(' → ')} 순서로 이어집니다.`;
 ---
 
 <figure class:list={['project-visual', `project-visual--${visual.kind}`]}>
@@ -47,6 +47,11 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join('에서 ')}
         </ol>
       </div>
     </div>
+  )}
+  {visual.kind === 'image' && (
+    <ol class="mobile-flow" aria-label={`${name} 핵심 흐름`}>
+      {flow.map((step) => <li>{step}</li>)}
+    </ol>
   )}
   <figcaption id={descriptionId}>{longDescription}</figcaption>
 </figure>
@@ -91,7 +96,7 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join('에서 ')}
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.96);
     box-shadow: 0 2px 10px rgba(23, 26, 29, 0.14);
-    font-size: 0.86rem;
+    font-size: 16px;
     font-weight: 850;
     text-decoration: none;
   }
@@ -126,7 +131,7 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join('에서 ')}
 
   .diagram-title small {
     color: #65d6ac;
-    font-size: 0.82rem;
+    font-size: var(--text-label);
   }
 
   .generated-diagram ol {
@@ -166,21 +171,25 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join('에서 ')}
   .generated-diagram li > span {
     color: #97a29d;
     font-family: var(--mono);
-    font-size: 0.82rem;
+    font-size: var(--text-label);
   }
 
   .generated-diagram li strong {
-    font-size: 0.94rem;
+    font-size: var(--text-dense);
     line-height: 1.45;
   }
 
   figcaption {
     margin-top: 10px;
     color: var(--ink-faint);
-    font-size: 0.86rem;
+    font-size: var(--text-dense);
   }
 
-  @media (max-width: 640px) {
+  .mobile-flow {
+    display: none;
+  }
+
+  @media (max-width: 639px) {
     .visual-media {
       min-height: 0;
       padding: 8px;
@@ -190,19 +199,50 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join('에서 ')}
       max-height: 68vh;
     }
 
+    .mobile-flow {
+      display: grid;
+      gap: 0;
+      margin: 16px 0 0;
+      padding: 0;
+      border-top: 1px solid var(--line-strong);
+      list-style: none;
+    }
+
+    .mobile-flow li {
+      position: relative;
+      padding: 12px 0 12px 22px;
+      border-bottom: 1px solid var(--line);
+      font-size: var(--text-dense);
+      font-weight: 700;
+    }
+
+    .mobile-flow li::before {
+      position: absolute;
+      top: 1.4em;
+      left: 2px;
+      color: var(--blue);
+      content: "→";
+    }
+
     .generated-diagram {
-      width: 720px;
       min-height: 0;
       padding: 16px;
     }
 
     .generated-diagram ol {
-      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      grid-template-columns: 1fr;
       margin-top: 30px;
     }
 
     .generated-diagram li {
-      min-height: 100px;
+      min-height: 88px;
+    }
+
+    .generated-diagram li:not(:last-child)::after {
+      top: auto;
+      right: 50%;
+      bottom: -25px;
+      transform: translateX(50%) rotate(90deg);
     }
   }
 </style>

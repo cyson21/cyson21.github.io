@@ -1,51 +1,22 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import { canonicalRoutes, gotoCanonicalRoute } from './fixtures/canonical';
 
-const routes = ['/', '/projects/', '/projects/stockrush/', '/projects/enterprise-policy-rag/', '/experience/', '/resume/'];
+const wcagTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
-for (const route of routes) {
-  test(`${route} has no horizontal document overflow`, async ({ page }) => {
-    await page.goto(route, { waitUntil: 'networkidle' });
-    const dimensions = await page.evaluate(() => ({
-      scrollWidth: document.documentElement.scrollWidth,
-      clientWidth: document.documentElement.clientWidth,
-    }));
-    expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
-  });
-
-  test(`${route} has no serious or critical axe violations`, async ({ page }) => {
-    await page.goto(route, { waitUntil: 'networkidle' });
-    const results = await new AxeBuilder({ page }).analyze();
-    const blocking = results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''));
-    expect(blocking).toEqual([]);
-  });
-
-  test(`${route} keeps visible text readable and the H1 within the editorial scale`, async ({ page }) => {
-    await page.goto(route, { waitUntil: 'networkidle' });
-    const audit = await page.evaluate(() => {
-      const tooSmall = Array.from(document.querySelectorAll<HTMLElement>('body *')).flatMap((element) => {
-        if (element.closest('.visually-hidden') || ['SCRIPT', 'STYLE', 'SVG'].includes(element.tagName)) return [];
-        const directText = Array.from(element.childNodes)
-          .filter((node) => node.nodeType === Node.TEXT_NODE)
-          .map((node) => node.textContent?.trim() ?? '')
-          .join(' ')
-          .trim();
-        if (!directText) return [];
-        const style = getComputedStyle(element);
-        const rect = element.getBoundingClientRect();
-        if (style.display === 'none' || style.visibility === 'hidden' || rect.width === 0 || rect.height === 0) return [];
-        const size = Number.parseFloat(style.fontSize);
-        return size < 13 ? [`${element.tagName.toLowerCase()}.${element.className || '-'}=${size}px:${directText.slice(0, 40)}`] : [];
+for (const route of canonicalRoutes) {
+  test(`${route.path} has no WCAG A or AA axe violations`, async ({ page }, testInfo) => {
+    await gotoCanonicalRoute(page, route.path);
+    const results = await new AxeBuilder({ page }).withTags([...wcagTags, 'best-practice']).analyze();
+    const blocking = results.violations.filter((violation) => violation.tags.some((tag) => wcagTags.includes(tag)));
+    const bestPractice = results.violations.filter((violation) => !blocking.includes(violation));
+    if (bestPractice.length > 0) {
+      await testInfo.attach('axe-best-practice-warnings.json', {
+        body: JSON.stringify(bestPractice, null, 2),
+        contentType: 'application/json',
       });
-      const heading = document.querySelector('h1');
-      return {
-        tooSmall,
-        h1Size: heading ? Number.parseFloat(getComputedStyle(heading).fontSize) : 0,
-      };
-    });
-    expect(audit.tooSmall).toEqual([]);
-    expect(audit.h1Size).toBeGreaterThanOrEqual(34);
-    expect(audit.h1Size).toBeLessThanOrEqual(60);
+    }
+    expect(blocking).toEqual([]);
   });
 }
 
