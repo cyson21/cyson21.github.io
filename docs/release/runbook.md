@@ -57,8 +57,6 @@ PDF 내용이 바뀐 경우에만 이 단계를 수행합니다.
 
 ```bash
 pnpm build
-pnpm test:privacy
-pnpm test:links
 pnpm test:e2e
 ```
 
@@ -69,6 +67,8 @@ pnpm test:e2e
 - `sitemap.xml`에 `<loc>`가 없습니다.
 - 웹 이력서, 인쇄 화면 2페이지, 공개 PDF 2페이지가 모두 열립니다.
 - 승인되지 않은 `public/` 파일과 manifest SHA 불일치가 없습니다.
+- 구조·접근성·오버플로 검사는 모든 공개 경로를 대상으로 합니다.
+- 전체 페이지 시각 기준은 대표 레이아웃을 320px, 768px, 1440px에서 비교합니다.
 
 ## Release 검증
 
@@ -78,8 +78,6 @@ pnpm test:e2e
 export PUBLIC_RELEASE=true
 export PUBLIC_SITE_URL=https://portfolio.example.com
 pnpm build
-pnpm test:privacy
-pnpm test:links
 pnpm test:e2e:release
 ```
 
@@ -94,9 +92,11 @@ pnpm test:e2e:release
 
 ## 배포와 확인
 
-1. 두 CI job `preview`, `release`가 모두 성공한 commit의 `dist/`만 배포합니다.
-2. 배포 식별자, commit SHA, 공개 origin, 배포 시각을 릴리스 기록에 남깁니다.
-3. 실제 배포 주소에서 다음을 다시 확인합니다.
+1. 보호된 `main`에는 `preview`, `release`가 모두 성공한 PR만 병합합니다.
+2. 병합 뒤 Pages workflow가 같은 `main` tree를 공개 환경으로 다시 빌드합니다. `pnpm build`에 포함된 타입·콘텐츠·단위·공개 안전·링크 검사를 통과한 `dist/`만 배포합니다.
+3. 전체 E2E는 PR에서 한 번 수행하며 Pages workflow에서는 반복하지 않습니다.
+4. 배포 식별자, commit SHA, 공개 origin, 배포 시각을 릴리스 기록에 남깁니다.
+5. 실제 배포 주소에서 다음을 다시 확인합니다.
 
    ```bash
    curl -fsS https://portfolio.example.com/robots.txt
@@ -104,8 +104,8 @@ pnpm test:e2e:release
    curl -fsSI https://portfolio.example.com/downloads/resume.pdf
    ```
 
-4. 브라우저에서 홈, 프로젝트 상세, 웹 이력서, 존재하지 않는 경로를 확인합니다.
-5. 검색 도구 등록이나 캐시 purge는 실제 배포 확인 뒤 별도 단계로 수행합니다.
+6. 브라우저에서 홈, 프로젝트 상세, 웹 이력서, 존재하지 않는 경로를 확인합니다.
+7. 검색 도구 등록이나 캐시 purge는 실제 배포 확인 뒤 별도 단계로 수행합니다.
 
 ## 되돌리기
 
