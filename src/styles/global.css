@@ -24,8 +24,8 @@
   --container: 1180px;
   --reading: min(760px, 40ic);
   --header-height: 72px;
-  --sans: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", Inter, system-ui, sans-serif;
-  --mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  --sans: Pretendard, "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", Inter, system-ui, sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Mono", "SFMono-Regular", Consolas, "Malgun Gothic", monospace;
   --text-code: 14px;
   --text-label: 15px;
   --text-dense: 16px;
