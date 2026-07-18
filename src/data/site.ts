@@ -1,5 +1,5 @@
 const publicResumeUrl = import.meta.env.PUBLIC_RESUME_URL?.trim() || '/downloads/resume.pdf';
-const siteUpdatedAt = '2026-07-16';
+const siteUpdatedAt = '2026-07-19';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -13,19 +13,19 @@ const experienceRecords = [
     end: null,
     company: '이엠캐스트(주)',
     role: '백엔드 개발자 · 주임',
-    context: '기업용 플랫폼의 API와 이벤트 기능을 개발·운영하며 요구사항 분석, 데이터 저장 구조 설계·구현과 회귀 테스트를 담당합니다.',
+    context: '기업용 플랫폼의 API와 이벤트 기능을 개발·운영하며 요구사항 분석, 데이터 모델 설계, 기능 구현과 회귀 테스트를 담당합니다.',
     highlights: [
       {
         title: '상태 변경 충돌 방지',
         problem: '사용자가 화면을 연 뒤 저장하기 전에 처리 상태가 바뀌면 오래된 기준으로 저장되어 진행 상태와 완료 여부가 어긋날 수 있었습니다.',
         action: '저장 직전에 최신 상태를 다시 확인하고 유효하지 않은 변경을 차단했으며 정상·차단 경로를 테스트했습니다.',
-        result: '정상 변경은 유지되고 저장 전 상태가 달라진 요청은 거절됨을 회귀 테스트로 확인했습니다.',
+        result: '정상 요청은 그대로 처리되고, 저장 전 상태가 달라진 요청은 거절되는 것을 회귀 테스트로 검증했습니다.',
       },
       {
         title: '시간대 변환 오류',
         problem: 'UTC 기준 날짜를 KST 일정으로 변환하는 과정에서 알림이 하루 늦게 실행되거나 누락되는 오류가 있었습니다.',
         action: '날짜가 바뀌는 경계 조건을 재현해 변환·발송 규칙을 수정하고 회귀 테스트를 추가했습니다.',
-        result: 'UTC 기준일이 바뀌는 시각 전후의 알림 실행일과 발송 여부를 회귀 테스트로 확인했습니다.',
+        result: 'UTC 기준일이 바뀌는 시각 전후에도 알림이 올바른 KST 날짜에 실행되는 것을 회귀 테스트로 검증했습니다.',
       },
       {
         title: '조회·삭제 조건 일치',
@@ -37,7 +37,7 @@ const experienceRecords = [
         title: 'AWS SDK 전환과 테스트 표준화',
         problem: 'S3 연동 코드에 구형 AWS SDK와 기능별 테스트 설정이 혼재해 변경 영향과 회귀 여부를 확인하기 어려웠습니다.',
         action: 'S3 업로드·인증 코드를 AWS SDK v2로 통일하고 실제 MySQL을 사용하는 공통 통합 테스트 환경을 구성했습니다.',
-        result: '구형 의존성을 제거하고 모듈 테스트·빌드 산출물 검사로 전환 범위를 확인했습니다.',
+        result: '구형 의존성을 제거하고 공통 환경에서 모듈 테스트와 빌드 산출물을 검증하도록 정리했습니다.',
       },
     ],
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'AWS S3', 'JUnit', 'Testcontainers'],
@@ -47,7 +47,7 @@ const experienceRecords = [
     end: '2024-03',
     company: '주식회사 화이트스캔',
     role: '백엔드·데이터 개발자 · 연구원',
-    context: '공공·실시간 데이터 수집과 가공, REST API 제공, 예측 결과 연동과 Docker 기반 배포·운영을 담당했습니다.',
+    context: '공공·실시간 데이터의 수집·가공, REST API 개발, 예측 결과 연동과 Docker 기반 배포·운영을 담당했습니다.',
     highlights: [
       {
         title: '실시간 데이터 파이프라인',
@@ -76,7 +76,7 @@ export const profile = {
   name: '손찬양',
   englishName: 'Son Chanyang',
   role: 'Java·Spring 백엔드 개발자',
-  statement: 'Java와 Spring으로 기업용 플랫폼 API를 개발·운영하고 상태 충돌과 시간대 오류를 회귀 테스트로 방지해 왔습니다.',
+  statement: 'Java와 Spring으로 기업용 플랫폼 API를 개발·운영하며 상태 충돌과 시간대 오류를 재현하고 회귀 테스트로 해결해 왔습니다.',
   email: 'cyson21@kakao.com',
   github: 'https://github.com/cyson21',
   resumePath: publicResumeUrl,
@@ -92,15 +92,19 @@ export const careerPeriod = `${formatMonth(experienceRecords.at(-1)?.start ?? ex
 
 export const skillGroups = [
   {
-    label: '실무 핵심',
-    items: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL'],
+    label: '백엔드',
+    items: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL'],
   },
   {
-    label: '검증·인프라',
-    items: ['AWS S3', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs'],
+    label: '데이터베이스',
+    items: ['MySQL', 'PostgreSQL', 'MongoDB'],
   },
   {
-    label: '프로젝트·이전 경력',
-    items: ['Python', 'FastAPI', 'PostgreSQL', 'MongoDB', 'Kafka', 'Redis', 'RabbitMQ'],
+    label: '테스트·인프라',
+    items: ['JUnit', 'Testcontainers', 'REST Docs', 'Docker', 'AWS S3'],
+  },
+  {
+    label: '데이터·메시징',
+    items: ['Python', 'FastAPI', 'Kafka', 'Redis', 'RabbitMQ'],
   },
 ] as const;

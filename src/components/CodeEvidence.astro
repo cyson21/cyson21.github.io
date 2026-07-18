@@ -25,7 +25,7 @@ const { items, results = [] } = Astro.props;
     <details class="evidence" open={index === 0}>
       <summary class="evidence-header">
         <div>
-          <p class="evidence-count">{index === 0 ? '대표 구현 근거' : '추가 구현 근거'}</p>
+          <p class="evidence-count">{index === 0 ? '주요 구현' : '추가 구현'}</p>
           <h3><code>{item.symbol}</code></h3>
         </div>
         <p class="evidence-path"><code>{item.displayPath}</code></p>
@@ -33,7 +33,7 @@ const { items, results = [] } = Astro.props;
       <div class="evidence-body">
         <div class="code-panel">
           <div class="code-panel-header">
-            <p class="panel-label">구현</p>
+            <p class="panel-label">코드</p>
             {item.sourceUrl && (
               <a class="source-link" href={item.sourceUrl} target="_blank" rel="noreferrer" aria-label={`${item.symbol} 구현 파일 새 창에서 열기`}>
                 소스 파일 열기 <ArrowUpRight size={15} aria-hidden="true" />
@@ -44,16 +44,16 @@ const { items, results = [] } = Astro.props;
         </div>
         <div class="evidence-context">
           <section aria-labelledby={`rule-${index}`}>
-            <h4 id={`rule-${index}`}>보호하는 규칙</h4>
+            <h4 id={`rule-${index}`}>구현 내용</h4>
             <p>{item.proves}</p>
           </section>
           <section aria-labelledby={`test-${index}`}>
-            <h4 id={`test-${index}`}>연결 테스트</h4>
+            <h4 id={`test-${index}`}>관련 테스트</h4>
             <code class="test-name">{item.testName}</code>
             {item.testUrl
               ? <a class="test-path" href={item.testUrl} target="_blank" rel="noreferrer" aria-label={`${item.testName} 테스트 새 창에서 열기`}><code>{item.testPath}</code><ArrowUpRight size={14} aria-hidden="true" /></a>
               : <code class="test-path">{item.testPath}</code>}
-            {results[index] && <p class="test-result"><strong>실행 결과</strong><span>{results[index]}</span></p>}
+            {results[index] && <p class="test-result"><strong>테스트 결과</strong><span>{results[index]}</span></p>}
           </section>
         </div>
       </div>
@@ -120,7 +120,7 @@ const { items, results = [] } = Astro.props;
   .panel-label {
     margin-bottom: 5px;
     color: var(--blue);
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: var(--text-label);
     font-weight: 800;
   }
@@ -246,7 +246,7 @@ const { items, results = [] } = Astro.props;
 
   .evidence-context h4 {
     color: #72e0b6;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: var(--text-label);
   }
 

@@ -2,18 +2,18 @@
 import { ArrowRight, ArrowUpRight, Download, Mail } from '@lucide/astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
-import { experiences, formatDate, profile, skillGroups } from '../../data/site';
+import { experiences, profile, skillGroups } from '../../data/site';
 ---
 
 <BaseLayout title="이력서" description="Java·Spring 백엔드 개발자 손찬양의 웹 이력서입니다. 운영 장애 분석, 상태 정합성, 플랫폼 전환과 데이터 파이프라인 경험을 요약합니다.">
-  <PageIntro title="손찬양" description="Java와 Spring으로 운영 API, 상태 정합성과 데이터 흐름을 구현하고 검증하는 백엔드 엔지니어입니다." />
+  <PageIntro title="손찬양" description="Java와 Spring으로 기업용 플랫폼 API를 개발·운영하는 백엔드 개발자입니다." />
 
   <section class="section resume-section">
     <div class="container resume-layout">
       <article class="resume-content">
         <section class="resume-summary">
           <h2>요약</h2>
-          <p>기업용 플랫폼의 API와 이벤트 기능을 개발·운영하며 요구사항 분석, 데이터 저장 구조 설계와 회귀 테스트를 담당했습니다. 상태 충돌과 시간대 오류를 수정하고 구형 의존성과 DB 테스트 환경을 표준화했습니다.</p>
+          <p>기업용 플랫폼 API와 이벤트 기능을 개발·운영하며 요구사항 분석부터 데이터 모델 설계, 기능 구현과 회귀 테스트까지 맡고 있습니다. 운영 중 발생한 상태 충돌과 시간대 오류를 재현해 수정했고, 구형 AWS SDK와 DB 통합 테스트 환경을 정비했습니다.</p>
         </section>
 
         <section class="resume-experience">
@@ -30,7 +30,7 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
         </section>
 
         <section class="resume-skills">
-          <h2>기술</h2>
+          <h2>기술 스택</h2>
           <div class="skill-groups">
             {skillGroups.map((group) => (
               <div><p class="skill-label">{group.label}</p><ul class="tag-list">{group.items.map((item) => <li class="tag">{item}</li>)}</ul></div>
@@ -55,7 +55,6 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
           <a class="button" href={profile.resumePath}><Download size={17} aria-hidden="true" /> PDF 다운로드</a>
           <a class="button button--secondary" href="/projects/">프로젝트 보기 <ArrowRight size={17} aria-hidden="true" /></a>
         </div>
-        <p class="updated">최근 수정 <time datetime={profile.updatedAt}>{formatDate(profile.updatedAt)}</time></p>
       </aside>
     </div>
   </section>
@@ -106,13 +105,6 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
   .button-stack {
     display: grid;
     gap: 8px;
-  }
-
-  .updated {
-    color: var(--ink-faint);
-    font-family: var(--sans);
-    font-size: var(--text-label);
-    font-variant-numeric: tabular-nums;
   }
 
   .resume-content {
@@ -301,12 +293,6 @@ import { experiences, formatDate, profile, skillGroups } from '../../data/site';
       min-height: 44px;
       padding: 7px 9px;
       font-size: 16px;
-    }
-
-    .updated {
-      grid-column: 2;
-      grid-row: 2;
-      align-self: end;
     }
 
     .resume-content > section {

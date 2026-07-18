@@ -1,18 +1,18 @@
-# 손찬양 | Backend Engineering Portfolio Web
+# 손찬양 | 백엔드 개발자 웹 포트폴리오
 
-Java/Spring 백엔드에서 상태 정합성, 부분 실패 복구, 이벤트 전달과 데이터 흐름을 어떻게 구현하고 검증했는지 보여주는 공개 웹 포트폴리오입니다.
+Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트 처리와 데이터 흐름 문제를 해결한 프로젝트를 정리했습니다.
 
 [웹 포트폴리오](https://cyson21.github.io/) · [이력서 PDF](https://github.com/cyson21/portfolio-hub/releases/download/latest/resume.pdf) · [통합 포트폴리오 PDF](https://github.com/cyson21/portfolio-hub/releases/download/latest/portfolio-complete.pdf)
 
 ## 대표 프로젝트
 
-| 프로젝트 | 핵심 시나리오 |
+| 프로젝트 | 주요 내용 |
 |---|---|
 | [StockRush](https://cyson21.github.io/projects/stockrush/) | 중복 주문과 결제 실패, Kafka 중단 뒤 주문·재고·Outbox 상태 수렴 |
 | [Member Event Consistency](https://cyson21.github.io/projects/member-event-consistency/) | 최초 보상 1회, 쿠폰 수량, 포인트 잔액을 동시 요청에서도 보호 |
-| [CDC Data Platform](https://cyson21.github.io/projects/cdc-data-platform/) | PostgreSQL 변경 캡처, 중복 ingest 억제, sink failure replay |
+| [CDC Data Platform](https://cyson21.github.io/projects/cdc-data-platform/) | PostgreSQL 변경 캡처, 중복 적재 방지, 실패 이벤트 재처리 |
 
-전체 프로젝트는 웹 홈에서 주제별로 탐색할 수 있으며, 각 사례는 저장소의 대표 코드와 테스트로 연결됩니다.
+전체 프로젝트는 웹사이트에서 주제별로 볼 수 있으며, 각 프로젝트 페이지에서 주요 코드와 관련 테스트를 확인할 수 있습니다.
 
 ## 콘텐츠와 공개 경계
 

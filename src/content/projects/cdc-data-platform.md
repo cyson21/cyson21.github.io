@@ -4,10 +4,10 @@ featured: false
 publicationState: public
 name: CDC Data Platform
 domain: Data
-eyebrow: 원천 데이터부터 마트까지의 계보
-summary: Docker CDC 실행 환경, Spring Boot 제어 API와 로컬 레이크하우스를 각각 검증해 원천 메타데이터, 중복 억제·재처리와 고정 입력 기반 계보 근거를 분리했습니다.
+eyebrow: CDC 데이터 파이프라인
+summary: Docker CDC 환경, Spring Boot 제어 API와 로컬 레이크하우스를 나누어 구현하고 원천 메타데이터 보존, 중복 처리 방지, 재처리와 데이터 계보를 각각 테스트했습니다.
 period: "2026.06"
-role: 개인 프로젝트 · 표준 이벤트 변환·중복 처리 장부·재처리 API, 품질 판단과 CDC·레이크하우스 검증 도구 직접 설계·구현
+role: 개인 프로젝트 · 표준 이벤트 변환·멱등 처리 장부·재처리 API, 품질 확인과 CDC·레이크하우스 테스트 도구 직접 설계·구현
 stack:
   - Java
   - Spring Boot
@@ -129,9 +129,9 @@ visual:
   kind: diagram
   alt: PostgreSQL 변경이 Debezium, Kafka, Canonical ingest와 Iceberg·mart lineage로 이어지는 데이터 흐름 구성도
 seo:
-  title: CDC Data Platform · 중복 억제와 Lineage
-  description: 원천 오프셋, 재시도·DLQ·재처리, Iceberg 추가 코드 경로와 고정 입력 기반 마트 계보를 분리한 데이터 플랫폼 프로젝트입니다.
-updatedAt: 2026-07-15
+  title: CDC Data Platform · 중복 처리 방지와 데이터 계보
+  description: 원천 오프셋 보존, 재시도·DLQ·재처리, Iceberg 추가 코드와 마트 데이터 계보를 각각 테스트한 데이터 플랫폼 프로젝트입니다.
+updatedAt: 2026-07-19
 ---
 
 데이터 처리 성공 여부뿐 아니라 재처리와 source-to-mart 추적 가능성을 함께 검증한 CDC 프로젝트입니다.

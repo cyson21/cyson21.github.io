@@ -8,6 +8,13 @@ const manifestPath = resolve(root, 'src/data/public-assets.json');
 const astroRequire = createRequire(import.meta.resolve('astro/package.json'));
 const { load: parseYaml } = astroRequire('js-yaml');
 const findings = [];
+const todayPartsInKorea = Object.fromEntries(new Intl.DateTimeFormat('en', {
+  timeZone: 'Asia/Seoul',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}).formatToParts(new Date()).map(({ type, value }) => [type, value]));
+const todayInKorea = `${todayPartsInKorea.year}-${todayPartsInKorea.month}-${todayPartsInKorea.day}`;
 
 function parseDocument(path) {
   const source = readFileSync(path, 'utf8');
@@ -120,7 +127,7 @@ for (const document of documents) {
   const updatedAt = data.updatedAt instanceof Date ? data.updatedAt : new Date(data.updatedAt);
   if (Number.isNaN(updatedAt.getTime())) {
     findings.push(`${id}: updatedAt must be a valid date`);
-  } else if (updatedAt.getTime() > Date.now()) {
+  } else if (updatedAt.toISOString().slice(0, 10) > todayInKorea) {
     findings.push(`${id}: updatedAt must not be in the future`);
   }
 }

@@ -18,9 +18,9 @@ const { items } = Astro.props;
     <article class="decision-item">
       <h3>{item.title}</h3>
       <dl>
-        <div><dt>선택</dt><dd>{item.choice}</dd></div>
-        <div><dt>대안</dt><dd>{item.alternative}</dd></div>
-        <div><dt>판단</dt><dd>{item.reason}</dd></div>
+        <div><dt>적용 방식</dt><dd>{item.choice}</dd></div>
+        <div><dt>검토한 대안</dt><dd>{item.alternative}</dd></div>
+        <div><dt>선택 이유</dt><dd>{item.reason}</dd></div>
       </dl>
     </article>
   ))}
@@ -54,13 +54,13 @@ const { items } = Astro.props;
 
   .decision-item dl div {
     display: grid;
-    grid-template-columns: 48px minmax(0, 1fr);
+    grid-template-columns: 90px minmax(0, 1fr);
     gap: 10px;
   }
 
   .decision-item dt {
     color: var(--ink-faint);
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: var(--text-label);
     font-weight: 800;
   }

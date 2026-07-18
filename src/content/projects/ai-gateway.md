@@ -4,10 +4,10 @@ featured: false
 publicationState: public
 name: AI Gateway
 domain: AI
-eyebrow: LLM 플랫폼 경계
-summary: OpenAI 호환 WebFlux 진입점 뒤에 할당량 검사, 입·출력 검증, 캐시, 라우팅, 제한된 복구와 기록을 정해진 순서로 적용했습니다.
+eyebrow: LLM API 게이트웨이
+summary: OpenAI 호환 API에서 할당량 확인, 입력 검증, 캐시, 모델 선택, 호출, 실패 복구, 출력 검증과 요청 기록을 정해진 순서로 처리하도록 구현했습니다.
 period: "2026.06"
-role: 개인 프로젝트 · Java WebFlux 요청 처리, 인증·비용 보호·캐시·라우팅·복구와 정적 콘솔 직접 설계·구현
+role: 개인 프로젝트 · Java WebFlux 요청 처리, 인증·할당량·캐시·모델 선택·실패 복구와 정적 콘솔 직접 설계·구현
 stack:
   - Java 21
   - Spring Boot WebFlux
@@ -128,7 +128,7 @@ limitations:
   - API 키 인증은 8단계 요청 처리 앞의 WebFilter에서 수행되며 처리 단계 수에 포함하지 않습니다.
   - SSE는 완료된 고정 응답을 조각으로 나눈 인터페이스 검증이며 실제 외부 모델 토큰을 실시간 중계한 결과가 아닙니다.
 next:
-  - 실제 provider를 opt-in 경로로 연결하고 정책별 비용·지연 데이터를 분리해 측정합니다.
+  - 실제 외부 모델을 선택적으로 연결하고 정책별 비용·지연 데이터를 분리해 측정합니다.
 links:
   github: https://github.com/cyson21/ai-gateway
   design: https://github.com/cyson21/ai-gateway/blob/main/docs/portfolio-one-pager.md
@@ -139,7 +139,7 @@ visual:
 seo:
   title: AI Gateway · LLM 정책과 제한된 복구
   description: OpenAI 호환 API에 비용 보호, 캐시, 정책 라우팅과 제한된 폴백을 구성한 Java WebFlux 프로젝트입니다.
-updatedAt: 2026-07-15
+updatedAt: 2026-07-19
 ---
 
 애플리케이션마다 중복되는 LLM 호출 정책과 장애 대응을 공통 경계로 모은 Gateway 프로젝트입니다.
