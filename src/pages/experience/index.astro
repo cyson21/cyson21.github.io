@@ -29,7 +29,7 @@ import { careerPeriod, experiences } from '../../data/site';
             </header>
 
             <section class="responsibilities">
-              <h3>주요 업무</h3>
+              <p class="responsibilities-title" role="heading" aria-level="3">주요 업무</p>
               <ul>
                 {experience.responsibilities.map((responsibility) => (
                   <li>
@@ -146,7 +146,7 @@ import { careerPeriod, experiences } from '../../data/site';
     border-bottom: 1px solid var(--line-strong);
   }
 
-  .responsibilities > h3 {
+  .responsibilities-title {
     color: var(--ink-faint);
     font-size: var(--text-label);
     font-weight: 800;
