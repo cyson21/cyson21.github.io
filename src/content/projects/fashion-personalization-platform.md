@@ -5,9 +5,9 @@ publicationState: public
 name: Fashion Personalization Platform
 domain: Backend
 eyebrow: 이벤트 기반 추천 파이프라인
-summary: 상품 특성과 사용자 행동 이벤트로 개인화 점수와 추천 스냅샷을 만들고 중복·실패 이벤트 격리와 최신성 지표를 추가했습니다.
+summary: 사용자 행동 이벤트를 한 번만 프로필에 반영하고, 상품 특성·가격·사이즈·재고를 근거로 추천 순위와 저장 결과를 만드는 백엔드를 구현했습니다.
 period: "2026.07"
-role: 개인 프로젝트 · Python 핵심 도메인, 이벤트 상태 전이, 규칙 기반 추천 순위, 배치 스냅샷과 FastAPI 어댑터 직접 구현
+role: 개인 프로젝트 · Python 이벤트 처리, 사용자 프로필, 규칙 기반 추천 순위, 배치 저장과 FastAPI 연결 계층 직접 구현
 stack:
   - Python 3.11
   - FastAPI
@@ -17,9 +17,9 @@ stack:
   - 메모리 저장소
 problem: 중복 이벤트나 처리 실패가 사용자 프로필을 오염시키면 추천 결과가 누적해서 잘못되고 오래된 스냅샷을 최신 결과로 오인할 수 있습니다.
 responsibilities:
-  - 외부 의존성 없이 실행되는 핵심 도메인·서비스와 필요할 때 연결할 수 있는 FastAPI 어댑터를 구현했습니다.
+  - 외부 서비스 없이 실행되는 핵심 도메인·서비스와 선택형 FastAPI 연결 계층을 구현했습니다.
   - 멱등 처리, 재시도 예산, DLQ·재처리 이벤트 흐름을 구성했습니다.
-  - 활성 사용자별 추천 스냅샷 배치, 최신성 운영 지표와 관리자 리포트를 구현했습니다.
+  - 활성 사용자별 추천 결과를 저장하고 생성 시각과 반영 이벤트 수를 확인하는 배치 흐름을 구현했습니다.
 flow:
   normal:
     - 상품 목록
@@ -36,26 +36,29 @@ flow:
     - DLQ·새 키로 재처리
     - 이벤트 처리 기준점·최신성 리포트
 signals:
-  - label: 실패 이벤트
-    expression: 3회 실패 → DLQ
-    result: 새 멱등 키로 재처리
+  - label: 중복 처리 방지
+    expression: 같은 이벤트 2회 → 프로필 반영 1회
+    result: 사용자 행동 중복 반영 0건
+    tone: success
+    source: test_event_processing.py::test_event_ingestion_is_idempotent
+    sourceUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/tests/test_event_processing.py
+  - label: 실패 이벤트 분리
+    expression: 처리 3회 실패 → 별도 보관
+    result: 정상 이벤트 처리와 분리
     tone: danger
     source: test_event_processing.py::test_unknown_product_moves_to_dead_letter_after_retry_budget
-  - label: 추천 고정 입력
-    expression: 상품 6개 → 추천 순위
-    result: 브랜드 · 사이즈 · 가격 · 재고 반영
-    tone: success
-    source: test_recommendation_engine.py::test_personal_ranking_prioritizes_user_preferences
-  - label: 배치 스냅샷
-    expression: 스냅샷 2개 이상
-    result: 지연 0건 · 최신성 확인
+    sourceUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/tests/test_event_processing.py
+  - label: 추천 근거
+    expression: 브랜드·사이즈·가격·재고 반영
+    result: 점수와 추천 이유 함께 제공
     tone: warning
-    source: test_batch_workflow.py::test_batch_refresh_writes_materialized_snapshots
+    source: test_recommendation_engine.py::test_personal_ranking_prioritizes_user_preferences
+    sourceUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/tests/test_recommendation_engine.py
 decisions:
   - title: 외부 의존성 없는 핵심 로직
     choice: 도메인과 서비스 핵심 흐름을 외부 웹 프레임워크 없이 실행할 수 있게 유지합니다.
     alternative: FastAPI 요청 모델과 ORM을 도메인에 직접 사용
-    reason: 설치 환경과 무관하게 추천·이벤트 규칙을 빠르게 검증하고 어댑터를 교체하기 위해 선택했습니다.
+    reason: 설치 환경과 무관하게 추천·이벤트 규칙을 확인하고 HTTP 연결 계층을 교체하기 위해 선택했습니다.
   - title: 실패 이벤트 격리
     choice: 멱등 처리, 재시도 예산, DLQ와 재처리를 별도 단계로 둡니다.
     alternative: 실패 이벤트를 무제한 즉시 재실행
@@ -121,11 +124,11 @@ verification:
     method: 선호 브랜드, 선택 사이즈, 이벤트 입력 순서별 목표 가격과 재고 상태를 각각 추천 순위 테스트에 전달합니다.
     result: 선호 속성이 점수와 이유에 반영되고 품절 상품은 제외되며 가격 프로필은 이벤트 입력 순서와 무관하게 같습니다.
   - layer: integration
-    method: 활성 사용자를 대상으로 배치 갱신과 최신성 리포트를 실행합니다.
+    method: 활성 사용자를 대상으로 배치 갱신과 최신성 조회를 실행합니다.
     result: 스냅샷 2개 이상이 생성되고 지연된 결과는 0건입니다.
 limitations:
-  - 검증 구현은 인메모리 저장소이며 PostgreSQL, SQS·EventBridge·S3와 AWS 배포는 포함하지 않았습니다.
-  - 추천은 학습 모델이나 품질 벤치마크가 아닌 결정론적 비즈니스 규칙이며 동일 점수의 product ID 정렬을 직접 고정하는 전용 회귀 테스트는 아직 없습니다.
+  - 현재 저장소는 프로세스 메모리 구현이며 PostgreSQL, SQS·EventBridge·S3와 AWS 배포는 포함하지 않았습니다.
+  - 추천은 학습 모델이나 품질 평가 결과가 아닌 고정된 비즈니스 규칙이며 동일 점수의 상품 ID 정렬을 직접 확인하는 전용 회귀 테스트는 아직 없습니다.
 next:
   - 저장소 어댑터와 메시지 인프라를 교체 가능한 경계로 유지한 채 PostgreSQL 통합 테스트를 추가합니다.
 links:
@@ -137,7 +140,7 @@ visual:
   alt: 행동 이벤트가 멱등 처리와 재시도를 거쳐 개인화 프로필, 추천 순위와 스냅샷으로 이어지는 구성도
 seo:
   title: Fashion Personalization · 이벤트 기반 추천 스냅샷
-  description: 중복과 실패 이벤트를 격리하고 사용자 프로필과 추천 스냅샷 최신성을 검증한 Python 백엔드 프로젝트입니다.
+  description: 행동 이벤트의 중복·실패를 분리하고 상품 특성과 사용자 선호를 근거로 추천 결과를 만드는 Python 백엔드 프로젝트입니다.
 updatedAt: 2026-07-19
 ---
 

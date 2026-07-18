@@ -5,7 +5,7 @@ publicationState: public
 name: Enterprise Policy RAG
 domain: AI
 eyebrow: 권한 기반 RAG
-summary: 권한이 없는 문서의 검색 노출과 근거 없는 답변을 막기 위해 검색 전 권한 필터, 인용·거절 응답, 실행 지연과 추정 토큰·비용 기록을 구현했습니다.
+summary: 권한 없는 정책 문서를 검색 단계에서 제외하고, 확인 가능한 근거가 없으면 답변을 생성하지 않도록 검색·답변 API를 구현했습니다.
 period: 2026.05–2026.06
 role: 개인 프로젝트 · FastAPI 검색·답변·운영 API, 저장소와 외부 모델 연동, React 콘솔 직접 설계·구현
 stack:
@@ -18,8 +18,8 @@ stack:
 problem: 기업 내부 정책 RAG는 검색 품질만으로 부족합니다. 사용자가 볼 수 없는 문서가 검색 후보에 섞이지 않아야 하고 근거가 없으면 답변 생성을 중단해야 합니다.
 responsibilities:
   - 문서 등록, 결정적 문서 분할, 권한 필터 검색과 인용·거절 응답 API를 구현했습니다.
-  - 질의 로그와 고정 평가 사례 3개, PostgreSQL/pgvector 선택 저장소와 외부 모델 경계를 분리했습니다.
-  - 검색·지식 관리·운영 화면과 정적 데모 검증 경로를 구성했습니다.
+  - PostgreSQL/pgvector 저장 경로와 외부 모델 연동을 서비스 로직에서 분리했습니다.
+  - 검색·지식 관리·질의 이력을 확인하는 운영 화면과 정적 데모를 구현했습니다.
 flow:
   normal:
     - 문서 등록·분할
@@ -70,7 +70,7 @@ decisions:
 protectionRules:
   - 다른 워크스페이스 또는 권한 범위 밖 문서는 검색 결과와 인용에 포함하지 않습니다.
   - 근거가 한 건도 없으면 답변 문자열을 생성하지 않습니다.
-  - 기본 검증은 고정 입력과 메모리 저장소에서 수행했으며 외부 모델 연동은 선택 실행 범위입니다.
+  - 기본 실행은 고정 입력과 메모리 저장소를 사용하며 외부 모델 연동은 선택 실행 범위입니다.
 codeEvidence:
   - symbol: RetrievalService.retrieve
     displayPath: app/retrieval.py
@@ -98,17 +98,22 @@ codeEvidence:
     testName: test_answer_api_refuses_when_no_evidence_is_available
     testPath: tests/test_answer_api.py
     testUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_answer_api.py
-  - symbol: run_eval
-    displayPath: app/evaluation.py
-    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/app/evaluation.py
+  - symbol: PostgresPolicyRepository.search_candidate_chunks
+    displayPath: app/repository.py
+    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/app/repository.py
     excerpt: |
-      cases = [_run_case(services, request.workspace_id, case) for case in GOLDEN_CASES]
-      retrieval_hit_rate = _rate(case.retrieval_hit for case in cases)
-      citation_coverage = _rate(case.citation_covered for case in cases)
-    proves: 3개 고정 평가 사례를 테스트용 답변 경로로 실행해 검색 적중률과 인용 커버리지를 함께 계산합니다.
-    testName: test_eval_run_api_returns_retrieval_and_citation_metrics
-    testPath: tests/test_eval_api.py
-    testUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_eval_api.py
+      WHERE c.workspace_id = %s
+        AND d.indexing_status = 'ready'
+        AND (
+          d.owner_user_id = %s
+          OR d.visibility = 'public'
+          OR (d.visibility = 'department' AND d.department_ids && %s::text[])
+        )
+      ORDER BY c.embedding <=> %s::vector
+    proves: 벡터 유사도 정렬 전에 작업 공간·소유자·공개 범위·부서 조건을 SQL 후보 단계에 적용합니다.
+    testName: test_postgres_repository_retrieval_filters_mixed_access_control_rows
+    testPath: tests/test_postgres_repository_integration.py
+    testUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_postgres_repository_integration.py
 verification:
   - layer: unit
     method: 권한 조합을 가진 문서 5건의 고정 입력으로 검색 경로를 실행합니다.
@@ -133,11 +138,11 @@ links:
 visual:
   kind: image
   src: /media/rag-operations.jpg
-  alt: 권한 검색 결과와 Citation, 질의 평가 지표를 보여주는 Enterprise Policy RAG 운영 화면
+  alt: 권한 검색 결과와 답변 근거, 질의 이력을 보여주는 Enterprise Policy RAG 운영 화면
 seo:
   title: Enterprise Policy RAG · 권한 검색과 근거 응답
   description: 권한 밖 문서를 검색 전에 차단하고 근거가 없으면 답변을 거절하는 사내 정책 RAG 백엔드 프로젝트입니다.
 updatedAt: 2026-07-19
 ---
 
-검색 정확도뿐 아니라 권한 경계와 답변 근거를 동시에 검증하는 사내 정책 RAG 프로젝트입니다.
+검색 정확도보다 먼저 권한 경계를 적용하고 답변 근거를 확인할 수 있게 만든 사내 정책 RAG 프로젝트입니다.
