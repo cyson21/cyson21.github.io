@@ -5,9 +5,9 @@ publicationState: public
 name: CDC Data Platform
 domain: Data
 eyebrow: CDC 데이터 파이프라인
-summary: 데이터 변경을 중복 없이 처리하고 실패 이벤트를 추적·재처리할 수 있도록 CDC 실행 환경, 제어 API와 로컬 적재 경로를 구현하고 각 검증 범위를 구분했습니다.
+summary: DB 변경을 다시 받아도 같은 변경을 두 번 반영하지 않고, 적재 실패 원인과 재처리 상태를 원천 위치와 함께 추적하는 CDC 처리 경로를 구현했습니다.
 period: "2026.06"
-role: 개인 프로젝트 · 표준 이벤트 변환·멱등 처리 장부·재처리 API, 품질 확인과 CDC·레이크하우스 테스트 도구 직접 설계·구현
+role: 개인 프로젝트 · Debezium·Kafka 변경 수집, 표준 이벤트 변환, 처리 장부와 실패·재처리 API 직접 설계·구현
 stack:
   - Java
   - Spring Boot
@@ -15,43 +15,43 @@ stack:
   - Debezium
   - Kafka
   - Apache Iceberg
-problem: 원천 DB 변경의 LSN, 오프셋과 이벤트 ID를 잃으면 중복 재처리를 구분할 수 없고 적재 실패 뒤 어떤 마트 행이 어느 변경에서 왔는지 추적하기 어렵습니다.
+problem: DB 변경은 수집기 재시작이나 재전달로 중복될 수 있습니다. 원천 위치를 잃으면 같은 변경인지 판단할 수 없고, 적재 실패 뒤 어떤 이벤트를 다시 처리해야 하는지도 추적하기 어렵습니다.
 responsibilities:
   - 원천 PostgreSQL 스키마, Debezium·Kafka 실행 환경과 Spring Boot CDC 제어 API를 설계했습니다.
   - 멱등 처리 장부, 재시도·DLQ·재처리와 커넥터 상태·지연·품질 기준을 구현했습니다.
-  - Docker CDC, Spring 제어 API, 로컬 객체·Parquet·마트와 Iceberg 명령 경계를 서로 독립적으로 확인하는 실행 도구를 구성했습니다.
+  - 변경 수집, 상태 제어와 로컬 적재를 독립된 범위로 구현해 연결된 구간과 아직 연결하지 않은 구간을 구분했습니다.
 flow:
   normal:
-    - "A · Docker CDC: PostgreSQL → Debezium → Kafka 원본"
-    - "B · 제어 API: 고정 입력 → 표준 이벤트 장부"
-    - "C · 로컬 레이크하우스: 독립 고정 입력 → 객체·Iceberg·마트"
+    - "A · 변경 수집: PostgreSQL → Debezium → Kafka"
+    - "B · 상태 제어: 원천 이벤트 → 표준 이벤트·처리 장부"
+    - "C · 로컬 적재: 표준 이벤트 → 객체 저장·조회 데이터"
   failure:
     - 동일 오프셋 중복 수신
     - 적재 처리 실패
-    - 데이터 계보 연결 불완전
+    - 같은 변경의 재전달
   recovery:
     - 멱등 처리 장부
     - 재시도·DLQ 분리
-    - 재처리 요청·데이터 계보 리포트
+    - 재처리 요청과 상태 기록
 signals:
-  - label: 중복 억제
-    expression: 원본 7건 → 6건 반영
-    result: 중복 1건 억제
+  - label: 변경 수집
+    expression: 생성·수정·삭제 3종
+    result: 변경 종류·LSN·오프셋 보존
     tone: success
-    source: test_lakehouse_smoke.py::test_multi_table_cdc_lineage_writes_joined_rows_with_source_metadata
-    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/main/tools/tests/test_lakehouse_smoke.py
-  - label: 원천 데이터 범위
-    expression: 원천 테이블 4개
-    result: 지원자 · 공고 · 평가 · 에이전트 작업
+    source: tools/runner/cdc-smoke applicant-change-capture
+    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/main/tools/runner/cdc-smoke
+  - label: 중복 처리 방지
+    expression: 같은 변경 2회 → 장부 1건
+    result: 두 번째 반영 차단
     tone: warning
-    source: test_lakehouse_smoke.py::test_multi_table_cdc_lineage_writes_joined_rows_with_source_metadata
-    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/main/tools/tests/test_lakehouse_smoke.py
-  - label: 데이터 계보
-    expression: 2행 중 계보 완성 1행
-    result: 미완성 경로 분리 보고
+    source: CanonicalIngestServiceTest.duplicateRawEnvelopeDoesNotIncreaseCanonicalEventCount
+    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/main/backend/src/test/java/com/example/cdcplatform/event/CanonicalIngestServiceTest.java
+  - label: 실패 재처리
+    expression: 적재 실패 → 재처리 요청·재발행
+    result: 원천 위치 보존 · 처리 장부 1건 유지
     tone: danger
-    source: test_lakehouse_smoke.py::test_mart_lineage_validation_materializes_expected_rows_and_sql_refs
-    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/main/tools/tests/test_lakehouse_smoke.py
+    source: SinkFailureReplayFlowTest.sinkFailureReplayFlowKeepsSourceMetadataIdempotency
+    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/main/backend/src/test/java/com/example/cdcplatform/resilience/SinkFailureReplayFlowTest.java
 decisions:
   - title: 원천 메타데이터 기반 이벤트 ID
     choice: LSN과 원천 오프셋을 이벤트 ID, 재처리와 계보 추적의 기준으로 보존합니다.
@@ -61,15 +61,15 @@ decisions:
     choice: 원본, 표준 이벤트, 재시도, DLQ와 재처리 흐름을 분리합니다.
     alternative: 실패 이벤트를 원래 토픽으로 즉시 되돌림
     reason: 반복 실패가 정상 소비를 오염시키지 않고 운영자가 재처리 범위를 선택할 수 있도록 했습니다.
-  - title: 로컬 우선 검증
-    choice: 객체·Parquet·마트 고정 입력과 Iceberg 명령 경계를 로컬에서 각각 검증합니다.
-    alternative: AWS 실행 결과만 검증 기준으로 사용
-    reason: 클라우드 자격과 비용 없이도 저장 형식과 데이터 계보 규칙을 재현하기 위해 선택했습니다.
+  - title: 구현 범위 분리
+    choice: 변경 수집, 상태 제어와 로컬 적재의 실행 범위를 나누고 연결 여부를 명시합니다.
+    alternative: 고정 입력으로 이어 붙인 결과를 하나의 종단 파이프라인으로 설명
+    reason: 실제로 연결해 확인한 구간과 독립적으로 구현한 구간을 구분해 결과를 과장하지 않기 위해 선택했습니다.
 protectionRules:
   - 같은 원천 오프셋의 변경 이벤트는 표준 이벤트 결과를 두 번 증가시키지 않습니다.
   - DLQ에 존재하지 않는 이벤트는 재처리 요청을 만들 수 없습니다.
-  - 검증은 로컬 고정 입력에서 수행했으며 AWS 실행은 포함하지 않았습니다.
-  - CDC 실행 환경, 제어 API와 레이크하우스는 독립 검증 상태이며 종단 연결은 구현하지 않았습니다.
+  - 로컬 적재는 고정 입력으로 확인했으며 AWS 실행은 포함하지 않았습니다.
+  - 변경 수집, 상태 제어와 로컬 적재는 독립 구현 상태이며 종단 연결은 구현하지 않았습니다.
 codeEvidence:
   - symbol: CanonicalIngestService.ingestRawEnvelope
     displayPath: backend/src/main/java/com/example/cdcplatform/event/CanonicalIngestService.java
@@ -94,18 +94,31 @@ codeEvidence:
     testName: ReplayRequestServiceTest.createsReplayRequestAndMarksDlqEventForReplay
     testPath: backend/src/test/java/com/example/cdcplatform/replay/ReplayRequestServiceTest.java
     testUrl: https://github.com/cyson21/cdc-data-platform/blob/main/backend/src/test/java/com/example/cdcplatform/replay/ReplayRequestServiceTest.java
-  - symbol: IcebergJavaEngine.append
-    displayPath: tools/iceberg-engine/src/main/java/com/example/cdcplatform/tools/IcebergJavaEngine.java
-    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/main/tools/iceberg-engine/src/main/java/com/example/cdcplatform/tools/IcebergJavaEngine.java
+  - symbol: RetryEventService.scheduleRetry
+    displayPath: backend/src/main/java/com/example/cdcplatform/retry/RetryEventService.java
+    sourceUrl: https://github.com/cyson21/cdc-data-platform/blob/main/backend/src/main/java/com/example/cdcplatform/retry/RetryEventService.java
     excerpt: |
-      DataFile dataFile = writer.toDataFile();
-      table.newAppend().appendFile(dataFile).commit();
-      table.refresh();
-      Snapshot snapshot = table.currentSnapshot();
-    proves: Java 엔진은 Parquet 데이터 파일을 Iceberg에 추가하도록 구성했습니다. 연결된 스모크 테스트는 대체 실행 파일로 명령 인자와 데이터 파일 생성 경계만 확인하며 실제 Iceberg 커밋은 검증하지 않습니다.
-    testName: LakehouseSmokeTest.test_iceberg_engine_append_passes_insert_sql_and_writes_data_file
-    testPath: tools/tests/test_lakehouse_smoke.py
-    testUrl: https://github.com/cyson21/cdc-data-platform/blob/main/tools/tests/test_lakehouse_smoke.py
+      RetryEventRepository.InsertResult insertResult =
+          retryEventRepository.insertIfAbsent(
+              new RetryEventRepository.RetryEvent(
+                  command.eventId(),
+                  command.sourceConnector(),
+                  command.sourceSchema(),
+                  command.sourceTable(),
+                  command.sourcePrimaryKey(),
+                  command.sourceLsn(),
+                  command.sourceOffsetJson(),
+                  command.rawPayloadJson(),
+                  command.failureReason(),
+                  command.retryTopic(),
+                  command.nextAttemptAt(),
+                  command.maxAttempts()
+              )
+          );
+    proves: 재시도 이벤트에도 원천 테이블·기본 키·LSN을 보존하고 같은 이벤트는 한 번만 등록합니다.
+    testName: SinkFailureReplayFlowTest.sinkFailureReplayFlowKeepsSourceMetadataIdempotency
+    testPath: backend/src/test/java/com/example/cdcplatform/resilience/SinkFailureReplayFlowTest.java
+    testUrl: https://github.com/cyson21/cdc-data-platform/blob/main/backend/src/test/java/com/example/cdcplatform/resilience/SinkFailureReplayFlowTest.java
 verification:
   - layer: integration
     method: 중복 오프셋을 포함한 원본 이벤트 7건의 고정 입력을 표준 이벤트 처리 경로에 전달합니다.
@@ -113,12 +126,12 @@ verification:
   - layer: container-smoke
     method: PostgreSQL의 applicant create·update·delete를 Debezium·Kafka raw topic에서 확인합니다.
     result: Docker CDC 실행 환경에서 연산 종류, 원천 LSN과 오프셋을 관찰하며 제어 API나 레이크하우스 전달은 이 결과에 포함하지 않습니다.
-  - layer: static-demo
-    method: 원천 테이블 4개의 독립 고정 입력과 로컬 마트 계보 검증을 실행합니다.
-    result: 원본 7건 중 중복 1건을 억제하고 계보 2행을 완성 1행과 미완성 1행으로 분리합니다.
+  - layer: integration
+    method: 적재 실패 이벤트를 DLQ에 기록한 뒤 재처리 요청과 재발행을 실행합니다.
+    result: 원천 위치를 보존한 채 재처리·재발행 상태가 남고 처리 장부는 한 건으로 유지됩니다.
 limitations:
-  - Docker CDC 실행 환경, Spring 제어 API와 레이크하우스 저장 경로는 독립 검증 단계이며 하나의 종단 시스템으로 연결되어 있지 않습니다.
-  - 기본 감사는 고정 입력과 로컬 우선 경로이며 AWS S3·Athena·dbt-athena, Trino Compose 성공과 운영 규모 데이터는 포함하지 않았습니다.
+  - Docker CDC 실행 환경, Spring 제어 API와 로컬 적재 경로는 독립 구현 범위이며 하나의 종단 시스템으로 연결되어 있지 않습니다.
+  - 로컬 적재는 고정 입력을 사용하며 AWS S3·Athena·dbt-athena, Trino Compose 실행과 운영 규모 데이터는 포함하지 않았습니다.
 next:
   - 현재 독립된 CDC 실행 환경, 제어 API와 레이크하우스를 연결한 뒤 종단 전달과 재처리 지연을 별도 시나리오로 검증합니다.
 links:
@@ -127,11 +140,11 @@ links:
   testReport: https://github.com/cyson21/cdc-data-platform/tree/main/tools/tests
 visual:
   kind: diagram
-  alt: PostgreSQL 변경이 Debezium, Kafka, Canonical ingest와 Iceberg·mart lineage로 이어지는 데이터 흐름 구성도
+  alt: PostgreSQL 변경 수집, 표준 이벤트 처리 장부와 로컬 적재 범위를 구분한 CDC 구성도
 seo:
   title: CDC Data Platform · 중복 처리 방지와 데이터 계보
-  description: 원천 오프셋 보존, 재시도·DLQ·재처리, Iceberg 추가 코드와 마트 데이터 계보를 각각 테스트한 데이터 플랫폼 프로젝트입니다.
+  description: DB 변경의 원천 위치를 보존하고 중복 반영을 막으며 적재 실패를 추적·재처리할 수 있게 구현한 CDC 데이터 플랫폼 프로젝트입니다.
 updatedAt: 2026-07-19
 ---
 
-데이터 처리 성공 여부뿐 아니라 재처리와 source-to-mart 추적 가능성을 함께 검증한 CDC 프로젝트입니다.
+중복될 수 있는 DB 변경을 식별하고 적재 실패 뒤 재처리 상태를 추적할 수 있게 구현한 CDC 프로젝트입니다.

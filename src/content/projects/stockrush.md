@@ -5,9 +5,9 @@ publicationState: public
 name: StockRush
 domain: Backend
 eyebrow: 이벤트 기반 커머스
-summary: 한정 재고 주문의 부분 실패와 중복 처리를 제어하고 주문·재고·결제·조회 모델의 최종 상태 수렴을 장애 시나리오로 검증했습니다.
+summary: 한정 재고 주문에서 결제 실패, 이벤트 중복과 Kafka 중단이 발생해도 주문·재고·결제 상태가 모순 없이 마무리되도록 Saga와 Outbox 흐름을 구현했습니다.
 period: "2026"
-role: 개인 프로젝트 · 도메인 모델, 백엔드 서비스, 게이트웨이, 로컬 인프라와 테스트 도구 직접 설계·구현
+role: 개인 프로젝트 · 주문·재고·결제 서비스 경계, Saga·Outbox, 게이트웨이 인증과 장애 복구 흐름 직접 설계·구현
 stack:
   - Java
   - Spring Boot
@@ -36,8 +36,8 @@ flow:
     - 발행 재시도·FAILED 전이
     - SQL 종료 상태 조건
 signals:
-  - label: 멱등 소비
-    expression: 동일 이벤트 2회 → Outbox 1건
+  - label: 중복 처리 방지
+    expression: 같은 재고 이벤트 2회 → 1회만 처리
     result: 중복 후속 이벤트 0건
     tone: success
     source: OrderSagaEventHandlerIntegrationTest.ignores_duplicate_inventory_event
@@ -136,7 +136,7 @@ visual:
   alt: Gateway에서 주문 Saga, 서비스별 Outbox와 Kafka, 조회 모델로 이어지는 StockRush 구성도
 seo:
   title: StockRush · 이벤트 기반 주문 상태 수렴
-  description: Saga, Transactional Outbox, 멱등 소비자와 종료 상태 조건으로 부분 실패 뒤 주문 상태 수렴을 검증한 Java 백엔드 프로젝트입니다.
+  description: Saga, Transactional Outbox, 중복 처리 방지와 종료 상태 조건으로 부분 실패 뒤 주문 상태를 수렴시키는 Java 백엔드 프로젝트입니다.
 updatedAt: 2026-07-19
 ---
 
