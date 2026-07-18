@@ -5,14 +5,14 @@ import PageIntro from '../../components/PageIntro.astro';
 import { careerPeriod, experiences } from '../../data/site';
 ---
 
-<BaseLayout title="경력" description="기업용 플랫폼과 공공·실시간 데이터 서비스에서 맡은 업무와 문제 해결 경험을 정리했습니다.">
-  <PageIntro title="경력" description="공공·실시간 데이터 수집부터 기업용 플랫폼 API 개발·운영까지 맡은 업무와 문제 해결 경험을 정리했습니다." />
+<BaseLayout title="경력" description="기업용 플랫폼과 공공·실시간 데이터 서비스에서 맡은 역할과 주요 업무를 정리했습니다.">
+  <PageIntro title="경력" description="공공·실시간 데이터 수집부터 기업용 플랫폼 API 개발·운영까지 맡아 온 역할과 주요 업무를 정리했습니다." />
 
   <section class="section experience-section">
     <div class="container experience-layout">
       <div class="career-summary">
         <div><span>전체 경력</span><strong>{careerPeriod}</strong></div>
-        <p>회사별 담당 업무와 운영 중 해결한 문제를 최근 경력부터 정리했습니다.</p>
+        <p>회사별 역할과 주요 업무를 최근 경력부터 정리했습니다.</p>
         <a href="/resume/">웹 이력서 보기 <ArrowRight size={17} aria-hidden="true" /></a>
       </div>
 
@@ -28,18 +28,17 @@ import { careerPeriod, experiences } from '../../data/site';
               <p class="context">{experience.context}</p>
             </header>
 
-            <div class="experience-cases" data-count={experience.highlights.length}>
-              {experience.highlights.map((highlight) => (
-                <section>
-                  <div class="case-title"><h3>{highlight.title}</h3></div>
-                  <dl>
-                    <div><dt>문제</dt><dd>{highlight.problem}</dd></div>
-                    <div><dt>조치</dt><dd>{highlight.action}</dd></div>
-                    <div><dt>결과</dt><dd>{highlight.result}</dd></div>
-                  </dl>
-                </section>
-              ))}
-            </div>
+            <section class="responsibilities">
+              <h3>주요 업무</h3>
+              <ul>
+                {experience.responsibilities.map((responsibility) => (
+                  <li>
+                    <h4>{responsibility.title}</h4>
+                    <p>{responsibility.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
 
             <div class="experience-stack">
               <span>기술 스택</span>
@@ -139,48 +138,39 @@ import { careerPeriod, experiences } from '../../data/site';
     font-size: var(--text-dense);
   }
 
-  .experience-cases {
+  .responsibilities {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    border-left: 1px solid var(--line-strong);
-  }
-
-  .experience-cases section {
-    padding: 24px;
-    border-right: 1px solid var(--line-strong);
+    grid-template-columns: 100px minmax(0, 1fr);
+    gap: 18px;
+    padding-block: 24px;
     border-bottom: 1px solid var(--line-strong);
   }
 
-  .case-title {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-  }
-
-  .case-title h3 {
-    font-size: var(--text-h3);
-  }
-
-  .experience-cases dl {
-    display: grid;
-    gap: 14px;
-    margin: 22px 0 0;
-  }
-
-  .experience-cases dl > div {
-    display: grid;
-    grid-template-columns: 44px 1fr;
-    gap: 10px;
-  }
-
-  .experience-cases dt {
+  .responsibilities > h3 {
     color: var(--ink-faint);
-    font-family: var(--sans);
     font-size: var(--text-label);
     font-weight: 800;
   }
 
-  .experience-cases dd {
+  .responsibilities ul {
+    display: grid;
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .responsibilities li {
+    display: grid;
+    grid-template-columns: minmax(150px, 0.36fr) minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .responsibilities h4 {
+    font-size: var(--text-dense);
+  }
+
+  .responsibilities p {
     margin: 0;
     color: var(--ink-soft);
     font-size: var(--text-dense);
@@ -210,12 +200,6 @@ import { careerPeriod, experiences } from '../../data/site';
     }
   }
 
-  @media (min-width: 960px) {
-    .experience-cases[data-count='3'] {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
   @media (max-width: 639px) {
     .experience-section {
       padding-block: 48px;
@@ -240,7 +224,8 @@ import { careerPeriod, experiences } from '../../data/site';
     }
 
     .experience-entry header,
-    .experience-cases {
+    .responsibilities,
+    .responsibilities li {
       grid-template-columns: 1fr;
     }
 
@@ -249,13 +234,13 @@ import { careerPeriod, experiences } from '../../data/site';
       padding-bottom: 18px;
     }
 
-    .experience-cases section {
-      padding: 20px;
+    .responsibilities {
+      gap: 14px;
+      padding-block: 20px;
     }
 
-    .experience-cases dl {
-      gap: 10px;
-      margin-top: 15px;
+    .responsibilities li {
+      gap: 5px;
     }
 
     .experience-stack {
