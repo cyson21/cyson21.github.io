@@ -61,15 +61,15 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
 
         <section class="summary block">
           <h2>요약</h2>
-          <div><strong>기업용 플랫폼 API와 이벤트 기능을 Java·Spring으로 개발·운영했습니다.</strong><p>저장 전 상태 충돌, UTC/KST 날짜 경계와 구형 AWS SDK 문제를 재현해 수정하고 회귀 테스트를 보강했습니다.</p></div>
+          <div><strong>기업용 플랫폼 API와 이벤트 기능을 Java·Spring으로 개발·운영했습니다.</strong><p>요구사항 분석, 데이터 모델과 비즈니스 로직 설계, 운영 안정성 개선과 회귀·통합 테스트를 담당했습니다.</p></div>
         </section>
 
         <section class="focus-list block" aria-label="핵심 역량">
           <h2>핵심 역량</h2>
           <div>
-            <article><strong>운영 장애 분석</strong><p>로그·API 흐름·DB 상태를 함께 추적해 재현 조건과 수정 범위를 좁힙니다.</p></article>
-            <article><strong>상태 정합성</strong><p>트랜잭션·멱등 처리·조건부 갱신으로 중복과 상태 역전을 방지합니다.</p></article>
-            <article><strong>플랫폼 전환</strong><p>구형 의존성을 교체하고 모듈 테스트와 빌드 산출물로 변경 범위를 확인합니다.</p></article>
+            <article><strong>API 설계·개발</strong><p>요구사항을 분석하고 데이터 모델과 비즈니스 로직을 API로 구현합니다.</p></article>
+            <article><strong>운영 안정성</strong><p>로그·API 흐름·DB 상태를 함께 확인해 운영 문제의 원인과 영향 범위를 좁힙니다.</p></article>
+            <article><strong>테스트</strong><p>회귀·통합 테스트와 공통 실행 환경으로 변경 사항을 반복 검증합니다.</p></article>
           </div>
         </section>
 
@@ -82,8 +82,8 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
             </header>
             <p class="context">{primaryExperience.context}</p>
             <div class="highlight-list">
-              {primaryExperience.highlights.map((highlight) => (
-                <div><strong>{highlight.title}</strong><p>{highlight.action} {highlight.result}</p></div>
+              {primaryExperience.responsibilities.map((responsibility) => (
+                <div><strong>{responsibility.title}</strong><p>{responsibility.description}</p></div>
               ))}
             </div>
           </article>
@@ -104,8 +104,8 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
             </header>
             <p class="context">{previousExperience.context}</p>
             <div class="highlight-list highlight-list--compact">
-              {previousExperience.highlights.map((highlight) => (
-                <div><strong>{highlight.title}</strong><p>{highlight.action} {highlight.result}</p></div>
+              {previousExperience.responsibilities.map((responsibility) => (
+                <div><strong>{responsibility.title}</strong><p>{responsibility.description}</p></div>
               ))}
             </div>
           </article>

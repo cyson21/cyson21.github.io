@@ -5,7 +5,7 @@ import PageIntro from '../../components/PageIntro.astro';
 import { experiences, profile, skillGroups } from '../../data/site';
 ---
 
-<BaseLayout title="이력서" description="Java·Spring 백엔드 개발자 손찬양의 웹 이력서입니다. 운영 장애 분석, 상태 정합성, 플랫폼 전환과 데이터 파이프라인 경험을 요약합니다.">
+<BaseLayout title="이력서" description="Java·Spring 백엔드 개발자 손찬양의 웹 이력서입니다. 플랫폼 API 개발·운영과 데이터 서비스 경험을 요약합니다.">
   <PageIntro title="손찬양" description="Java와 Spring으로 기업용 플랫폼 API를 개발·운영하는 백엔드 개발자입니다." />
 
   <section class="section resume-section">
@@ -13,7 +13,7 @@ import { experiences, profile, skillGroups } from '../../data/site';
       <article class="resume-content">
         <section class="resume-summary">
           <h2>요약</h2>
-          <p>기업용 플랫폼 API와 이벤트 기능을 개발·운영하며 요구사항 분석부터 데이터 모델 설계, 기능 구현과 회귀 테스트까지 맡고 있습니다. 운영 중 발생한 상태 충돌과 시간대 오류를 재현해 수정했고, 구형 AWS SDK와 DB 통합 테스트 환경을 정비했습니다.</p>
+          <p>기업용 플랫폼 API와 이벤트 기능을 개발·운영하며 요구사항 분석, 데이터 모델과 비즈니스 로직 설계, 기능 구현과 테스트를 담당하고 있습니다. 이전에는 공공·실시간 데이터 수집·가공, REST API 개발과 Docker 기반 배포·운영을 경험했습니다.</p>
         </section>
 
         <section class="resume-experience">
@@ -23,7 +23,7 @@ import { experiences, profile, skillGroups } from '../../data/site';
               <header><div><h3>{experience.company}</h3><p>{experience.role}</p></div><time>{experience.period}</time></header>
               <p class="job-context">{experience.context}</p>
               <ul>
-                {experience.highlights.map((highlight) => <li><strong>{highlight.title}</strong><span>{highlight.action} {highlight.result}</span></li>)}
+                {experience.responsibilities.map((responsibility) => <li><strong>{responsibility.title}</strong><span>{responsibility.description}</span></li>)}
               </ul>
             </div>
           ))}

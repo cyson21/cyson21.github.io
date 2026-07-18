@@ -86,6 +86,17 @@ export async function gotoAuditRoute(
   }
   await page.evaluate(async () => {
     await document.fonts.ready;
+    await Promise.all(
+      Array.from(document.images).map(async (image) => {
+        if (!image.complete) {
+          await new Promise<void>((resolve) => {
+            image.addEventListener('load', () => resolve(), { once: true });
+            image.addEventListener('error', () => resolve(), { once: true });
+          });
+        }
+        await image.decode().catch(() => undefined);
+      }),
+    );
     await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
   });
 }
