@@ -32,6 +32,7 @@ const deprecatedLabels = [
   '사용 기술',
   '사용 범위',
   '경력과 구현 근거',
+  'Backend Engineer',
 ];
 
 for (const route of routes) {
@@ -58,12 +59,38 @@ test('project filter works and code details keep implementation and tests visibl
   await expect(page.locator('[data-project-domain="Backend"]')).toHaveCount(3);
   await expect(page.locator('[data-project-domain="AI"]:visible')).toHaveCount(0);
   await expect(page.locator('#filter-status')).toHaveText('백엔드 3개 프로젝트');
+  await expect(page.locator('[data-project-domain="Backend"] .domain')).toHaveText(['백엔드', '백엔드', '백엔드']);
 
   await page.goto('/projects/stockrush/');
   const firstEvidence = page.locator('.evidence').first();
   await expect(firstEvidence.getByRole('heading', { name: '구현 내용' })).toBeVisible();
   await expect(firstEvidence.getByRole('heading', { name: '관련 테스트' })).toBeVisible();
   await expect(firstEvidence.locator('.test-path')).toBeVisible();
+});
+
+test('Korean interface labels use the text font rather than the code font', async ({ page }) => {
+  const codeFontPattern = /JetBrains Mono|Cascadia Mono|SFMono|Consolas/i;
+  const expectTextFonts = async (selectors: string[]) => {
+    const fontFamilies = await page.locator(selectors.join(', ')).evaluateAll((elements) =>
+      elements.map((element) => getComputedStyle(element).fontFamily),
+    );
+    expect(fontFamilies.length).toBeGreaterThan(0);
+    fontFamilies.forEach((fontFamily) => expect(fontFamily).not.toMatch(codeFontPattern));
+  };
+
+  await page.goto('/projects/');
+  await expectTextFonts(['.wordmark-role', '.domain', '#filter-status']);
+
+  await page.goto('/projects/stockrush/');
+  await expectTextFonts([
+    '.project-meta dt',
+    '.project-toc > p',
+    '.decision-item dt',
+    '.evidence-count',
+    '.evidence-context h4',
+    '.verification-table thead th',
+    '.pagination-grid a span',
+  ]);
 });
 
 test('projects page heading levels do not skip from h1 to h3', async ({ page }) => {

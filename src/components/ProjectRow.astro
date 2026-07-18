@@ -8,9 +8,10 @@ interface Props {
   compact?: boolean;
 }
 
-const { project, headingLevel = 3, compact = false } = Astro.props;
+const { project, headingLevel = 3, compact = false }: Props = Astro.props;
 const data = project.data;
 const primarySignal = data.signals[0];
+const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as const;
 ---
 
 <article class:list={['project-row', { 'project-row--compact': compact }]}>
@@ -23,7 +24,7 @@ const primarySignal = data.signals[0];
             : <h3><a href={`/projects/${project.id}/`}>{data.name}</a></h3>}
         </div>
         <div class="project-status">
-          <span class="domain">{data.domain}</span>
+          <span class="domain">{domainLabels[data.domain]}</span>
           {data.publicationState === 'case-study-only' && <span class="case-study">문서만 공개</span>}
         </div>
       </div>
@@ -107,7 +108,7 @@ const primarySignal = data.signals[0];
     border: 1px solid var(--line-strong);
     border-radius: 3px;
     color: var(--ink-soft);
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: var(--text-label);
     font-weight: 800;
   }
@@ -149,14 +150,14 @@ const primarySignal = data.signals[0];
 
   .proof-label {
     color: var(--green);
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: var(--text-label);
     font-weight: 800;
   }
 
   .project-proof strong {
     overflow-wrap: anywhere;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: var(--text-dense);
     line-height: 1.45;
   }
