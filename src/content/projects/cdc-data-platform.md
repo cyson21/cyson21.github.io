@@ -5,7 +5,7 @@ publicationState: public
 name: CDC Data Platform
 domain: Data
 eyebrow: CDC 데이터 파이프라인
-summary: Docker CDC 환경, Spring Boot 제어 API와 로컬 레이크하우스를 나누어 구현하고 원천 메타데이터 보존, 중복 처리 방지, 재처리와 데이터 계보를 각각 테스트했습니다.
+summary: 데이터 변경을 중복 없이 처리하고 실패 이벤트를 추적·재처리할 수 있도록 CDC 실행 환경, 제어 API와 로컬 적재 경로를 구현하고 각 검증 범위를 구분했습니다.
 period: "2026.06"
 role: 개인 프로젝트 · 표준 이벤트 변환·멱등 처리 장부·재처리 API, 품질 확인과 CDC·레이크하우스 테스트 도구 직접 설계·구현
 stack:
