@@ -6,7 +6,6 @@ import VerificationSignal from '../../components/VerificationSignal.astro';
 import DecisionGrid from '../../components/DecisionGrid.astro';
 import CodeEvidence from '../../components/CodeEvidence.astro';
 import ProjectVisual from '../../components/ProjectVisual.astro';
-import { formatDate } from '../../data/site';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -32,17 +31,17 @@ await render(project);
 const layerLabel: Record<string, string> = {
   unit: '단위 테스트',
   integration: '통합 테스트',
-  'container-smoke': '컨테이너 스모크 테스트',
+  'container-smoke': '컨테이너 테스트',
   'static-demo': '정적 데모',
   'live-demo': '공개 데모',
-  cloud: '클라우드 실행',
+  cloud: '클라우드 환경',
 };
 const toc = [
-  ['overview', '문제와 담당 범위'],
-  ['decisions', '설계 판단'],
-  ['evidence', '대표 코드 근거'],
-  ['verification', '검증 결과'],
-  ['scope', '검증 범위'],
+  ['overview', '프로젝트 개요'],
+  ['decisions', '기술 선택'],
+  ['evidence', '주요 구현'],
+  ['verification', '테스트 결과'],
+  ['scope', '프로젝트 범위'],
 ];
 ---
 
@@ -57,47 +56,46 @@ const toc = [
   <header class="project-hero">
     <div class="container project-hero-grid">
       <div class="project-heading">
-        <a class="back-link" href="/projects/"><ArrowLeft size={17} aria-hidden="true" /> 프로젝트 전체</a>
+        <a class="back-link" href="/projects/"><ArrowLeft size={17} aria-hidden="true" /> 프로젝트 목록</a>
         <h1>{data.name}</h1>
         <p class="project-lede">{data.summary}</p>
         <p class="project-meta-compact">{data.role} · {data.period} · {data.domain}</p>
         <div class="button-row project-actions">
           {data.links.github && <a class="button" href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}><CodeXml size={17} aria-hidden="true" /> GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
           {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer" aria-label={`${data.name} 데모 새 창에서 열기`}>데모 <ArrowUpRight size={17} aria-hidden="true" /></a>}
-          {data.publicationState === 'case-study-only' && <span class="scope-badge"><CircleAlert size={16} aria-hidden="true" /> 사례 문서</span>}
+          {data.publicationState === 'case-study-only' && <span class="scope-badge"><CircleAlert size={16} aria-hidden="true" /> 문서만 공개</span>}
         </div>
       </div>
       <dl class="project-meta">
         <div><dt>역할</dt><dd>{data.role}</dd></div>
         <div><dt>기간</dt><dd>{data.period}</dd></div>
-        <div><dt>영역</dt><dd>{data.domain}</dd></div>
-        <div><dt>근거</dt><dd>코드 {data.codeEvidence.length}개 · 테스트 {data.codeEvidence.length}개</dd></div>
-        <div><dt>수정일</dt><dd><time datetime={data.updatedAt.toISOString()}>{formatDate(data.updatedAt)}</time></dd></div>
+        <div><dt>분야</dt><dd>{data.domain}</dd></div>
+        <div><dt>코드·테스트</dt><dd>주요 코드 {data.codeEvidence.length}개 · 관련 테스트 {data.codeEvidence.length}개</dd></div>
       </dl>
     </div>
   </header>
 
   <div class="container project-layout">
     <aside class="project-toc no-print">
-      <p id="project-toc-title">페이지 목차</p>
+      <p id="project-toc-title">목차</p>
       <nav aria-labelledby="project-toc-title">
         {toc.map(([id, label], index) => <a href={`#${id}`} aria-current={index === 0 ? 'location' : undefined}>{label}</a>)}
       </nav>
       <div class="toc-stack">
-        <p>사용 기술</p>
+        <p>기술 스택</p>
         <ul class="tag-list">{data.stack.map((item) => <li class="tag">{item}</li>)}</ul>
       </div>
     </aside>
 
     <article class="project-content">
       <section id="overview" class="project-section" tabindex="-1">
-        <h2>해결한 문제와 담당 범위</h2>
+        <h2>해결한 문제와 담당 역할</h2>
         <p class="section-lede">{data.problem}</p>
         <div class="responsibility-list">
           {data.responsibilities.map((item) => <p>{item}</p>)}
         </div>
         <div class="overview-rules">
-          <h3>이 구현이 보호하는 기준</h3>
+          <h3>핵심 요구사항</h3>
           <ul class="protection-list">
             {data.protectionRules.map((rule) => <li><strong>{rule}</strong></li>)}
           </ul>
@@ -109,33 +107,33 @@ const toc = [
       </div>
 
       <section id="decisions" class="project-section project-section--wide" tabindex="-1">
-        <h2>선택한 구조와 제외한 대안</h2>
+        <h2>기술 선택과 이유</h2>
         <DecisionGrid items={data.decisions} />
       </section>
 
       <section id="evidence" class="project-section project-section--wide" tabindex="-1">
-        <h2>대표 코드, 보호 규칙과 연결 테스트</h2>
-        <p class="section-lede">핵심 구현이 보호하는 규칙과 이를 검증한 테스트입니다.</p>
+        <h2>주요 구현과 관련 테스트</h2>
+        <p class="section-lede">핵심 로직과 동작을 확인한 테스트를 함께 정리했습니다.</p>
         <CodeEvidence items={data.codeEvidence} results={data.verification.map((item) => item.result)} />
       </section>
 
       <section id="verification" class="project-section project-section--wide" tabindex="-1">
-        <h2>실행한 입력과 확인한 상태</h2>
+        <h2>테스트 결과</h2>
         <div class="signal-detail-grid">
           {data.signals.map((signal) => <VerificationSignal {...signal} />)}
         </div>
         <details class="verification-details">
-          <summary>실행 환경과 방법 상세 보기</summary>
+          <summary>테스트 방법 보기</summary>
           <table class="verification-table">
-            <caption class="visually-hidden">{data.name} 검증 결과</caption>
+            <caption class="visually-hidden">{data.name} 테스트 결과</caption>
             <thead>
-              <tr><th scope="col">검증 수준</th><th scope="col">실행 방법</th><th scope="col">확인 결과</th></tr>
+              <tr><th scope="col">구분</th><th scope="col">테스트 방법</th><th scope="col">결과</th></tr>
             </thead>
             <tbody>
               {data.verification.map((item) => (
                 <tr>
-                  <th scope="row" class="level" data-label="수준">{layerLabel[item.layer]}</th>
-                  <td data-label="방법">{item.method}</td>
+                  <th scope="row" class="level" data-label="구분">{layerLabel[item.layer]}</th>
+                  <td data-label="테스트 방법">{item.method}</td>
                   <td data-label="결과">{item.result}</td>
                 </tr>
               ))}
@@ -145,13 +143,13 @@ const toc = [
       </section>
 
       <section id="scope" class="project-section scope-grid" tabindex="-1">
-        <h2>현재 검증 범위</h2>
+        <h2>프로젝트 범위</h2>
         <div>
-          <h3>아직 검증하지 않은 것</h3>
+          <h3>제외 범위</h3>
           <ul class="rule-list">{data.limitations.map((item) => <li>{item}</li>)}</ul>
         </div>
         <div>
-          <h3>다음 검증 단계</h3>
+          <h3>향후 개선</h3>
           <ul class="rule-list">{data.next.map((item) => <li>{item}</li>)}</ul>
         </div>
       </section>
@@ -291,7 +289,7 @@ const toc = [
 
   .project-meta div {
     display: grid;
-    grid-template-columns: 78px 1fr;
+    grid-template-columns: 100px 1fr;
     gap: 14px;
     padding-block: 13px;
     border-bottom: 1px solid var(--line-strong);

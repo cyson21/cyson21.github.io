@@ -5,14 +5,14 @@ import PageIntro from '../../components/PageIntro.astro';
 import { careerPeriod, experiences } from '../../data/site';
 ---
 
-<BaseLayout title="경력" description="기업용 플랫폼 운영 백엔드와 공공·실시간 데이터 파이프라인에서 담당한 문제, 기술적 조치와 검증 범위입니다.">
-  <PageIntro title="경력" description="데이터 수집과 API 구현에서 시작해 기업용 플랫폼의 운영 장애, 상태 정합성, 의존성 전환과 테스트 기반 개선으로 책임 범위를 확장했습니다." />
+<BaseLayout title="경력" description="기업용 플랫폼과 공공·실시간 데이터 서비스에서 맡은 업무와 문제 해결 경험을 정리했습니다.">
+  <PageIntro title="경력" description="공공·실시간 데이터 수집부터 기업용 플랫폼 API 개발·운영까지 맡은 업무와 문제 해결 경험을 정리했습니다." />
 
   <section class="section experience-section">
     <div class="container experience-layout">
       <div class="career-summary">
         <div><span>전체 경력</span><strong>{careerPeriod}</strong></div>
-        <p>기업용 플랫폼 운영과 데이터 서비스 개발에서 해결한 사례를 경력 순서로 확인할 수 있습니다.</p>
+        <p>회사별 담당 업무와 운영 중 해결한 문제를 최근 경력부터 정리했습니다.</p>
         <a href="/resume/">웹 이력서 보기 <ArrowRight size={17} aria-hidden="true" /></a>
       </div>
 
@@ -35,14 +35,14 @@ import { careerPeriod, experiences } from '../../data/site';
                   <dl>
                     <div><dt>문제</dt><dd>{highlight.problem}</dd></div>
                     <div><dt>조치</dt><dd>{highlight.action}</dd></div>
-                    <div><dt>확인</dt><dd>{highlight.result}</dd></div>
+                    <div><dt>결과</dt><dd>{highlight.result}</dd></div>
                   </dl>
                 </section>
               ))}
             </div>
 
             <div class="experience-stack">
-              <span>사용 범위</span>
+              <span>기술 스택</span>
               <ul class="tag-list">{experience.stack.map((item) => <li class="tag">{item}</li>)}</ul>
             </div>
           </article>

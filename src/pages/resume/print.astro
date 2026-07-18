@@ -17,18 +17,18 @@ const additionalProjects = representativeProjects.slice(3);
 const verificationLabels = {
   unit: '단위 테스트',
   integration: '통합 테스트',
-  'container-smoke': '컨테이너 스모크 테스트',
+  'container-smoke': '컨테이너 테스트',
   'static-demo': '정적 데모',
   'live-demo': '공개 데모',
-  cloud: '클라우드 실행',
+  cloud: '클라우드 환경',
 } as const;
 const firstVerificationLabel = (project: (typeof representativeProjects)[number]) => {
   const verification = project.data.verification.at(0);
-  return verification ? verificationLabels[verification.layer] : '검증 기록';
+  return verification ? verificationLabels[verification.layer] : '테스트 기록';
 };
 const firstSignalResult = (project: (typeof representativeProjects)[number]) => {
   const signal = project.data.signals.at(0);
-  if (!signal) throw new Error(`${project.id} 프로젝트에 검증 결과가 없습니다.`);
+  if (!signal) throw new Error(`${project.id} 프로젝트에 테스트 결과가 없습니다.`);
   return signal.result;
 };
 ---
@@ -133,7 +133,7 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
 
         <div class="lower-grid block">
           <section>
-            <div class="section-title"><h2>기술</h2></div>
+            <div class="section-title"><h2>기술 스택</h2></div>
             <div class="skills">
               {skillGroups.map((group) => <div><strong>{group.label}</strong><p>{group.items.join(' · ')}</p></div>)}
             </div>

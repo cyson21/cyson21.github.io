@@ -4,8 +4,8 @@ featured: true
 publicationState: public
 name: Member Event Consistency
 domain: Backend
-eyebrow: 불변식 기반 동시성
-summary: 최초 보상·쿠폰 발급·포인트 차감의 동시성 불변식을 PostgreSQL 제약과 조건부 갱신으로 지키고 Redis 잠금·RabbitMQ 단일 소비자 경로의 기능 결과를 대조했습니다.
+eyebrow: 동시 요청 제어
+summary: 최초 보상·쿠폰 발급·포인트 차감 규칙을 PostgreSQL 제약과 조건부 갱신으로 지키고 Redis 잠금과 RabbitMQ 단일 소비자를 같은 시나리오에서 비교했습니다.
 period: 2026.05–2026.06
 role: 개인 프로젝트 · Spring 시나리오 API, JDBC 저장소, Redisson·RabbitMQ 제어 경로와 검증 도구 직접 구현
 stack:
@@ -130,11 +130,11 @@ links:
   testReport: https://github.com/cyson21/member-event-consistency/tree/main/backend/src/test
 visual:
   kind: diagram
-  alt: 이벤트 시나리오별 불변식을 PostgreSQL guard와 Redis·RabbitMQ 비교 경로로 연결한 구성도
+  alt: 이벤트 시나리오별 불변식을 PostgreSQL 제약 조건과 Redis·RabbitMQ 비교 경로로 연결한 구성도
 seo:
   title: Member Event Consistency · 불변식 기반 동시성 제어
-  description: PostgreSQL guard를 최종 보호 장치로 두고 Redis와 RabbitMQ 동시성 전략을 비교한 Java 백엔드 프로젝트입니다.
-updatedAt: 2026-07-15
+  description: PostgreSQL 제약 조건을 최종 보호 장치로 두고 Redis와 RabbitMQ 동시성 전략을 비교한 Java 백엔드 프로젝트입니다.
+updatedAt: 2026-07-19
 ---
 
 하나의 동시성 도구가 아니라 업무 불변식별로 적합한 제어 경계를 선택하고 비교한 프로젝트입니다.

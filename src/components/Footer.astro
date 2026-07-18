@@ -1,16 +1,15 @@
 ---
 import { ArrowUpRight, Mail } from '@lucide/astro';
-import { formatDate, profile } from '../data/site';
 ---
 
 <footer class="site-footer">
   <div class="container footer-grid">
     <div class="footer-identity">
       <p><strong>손찬양</strong><span>백엔드 개발자</span></p>
-      <p class="footer-message">운영 문제를 분석하고 수정 범위를 회귀 테스트로 확인합니다.</p>
+      <p class="footer-message">운영 중 발생한 문제를 재현하고 회귀 테스트로 수정 결과를 검증합니다.</p>
     </div>
     <div class="footer-contact">
-      <p>기업용 플랫폼 경력과 프로젝트별 설계·테스트 결과입니다.</p>
+      <p>경력과 프로젝트를 더 자세히 확인해 보세요.</p>
       <div class="button-row">
         <a class="button button--secondary" href="mailto:cyson21@kakao.com" aria-label="손찬양에게 이메일 보내기"><Mail size={17} aria-hidden="true" /> 이메일</a>
         <a
@@ -25,7 +24,6 @@ import { formatDate, profile } from '../data/site';
   </div>
   <div class="container footer-base">
     <span>© {new Date().getFullYear()} 손찬양</span>
-    <span>최근 수정 <time datetime={profile.updatedAt}>{formatDate(profile.updatedAt)}</time></span>
   </div>
 </footer>
 
@@ -95,7 +93,7 @@ import { formatDate, profile } from '../data/site';
 
   .footer-base {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 20px;
     margin-top: 32px;
     padding-top: 16px;

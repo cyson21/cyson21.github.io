@@ -7,7 +7,7 @@ domain: Backend
 eyebrow: 이벤트 기반 커머스
 summary: 한정 재고 주문의 부분 실패와 중복 처리를 제어하고 주문·재고·결제·조회 모델의 최종 상태 수렴을 장애 시나리오로 검증했습니다.
 period: "2026"
-role: 개인 프로젝트 · 도메인 모델, 백엔드 서비스, 게이트웨이, 로컬 인프라와 검증 도구 직접 설계·구현
+role: 개인 프로젝트 · 도메인 모델, 백엔드 서비스, 게이트웨이, 로컬 인프라와 테스트 도구 직접 설계·구현
 stack:
   - Java
   - Spring Boot
@@ -118,7 +118,7 @@ verification:
     result: Outbox가 1건만 남고 중복 후속 이벤트가 생성되지 않습니다.
   - layer: integration
     method: 취소 완료 뒤 결제 승인 이벤트를 늦게 전달합니다.
-    result: SQL 종료 상태 guard가 주문 상태 변경을 거절합니다.
+    result: SQL 종료 상태 조건이 주문 상태 변경을 거절합니다.
   - layer: integration
     method: PostgreSQL 통합 테스트에서 실패하는 발행기를 주입해 Outbox 발행 재시도 횟수를 소진합니다.
     result: 다섯 번째 실패 뒤 이벤트가 FAILED로 전이됩니다.
@@ -136,8 +136,8 @@ visual:
   alt: Gateway에서 주문 Saga, 서비스별 Outbox와 Kafka, 조회 모델로 이어지는 StockRush 구성도
 seo:
   title: StockRush · 이벤트 기반 주문 상태 수렴
-  description: Saga, Transactional Outbox, 멱등 소비자와 종료 상태 guard로 부분 실패 뒤 주문 상태 수렴을 검증한 Java 백엔드 프로젝트입니다.
-updatedAt: 2026-07-15
+  description: Saga, Transactional Outbox, 멱등 소비자와 종료 상태 조건으로 부분 실패 뒤 주문 상태 수렴을 검증한 Java 백엔드 프로젝트입니다.
+updatedAt: 2026-07-19
 ---
 
 정상 주문보다 부분 실패 이후의 상태 수렴을 중심으로 설계한 이벤트 기반 커머스 프로젝트입니다.

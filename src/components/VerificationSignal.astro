@@ -34,10 +34,10 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
           href={sourceUrl}
           target="_blank"
           rel="noreferrer"
-          aria-label={`${label} 검증 근거 새 창에서 열기`}
+          aria-label={`${label} 관련 코드 새 창에서 열기`}
           title={source}
         >
-          <span class="signal-source-label">근거</span>
+          <span class="signal-source-label">관련 코드</span>
           <code>
             <span class="source-file">
               {sourceFileSegments.map((segment) => <>{segment}<wbr /></>)}
@@ -53,7 +53,7 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
       )
       : (
         <p class="signal-source" title={source}>
-          <span class="signal-source-label">근거</span>
+          <span class="signal-source-label">관련 코드</span>
           <code>
             <span class="source-file">
               {sourceFileSegments.map((segment) => <>{segment}<wbr /></>)}

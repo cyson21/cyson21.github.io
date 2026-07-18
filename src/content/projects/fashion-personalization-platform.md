@@ -5,19 +5,19 @@ publicationState: public
 name: Fashion Personalization Platform
 domain: Backend
 eyebrow: 이벤트 기반 추천 파이프라인
-summary: 상품 특성과 사용자 행동 이벤트를 규칙 기반 개인화 점수와 추천 스냅샷으로 변환하고 중복·실패 이벤트 격리와 최신성 지표를 구성했습니다.
+summary: 상품 특성과 사용자 행동 이벤트로 개인화 점수와 추천 스냅샷을 만들고 중복·실패 이벤트 격리와 최신성 지표를 추가했습니다.
 period: "2026.07"
-role: 개인 프로젝트 · Python 핵심 도메인, 이벤트 상태 전이, 규칙 기반 추천 순위, 배치 스냅샷과 선택형 FastAPI 직접 구현
+role: 개인 프로젝트 · Python 핵심 도메인, 이벤트 상태 전이, 규칙 기반 추천 순위, 배치 스냅샷과 FastAPI 어댑터 직접 구현
 stack:
   - Python 3.11
-  - 선택형 FastAPI
+  - FastAPI
   - pytest
   - 이벤트 처리
   - 배치 작업
   - 메모리 저장소
 problem: 중복 이벤트나 처리 실패가 사용자 프로필을 오염시키면 추천 결과가 누적해서 잘못되고 오래된 스냅샷을 최신 결과로 오인할 수 있습니다.
 responsibilities:
-  - 외부 의존성 없는 핵심 도메인·서비스와 선택형 FastAPI 어댑터를 구현했습니다.
+  - 외부 의존성 없이 실행되는 핵심 도메인·서비스와 필요할 때 연결할 수 있는 FastAPI 어댑터를 구현했습니다.
   - 멱등 처리, 재시도 예산, DLQ·재처리 이벤트 흐름을 구성했습니다.
   - 활성 사용자별 추천 스냅샷 배치, 최신성 운영 지표와 관리자 리포트를 구현했습니다.
 flow:
@@ -127,18 +127,18 @@ limitations:
   - 검증 구현은 인메모리 저장소이며 PostgreSQL, SQS·EventBridge·S3와 AWS 배포는 포함하지 않았습니다.
   - 추천은 학습 모델이나 품질 벤치마크가 아닌 결정론적 비즈니스 규칙이며 동일 점수의 product ID 정렬을 직접 고정하는 전용 회귀 테스트는 아직 없습니다.
 next:
-  - 저장소 adapter와 메시지 인프라를 교체 가능한 경계로 유지한 채 PostgreSQL 통합 테스트를 추가합니다.
+  - 저장소 어댑터와 메시지 인프라를 교체 가능한 경계로 유지한 채 PostgreSQL 통합 테스트를 추가합니다.
 links:
   github: https://github.com/cyson21/fashion-personalization-platform
   adr: https://github.com/cyson21/fashion-personalization-platform/tree/main/docs/adr
   design: https://github.com/cyson21/fashion-personalization-platform/blob/main/docs/architecture.md
 visual:
   kind: diagram
-  alt: 행동 이벤트가 idempotency와 retry를 거쳐 개인화 profile, 추천 ranking과 snapshot으로 이어지는 구성도
+  alt: 행동 이벤트가 멱등 처리와 재시도를 거쳐 개인화 프로필, 추천 순위와 스냅샷으로 이어지는 구성도
 seo:
-  title: Fashion Personalization · 이벤트 기반 추천 Snapshot
+  title: Fashion Personalization · 이벤트 기반 추천 스냅샷
   description: 중복과 실패 이벤트를 격리하고 사용자 프로필과 추천 스냅샷 최신성을 검증한 Python 백엔드 프로젝트입니다.
-updatedAt: 2026-07-15
+updatedAt: 2026-07-19
 ---
 
 행동 이벤트의 신뢰성과 스냅샷 운영 경계를 다루는 규칙 기반 개인화 백엔드입니다.
