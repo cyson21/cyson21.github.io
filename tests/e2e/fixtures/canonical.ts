@@ -31,6 +31,21 @@ export const canonicalViewports = [
   { width: 1440, height: 1000 },
 ] as const;
 
+export const visualAuditRoutes = [
+  canonicalRoutes[0],
+  canonicalRoutes[1],
+  canonicalRoutes[2],
+  canonicalRoutes[4],
+  canonicalRoutes[5],
+  supplementalAuditRoutes[5],
+] as const;
+
+export const visualViewports = [
+  canonicalViewports[0],
+  canonicalViewports[2],
+  canonicalViewports[4],
+] as const;
+
 export const boundaryViewports = [
   { width: 639, height: 900 },
   { width: 640, height: 900 },

@@ -12,6 +12,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: true,
   retries: 0,
+  ...(process.env.CI ? { workers: 4 } : {}),
   expect: {
     toHaveScreenshot: {
       animations: 'disabled',
