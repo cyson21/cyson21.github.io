@@ -1,4 +1,4 @@
-/* Dual-theme revision: 2026-07-19-bc4 | C Soft Organic */
+/* Dual-theme revision: 2026-07-20-bc5 | C Soft Organic */
 html[data-theme="c"] {
   --paper: #f1f3f1;
   --surface: #fbfcfa;
@@ -19,6 +19,12 @@ html[data-theme="c"] {
   --focus: #5d3153;
   --contact-copy: #5d5861;
   --career-marker-gutter: 0px;
+  --footer-muted-copy: #5d5861;
+  --footer-link-copy: #704163;
+  --footer-faint-copy: #655f68;
+  --project-meta-copy: #5d5861;
+  --warning-result-copy: #6b5939;
+  --pagination-label-copy: #5d5861;
   --graphite: #302c33;
   --graphite-soft: #454048;
   --shadow: 0 18px 42px rgba(56, 46, 57, 0.1);

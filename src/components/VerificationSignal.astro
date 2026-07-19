@@ -138,7 +138,7 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
   }
 
   .signal--warning .signal-result {
-    color: var(--amber);
+    color: var(--warning-result-copy, var(--amber));
   }
 
   .signal--danger .signal-result {

@@ -2,10 +2,13 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const root = new URL('../', import.meta.url);
-const [layout, bCss, cCss] = await Promise.all([
+const [layout, bCss, cCss, footer, verificationSignal, projectPage] = await Promise.all([
   readFile(new URL('src/layouts/BaseLayout.astro', root), 'utf8'),
   readFile(new URL('public/themes/b.css', root), 'utf8'),
   readFile(new URL('public/themes/c.css', root), 'utf8'),
+  readFile(new URL('src/components/Footer.astro', root), 'utf8'),
+  readFile(new URL('src/components/VerificationSignal.astro', root), 'utf8'),
+  readFile(new URL('src/pages/projects/[slug].astro', root), 'utf8'),
 ]);
 
 const revisionPattern = /Dual-theme revision:\s*([^\s|]+)/;
@@ -36,10 +39,29 @@ assert.match(bCss, /--amber:\s*#b7f34a/i);
 assert.match(bCss, /--green:\s*#06705c/i);
 assert.match(bCss, /--contact-copy:\s*#f4f7ff/i);
 assert.match(bCss, /--career-marker-gutter:\s*18px/i);
+assert.match(bCss, /--footer-muted-copy:\s*#b7c3c9/i);
+assert.match(bCss, /--footer-link-copy:\s*#b7f34a/i);
+assert.match(bCss, /--footer-faint-copy:\s*#b7c3c9/i);
+assert.match(bCss, /--project-meta-copy:\s*#d7e0e4/i);
+assert.match(bCss, /--warning-result-copy:\s*#4c6300/i);
+assert.match(bCss, /--pagination-label-copy:\s*#b7c3c9/i);
 assert.match(cCss, /--blue:\s*#704163/i);
 assert.match(cCss, /--green:\s*#2f6f69/i);
 assert.match(cCss, /--contact-copy:\s*#5d5861/i);
 assert.match(cCss, /--career-marker-gutter:\s*0px/i);
+assert.match(cCss, /--footer-muted-copy:\s*#5d5861/i);
+assert.match(cCss, /--footer-link-copy:\s*#704163/i);
+assert.match(cCss, /--footer-faint-copy:\s*#655f68/i);
+assert.match(cCss, /--project-meta-copy:\s*#5d5861/i);
+assert.match(cCss, /--warning-result-copy:\s*#6b5939/i);
+assert.match(cCss, /--pagination-label-copy:\s*#5d5861/i);
+
+assert.match(footer, /var\(--footer-muted-copy,\s*var\(--ink-soft\)\)/);
+assert.match(footer, /var\(--footer-link-copy,\s*var\(--ink\)\)/);
+assert.match(footer, /var\(--footer-faint-copy,\s*var\(--ink-faint\)\)/);
+assert.match(verificationSignal, /var\(--warning-result-copy,\s*var\(--amber\)\)/);
+assert.match(projectPage, /var\(--project-meta-copy,\s*var\(--ink-faint\)\)/);
+assert.match(projectPage, /var\(--pagination-label-copy,\s*var\(--ink-faint\)\)/);
 
 for (const [id, css] of [['b', bCss], ['c', cCss]]) {
   assert.match(
