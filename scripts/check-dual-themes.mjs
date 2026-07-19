@@ -2,13 +2,14 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const root = new URL('../', import.meta.url);
-const [layout, bCss, cCss, footer, verificationSignal, projectPage] = await Promise.all([
+const [layout, bCss, cCss, footer, verificationSignal, projectPage, projectsIndex] = await Promise.all([
   readFile(new URL('src/layouts/BaseLayout.astro', root), 'utf8'),
   readFile(new URL('public/themes/b.css', root), 'utf8'),
   readFile(new URL('public/themes/c.css', root), 'utf8'),
   readFile(new URL('src/components/Footer.astro', root), 'utf8'),
   readFile(new URL('src/components/VerificationSignal.astro', root), 'utf8'),
   readFile(new URL('src/pages/projects/[slug].astro', root), 'utf8'),
+  readFile(new URL('src/pages/projects/index.astro', root), 'utf8'),
 ]);
 
 const revisionPattern = /Dual-theme revision:\s*([^\s|]+)/;
@@ -76,6 +77,11 @@ assert.match(footer, /var\(--footer-faint-copy,\s*var\(--ink-faint\)\)/);
 assert.match(verificationSignal, /var\(--warning-result-copy,\s*var\(--amber\)\)/);
 assert.match(projectPage, /var\(--project-meta-copy,\s*var\(--ink-faint\)\)/);
 assert.match(projectPage, /var\(--pagination-label-copy,\s*var\(--ink-faint\)\)/);
+assert.match(
+  projectsIndex,
+  /@media\s*\(max-width:\s*639px\)[\s\S]*?\.filter-bar\s*\{[\s\S]*?margin-bottom:\s*20px;[\s\S]*?padding-bottom:\s*0;[\s\S]*?border-bottom:\s*0;/,
+  'Mobile project filters must not add a second divider above the first project row',
+);
 
 for (const [id, css] of [['b', bCss], ['c', cCss]]) {
   assert.match(
