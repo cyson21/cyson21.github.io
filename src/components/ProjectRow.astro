@@ -29,12 +29,30 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
         </div>
       </div>
       <p class="project-summary">{data.summary}</p>
+      {compact && data.cardEvidence && (
+        <dl class="project-card-evidence">
+          <div>
+            <dt>핵심 구현</dt>
+            <dd>{data.cardEvidence.implementation}</dd>
+          </div>
+          <div>
+            <dt>확인 결과</dt>
+            <dd>{data.cardEvidence.result}</dd>
+          </div>
+        </dl>
+      )}
       <div class="project-footnote">
         <ul class="tag-list" aria-label={`${data.name} 기술`}>
           {data.stack.slice(0, 5).map((item) => <li class="tag">{item}</li>)}
         </ul>
         <span class="project-period">{data.period}</span>
       </div>
+      {compact && (
+        <div class="project-links project-links--compact">
+          <a href={`/projects/${project.id}/`} aria-label={`${data.name} 프로젝트 상세 보기`}>자세히 보기 <ArrowRight size={16} aria-hidden="true" /></a>
+          {data.links.github && <a href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}>GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
+        </div>
+      )}
     </div>
   </div>
   {primarySignal && !compact && <div class="project-proof">
@@ -124,6 +142,34 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
     color: var(--ink-soft);
   }
 
+  .project-card-evidence {
+    display: grid;
+    gap: 0;
+    margin: 2px 0 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .project-card-evidence > div {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 14px;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .project-card-evidence dt {
+    color: var(--green);
+    font-family: var(--sans);
+    font-size: var(--text-label);
+    font-weight: 800;
+  }
+
+  .project-card-evidence dd {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: var(--text-dense);
+  }
+
   .project-footnote {
     display: flex;
     align-items: end;
@@ -185,6 +231,10 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
     font-weight: 800;
   }
 
+  .project-links--compact {
+    margin-top: -2px;
+  }
+
   .project-row--compact {
     display: block;
     padding-block: 32px;
@@ -233,6 +283,12 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
 
     .project-row--compact .project-footnote {
       margin-top: 2px;
+    }
+
+    .project-card-evidence > div {
+      grid-template-columns: 1fr;
+      gap: 4px;
+      padding-block: 10px;
     }
   }
 </style>

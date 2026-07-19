@@ -52,6 +52,10 @@ const projectCollection = defineCollection({
     domain: z.enum(['Backend', 'Data', 'AI']),
     eyebrow: z.string(),
     summary: z.string(),
+    cardEvidence: z.object({
+      implementation: z.string(),
+      result: z.string(),
+    }).optional(),
     period: z.string(),
     role: z.string(),
     stack: z.array(z.string()).min(2),

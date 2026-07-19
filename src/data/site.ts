@@ -13,7 +13,7 @@ const experienceRecords = [
     end: null,
     company: '이엠캐스트(주)',
     role: '백엔드 개발자 · 주임',
-    context: '기업용 플랫폼의 API와 이벤트 기능을 개발·운영하며 요구사항 분석, 데이터 모델과 비즈니스 로직 설계, 운영 안정성 개선과 테스트를 담당합니다.',
+    context: '기업용 플랫폼의 API와 이벤트 기능을 개발·운영합니다. 요구사항을 분석해 데이터 모델과 비즈니스 로직을 설계하고, 테스트와 운영 이슈 개선을 담당합니다.',
     responsibilities: [
       {
         title: '플랫폼 API 개발·운영',
@@ -21,11 +21,11 @@ const experienceRecords = [
       },
       {
         title: '운영 안정성 개선',
-        description: '운영 중 발생하는 상태·일정·데이터 처리 문제를 분석하고 저장·알림·조회 규칙을 개선합니다.',
+        description: '운영 중 확인한 문제를 로그, API 흐름과 DB 상태를 바탕으로 추적하고 관련 처리 규칙을 수정합니다.',
       },
       {
         title: '테스트 체계 정비',
-        description: '회귀·통합 테스트를 작성하고 공통 테스트 환경을 정비해 기능 변경과 운영 이슈의 재발 여부를 검증합니다.',
+        description: '변경한 기능의 정상·예외 경로를 회귀·통합 테스트로 확인하고 공통 테스트 환경을 관리합니다.',
       },
     ],
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'AWS S3', 'JUnit', 'Testcontainers'],
@@ -58,7 +58,7 @@ export const profile = {
   name: '손찬양',
   englishName: 'Son Chanyang',
   role: 'Java·Spring 백엔드 개발자',
-  statement: 'Java와 Spring으로 기업용 플랫폼 API를 개발·운영하며 데이터 모델 설계, 운영 안정성 개선과 테스트를 담당해 왔습니다.',
+  statement: 'Java·Spring 기반 기업용 플랫폼 API를 개발하고 운영해 왔습니다. 요구사항 분석부터 데이터 모델·비즈니스 로직 설계, 테스트와 운영 안정성 개선까지 담당합니다.',
   email: 'cyson21@kakao.com',
   github: 'https://github.com/cyson21',
   resumePath: publicResumeUrl,

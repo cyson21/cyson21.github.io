@@ -9,7 +9,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 const featured = projects.filter((project) => project.data.featured);
 ---
 
-<BaseLayout title="손찬양" description="Java와 Spring으로 기업용 플랫폼을 개발·운영하며 동시성, 장애 복구와 데이터 정합성 문제를 해결한 백엔드 개발자 손찬양의 포트폴리오입니다.">
+<BaseLayout title="손찬양" description="Java·Spring 기반 기업용 플랫폼 API 개발·운영과 데이터 모델 설계, 테스트 경험을 정리한 백엔드 개발자 손찬양의 포트폴리오입니다.">
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-copy">
@@ -35,10 +35,10 @@ const featured = projects.filter((project) => project.data.featured);
       <div class="section-heading experience-heading">
         <div>
           <h2 id="experience-title">경력</h2>
-          <p class="section-deck">회사별 담당 업무와 주요 경험을 정리했습니다.</p>
+          <p class="section-deck">담당 역할과 업무 범위를 정리했습니다.</p>
         </div>
         <div>
-          <p class="lede">2021년부터 공공·실시간 데이터 서비스와 기업용 플랫폼의 백엔드를 개발·운영했습니다.</p>
+          <p class="lede">2021년부터 공공·실시간 데이터 서비스와 기업용 플랫폼의 백엔드를 개발했습니다.</p>
           <a class="section-link" href="/experience/">경력 상세 보기 <ArrowRight size={18} aria-hidden="true" /></a>
         </div>
       </div>
@@ -58,10 +58,10 @@ const featured = projects.filter((project) => project.data.featured);
       <div class="section-heading">
         <div>
           <h2 id="featured-title">대표 프로젝트</h2>
-          <p class="section-deck">백엔드 설계와 문제 해결 과정을 담은 프로젝트입니다.</p>
+          <p class="section-deck">실패 조건과 기술 선택, 확인 결과를 정리했습니다.</p>
         </div>
         <div>
-          <p class="lede">동시성, 데이터 정합성, 장애 복구와 접근 제어 문제를 설계하고 해결했습니다.</p>
+          <p class="lede">데이터 정합성과 복구 가능성을 기준으로 설계한 대표 프로젝트입니다.</p>
           <a class="section-link" href="/projects/">6개 프로젝트 전체 보기 <ArrowRight size={18} aria-hidden="true" /></a>
         </div>
       </div>
@@ -73,7 +73,7 @@ const featured = projects.filter((project) => project.data.featured);
 
   <section class="contact-band">
     <div class="container contact-inner">
-      <div><h2>경력 및 프로젝트</h2><p>담당 업무와 프로젝트별 문제 해결 과정을 정리했습니다.</p></div>
+      <div><h2>경력 및 프로젝트</h2><p>경력과 프로젝트에서 담당 범위와 구현 결과를 확인할 수 있습니다.</p></div>
       <div class="button-row">
         <a class="button" href="/resume/">웹 이력서 <ArrowRight size={17} aria-hidden="true" /></a>
         <a class="button button--secondary" href={profile.resumePath}>PDF <Download size={17} aria-hidden="true" /></a>

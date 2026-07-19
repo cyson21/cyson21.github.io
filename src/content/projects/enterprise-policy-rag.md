@@ -5,7 +5,10 @@ publicationState: public
 name: Enterprise Policy RAG
 domain: AI
 eyebrow: 권한 기반 RAG
-summary: 권한 없는 정책 문서를 검색 단계에서 제외하고, 확인 가능한 근거가 없으면 답변을 생성하지 않도록 검색·답변 API를 구현했습니다.
+summary: 비인가 문서가 모델 입력에 들어가는 시점 자체를 막기 위해 검색 전에 권한 범위를 적용했습니다. 근거가 없으면 답변을 만들지 않습니다.
+cardEvidence:
+  implementation: 벡터 유사도 정렬 전에 작업 공간·소유자·공개 범위·부서 조건으로 후보를 제한합니다.
+  result: 고정 문서 5건 중 허용된 3건만 반환하고, 검색 결과가 없으면 모델 호출 없이 거절합니다.
 period: 2026.05–2026.06
 role: 개인 프로젝트 · FastAPI 검색·답변·운영 API, 저장소와 외부 모델 연동, React 콘솔 직접 설계·구현
 stack:

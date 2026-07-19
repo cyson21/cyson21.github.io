@@ -5,7 +5,7 @@ publicationState: public
 name: Fashion Personalization Platform
 domain: Backend
 eyebrow: 이벤트 기반 추천 파이프라인
-summary: 사용자 행동 이벤트를 한 번만 프로필에 반영하고, 상품 특성·가격·사이즈·재고를 근거로 추천 순위와 저장 결과를 만드는 백엔드를 구현했습니다.
+summary: 중복되거나 실패한 행동 이벤트가 사용자 프로필을 오염시키지 않도록 처리 상태와 재시도 범위를 분리했습니다. 상품 조건과 사용자 선호를 근거로 규칙 기반 추천 결과를 만들었습니다.
 period: "2026.07"
 role: 개인 프로젝트 · Python 이벤트 처리, 사용자 프로필, 규칙 기반 추천 순위, 배치 저장과 FastAPI 연결 계층 직접 구현
 stack:

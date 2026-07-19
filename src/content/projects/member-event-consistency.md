@@ -5,7 +5,10 @@ publicationState: public
 name: Member Event Consistency
 domain: Backend
 eyebrow: 동시 요청 제어
-summary: 동시에 들어온 최초 보상·쿠폰 발급·포인트 차감 요청이 중복 지급, 초과 발급과 음수 잔액을 만들지 않도록 PostgreSQL을 최종 보호 경계로 구현했습니다.
+summary: 외부 잠금이 실패해도 잘못된 상태가 저장되지 않도록 PostgreSQL을 최종 보호 경계로 두었습니다. 경합 방식은 업무 규칙별로 나눴습니다.
+cardEvidence:
+  implementation: 중복 보상은 고유 제약, 포인트는 조건부 차감, 쿠폰은 행 잠금과 용량 조건으로 보호합니다.
+  result: 8건의 동시 보상은 1건만 반영되고, 잔액 100의 60 차감 요청 2건은 1건만 성공합니다.
 period: 2026.05–2026.06
 role: 개인 프로젝트 · Spring API, PostgreSQL 동시성 제어, Redis 잠금과 RabbitMQ 순차 처리 경로 직접 설계·구현
 stack:

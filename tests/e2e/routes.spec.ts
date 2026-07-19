@@ -111,6 +111,16 @@ test('experience and resume describe recurring responsibilities rather than isol
   await expect(page.locator('.resume-job').first()).toContainText('테스트 체계 정비');
 });
 
+test('featured project cards follow the approved evidence hierarchy', async ({ page }) => {
+  await page.goto('/');
+  const featuredProjects = page.locator('#featured-projects .project-row');
+  await expect(featuredProjects).toHaveCount(3);
+  await expect(featuredProjects.locator('dt', { hasText: '핵심 구현' })).toHaveCount(3);
+  await expect(featuredProjects.locator('dt', { hasText: '확인 결과' })).toHaveCount(3);
+  await expect(featuredProjects.locator('.test-path')).toHaveCount(0);
+  await expect(featuredProjects.getByRole('link', { name: /프로젝트 상세 보기/ })).toHaveCount(3);
+});
+
 test('projects page heading levels do not skip from h1 to h3', async ({ page }) => {
   await page.goto('/projects/');
   const levels = await page.locator('main :is(h1, h2, h3, h4)').evaluateAll((headings) =>

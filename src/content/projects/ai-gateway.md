@@ -5,7 +5,7 @@ publicationState: public
 name: AI Gateway
 domain: AI
 eyebrow: LLM API 게이트웨이
-summary: 여러 애플리케이션의 LLM 요청에 조직 인증, 사용량 제한, 캐시와 모델 장애 복구 정책을 한곳에서 일관되게 적용하는 게이트웨이를 구현했습니다.
+summary: 애플리케이션마다 반복되는 인증·사용량·캐시·장애 복구 정책을 공통 경계로 모았습니다. 모델 호출 전후의 정책 순서와 제한된 복구 범위를 구현했습니다.
 period: "2026.06"
 role: 개인 프로젝트 · Java WebFlux 요청 처리, 조직별 사용량·캐시 격리, 모델 선택과 제한된 장애 복구 직접 설계·구현
 stack:

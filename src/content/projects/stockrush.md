@@ -5,7 +5,10 @@ publicationState: public
 name: StockRush
 domain: Backend
 eyebrow: 이벤트 기반 커머스
-summary: 한정 재고 주문에서 결제 실패, 이벤트 중복과 Kafka 중단이 발생해도 주문·재고·결제 상태가 모순 없이 마무리되도록 Saga와 Outbox 흐름을 구현했습니다.
+summary: 주문·재고·결제가 서로 다른 속도로 처리되는 상황을 전제로 설계했습니다. Saga와 Outbox로 부분 실패 뒤의 상태 수렴 경로를 구현했습니다.
+cardEvidence:
+  implementation: 주문 서비스가 상태 전이를 조율하고, DB 커밋과 이벤트 발행 사이의 실패는 Outbox 기록으로 남깁니다.
+  result: 중복 이벤트는 후속 처리를 늘리지 않고, 취소 뒤 도착한 결제 승인은 종료 상태 조건에서 거절됩니다.
 period: "2026"
 role: 개인 프로젝트 · 주문·재고·결제 서비스 경계, Saga·Outbox, 게이트웨이 인증과 장애 복구 흐름 직접 설계·구현
 stack:
