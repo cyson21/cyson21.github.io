@@ -34,8 +34,10 @@ for (const [name, css] of [['B', bCss], ['C', cCss]]) {
 assert.match(bCss, /--blue:\s*#0057ff/i);
 assert.match(bCss, /--amber:\s*#b7f34a/i);
 assert.match(bCss, /--green:\s*#06705c/i);
+assert.match(bCss, /--contact-copy:\s*#f4f7ff/i);
 assert.match(cCss, /--blue:\s*#704163/i);
 assert.match(cCss, /--green:\s*#2f6f69/i);
+assert.match(cCss, /--contact-copy:\s*#5d5861/i);
 
 for (const [id, css] of [['b', bCss], ['c', cCss]]) {
   assert.match(

@@ -1,4 +1,4 @@
-/* Dual-theme revision: 2026-07-19-bc2 | C Soft Organic */
+/* Dual-theme revision: 2026-07-19-bc3 | C Soft Organic */
 html[data-theme="c"] {
   --paper: #f1f3f1;
   --surface: #fbfcfa;
@@ -17,6 +17,7 @@ html[data-theme="c"] {
   --red: #9a4e5f;
   --red-soft: #f3e3e7;
   --focus: #5d3153;
+  --contact-copy: #5d5861;
   --graphite: #302c33;
   --graphite-soft: #454048;
   --shadow: 0 18px 42px rgba(56, 46, 57, 0.1);
