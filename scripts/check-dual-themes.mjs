@@ -87,10 +87,11 @@ for (const [id, css] of [['b', bCss], ['c', cCss]]) {
   assert.match(
     css,
     new RegExp(
+      `html\\[data-theme="${id}"\\] \\.filter-bar\\s*\\{[\\s\\S]*?\\}[\\s\\S]*?` +
       `@media\\s*\\((?:max-width:\\s*639px|width\\s*<=\\s*639px)\\)[\\s\\S]*?` +
       `html\\[data-theme="${id}"\\] \\.filter-bar\\s*\\{[\\s\\S]*?border-bottom-width:\\s*0;`,
     ),
-    `${id.toUpperCase()} mobile theme must not restore the filter divider`,
+    `${id.toUpperCase()} mobile divider reset must come after the theme filter rule`,
   );
   assert.match(
     css,

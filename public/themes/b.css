@@ -1,4 +1,4 @@
-/* Dual-theme revision: 2026-07-20-bc9 | B Signal Grid */
+/* Dual-theme revision: 2026-07-20-bc10 | B Signal Grid */
 /* OPTION B — SIGNAL GRID
    CSS-only visual study. Layout, DOM order, copy, and links are inherited unchanged. */
 html[data-theme="b"] {
@@ -411,10 +411,6 @@ html[data-theme="b"] .footer-base {
 }
 
 @media (width <= 639px) {
-  html[data-theme="b"] .filter-bar {
-    border-bottom-width: 0;
-  }
-
   html[data-theme="b"] .hero {
     background-size: 22px 22px;
   }
@@ -769,6 +765,10 @@ html[data-theme="b"] .pagination-grid a span {
 }
 
 @media (max-width: 639px) {
+  html[data-theme="b"] .filter-bar {
+    border-bottom-width: 0;
+  }
+
   html[data-theme="b"] .page-intro,
   html[data-theme="b"] .project-hero {
     background-size: 22px 22px;
