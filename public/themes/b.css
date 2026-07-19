@@ -1,4 +1,4 @@
-/* Dual-theme revision: 2026-07-19-bc3 | B Signal Grid */
+/* Dual-theme revision: 2026-07-19-bc4 | B Signal Grid */
 /* OPTION B — SIGNAL GRID
    CSS-only visual study. Layout, DOM order, copy, and links are inherited unchanged. */
 html[data-theme="b"] {
@@ -20,6 +20,7 @@ html[data-theme="b"] {
   --red-soft: #fbe6e9;
   --focus: #0057ff;
   --contact-copy: #f4f7ff;
+  --career-marker-gutter: 18px;
   --graphite: #111820;
   --graphite-soft: #1d2933;
   --shadow: 5px 5px 0 #111820;
