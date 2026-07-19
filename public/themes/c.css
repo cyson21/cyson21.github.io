@@ -1,4 +1,4 @@
-/* Dual-theme revision: 2026-07-20-bc8 | C Soft Organic */
+/* Dual-theme revision: 2026-07-20-bc9 | C Soft Organic */
 html[data-theme="c"] {
   --paper: #f1f3f1;
   --surface: #fbfcfa;
@@ -296,6 +296,10 @@ html[data-theme="c"] .footer-base {
 }
 
 @media (max-width: 639px) {
+  html[data-theme="c"] .filter-bar {
+    border-bottom-width: 0;
+  }
+
   html[data-theme="c"] .hero:before {
     top: -214px;
     right: -210px;

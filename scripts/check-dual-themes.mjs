@@ -87,6 +87,14 @@ for (const [id, css] of [['b', bCss], ['c', cCss]]) {
   assert.match(
     css,
     new RegExp(
+      `@media\\s*\\((?:max-width:\\s*639px|width\\s*<=\\s*639px)\\)[\\s\\S]*?` +
+      `html\\[data-theme="${id}"\\] \\.filter-bar\\s*\\{[\\s\\S]*?border-bottom-width:\\s*0;`,
+    ),
+    `${id.toUpperCase()} mobile theme must not restore the filter divider`,
+  );
+  assert.match(
+    css,
+    new RegExp(
       `html\\[data-theme="${id}"\\] \\.wordmark-role,[\\s\\S]*?` +
       `html\\[data-theme="${id}"\\] \\.pagination-grid a span\\s*\\{\\s*` +
       `font-family:\\s*var\\(--sans\\)`,
