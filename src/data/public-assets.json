@@ -52,5 +52,23 @@
     "owner": "Son Chanyang",
     "usage": "Public portfolio browser icon",
     "approvedAt": "2026-07-15"
+  },
+  {
+    "output": "public/themes/b.css",
+    "sourceProject": "portfolio-web",
+    "sourcePath": "public/themes/b.css",
+    "sha256": "c17ac90acae2def0fd29d19949aebdcf02706268b445999d5df0871000f738a7",
+    "owner": "Son Chanyang",
+    "usage": "Public B Signal Grid visual theme",
+    "approvedAt": "2026-07-19"
+  },
+  {
+    "output": "public/themes/c.css",
+    "sourceProject": "portfolio-web",
+    "sourcePath": "public/themes/c.css",
+    "sha256": "d48b9943401a8043a86e8422b3c7bc822d701e18531134a8de9014a06191ea50",
+    "owner": "Son Chanyang",
+    "usage": "Companion C Soft Organic visual theme",
+    "approvedAt": "2026-07-19"
   }
 ]
