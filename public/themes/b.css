@@ -1,4 +1,4 @@
-/* Dual-theme revision: 2026-07-20-bc6 | B Signal Grid */
+/* Dual-theme revision: 2026-07-20-bc7 | B Signal Grid */
 /* OPTION B — SIGNAL GRID
    CSS-only visual study. Layout, DOM order, copy, and links are inherited unchanged. */
 html[data-theme="b"] {
@@ -257,6 +257,12 @@ html[data-theme="b"] .career-list li::before {
   height: 9px;
   background: var(--blue);
   box-shadow: 3px 3px 0 var(--amber);
+}
+
+@media (min-width: 640px) {
+  html[data-theme="b"] .career-list li::before {
+    left: -16px;
+  }
 }
 
 html[data-theme="b"] .career-list time,

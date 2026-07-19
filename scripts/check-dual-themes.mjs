@@ -45,6 +45,11 @@ assert.match(bCss, /--footer-faint-copy:\s*#b7c3c9/i);
 assert.match(bCss, /--project-meta-copy:\s*#d7e0e4/i);
 assert.match(bCss, /--warning-result-copy:\s*#4c6300/i);
 assert.match(bCss, /--pagination-label-copy:\s*#b7c3c9/i);
+assert.match(
+  bCss,
+  /@media\s*\(min-width:\s*640px\)\s*\{[\s\S]*?\.career-list li::before\s*\{[\s\S]*?left:\s*-16px;/,
+  'B desktop career marker must stay outside the date text box',
+);
 assert.match(cCss, /--blue:\s*#704163/i);
 assert.match(cCss, /--green:\s*#2f6f69/i);
 assert.match(cCss, /--contact-copy:\s*#5d5861/i);
