@@ -57,7 +57,16 @@ assert.match(cCss, /--warning-result-copy:\s*#6b5939/i);
 assert.match(cCss, /--pagination-label-copy:\s*#5d5861/i);
 
 assert.match(footer, /var\(--footer-muted-copy,\s*var\(--ink-soft\)\)/);
-assert.match(footer, /var\(--footer-link-copy,\s*var\(--ink\)\)/);
+assert.match(
+  footer,
+  /\.site-footer \.button--secondary\s*\{[\s\S]*?color:\s*var\(--ink\);[\s\S]*?\}/,
+  'Footer secondary button must keep readable ink on its light surface',
+);
+assert.match(
+  footer,
+  /\.site-footer \.button--text\s*\{[\s\S]*?color:\s*var\(--footer-link-copy,\s*var\(--ink\)\);[\s\S]*?\}/,
+  'Footer text link must use the theme-specific footer link color',
+);
 assert.match(footer, /var\(--footer-faint-copy,\s*var\(--ink-faint\)\)/);
 assert.match(verificationSignal, /var\(--warning-result-copy,\s*var\(--amber\)\)/);
 assert.match(projectPage, /var\(--project-meta-copy,\s*var\(--ink-faint\)\)/);
