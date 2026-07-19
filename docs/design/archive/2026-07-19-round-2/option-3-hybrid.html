@@ -1,0 +1,1485 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="손찬양 포트폴리오 디자인 비교안 — 현재의 편집형 인상과 증거 중심 정보 구조를 결합한 하이브리드 방향">
+  <title>손찬양 — Hybrid Evidence Editorial</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f3f5f2;
+      --surface: #ffffff;
+      --surface-soft: #eef1ee;
+      --ink: #181d1b;
+      --ink-soft: #4d5752;
+      --ink-faint: #69736e;
+      --line: #cbd2cd;
+      --line-strong: #7d8882;
+      --blue: #1c5d99;
+      --blue-dark: #174b7c;
+      --blue-soft: #e5edf7;
+      --green: #176e50;
+      --green-soft: #e2f0e9;
+      --focus: #0b61c5;
+      --container: 1180px;
+      --reading: 760px;
+      --nav-height: 54px;
+      --sans: Pretendard, "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", Inter, system-ui, sans-serif;
+      --mono: "JetBrains Mono", "Cascadia Mono", "SFMono-Regular", Consolas, "Malgun Gothic", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(var(--nav-height) + 18px);
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-underline-offset: 0.22em;
+      text-decoration-thickness: 1px;
+    }
+
+    a:hover {
+      color: var(--blue);
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 4px;
+    }
+
+    ::selection {
+      background: #bdd7f4;
+      color: var(--ink);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin: 0;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    ul,
+    ol,
+    dl {
+      margin: 0;
+    }
+
+    .container {
+      width: min(calc(100% - 48px), var(--container));
+      margin-inline: auto;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 1000;
+      top: 10px;
+      left: 12px;
+      padding: 9px 14px;
+      transform: translateY(-150%);
+      border: 2px solid var(--ink);
+      background: var(--surface);
+      font-weight: 800;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .jump-nav {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      height: var(--nav-height);
+      border-bottom: 1px solid var(--line-strong);
+      background: rgba(243, 245, 242, 0.98);
+    }
+
+    .jump-nav__inner {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .jump-nav__label {
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .jump-nav ul {
+      display: flex;
+      align-items: stretch;
+      align-self: stretch;
+      padding: 0;
+      list-style: none;
+    }
+
+    .jump-nav a {
+      display: flex;
+      min-width: 104px;
+      align-items: center;
+      justify-content: center;
+      border-left: 1px solid var(--line);
+      font-size: 14px;
+      font-weight: 760;
+      text-decoration: none;
+    }
+
+    .jump-nav li:last-child a {
+      border-right: 1px solid var(--line);
+    }
+
+    .jump-nav a:hover {
+      background: var(--surface);
+      color: var(--blue);
+    }
+
+    .prototype-page {
+      min-height: 100vh;
+      border-bottom: 12px solid #dde2de;
+      background: var(--paper);
+    }
+
+    .prototype-page:last-child {
+      border-bottom: 0;
+    }
+
+    .site-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .site-header__inner {
+      display: flex;
+      min-height: 72px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .brand span {
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .site-nav {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .site-nav a {
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .site-nav a[aria-current="page"] {
+      color: var(--blue);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 0.42em;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 760;
+      letter-spacing: 0.01em;
+    }
+
+    .section-kicker {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .section-kicker::before {
+      width: 34px;
+      height: 1px;
+      background: currentColor;
+      content: "";
+    }
+
+    .text-link {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .text-link::after {
+      color: var(--blue);
+      content: "→";
+      font-size: 19px;
+    }
+
+    .text-link:hover {
+      color: var(--blue);
+    }
+
+    /* HOME */
+    .home-hero {
+      padding: 54px 0 46px;
+      background: var(--surface);
+    }
+
+    .home-hero__grid {
+      display: grid;
+      grid-template-columns: minmax(270px, 0.72fr) minmax(0, 1.28fr);
+      gap: 64px;
+      align-items: start;
+    }
+
+    .home-identity {
+      padding-top: 4px;
+    }
+
+    .home-identity h1 {
+      margin-top: 9px;
+      font-size: clamp(42px, 5vw, 66px);
+      font-weight: 790;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+
+    .home-role {
+      margin-top: 15px;
+      color: var(--blue);
+      font-size: 16px;
+      font-weight: 780;
+    }
+
+    .home-statement {
+      max-width: 730px;
+      color: var(--ink);
+      font-size: clamp(23px, 2.5vw, 34px);
+      font-weight: 670;
+      line-height: 1.44;
+      letter-spacing: -0.025em;
+    }
+
+    .home-statement span {
+      color: var(--blue);
+    }
+
+    .home-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 26px;
+    }
+
+    .home-signals {
+      padding: 0 0 36px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-block: 1px solid var(--line-strong);
+    }
+
+    .signal {
+      display: grid;
+      min-height: 142px;
+      grid-template-rows: auto 1fr auto;
+      gap: 11px;
+      padding: 20px 24px 18px;
+      border-right: 1px solid var(--line-strong);
+      background: var(--blue-soft);
+    }
+
+    .signal:nth-child(2) {
+      background: var(--green-soft);
+    }
+
+    .signal:last-child {
+      border-right: 0;
+    }
+
+    .signal__project {
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .signal__test {
+      font-size: 17px;
+      font-weight: 740;
+      line-height: 1.45;
+    }
+
+    .signal__result {
+      color: var(--blue-dark);
+      font-size: 14px;
+      font-weight: 820;
+    }
+
+    .signal:nth-child(2) .signal__result {
+      color: var(--green);
+    }
+
+    .home-lower {
+      padding: 44px 0 66px;
+    }
+
+    .home-lower__grid {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.62fr) minmax(0, 1.38fr);
+      gap: 64px;
+      align-items: start;
+    }
+
+    .home-lower h2 {
+      margin-top: 12px;
+      font-size: 28px;
+      line-height: 1.25;
+    }
+
+    .career-lines {
+      padding: 0;
+      border-top: 1px solid var(--line-strong);
+      list-style: none;
+    }
+
+    .career-lines li {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 28px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .career-lines strong {
+      display: block;
+      font-size: 17px;
+    }
+
+    .career-lines span {
+      display: block;
+      margin-top: 4px;
+      color: var(--ink-soft);
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .career-lines time {
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    /* PROJECT LIST */
+    .page-intro {
+      padding: 56px 0 44px;
+      border-bottom: 1px solid var(--line-strong);
+      background: var(--surface);
+    }
+
+    .page-intro__grid {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.58fr) minmax(0, 1.42fr);
+      gap: 64px;
+      align-items: end;
+    }
+
+    .page-intro h1 {
+      margin-top: 10px;
+      font-size: clamp(38px, 4.4vw, 58px);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+
+    .page-intro__lead {
+      max-width: 720px;
+      color: var(--ink-soft);
+      font-size: 21px;
+      font-weight: 590;
+      line-height: 1.58;
+    }
+
+    .project-index {
+      padding: 0 0 72px;
+    }
+
+    .project-row {
+      display: grid;
+      grid-template-columns: 74px minmax(0, 1.35fr) minmax(300px, 0.8fr);
+      gap: 30px;
+      align-items: start;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .project-row__number {
+      padding-top: 4px;
+      color: var(--ink-faint);
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+
+    .project-row h2 {
+      font-size: clamp(25px, 2.5vw, 34px);
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+    }
+
+    .project-row__summary {
+      max-width: 680px;
+      margin-top: 12px;
+      color: var(--ink-soft);
+      font-size: 17px;
+      line-height: 1.64;
+    }
+
+    .project-row__link {
+      margin-top: 18px;
+    }
+
+    .evidence-band {
+      display: grid;
+      gap: 13px;
+      padding: 18px 20px;
+      border-left: 3px solid var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .project-row:nth-child(2) .evidence-band {
+      border-left-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .evidence-band dt {
+      color: var(--ink-faint);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .evidence-band dd {
+      margin: 3px 0 0;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 740;
+      line-height: 1.45;
+    }
+
+    .evidence-band__result dd {
+      color: var(--blue-dark);
+      font-size: 17px;
+      font-weight: 820;
+    }
+
+    .project-row:nth-child(2) .evidence-band__result dd {
+      color: var(--green);
+    }
+
+    /* DETAIL */
+    .detail-head {
+      padding: 50px 0 34px;
+      background: var(--surface);
+    }
+
+    .detail-breadcrumb {
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .detail-title-grid {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.55fr) minmax(0, 1.45fr);
+      gap: 64px;
+      margin-top: 34px;
+      align-items: start;
+    }
+
+    .detail-meta {
+      display: grid;
+      gap: 16px;
+    }
+
+    .detail-meta div {
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .detail-meta dt {
+      color: var(--ink-faint);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 760;
+      text-transform: uppercase;
+    }
+
+    .detail-meta dd {
+      margin: 5px 0 0;
+      font-size: 14px;
+      font-weight: 720;
+      line-height: 1.55;
+    }
+
+    .detail-title h1 {
+      font-size: clamp(43px, 6vw, 76px);
+      line-height: 1;
+      letter-spacing: -0.045em;
+    }
+
+    .detail-title__summary {
+      max-width: 760px;
+      margin-top: 21px;
+      color: var(--ink-soft);
+      font-size: clamp(19px, 2vw, 24px);
+      line-height: 1.56;
+    }
+
+    .result-strip {
+      border-block: 1px solid var(--line-strong);
+      background: var(--blue-soft);
+    }
+
+    .result-strip__inner {
+      display: grid;
+      grid-template-columns: 150px repeat(2, 1fr);
+      min-height: 126px;
+      align-items: stretch;
+    }
+
+    .result-strip h2 {
+      padding: 24px 20px 24px 0;
+      color: var(--blue-dark);
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .result-item {
+      display: grid;
+      align-content: center;
+      gap: 6px;
+      padding: 20px 26px;
+      border-left: 1px solid #aebed0;
+    }
+
+    .result-item span {
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 720;
+    }
+
+    .result-item strong {
+      font-size: 19px;
+      line-height: 1.4;
+    }
+
+    .case-body {
+      padding: 56px 0 88px;
+      background: var(--surface);
+    }
+
+    .case-section {
+      display: grid;
+      grid-template-columns: minmax(200px, 0.52fr) minmax(0, 1.48fr);
+      gap: 64px;
+      padding: 0 0 54px;
+      margin-bottom: 54px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .case-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .case-section__title {
+      position: sticky;
+      top: calc(var(--nav-height) + 22px);
+      align-self: start;
+    }
+
+    .case-section__title span {
+      display: block;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 760;
+    }
+
+    .case-section__title h2 {
+      margin-top: 8px;
+      font-size: 23px;
+      line-height: 1.35;
+    }
+
+    .case-copy {
+      max-width: var(--reading);
+    }
+
+    .case-copy > p {
+      color: var(--ink-soft);
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    .case-copy > p + p {
+      margin-top: 16px;
+    }
+
+    .scope-callout {
+      margin-top: 25px;
+      padding: 17px 19px;
+      border-left: 3px solid var(--ink);
+      background: var(--surface-soft);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .scope-callout strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .decision-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-top: 1px solid var(--line-strong);
+      font-size: 15px;
+    }
+
+    .decision-table th,
+    .decision-table td {
+      padding: 16px 15px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .decision-table th {
+      color: var(--ink-faint);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: 0.03em;
+    }
+
+    .decision-table td:first-child {
+      width: 26%;
+      color: var(--blue-dark);
+      font-weight: 800;
+    }
+
+    .decision-table td:nth-child(2) {
+      width: 35%;
+      font-weight: 700;
+    }
+
+    .evidence-list {
+      padding: 0;
+      border-top: 1px solid var(--line-strong);
+      list-style: none;
+    }
+
+    .evidence-list li {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.15fr);
+      gap: 26px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+      align-items: start;
+    }
+
+    .evidence-list strong {
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .evidence-list div {
+      color: var(--ink-soft);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .evidence-list code {
+      display: inline;
+      padding: 2px 5px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--blue-dark);
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space: normal;
+    }
+
+    .range-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 30px;
+      padding: 0;
+      border-top: 1px solid var(--line-strong);
+      list-style: none;
+    }
+
+    .range-list li {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 15px;
+      font-weight: 680;
+    }
+
+    .limitation {
+      margin-top: 25px;
+      padding: 20px 22px;
+      border: 1px solid #b7c1bb;
+      background: var(--green-soft);
+    }
+
+    .limitation strong {
+      display: block;
+      color: var(--green);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .limitation p {
+      margin-top: 7px;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 680;
+      line-height: 1.65;
+    }
+
+    .page-footer {
+      padding: 36px 0;
+      border-top: 1px solid var(--line-strong);
+      background: var(--paper);
+    }
+
+    .page-footer__inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      .home-hero__grid,
+      .page-intro__grid,
+      .detail-title-grid,
+      .case-section {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .home-identity {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0 18px;
+        align-items: end;
+      }
+
+      .home-identity .eyebrow {
+        grid-column: 1 / -1;
+      }
+
+      .home-role {
+        margin: 0 0 5px;
+      }
+
+      .home-statement {
+        max-width: none;
+      }
+
+      .signal-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .signal {
+        min-height: 0;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        gap: 5px 18px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line-strong);
+      }
+
+      .signal:last-child {
+        border-bottom: 0;
+      }
+
+      .signal__test {
+        grid-column: 1;
+      }
+
+      .signal__result {
+        grid-column: 2;
+        grid-row: 1 / 3;
+        align-self: center;
+        text-align: right;
+      }
+
+      .project-row {
+        grid-template-columns: 54px minmax(0, 1fr);
+      }
+
+      .project-row .evidence-band {
+        grid-column: 2;
+      }
+
+      .detail-title-grid {
+        margin-top: 22px;
+      }
+
+      .detail-meta {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        order: 2;
+      }
+
+      .case-section__title {
+        position: static;
+      }
+    }
+
+    @media (max-width: 680px) {
+      :root {
+        --nav-height: 50px;
+      }
+
+      body {
+        font-size: 16px;
+      }
+
+      .container {
+        width: min(calc(100% - 32px), var(--container));
+      }
+
+      .jump-nav__label {
+        display: none;
+      }
+
+      .jump-nav__inner {
+        justify-content: stretch;
+      }
+
+      .jump-nav ul {
+        width: 100%;
+      }
+
+      .jump-nav li {
+        flex: 1;
+      }
+
+      .jump-nav a {
+        min-width: 0;
+        font-size: 13px;
+      }
+
+      .site-header__inner {
+        min-height: 62px;
+      }
+
+      .brand span {
+        display: none;
+      }
+
+      .site-nav {
+        gap: 14px;
+      }
+
+      .site-nav a:nth-child(2) {
+        display: none;
+      }
+
+      .home-hero {
+        padding: 38px 0 32px;
+      }
+
+      .home-hero__grid {
+        gap: 24px;
+      }
+
+      .home-identity {
+        display: block;
+      }
+
+      .home-identity h1 {
+        font-size: 43px;
+      }
+
+      .home-role {
+        margin-top: 9px;
+      }
+
+      .home-statement {
+        font-size: 23px;
+        line-height: 1.48;
+      }
+
+      .home-actions {
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .home-signals {
+        padding-bottom: 26px;
+      }
+
+      .signal {
+        display: block;
+        padding: 15px 16px;
+      }
+
+      .signal__test {
+        margin-top: 5px;
+        font-size: 15px;
+      }
+
+      .signal__result {
+        margin-top: 7px;
+        text-align: left;
+      }
+
+      .home-lower {
+        padding: 34px 0 50px;
+      }
+
+      .home-lower__grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .career-lines li {
+        grid-template-columns: 1fr;
+        gap: 7px;
+      }
+
+      .career-lines time {
+        grid-row: 1;
+      }
+
+      .page-intro {
+        padding: 38px 0 31px;
+      }
+
+      .page-intro__grid {
+        gap: 20px;
+      }
+
+      .page-intro__lead {
+        font-size: 18px;
+      }
+
+      .project-row {
+        display: block;
+        padding: 29px 0;
+      }
+
+      .project-row__number {
+        margin-bottom: 9px;
+      }
+
+      .project-row__summary {
+        font-size: 16px;
+      }
+
+      .project-row .evidence-band {
+        margin-top: 20px;
+      }
+
+      .detail-head {
+        padding: 34px 0 28px;
+      }
+
+      .detail-title-grid {
+        gap: 24px;
+      }
+
+      .detail-title h1 {
+        font-size: 48px;
+      }
+
+      .detail-title__summary {
+        font-size: 19px;
+      }
+
+      .detail-meta {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .result-strip__inner {
+        grid-template-columns: 1fr;
+      }
+
+      .result-strip h2 {
+        padding: 17px 0 10px;
+      }
+
+      .result-item {
+        padding: 15px 0;
+        border-top: 1px solid #aebed0;
+        border-left: 0;
+      }
+
+      .case-body {
+        padding: 42px 0 64px;
+      }
+
+      .case-section {
+        gap: 20px;
+        padding-bottom: 39px;
+        margin-bottom: 39px;
+      }
+
+      .case-copy > p {
+        font-size: 17px;
+      }
+
+      .decision-table,
+      .decision-table tbody,
+      .decision-table tr,
+      .decision-table th,
+      .decision-table td {
+        display: block;
+      }
+
+      .decision-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      }
+
+      .decision-table tr {
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .decision-table td,
+      .decision-table td:first-child,
+      .decision-table td:nth-child(2) {
+        width: auto;
+        padding: 0;
+        border: 0;
+      }
+
+      .decision-table td + td {
+        margin-top: 7px;
+      }
+
+      .decision-table td:nth-child(2) {
+        font-size: 14px;
+      }
+
+      .decision-table td:nth-child(3) {
+        color: var(--ink-soft);
+        font-size: 14px;
+      }
+
+      .evidence-list li {
+        grid-template-columns: 1fr;
+        gap: 7px;
+      }
+
+      .range-list {
+        grid-template-columns: 1fr;
+      }
+
+      .page-footer__inner {
+        display: block;
+      }
+
+      .page-footer__inner span {
+        display: block;
+        margin-top: 5px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#home-content">본문으로 바로가기</a>
+
+  <nav class="jump-nav" aria-label="비교 시안 페이지 이동">
+    <div class="container jump-nav__inner">
+      <span class="jump-nav__label">Hybrid evidence editorial · option 03</span>
+      <ul>
+        <li><a href="#home">홈</a></li>
+        <li><a href="#projects">프로젝트</a></li>
+        <li><a href="#stockrush">StockRush</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="prototype-page" id="home" aria-labelledby="home-title">
+      <header class="site-header">
+        <div class="container site-header__inner">
+          <a class="brand" href="#home">손찬양 <span>BACKEND ENGINEER</span></a>
+          <nav class="site-nav" aria-label="홈 시안 메뉴">
+            <a href="#home" aria-current="page">소개</a>
+            <a href="#projects">프로젝트</a>
+            <a href="#stockrush">경력·이력서</a>
+          </nav>
+        </div>
+      </header>
+
+      <div id="home-content" class="home-hero">
+        <div class="container home-hero__grid">
+          <div class="home-identity">
+            <p class="eyebrow">JAVA · SPRING</p>
+            <h1 id="home-title">손찬양</h1>
+            <p class="home-role">Java·Spring 백엔드 개발자</p>
+          </div>
+          <div>
+            <p class="home-statement">Java와 Spring으로 기업용 플랫폼 API를 개발·운영하며 <span>데이터 모델 설계, 운영 안정성 개선과 테스트</span>를 담당해 왔습니다.</p>
+            <div class="home-actions">
+              <a class="text-link" href="#projects">프로젝트와 검증 결과</a>
+              <a class="text-link" href="#stockrush">StockRush 사례 읽기</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-signals" aria-label="대표 프로젝트 검증 결과">
+        <div class="container signal-grid">
+          <article class="signal">
+            <p class="signal__project">STOCKRUSH</p>
+            <p class="signal__test">같은 재고 이벤트 2회 → 1회만 처리</p>
+            <p class="signal__result">중복 후속 이벤트 0건</p>
+          </article>
+          <article class="signal">
+            <p class="signal__project">ENTERPRISE POLICY RAG</p>
+            <p class="signal__test">문서 5건 → 허용 3건</p>
+            <p class="signal__result">다른 워크스페이스 결과 0건</p>
+          </article>
+          <article class="signal">
+            <p class="signal__project">MEMBER EVENT CONSISTENCY</p>
+            <p class="signal__test">동시 요청 8건 → 보상 1건</p>
+            <p class="signal__result">7건 거절 · 중복 0건</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="home-lower">
+        <div class="container home-lower__grid">
+          <div>
+            <p class="section-kicker">EXPERIENCE</p>
+            <h2>운영 환경과 데이터 경계를 함께 다뤄 왔습니다.</h2>
+          </div>
+          <ol class="career-lines">
+            <li>
+              <div>
+                <strong>이엠캐스트(주)</strong>
+                <span>백엔드 개발자·주임</span>
+              </div>
+              <time datetime="2024-03">2024.03–현재</time>
+            </li>
+            <li>
+              <div>
+                <strong>주식회사 화이트스캔</strong>
+                <span>백엔드·데이터 개발자·연구원</span>
+              </div>
+              <time datetime="2021-07/2024-03">2021.07–2024.03</time>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="prototype-page" id="projects" aria-labelledby="projects-title">
+      <header class="site-header">
+        <div class="container site-header__inner">
+          <a class="brand" href="#home">손찬양 <span>BACKEND ENGINEER</span></a>
+          <nav class="site-nav" aria-label="프로젝트 목록 시안 메뉴">
+            <a href="#home">소개</a>
+            <a href="#projects" aria-current="page">프로젝트</a>
+            <a href="#stockrush">경력·이력서</a>
+          </nav>
+        </div>
+      </header>
+
+      <div class="page-intro">
+        <div class="container page-intro__grid">
+          <div>
+            <p class="eyebrow">SELECTED WORK</p>
+            <h1 id="projects-title">프로젝트</h1>
+          </div>
+          <p class="page-intro__lead">구현 기술의 수보다 어떤 실패 조건을 정의했고, 무엇으로 결과를 확인했는지 먼저 보여줍니다.</p>
+        </div>
+      </div>
+
+      <div class="project-index">
+        <div class="container">
+          <article class="project-row">
+            <p class="project-row__number">01 / 03</p>
+            <div>
+              <h2>StockRush</h2>
+              <p class="project-row__summary">한정 재고 주문에서 결제 실패, 이벤트 중복과 Kafka 중단이 발생해도 주문·재고·결제 상태가 모순 없이 마무리되도록 Saga와 Outbox 흐름을 구현했습니다.</p>
+              <a class="text-link project-row__link" href="#stockrush">사례 상세 보기</a>
+            </div>
+            <dl class="evidence-band">
+              <div>
+                <dt>검증 신호</dt>
+                <dd>같은 재고 이벤트 2회 → 1회만 처리</dd>
+              </div>
+              <div class="evidence-band__result">
+                <dt>결과</dt>
+                <dd>중복 후속 이벤트 0건</dd>
+              </div>
+            </dl>
+          </article>
+
+          <article class="project-row">
+            <p class="project-row__number">02 / 03</p>
+            <div>
+              <h2>Enterprise Policy RAG</h2>
+              <p class="project-row__summary">권한 없는 정책 문서를 검색 단계에서 제외하고, 확인 가능한 근거가 없으면 답변을 생성하지 않도록 검색·답변 API를 구현했습니다.</p>
+              <a class="text-link project-row__link" href="#projects">프로젝트 요약 읽기</a>
+            </div>
+            <dl class="evidence-band">
+              <div>
+                <dt>검증 신호</dt>
+                <dd>문서 5건 → 허용 3건</dd>
+              </div>
+              <div class="evidence-band__result">
+                <dt>결과</dt>
+                <dd>다른 워크스페이스 결과 0건</dd>
+              </div>
+            </dl>
+          </article>
+
+          <article class="project-row">
+            <p class="project-row__number">03 / 03</p>
+            <div>
+              <h2>Member Event Consistency</h2>
+              <p class="project-row__summary">동시에 들어온 최초 보상·쿠폰 발급·포인트 차감 요청이 중복 지급, 초과 발급과 음수 잔액을 만들지 않도록 PostgreSQL을 최종 보호 경계로 구현했습니다.</p>
+              <a class="text-link project-row__link" href="#projects">프로젝트 요약 읽기</a>
+            </div>
+            <dl class="evidence-band">
+              <div>
+                <dt>검증 신호</dt>
+                <dd>동시 요청 8건 → 보상 1건</dd>
+              </div>
+              <div class="evidence-band__result">
+                <dt>결과</dt>
+                <dd>7건 거절 · 중복 0건</dd>
+              </div>
+            </dl>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="prototype-page" id="stockrush" aria-labelledby="stockrush-title">
+      <header class="site-header">
+        <div class="container site-header__inner">
+          <a class="brand" href="#home">손찬양 <span>BACKEND ENGINEER</span></a>
+          <nav class="site-nav" aria-label="StockRush 상세 시안 메뉴">
+            <a href="#home">소개</a>
+            <a href="#projects">프로젝트</a>
+            <a href="#stockrush" aria-current="page">StockRush</a>
+          </nav>
+        </div>
+      </header>
+
+      <div class="detail-head">
+        <div class="container">
+          <p class="detail-breadcrumb"><a href="#projects">프로젝트</a> / StockRush</p>
+          <div class="detail-title-grid">
+            <dl class="detail-meta">
+              <div>
+                <dt>구분</dt>
+                <dd>개인 프로젝트</dd>
+              </div>
+              <div>
+                <dt>담당</dt>
+                <dd>주문·재고·결제 서비스 경계, Saga·Outbox, 게이트웨이 인증과 장애 복구 흐름 직접 설계·구현</dd>
+              </div>
+            </dl>
+            <div class="detail-title">
+              <p class="eyebrow">DISTRIBUTED TRANSACTION CASE</p>
+              <h1 id="stockrush-title">StockRush</h1>
+              <p class="detail-title__summary">한정 재고 주문에서 결제 실패, 이벤트 중복과 Kafka 중단이 발생해도 주문·재고·결제 상태가 모순 없이 마무리되도록 Saga와 Outbox 흐름을 구현했습니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="result-strip" aria-labelledby="result-title">
+        <div class="container result-strip__inner">
+          <h2 id="result-title">확인한 결과</h2>
+          <div class="result-item">
+            <span>중복 이벤트</span>
+            <strong>같은 재고 이벤트 2회 → 1회만 처리</strong>
+          </div>
+          <div class="result-item">
+            <span>후속 처리</span>
+            <strong>중복 후속 이벤트 0건</strong>
+          </div>
+        </div>
+      </section>
+
+      <div class="case-body">
+        <div class="container">
+          <section class="case-section" aria-labelledby="problem-title">
+            <div class="case-section__title">
+              <span>01</span>
+              <h2 id="problem-title">해결한 문제와 담당 역할</h2>
+            </div>
+            <div class="case-copy">
+              <p>한정된 재고를 여러 요청이 동시에 주문할 때, 주문 생성과 재고 예약, 결제 승인 중 하나만 실패해도 서비스별 상태가 달라질 수 있습니다. 여기에 동일 이벤트의 재전달과 브로커 중단이 겹치는 조건을 실패 시나리오로 정의했습니다.</p>
+              <p>주문·재고·결제 서비스 경계, Saga·Outbox, 게이트웨이 인증과 장애 복구 흐름 직접 설계·구현을 담당했습니다. 각 서비스의 로컬 트랜잭션은 유지하되, 전체 흐름은 보상과 재처리로 수렴하도록 구성했습니다.</p>
+              <div class="scope-callout">
+                <strong>책임 경계</strong>
+                서비스 간 상태 전이를 직접 설계하고, 중복 처리 방지와 실패 상태 보존까지 테스트로 확인했습니다.
+              </div>
+            </div>
+          </section>
+
+          <section class="case-section" aria-labelledby="decision-title">
+            <div class="case-section__title">
+              <span>02</span>
+              <h2 id="decision-title">기술 선택과 이유</h2>
+            </div>
+            <div class="case-copy">
+              <table class="decision-table">
+                <thead>
+                  <tr>
+                    <th scope="col">선택</th>
+                    <th scope="col">적용</th>
+                    <th scope="col">이유</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Saga 상태 조율</td>
+                    <td>주문 상태를 기준으로 재고 예약과 결제 결과를 전이</td>
+                    <td>분산 트랜잭션 없이도 실패 지점과 보상 상태를 명시적으로 남기기 위해 선택했습니다.</td>
+                  </tr>
+                  <tr>
+                    <td>트랜잭션 Outbox</td>
+                    <td>도메인 변경과 발행할 이벤트를 같은 로컬 트랜잭션에 기록</td>
+                    <td>DB 반영 후 Kafka 발행이 끊기는 이중 쓰기 구간을 줄이고 재전송 경로를 보존하기 위해 선택했습니다.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="case-section" aria-labelledby="implementation-title">
+            <div class="case-section__title">
+              <span>03</span>
+              <h2 id="implementation-title">주요 구현과 관련 테스트</h2>
+            </div>
+            <div class="case-copy">
+              <ol class="evidence-list">
+                <li>
+                  <strong>중복 재고 이벤트를 멱등하게 소비</strong>
+                  <div><code>InventoryEventConsumerTest</code> · 같은 재고 이벤트 2회 → 1회만 처리 · 중복 후속 이벤트 0건</div>
+                </li>
+                <li>
+                  <strong>취소 뒤 늦게 도착한 결제 승인을 차단</strong>
+                  <div><code>LatePaymentApprovalTest</code> · 늦은 승인 → 무시 / 취소 주문 상태 유지</div>
+                </li>
+                <li>
+                  <strong>발행 실패를 숨기지 않고 복구 대상으로 보존</strong>
+                  <div><code>OutboxRetryPolicyTest</code> · 5회 실패 → FAILED / 실패 상태와 재처리 경로 보존</div>
+                </li>
+              </ol>
+            </div>
+          </section>
+
+          <section class="case-section" aria-labelledby="scope-title">
+            <div class="case-section__title">
+              <span>04</span>
+              <h2 id="scope-title">프로젝트 범위</h2>
+            </div>
+            <div class="case-copy">
+              <ul class="range-list">
+                <li>주문·재고·결제 서비스 경계</li>
+                <li>Saga 상태 전이와 보상 흐름</li>
+                <li>트랜잭션 Outbox와 재시도</li>
+                <li>게이트웨이 인증과 서비스 요청 전달</li>
+                <li>이벤트 중복·순서 역전 검증</li>
+                <li>브로커 중단 뒤 재처리 경로</li>
+              </ul>
+              <div class="limitation">
+                <strong>LIMITATION</strong>
+                <p>실결제, 다중 리전, 운영 규모 부하와 장시간 브로커 장애는 포함하지 않았습니다.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <footer class="page-footer">
+        <div class="container page-footer__inner">
+          <strong>손찬양 · Java·Spring 백엔드 개발자</strong>
+          <span>결과 → 판단 → 구현 → 범위 순서의 기술 사례</span>
+        </div>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>
