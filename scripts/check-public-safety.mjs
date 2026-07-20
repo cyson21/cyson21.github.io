@@ -22,10 +22,13 @@ const findings = [];
 
 const bundledPython = resolve(
   homedir(),
-  '.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3',
+  process.platform === 'win32'
+    ? '.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe'
+    : '.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3',
 );
 const pdfTextPython = String.raw`from pypdf import PdfReader
 import sys
+sys.stdout.reconfigure(encoding="utf-8")
 reader = PdfReader(sys.argv[1])
 print("\n".join(page.extract_text() or "" for page in reader.pages))`;
 

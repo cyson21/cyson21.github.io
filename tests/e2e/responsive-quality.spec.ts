@@ -187,6 +187,87 @@ for (const viewport of canonicalViewports.filter(({ width }) => width <= 390)) {
   });
 }
 
+for (const theme of ['b', 'c'] as const) {
+  for (const viewport of [...canonicalViewports, ...boundaryViewports]) {
+    test(`resume theme ${theme.toUpperCase()} keeps its information priority and control geometry at ${viewport.width}px`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await gotoCanonicalRoute(page, '/resume/');
+      if (theme === 'c') {
+        await page.evaluate(() => new Promise<void>((resolve, reject) => {
+          document.documentElement.dataset.theme = 'c';
+          const link = document.querySelector<HTMLLinkElement>('link[data-portfolio-theme]');
+          if (!link) {
+            reject(new Error('Missing portfolio theme stylesheet'));
+            return;
+          }
+          link.addEventListener('load', () => resolve(), { once: true });
+          link.addEventListener('error', () => reject(new Error('Failed to load C theme stylesheet')), { once: true });
+          link.href = '/themes/c.css';
+        }));
+      }
+
+      const layout = await page.evaluate(() => {
+        const rect = (selector: string) => {
+          const element = document.querySelector<HTMLElement>(selector);
+          if (!element) throw new Error(`Missing resume element: ${selector}`);
+          const bounds = element.getBoundingClientRect();
+          return {
+            top: bounds.top,
+            right: bounds.right,
+            bottom: bounds.bottom,
+            left: bounds.left,
+            width: bounds.width,
+            height: bounds.height,
+          };
+        };
+        const summary = document.querySelector<HTMLElement>('.resume-summary');
+        const firstButton = document.querySelector<HTMLElement>('.resume-sidebar .button');
+        const secondButton = document.querySelector<HTMLElement>('.resume-sidebar .button--secondary');
+        const current = document.querySelector<HTMLElement>('.resume-job--current');
+        const sidebar = document.querySelector<HTMLElement>('.resume-sidebar');
+        const previous = document.querySelector<HTMLElement>('.resume-job--previous');
+        if (!summary || !firstButton || !secondButton || !current || !sidebar || !previous) {
+          throw new Error('Resume priority elements must all render');
+        }
+        const summaryStyle = getComputedStyle(summary);
+        const precedesPrevious = Boolean(
+          sidebar.compareDocumentPosition(previous) & Node.DOCUMENT_POSITION_FOLLOWING,
+        );
+        return {
+          summary: rect('.resume-summary'),
+          current: rect('.resume-job--current'),
+          sidebar: rect('.resume-sidebar'),
+          previous: rect('.resume-job--previous'),
+          summaryPaddingInline: [
+            Number.parseFloat(summaryStyle.paddingLeft),
+            Number.parseFloat(summaryStyle.paddingRight),
+          ],
+          buttonHeights: [
+            firstButton.getBoundingClientRect().height,
+            secondButton.getBoundingClientRect().height,
+          ],
+          precedesPrevious,
+        };
+      });
+
+      expect(layout.summaryPaddingInline.every((padding) => padding >= 18)).toBeTruthy();
+      expect(layout.buttonHeights.every((height) => height >= 44)).toBeTruthy();
+      expect(layout.precedesPrevious, 'CTA must precede previous experience in DOM order').toBeTruthy();
+
+      if (viewport.width <= 959) {
+        expect(layout.current.bottom).toBeLessThanOrEqual(layout.sidebar.top + 1);
+        expect(layout.sidebar.bottom).toBeLessThanOrEqual(layout.previous.top + 1);
+      } else {
+        const columnGap = layout.current.left - layout.sidebar.right;
+        expect(layout.sidebar.left).toBeLessThan(layout.current.left);
+        expect(columnGap).toBeGreaterThanOrEqual(24);
+        expect(columnGap).toBeLessThanOrEqual(32.1);
+        expect(Math.abs(layout.summary.left - layout.current.left)).toBeLessThanOrEqual(1);
+      }
+    });
+  }
+}
+
 for (const route of supplementalAuditRoutes) {
   for (const viewport of canonicalViewports) {
     test(`${route.path} reflows without horizontal overflow at ${viewport.width}px`, async ({ page }) => {

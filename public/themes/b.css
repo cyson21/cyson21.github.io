@@ -1,4 +1,4 @@
-/* Dual-theme revision: 2026-07-20-bc10 | B Signal Grid */
+/* Dual-theme revision: 2026-07-20-bc11 | B Signal Grid */
 /* OPTION B — SIGNAL GRID
    CSS-only visual study. Layout, DOM order, copy, and links are inherited unchanged. */
 html[data-theme="b"] {
@@ -664,6 +664,32 @@ html[data-theme="b"] .resume-summary {
   background: var(--surface);
 }
 
+html[data-theme="b"] .resume-summary {
+  border-left: 5px solid var(--blue);
+  background:
+    linear-gradient(90deg, rgb(0 87 255 / 7%), transparent 42%),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 21px,
+      rgb(17 24 32 / 4%) 21px,
+      rgb(17 24 32 / 4%) 22px
+    ),
+    var(--surface);
+}
+
+html[data-theme="b"] .resume-summary h2 {
+  margin-bottom: 16px;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+html[data-theme="b"] .resume-summary h2::after {
+  width: 48px;
+  height: 3px;
+  margin-top: 7px;
+}
+
 html[data-theme="b"] .verification-table {
   border-width: 2px;
 }
@@ -703,10 +729,33 @@ html[data-theme="b"] .resume-job {
 }
 
 html[data-theme="b"] .resume-sidebar {
-  border-left: 3px solid var(--blue);
+  border: 1px solid var(--line-strong);
+  border-left: 4px solid var(--blue);
   background:
     linear-gradient(90deg, rgb(0 87 255 / 6%), transparent 70%),
     var(--surface);
+  box-shadow: 4px 4px 0 rgb(17 24 32 / 15%);
+}
+
+html[data-theme="b"] .resume-sidebar > img {
+  border-width: 2px;
+  box-shadow: 3px 3px 0 var(--blue);
+}
+
+html[data-theme="b"] .resume-sidebar .button {
+  min-height: 46px;
+}
+
+html[data-theme="b"] .resume-sidebar .button:first-child {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+
+html[data-theme="b"] .resume-sidebar .button--secondary {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+  color: var(--blue);
 }
 
 html[data-theme="b"] .project-pagination {
@@ -783,6 +832,16 @@ html[data-theme="b"] .pagination-grid a span {
   html[data-theme="b"] .experience-entry,
   html[data-theme="b"] .resume-job {
     padding: 16px;
+  }
+
+  html[data-theme="b"] .resume-job,
+  html[data-theme="b"] .resume-summary,
+  html[data-theme="b"] .resume-sidebar {
+    box-shadow: none;
+  }
+
+  html[data-theme="b"] .resume-job {
+    border-color: var(--line);
   }
 
   html[data-theme="b"] .project-toc,

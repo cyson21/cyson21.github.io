@@ -1,4 +1,4 @@
-/* Dual-theme revision: 2026-07-20-bc10 | C Soft Organic */
+/* Dual-theme revision: 2026-07-20-bc11 | C Soft Organic */
 html[data-theme="c"] {
   --paper: #f1f3f1;
   --surface: #fbfcfa;
@@ -536,6 +536,24 @@ html[data-theme="c"] .resume-summary {
     var(--surface);
 }
 
+html[data-theme="c"] .resume-summary {
+  border-left: 4px solid var(--blue);
+  background:
+    radial-gradient(circle at 100% 0, rgb(47 111 105 / 9%), transparent 150px),
+    linear-gradient(145deg, rgb(255 255 255 / 72%), transparent 62%),
+    var(--surface);
+}
+
+html[data-theme="c"] .resume-summary h2 {
+  margin-bottom: 16px;
+  padding-bottom: 0;
+}
+
+html[data-theme="c"] .resume-summary h2::after {
+  width: 44px;
+  margin-top: 8px;
+}
+
 html[data-theme="c"] .scope-grid > div {
   border-top-width: 1px;
   background:
@@ -584,6 +602,15 @@ html[data-theme="c"] .resume-sidebar {
     radial-gradient(circle at 100% 0, rgb(112 65 99 / 8%), transparent 130px),
     var(--surface);
   box-shadow: 0 16px 36px rgb(56 46 57 / 8%);
+}
+
+html[data-theme="c"] .resume-sidebar > img {
+  border-color: rgb(112 65 99 / 28%);
+  box-shadow: 0 8px 20px rgb(56 46 57 / 10%);
+}
+
+html[data-theme="c"] .resume-sidebar .button {
+  min-height: 46px;
 }
 
 html[data-theme="c"] .project-pagination {
@@ -652,6 +679,17 @@ html[data-theme="c"] .pagination-grid a span {
   html[data-theme="c"] .experience-entry,
   html[data-theme="c"] .resume-job {
     padding: 16px;
+  }
+
+  html[data-theme="c"] .resume-job,
+  html[data-theme="c"] .resume-summary,
+  html[data-theme="c"] .resume-sidebar {
+    box-shadow: none;
+  }
+
+  html[data-theme="c"] .resume-job {
+    border-color: rgb(112 105 114 / 16%);
+    background: rgb(251 252 250 / 82%);
   }
 
   html[data-theme="c"] .project-toc,
