@@ -33,11 +33,8 @@ const deprecatedLabels = [
   '사용 범위',
   '경력과 구현 근거',
   'Backend Engineer',
-  '상태 변경 충돌 방지',
   '시간대 변환 오류',
-  '조회·삭제 조건 일치',
   'AWS SDK 전환과 테스트 표준화',
-  '구형 AWS SDK',
 ];
 
 for (const route of routes) {
@@ -98,17 +95,21 @@ test('Korean interface labels use the text font rather than the code font', asyn
   ]);
 });
 
-test('experience and resume describe recurring responsibilities rather than isolated maintenance tasks', async ({ page }) => {
+test('experience and resume show the approved problem-solution evidence', async ({ page }) => {
   await page.goto('/experience/');
   await expect(page.getByRole('heading', { name: '주요 업무' })).toHaveCount(2);
-  await expect(page.getByRole('heading', { name: '플랫폼 API 개발·운영' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '운영 안정성 개선' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '테스트 체계 정비' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '상태 변경 충돌 방지' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '시간대 경계 알림 오류' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '조회·삭제 조건 일치' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'AWS SDK v2 전환' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'DB 테스트 표준화' })).toBeVisible();
 
   await page.goto('/resume/');
-  await expect(page.locator('.resume-job').first()).toContainText('플랫폼 API 개발·운영');
-  await expect(page.locator('.resume-job').first()).toContainText('운영 안정성 개선');
-  await expect(page.locator('.resume-job').first()).toContainText('테스트 체계 정비');
+  await expect(page.locator('.resume-job').first()).toContainText('상태 변경 충돌 방지');
+  await expect(page.locator('.resume-job').first()).toContainText('시간대 경계 알림 오류');
+  await expect(page.locator('.resume-job').first()).toContainText('조회·삭제 조건 일치');
+  await expect(page.locator('.resume-job').first()).toContainText('AWS SDK v2 전환');
+  await expect(page.locator('.resume-job').first()).toContainText('DB 테스트 표준화');
 });
 
 test('featured project cards follow the approved evidence hierarchy', async ({ page }) => {

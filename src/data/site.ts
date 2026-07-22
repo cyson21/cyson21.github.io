@@ -1,5 +1,5 @@
 const publicResumeUrl = import.meta.env.PUBLIC_RESUME_URL?.trim() || '/downloads/resume.pdf';
-const siteUpdatedAt = '2026-07-19';
+const siteUpdatedAt = '2026-07-22';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -13,19 +13,27 @@ const experienceRecords = [
     end: null,
     company: '이엠캐스트(주)',
     role: '백엔드 개발자 · 주임',
-    context: '기업용 플랫폼의 API와 이벤트 기능을 개발·운영합니다. 요구사항을 분석해 데이터 모델과 비즈니스 로직을 설계하고, 테스트와 운영 이슈 개선을 담당합니다.',
+    context: '기업용 플랫폼에서 요구사항을 API·데이터 모델로 설계하고, 운영 이슈의 재현·수정·회귀 검증까지 맡았습니다.',
     responsibilities: [
       {
-        title: '플랫폼 API 개발·운영',
-        description: '요구사항을 분석하고 데이터 모델과 비즈니스 로직을 설계해 기업용 플랫폼의 API와 이벤트 기능을 개발·운영합니다.',
+        title: '상태 변경 충돌 방지',
+        description: '사용자가 화면을 연 뒤 저장하기 전에 상태가 바뀌면, 이전 상태를 기준으로 저장되어 진행 상태와 완료 여부가 어긋나는 문제가 있었습니다. 저장 직전에 최신 상태를 다시 검증해, 이미 상태가 변경된 건은 저장되지 않도록 수정했습니다.',
       },
       {
-        title: '운영 안정성 개선',
-        description: '운영 중 확인한 문제를 로그, API 흐름과 DB 상태를 바탕으로 추적하고 관련 처리 규칙을 수정합니다.',
+        title: '시간대 경계 알림 오류',
+        description: 'UTC로 저장된 날짜를 KST 발송 일정으로 해석하는 날짜 경계에서 알림이 누락되거나 하루 늦게 발송되는 오류를 재현했습니다. 변환과 발송 규칙을 수정하고, 경계 조건을 회귀 테스트로 확인했습니다.',
       },
       {
-        title: '테스트 체계 정비',
-        description: '변경한 기능의 정상·예외 경로를 회귀·통합 테스트로 확인하고 공통 테스트 환경을 관리합니다.',
+        title: '조회·삭제 조건 일치',
+        description: '같은 사용자 ID에 서로 다른 유형의 데이터가 연결될 때 일부 행이 누락되고 페이지 합계가 달라지는 원인을 확인했습니다. ID와 데이터 유형을 함께 비교하도록 QueryDSL 조회·삭제 조건을 통일하고 통합 테스트로 검증했습니다.',
+      },
+      {
+        title: 'AWS SDK v2 전환',
+        description: 'S3 연동에 섞여 있던 구형 AWS SDK 의존성을 v2로 통일하고, 업로드·인증 구현의 기준을 정리했습니다. 구형 의존성 제거와 모듈 테스트·빌드 검증으로 전환 범위를 확인했습니다.',
+      },
+      {
+        title: 'DB 테스트 표준화',
+        description: '테스트마다 반복되던 MySQL 컨테이너와 설정을 Testcontainers 기반 공통 구성으로 묶었습니다. QueryDSL 조회와 시간대 처리 로직을 실제 MySQL 조건에서 일관되게 반복 검증할 수 있게 했습니다.',
       },
     ],
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'AWS S3', 'JUnit', 'Testcontainers'],
@@ -54,11 +62,16 @@ const experienceRecords = [
   },
 ] as const;
 
+export const resumeSummary = [
+  '기업용 플랫폼의 API와 이벤트 모듈을 Java·Spring Boot로 개발·운영해 온 5년 경력 백엔드 개발자입니다.',
+  '운영 오류를 재현해 상태 변경과 시간대 처리의 경계 규칙을 바로잡고, 회귀 테스트로 재발 경로를 관리해 왔습니다.',
+] as const;
+
 export const profile = {
   name: '손찬양',
   englishName: 'Son Chanyang',
   role: 'Java·Spring 백엔드 개발자',
-  statement: 'Java·Spring 기반 기업용 플랫폼 API를 개발하고 운영해 왔습니다. 요구사항 분석부터 데이터 모델·비즈니스 로직 설계, 테스트와 운영 안정성 개선까지 담당합니다.',
+  statement: resumeSummary.join(' '),
   email: 'cyson21@kakao.com',
   github: 'https://github.com/cyson21',
   resumePath: publicResumeUrl,

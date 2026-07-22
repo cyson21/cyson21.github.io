@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { experiences, profile, skillGroups } from '../../data/site';
+import { experiences, profile, resumeSummary, skillGroups } from '../../data/site';
 
 const projects = await getCollection('projects');
 const [primaryExperience, previousExperience] = experiences;
@@ -61,7 +61,7 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
 
         <section class="summary block">
           <h2>요약</h2>
-          <div><strong>Java·Spring 기반 기업용 플랫폼 API를 개발하고 운영해 왔습니다.</strong><p>요구사항 분석부터 데이터 모델·비즈니스 로직 설계, 테스트와 운영 안정성 개선까지 담당합니다.</p></div>
+          <div><strong>{resumeSummary[0]}</strong><p>{resumeSummary[1]}</p></div>
         </section>
 
         <section class="focus-list block" aria-label="핵심 역량">
@@ -211,9 +211,12 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
   .highlight-list p { margin-top: 1mm; color: #4d5752; font-size: 9.5pt; line-height: 1.5; }
 
   .sheet--first .highlight-list { grid-template-columns: 1fr; gap: 0; }
-  .sheet--first .highlight-list > div { display: grid; grid-template-columns: 42mm 1fr; gap: 5mm; padding-block: 4mm; border-bottom: 0.25mm solid #cbd2cd; }
+  .sheet--first .block { margin-top: 6mm; }
+  .sheet--first .focus-list { padding-block: 3mm; }
+  .sheet--first .highlight-list { margin-top: 2.5mm; }
+  .sheet--first .highlight-list > div { display: grid; grid-template-columns: 42mm 1fr; gap: 5mm; padding-block: 2.5mm; border-bottom: 0.25mm solid #cbd2cd; }
   .sheet--first .highlight-list strong { text-wrap: balance; }
-  .sheet--first .highlight-list p { margin-top: 0; }
+  .sheet--first .highlight-list p { margin-top: 0; font-size: 9pt; line-height: 1.4; }
 
   footer { position: absolute; right: 15mm; bottom: 14mm; left: 15mm; display: flex; justify-content: space-between; padding-top: 2mm; border-top: 0.25mm solid #cbd2cd; color: #4d5752; font-family: "SFMono-Regular", Consolas, monospace; font-size: 7.5pt; line-height: 1.5; }
 
