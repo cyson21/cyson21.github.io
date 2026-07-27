@@ -20,11 +20,21 @@ test('release robots and sitemap expose only public routes', async ({ request })
   const body = await sitemap.text();
   const locations = Array.from(body.matchAll(/<loc>([^<]+)<\/loc>/g))
     .flatMap((match) => match[1] ? [match[1]] : []);
-  expect(locations).toHaveLength(10);
+  expect(locations).toHaveLength(11);
   expect(locations.every((location) => location.startsWith(`${releaseOrigin}/`))).toBeTruthy();
+  expect(locations).toContain(`${releaseOrigin}/portfolio/`);
   expect(locations).toContain(`${releaseOrigin}/resume/`);
   expect(body).not.toContain('/resume/print/');
   expect(body).not.toContain('/404');
+});
+
+test('integrated portfolio HTML is published as a browser page', async ({ request }) => {
+  const response = await request.get('/portfolio/');
+  expect(response.status()).toBe(200);
+  const body = await response.text();
+  expect(body).toContain('<title>통합 포트폴리오</title>');
+  expect(body).toContain('StockRush');
+  expect(body).not.toContain('portfolio-complete.pdf');
 });
 
 test('release 404 remains noindex', async ({ page }) => {

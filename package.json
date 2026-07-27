@@ -14,6 +14,7 @@
     "build:raw": "astro build",
     "build": "pnpm check && pnpm build:raw && pnpm test:privacy && pnpm test:links",
     "preview": "astro preview",
+    "generate:portfolio": "node scripts/sync-public-portfolio.mjs",
     "generate:resume": "node scripts/generate-public-resume.mjs",
     "test:privacy": "node scripts/check-public-safety.mjs dist",
     "test:links": "node scripts/check-links.mjs dist",
