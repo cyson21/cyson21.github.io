@@ -1,4 +1,4 @@
-/* Dual-theme revision: 2026-07-20-bc11 | B Signal Grid */
+/* Dual-theme revision: 2026-07-20-bc13 | B Signal Grid */
 /* OPTION B — SIGNAL GRID
    CSS-only visual study. Layout, DOM order, copy, and links are inherited unchanged. */
 html[data-theme="b"] {
@@ -213,7 +213,7 @@ html[data-theme="b"] .section--surface {
 }
 
 html[data-theme="b"] .section-heading {
-  border-top: 2px solid var(--ink);
+  border-top: 0;
 }
 
 html[data-theme="b"] .section-heading h2 {
@@ -234,18 +234,31 @@ html[data-theme="b"] .lede {
 html[data-theme="b"] .section-link {
   color: var(--blue);
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 650;
   letter-spacing: .015em;
-  text-decoration-thickness: 2px;
+  text-decoration: none;
 }
 
 html[data-theme="b"] .career-list {
-  border-top: 2px solid var(--ink);
+  border-top: 0;
 }
 
 html[data-theme="b"] .career-list li {
   position: relative;
-  border-bottom-color: var(--line-strong);
+  border-bottom-color: var(--line);
+}
+
+html[data-theme="b"] .career-list li:last-child {
+  border-bottom: 0;
+}
+
+html[data-theme="b"] .career-list strong {
+  font-weight: 650;
+}
+
+html[data-theme="b"] .career-list span {
+  font-weight: 600;
 }
 
 html[data-theme="b"] .career-list li::before {
@@ -273,27 +286,19 @@ html[data-theme="b"] .project-period {
 
 html[data-theme="b"] .project-row {
   position: relative;
-  border-top: 2px solid var(--ink);
+  border-top: 1px solid var(--line);
 }
 
 html[data-theme="b"] .project-row::after {
-  content: "";
-  position: absolute;
-  top: -2px;
-  right: 0;
-  width: 84px;
-  height: 5px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--blue) 0,
-    var(--blue) 8px,
-    transparent 8px,
-    transparent 12px
-  );
+  content: none;
+}
+
+html[data-theme="b"] .project-row:first-child {
+  border-top: 0;
 }
 
 html[data-theme="b"] .project-row:last-child {
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 0;
 }
 
 html[data-theme="b"] .project-title-line h3 a {
@@ -537,7 +542,8 @@ html[data-theme="b"] .project-hero .scope-badge {
 }
 
 html[data-theme="b"] .filter-bar {
-  border-bottom: 2px solid var(--ink);
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 html[data-theme="b"] .filter-buttons {
@@ -606,11 +612,23 @@ html[data-theme="b"] .project-toc nav a[aria-current="location"] {
 }
 
 html[data-theme="b"] .project-toc nav a,
-html[data-theme="b"] .pagination-grid a,
-html[data-theme="b"] .section-link,
-html[data-theme="b"] .project-links a {
+html[data-theme="b"] .pagination-grid a {
   text-underline-offset: 4px;
   text-decoration-thickness: 2px;
+}
+
+html[data-theme="b"] body .section-link,
+html[data-theme="b"] .project-row .project-links a {
+  font-weight: 650;
+  text-decoration: none;
+}
+
+html[data-theme="b"] body .section-link:hover,
+html[data-theme="b"] body .section-link:focus-visible,
+html[data-theme="b"] .project-row .project-links a:hover,
+html[data-theme="b"] .project-row .project-links a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
 }
 
 html[data-theme="b"] .project-section {
@@ -618,10 +636,14 @@ html[data-theme="b"] .project-section {
 }
 
 html[data-theme="b"] .project-section h2,
-html[data-theme="b"] .experience-section h2,
-html[data-theme="b"] .resume-section h2 {
+html[data-theme="b"] .experience-section h2 {
   padding-bottom: 9px;
   border-bottom: 2px solid var(--ink);
+}
+
+html[data-theme="b"] .resume-section h2 {
+  padding-bottom: 9px;
+  border-bottom: 0;
 }
 
 html[data-theme="b"] .project-section h2::after,
@@ -716,10 +738,13 @@ html[data-theme="b"] .test-path {
 }
 
 html[data-theme="b"] .responsibility-list,
-html[data-theme="b"] .protection-list,
+html[data-theme="b"] .protection-list {
+  border-top: 2px solid var(--ink);
+}
+
 html[data-theme="b"] .experience-list,
 html[data-theme="b"] .resume-experience {
-  border-top: 2px solid var(--ink);
+  border-top: 0 !important;
 }
 
 html[data-theme="b"] .experience-entry,

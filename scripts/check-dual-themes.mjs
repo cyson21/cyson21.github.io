@@ -87,6 +87,59 @@ for (const [id, css] of [['b', bCss], ['c', cCss]]) {
   assert.match(
     css,
     new RegExp(
+      `html\\[data-theme="${id}"\\] \\.section-heading\\s*\\{[\\s\\S]*?border-top:\\s*0;`,
+    ),
+    `${id.toUpperCase()} section headings must rely on the title accent instead of a second full-width rule`,
+  );
+  assert.match(
+    css,
+    new RegExp(
+      `html\\[data-theme="${id}"\\] body \\.section-link,[\\s\\S]*?` +
+      `html\\[data-theme="${id}"\\] \\.project-row \\.project-links a\\s*\\{[\\s\\S]*?` +
+      `font-weight:\\s*650;[\\s\\S]*?text-decoration:\\s*none;`,
+    ),
+    `${id.toUpperCase()} compact links must not combine heavy weight with a permanent underline`,
+  );
+  assert.match(
+    css,
+    new RegExp(
+      `html\\[data-theme="${id}"\\] \\.career-list\\s*\\{[\\s\\S]*?border-top:\\s*0;`,
+    ),
+    `${id.toUpperCase()} career lists must not repeat the section boundary`,
+  );
+  assert.match(
+    css,
+    new RegExp(
+      `html\\[data-theme="${id}"\\] \\.project-row:first-child\\s*\\{[\\s\\S]*?border-top:\\s*0;`,
+    ),
+    `${id.toUpperCase()} project lists must not start with a redundant divider`,
+  );
+  assert.match(
+    css,
+    new RegExp(
+      `html\\[data-theme="${id}"\\] \\.filter-bar\\s*\\{[\\s\\S]*?` +
+      `padding-bottom:\\s*0;[\\s\\S]*?border-bottom:\\s*0;`,
+    ),
+    `${id.toUpperCase()} desktop project filters must use the filter control as the single boundary`,
+  );
+  assert.match(
+    css,
+    new RegExp(
+      `html\\[data-theme="${id}"\\] \\.experience-list,[\\s\\S]*?` +
+      `html\\[data-theme="${id}"\\] \\.resume-experience\\s*\\{[\\s\\S]*?border-top:\\s*0\\s*!important;`,
+    ),
+    `${id.toUpperCase()} bordered cards must not receive a second wrapper divider`,
+  );
+  assert.match(
+    css,
+    new RegExp(
+      `html\\[data-theme="${id}"\\] \\.resume-section h2\\s*\\{[\\s\\S]*?border-bottom:\\s*0;`,
+    ),
+    `${id.toUpperCase()} resume headings must not duplicate their content boundaries`,
+  );
+  assert.match(
+    css,
+    new RegExp(
       `html\\[data-theme="${id}"\\] \\.filter-bar\\s*\\{[\\s\\S]*?\\}[\\s\\S]*?` +
       `@media\\s*\\((?:max-width:\\s*639px|width\\s*<=\\s*639px)\\)[\\s\\S]*?` +
       `html\\[data-theme="${id}"\\] \\.filter-bar\\s*\\{[\\s\\S]*?border-bottom-width:\\s*0;`,

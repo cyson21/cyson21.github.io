@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import {
   boundaryViewports,
   canonicalRoutes,
@@ -32,6 +32,39 @@ const fixedRoleSizes: Record<Exclude<TypeRole, 'h1' | 'h2' | 'h3' | 'lede'>, num
   path: 14,
   dense: 16,
 };
+
+async function applyPortfolioTheme(page: Page, theme: 'b' | 'c'): Promise<void> {
+  if (theme === 'c') {
+    await page.evaluate(() => new Promise<void>((resolve, reject) => {
+      document.documentElement.dataset.theme = 'c';
+      const link = document.querySelector<HTMLLinkElement>('link[data-portfolio-theme]');
+      if (!link) {
+        reject(new Error('Missing portfolio theme stylesheet'));
+        return;
+      }
+      link.addEventListener('load', () => resolve(), { once: true });
+      link.addEventListener('error', () => reject(new Error('Failed to load C theme stylesheet')), { once: true });
+      link.href = '/themes/c.css';
+    }));
+  }
+
+  await page.waitForFunction(
+    ({ expectedTheme, expectedRadius }) => {
+      const root = document.documentElement;
+      const link = document.querySelector<HTMLLinkElement>('link[data-portfolio-theme]');
+      return root.dataset.theme === expectedTheme
+        && link?.href.endsWith(`/themes/${expectedTheme}.css`)
+        && getComputedStyle(root).getPropertyValue('--radius').trim() === expectedRadius;
+    },
+    {
+      expectedTheme: theme,
+      expectedRadius: theme === 'b' ? '2px' : '14px',
+    },
+  );
+  await page.evaluate(() => new Promise<void>((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
+}
 
 for (const route of canonicalRoutes) {
   for (const viewport of canonicalViewports) {
@@ -192,19 +225,7 @@ for (const theme of ['b', 'c'] as const) {
     test(`resume theme ${theme.toUpperCase()} keeps its information priority and control geometry at ${viewport.width}px`, async ({ page }) => {
       await page.setViewportSize(viewport);
       await gotoCanonicalRoute(page, '/resume/');
-      if (theme === 'c') {
-        await page.evaluate(() => new Promise<void>((resolve, reject) => {
-          document.documentElement.dataset.theme = 'c';
-          const link = document.querySelector<HTMLLinkElement>('link[data-portfolio-theme]');
-          if (!link) {
-            reject(new Error('Missing portfolio theme stylesheet'));
-            return;
-          }
-          link.addEventListener('load', () => resolve(), { once: true });
-          link.addEventListener('error', () => reject(new Error('Failed to load C theme stylesheet')), { once: true });
-          link.href = '/themes/c.css';
-        }));
-      }
+      await applyPortfolioTheme(page, theme);
 
       const layout = await page.evaluate(() => {
         const rect = (selector: string) => {
@@ -264,6 +285,109 @@ for (const theme of ['b', 'c'] as const) {
         expect(columnGap).toBeLessThanOrEqual(32.1);
         expect(Math.abs(layout.summary.left - layout.current.left)).toBeLessThanOrEqual(1);
       }
+    });
+  }
+}
+
+for (const theme of ['b', 'c'] as const) {
+  for (const viewport of [...canonicalViewports, ...boundaryViewports]) {
+    test(`theme ${theme.toUpperCase()} keeps one divider boundary at ${viewport.width}px`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+
+      await gotoCanonicalRoute(page, '/');
+      await applyPortfolioTheme(page, theme);
+      const homeHierarchy = await page.evaluate(() => {
+        const heading = document.querySelector<HTMLElement>('#featured-projects .section-heading');
+        const headingTitle = document.querySelector<HTMLElement>('#featured-projects .section-heading h2');
+        const careerList = document.querySelector<HTMLElement>('.career-list');
+        const careerItems = Array.from(document.querySelectorAll<HTMLElement>('.career-list li'));
+        const projectRows = Array.from(document.querySelectorAll<HTMLElement>('#featured-projects .project-row'));
+        const sectionLink = document.querySelector<HTMLElement>('.section-link');
+        const projectLink = document.querySelector<HTMLElement>('.project-links a');
+        if (!heading || !headingTitle || !careerList || careerItems.length < 2 || projectRows.length < 2 || !sectionLink || !projectLink) {
+          throw new Error('Home hierarchy must render');
+        }
+        const style = (element: HTMLElement) => getComputedStyle(element);
+        return {
+          headingTop: Number.parseFloat(style(heading).borderTopWidth),
+          headingAccent: Math.max(
+            Number.parseFloat(style(headingTitle).borderBottomWidth),
+            Number.parseFloat(getComputedStyle(headingTitle, '::after').height) || 0,
+          ),
+          careerTop: Number.parseFloat(style(careerList).borderTopWidth),
+          lastCareerBottom: Number.parseFloat(style(careerItems.at(-1)!).borderBottomWidth),
+          firstProjectTop: Number.parseFloat(style(projectRows[0]!).borderTopWidth),
+          secondProjectTop: Number.parseFloat(style(projectRows[1]!).borderTopWidth),
+          lastProjectBottom: Number.parseFloat(style(projectRows.at(-1)!).borderBottomWidth),
+          sectionLinkDecoration: style(sectionLink).textDecorationLine,
+          sectionLinkWeight: Number.parseFloat(style(sectionLink).fontWeight),
+          projectLinkDecoration: style(projectLink).textDecorationLine,
+          projectLinkWeight: Number.parseFloat(style(projectLink).fontWeight),
+        };
+      });
+      expect(homeHierarchy.headingTop).toBe(0);
+      expect(homeHierarchy.headingAccent).toBeGreaterThan(0);
+      expect(homeHierarchy.careerTop).toBe(0);
+      expect(homeHierarchy.lastCareerBottom).toBe(0);
+      expect(homeHierarchy.firstProjectTop).toBe(0);
+      expect(homeHierarchy.secondProjectTop).toBeGreaterThan(0);
+      expect(homeHierarchy.lastProjectBottom).toBe(0);
+      expect(homeHierarchy.sectionLinkDecoration).toBe('none');
+      expect(homeHierarchy.sectionLinkWeight).toBeLessThanOrEqual(650);
+      expect(homeHierarchy.projectLinkDecoration).toBe('none');
+      expect(homeHierarchy.projectLinkWeight).toBeLessThanOrEqual(650);
+
+      await gotoCanonicalRoute(page, '/projects/');
+      await applyPortfolioTheme(page, theme);
+      const projectFilter = await page.locator('.filter-bar').evaluate((element) => {
+        const style = getComputedStyle(element);
+        return {
+          borderBottomWidth: Number.parseFloat(style.borderBottomWidth),
+          paddingBottom: Number.parseFloat(style.paddingBottom),
+        };
+      });
+      expect(projectFilter).toEqual({ borderBottomWidth: 0, paddingBottom: 0 });
+
+      await gotoCanonicalRoute(page, '/experience/');
+      await applyPortfolioTheme(page, theme);
+      const experienceBoundaries = await page.evaluate(() => {
+        const list = document.querySelector<HTMLElement>('.experience-list');
+        const entry = document.querySelector<HTMLElement>('.experience-entry');
+        if (!list || !entry) throw new Error('Experience boundaries must render');
+        return {
+          listTop: Number.parseFloat(getComputedStyle(list).borderTopWidth),
+          entryTop: Number.parseFloat(getComputedStyle(entry).borderTopWidth),
+        };
+      });
+      expect(experienceBoundaries.listTop).toBe(0);
+      expect(experienceBoundaries.entryTop).toBeGreaterThan(0);
+
+      await gotoCanonicalRoute(page, '/resume/');
+      await applyPortfolioTheme(page, theme);
+      const resumeBoundaries = await page.evaluate(() => {
+        const headings = Array.from(document.querySelectorAll<HTMLElement>('.resume-layout h2'));
+        const currentSection = document.querySelector<HTMLElement>('.resume-experience--current');
+        const previousSection = document.querySelector<HTMLElement>('.resume-experience--previous');
+        const currentJob = document.querySelector<HTMLElement>('.resume-job--current');
+        const previousJob = document.querySelector<HTMLElement>('.resume-job--previous');
+        if (!headings.length || !currentSection || !previousSection || !currentJob || !previousJob) {
+          throw new Error('Resume boundaries must render');
+        }
+        return {
+          headingBottoms: headings.map((heading) => Number.parseFloat(getComputedStyle(heading).borderBottomWidth)),
+          currentSectionTop: Number.parseFloat(getComputedStyle(currentSection).borderTopWidth),
+          previousSectionTop: Number.parseFloat(getComputedStyle(previousSection).borderTopWidth),
+          currentJobTop: Number.parseFloat(getComputedStyle(currentJob).borderTopWidth),
+          currentJobBottom: Number.parseFloat(getComputedStyle(currentJob).borderBottomWidth),
+          previousJobTop: Number.parseFloat(getComputedStyle(previousJob).borderTopWidth),
+        };
+      });
+      expect(resumeBoundaries.headingBottoms.every((width) => width === 0)).toBeTruthy();
+      expect(resumeBoundaries.currentSectionTop).toBe(0);
+      expect(resumeBoundaries.previousSectionTop).toBe(0);
+      expect(resumeBoundaries.currentJobTop).toBeGreaterThan(0);
+      expect(resumeBoundaries.currentJobBottom).toBeGreaterThan(0);
+      expect(resumeBoundaries.previousJobTop).toBeGreaterThan(0);
     });
   }
 }

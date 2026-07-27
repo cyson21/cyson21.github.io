@@ -1,4 +1,4 @@
-/* Dual-theme revision: 2026-07-20-bc11 | C Soft Organic */
+/* Dual-theme revision: 2026-07-20-bc13 | C Soft Organic */
 html[data-theme="c"] {
   --paper: #f1f3f1;
   --surface: #fbfcfa;
@@ -171,12 +171,27 @@ html[data-theme="c"] .section--surface {
 }
 
 html[data-theme="c"] .section-heading {
-  border-top: 2px solid transparent;
-  border-image: linear-gradient(90deg, var(--blue), rgba(112, 65, 99, 0.16) 38%, var(--line) 78%) 1;
+  border-top: 0;
+  border-image: none;
+}
+
+html[data-theme="c"] .section-heading h2 {
+  display: inline-block;
+  padding-bottom: 7px;
+}
+
+html[data-theme="c"] .section-heading h2::after {
+  display: block;
+  width: 58px;
+  height: 3px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  content: "";
 }
 
 html[data-theme="c"] .career-list {
-  border-top-color: var(--line-strong);
+  border-top: 0;
 }
 
 html[data-theme="c"] .career-list li {
@@ -184,8 +199,16 @@ html[data-theme="c"] .career-list li {
   background: linear-gradient(90deg, rgba(251, 252, 250, 0), rgba(251, 252, 250, 0.72) 50%, rgba(251, 252, 250, 0));
 }
 
+html[data-theme="c"] .career-list li:last-child {
+  border-bottom: 0;
+}
+
 html[data-theme="c"] .career-list strong {
-  font-weight: 800;
+  font-weight: 650;
+}
+
+html[data-theme="c"] .career-list span {
+  font-weight: 600;
 }
 
 html[data-theme="c"] .project-row {
@@ -193,8 +216,12 @@ html[data-theme="c"] .project-row {
   background: linear-gradient(90deg, rgba(112, 65, 99, 0.02), transparent 26%);
 }
 
+html[data-theme="c"] .project-row:first-child {
+  border-top: 0;
+}
+
 html[data-theme="c"] .project-row:last-child {
-  border-bottom-color: var(--line);
+  border-bottom: 0;
 }
 
 html[data-theme="c"] .project-title-line :is(h2, h3) a {
@@ -423,7 +450,8 @@ html[data-theme="c"] .project-hero .scope-badge {
 }
 
 html[data-theme="c"] .filter-bar {
-  border-bottom-color: var(--line);
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 html[data-theme="c"] .filter-buttons {
@@ -483,18 +511,35 @@ html[data-theme="c"] .project-toc nav a[aria-current="location"] {
 }
 
 html[data-theme="c"] .project-toc nav a,
-html[data-theme="c"] .pagination-grid a,
-html[data-theme="c"] .section-link,
-html[data-theme="c"] .project-links a {
+html[data-theme="c"] .pagination-grid a {
   text-underline-offset: 4px;
   text-decoration-thickness: 2px;
 }
 
+html[data-theme="c"] body .section-link,
+html[data-theme="c"] .project-row .project-links a {
+  font-weight: 650;
+  text-decoration: none;
+}
+
+html[data-theme="c"] body .section-link:hover,
+html[data-theme="c"] body .section-link:focus-visible,
+html[data-theme="c"] .project-row .project-links a:hover,
+html[data-theme="c"] .project-row .project-links a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
 html[data-theme="c"] .project-section h2,
-html[data-theme="c"] .experience-section h2,
+html[data-theme="c"] .experience-section h2 {
+  position: relative;
+  padding-bottom: 12px;
+}
+
 html[data-theme="c"] .resume-section h2 {
   position: relative;
   padding-bottom: 12px;
+  border-bottom: 0;
 }
 
 html[data-theme="c"] .project-section h2::after,
@@ -583,10 +628,13 @@ html[data-theme="c"] .verification-table tbody tr {
 }
 
 html[data-theme="c"] .responsibility-list,
-html[data-theme="c"] .protection-list,
+html[data-theme="c"] .protection-list {
+  border-top-color: rgb(112 105 114 / 30%);
+}
+
 html[data-theme="c"] .experience-list,
 html[data-theme="c"] .resume-experience {
-  border-top-color: rgb(112 105 114 / 30%);
+  border-top: 0 !important;
 }
 
 html[data-theme="c"] .experience-entry,
