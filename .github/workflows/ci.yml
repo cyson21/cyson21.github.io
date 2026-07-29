@@ -25,9 +25,20 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: sudo apt-get update && sudo apt-get install -y poppler-utils
       - run: pnpm build
+      - name: External link smoke (PR)
+        run: pnpm test:external-links:smoke -- --report artifacts/external-links-smoke.json
+        # Permanent broken fails the job; 403/429/transient 5xx are warnings only.
       - run: pnpm test:e2e
         env:
           CI: true
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: preview-quality-artifacts
+          path: |
+            artifacts/external-links-smoke.json
+            artifacts/playwright/axe-best-practice-*.json
+          if-no-files-found: ignore
       - uses: actions/upload-artifact@v7
         if: failure()
         with:

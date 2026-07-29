@@ -1,0 +1,34 @@
+name: portfolio-web-external-links-weekly
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Monday 03:17 UTC — avoid top-of-hour contention with other weekly jobs.
+    - cron: '17 3 * * 1'
+
+concurrency:
+  group: portfolio-web-external-links-weekly
+  cancel-in-progress: false
+
+jobs:
+  external-links-full:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.1.3
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - name: External link full check
+        run: pnpm test:external-links:full -- --report artifacts/external-links-full.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: external-links-full-report
+          path: artifacts/external-links-full.json
+          if-no-files-found: ignore

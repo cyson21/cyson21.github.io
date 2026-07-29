@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "host": "blocked.example",
+      "reason": "Host intentionally returns 403 in fixture tests",
+      "expiresOn": "2099-01-01"
+    }
+  ]
+}
