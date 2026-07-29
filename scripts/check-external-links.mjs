@@ -33,6 +33,7 @@ function parseArgs(argv) {
     else if (arg === '--timeout-ms') options.timeoutMs = Number(argv[++i]);
     else if (arg === '--retries') options.retries = Number(argv[++i]);
     else if (arg === '--help' || arg === '-h') options.help = true;
+    else if (arg === '--') continue;
     else throw new Error(`Unknown argument: ${arg}`);
   }
   if (!['smoke', 'full'].includes(options.mode)) {

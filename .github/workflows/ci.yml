@@ -26,7 +26,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y poppler-utils
       - run: pnpm build
       - name: External link smoke (PR)
-        run: pnpm test:external-links:smoke -- --report artifacts/external-links-smoke.json
+        run: node scripts/check-external-links.mjs --mode=smoke --report artifacts/external-links-smoke.json
         # Permanent broken fails the job; 403/429/transient 5xx are warnings only.
       - run: pnpm test:e2e
         env:
