@@ -241,7 +241,10 @@ function smokeRank(ref) {
 export function classifyHttpStatus(status) {
   if (status >= 200 && status < 400) return 'ok';
   if (status === 404 || status === 410 || status === 451) return 'broken';
-  if (status === 401 || status === 403) return 'blocked';
+  // Public links that require auth are broken for this portfolio surface.
+  if (status === 401) return 'broken';
+  // 403 stays a soft warning (bot/WAF blocks are often temporary or client-specific).
+  if (status === 403) return 'blocked';
   if (status === 429) return 'rate_limited';
   if (status === 408 || status === 425 || status === 500 || status === 502 || status === 503 || status === 504) {
     return 'transient';
@@ -254,7 +257,12 @@ export function classifyHttpStatus(status) {
 export function classifyNetworkError(error) {
   const code = error?.cause?.code || error?.code || '';
   const message = String(error?.message || error);
-  if (['ENOTFOUND', 'EAI_AGAIN'].includes(code) || /getaddrinfo/i.test(message)) return 'broken';
+  // Temporary DNS resolver failure — soft warning with retry upstream.
+  if (code === 'EAI_AGAIN' || /\bEAI_AGAIN\b/.test(message)) return 'transient';
+  // Permanent-looking DNS miss remains broken.
+  if (code === 'ENOTFOUND' || /\bENOTFOUND\b/.test(message) || /getaddrinfo/i.test(message)) {
+    return 'broken';
+  }
   if (['ETIMEDOUT', 'ECONNRESET', 'ECONNREFUSED', 'UND_ERR_CONNECT_TIMEOUT', 'AbortError'].includes(code)
     || /aborted|timeout|network/i.test(message)) {
     return 'transient';
@@ -266,7 +274,25 @@ async function sleep(ms) {
   await new Promise((resolvePromise) => setTimeout(resolvePromise, ms));
 }
 
-async function fetchOnce(url, { method, timeoutMs, redirect, fetchImpl }) {
+const GET_FALLBACK_HEADERS = Object.freeze({
+  Range: 'bytes=0-0',
+});
+
+/**
+ * Drop any response body as soon as status/headers are available so GET
+ * fallbacks do not download full payloads or hold sockets open.
+ */
+export async function cancelResponseBody(response) {
+  const body = response?.body;
+  if (!body || typeof body.cancel !== 'function') return;
+  try {
+    await body.cancel();
+  } catch {
+    // Ignore cancel races after the stream already closed.
+  }
+}
+
+async function fetchOnce(url, { method, timeoutMs, redirect, fetchImpl, headers = {} }) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -277,12 +303,23 @@ async function fetchOnce(url, { method, timeoutMs, redirect, fetchImpl }) {
       headers: {
         'user-agent': USER_AGENT,
         accept: '*/*',
+        ...headers,
       },
     });
     return response;
   } finally {
     clearTimeout(timer);
   }
+}
+
+async function fetchGetFallback(url, options) {
+  const response = await fetchOnce(url, {
+    ...options,
+    method: 'GET',
+    headers: GET_FALLBACK_HEADERS,
+  });
+  await cancelResponseBody(response);
+  return response;
 }
 
 /**
@@ -297,18 +334,18 @@ export async function probeUrl(url, options = {}) {
     fetchImpl = globalThis.fetch,
   } = options;
 
+  const shared = { timeoutMs, redirect, fetchImpl };
   let lastError;
   for (let attempt = 0; attempt <= retries; attempt += 1) {
     try {
-      let response = await fetchOnce(url, { method: 'HEAD', timeoutMs, redirect, fetchImpl });
+      let response = await fetchOnce(url, { ...shared, method: 'HEAD' });
       let method = 'HEAD';
       if ([405, 501].includes(response.status) || (response.status === 403 && response.headers.get('allow')?.includes('GET'))) {
-        response = await fetchOnce(url, { method: 'GET', timeoutMs, redirect, fetchImpl });
+        response = await fetchGetFallback(url, shared);
         method = 'GET';
-      } else if (response.status === 403 || response.status === 404) {
+      } else if (response.status === 401 || response.status === 403 || response.status === 404) {
         // Some hosts reject HEAD with a misleading status; confirm with GET once.
-        const getResponse = await fetchOnce(url, { method: 'GET', timeoutMs, redirect, fetchImpl });
-        response = getResponse;
+        response = await fetchGetFallback(url, shared);
         method = 'GET';
       }
 

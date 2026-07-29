@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
 import {
+  cancelResponseBody,
   checkExternalLinks,
   classifyHttpStatus,
   classifyNetworkError,
@@ -86,26 +87,57 @@ test('classifyHttpStatus separates permanent broken from soft failures', () => {
   assert.equal(classifyHttpStatus(301), 'ok');
   assert.equal(classifyHttpStatus(404), 'broken');
   assert.equal(classifyHttpStatus(410), 'broken');
+  assert.equal(classifyHttpStatus(401), 'broken');
   assert.equal(classifyHttpStatus(403), 'blocked');
   assert.equal(classifyHttpStatus(429), 'rate_limited');
   assert.equal(classifyHttpStatus(503), 'transient');
-  assert.equal(classifyNetworkError({ code: 'ENOTFOUND', message: 'getaddrinfo' }), 'broken');
+  assert.equal(classifyNetworkError({ code: 'ENOTFOUND', message: 'getaddrinfo ENOTFOUND' }), 'broken');
+  assert.equal(classifyNetworkError({ code: 'EAI_AGAIN', message: 'getaddrinfo EAI_AGAIN' }), 'transient');
   assert.equal(classifyNetworkError({ code: 'ETIMEDOUT', message: 'timeout' }), 'transient');
 });
 
-test('probeUrl prefers HEAD and falls back to GET when HEAD is rejected', async () => {
+test('probeUrl prefers HEAD and falls back to ranged GET when HEAD is rejected', async () => {
   const calls = [];
   const fetchImpl = async (url, init) => {
-    calls.push(init.method);
+    calls.push({ method: init.method, range: init.headers?.Range ?? init.headers?.range });
     if (init.method === 'HEAD') {
       return new Response(null, { status: 405, headers: { allow: 'GET, OPTIONS' } });
     }
     return new Response('ok', { status: 200 });
   };
   const result = await probeUrl('https://example.com/resource', { fetchImpl, retries: 0 });
-  assert.deepEqual(calls, ['HEAD', 'GET']);
+  assert.deepEqual(calls.map((call) => call.method), ['HEAD', 'GET']);
+  assert.equal(calls[1].range, 'bytes=0-0');
   assert.equal(result.status, 'ok');
   assert.equal(result.method, 'GET');
+});
+
+test('probeUrl GET fallback cancels the response body after status is known', async () => {
+  let cancelCount = 0;
+  const fetchImpl = async (_url, init) => {
+    if (init.method === 'HEAD') {
+      return new Response(null, { status: 405, headers: { allow: 'GET' } });
+    }
+    const body = {
+      cancel: async () => {
+        cancelCount += 1;
+      },
+    };
+    return {
+      status: 200,
+      headers: new Headers(),
+      body,
+    };
+  };
+  const result = await probeUrl('https://example.com/resource', { fetchImpl, retries: 0 });
+  assert.equal(result.status, 'ok');
+  assert.equal(result.method, 'GET');
+  assert.equal(cancelCount, 1);
+});
+
+test('cancelResponseBody ignores responses without a cancelable body', async () => {
+  await cancelResponseBody({ status: 204, body: null });
+  await cancelResponseBody({ status: 204, body: {} });
 });
 
 test('checkExternalLinks allowlists hosts and fails only permanent broken', async () => {

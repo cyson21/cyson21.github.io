@@ -27,7 +27,7 @@ jobs:
       - run: pnpm build
       - name: External link smoke (PR)
         run: node scripts/check-external-links.mjs --mode=smoke --report artifacts/external-links-smoke.json
-        # Permanent broken fails the job; 403/429/transient 5xx are warnings only.
+        # Permanent broken (401/404/…) fails the job; 403/429/transient soft warnings only.
       - run: pnpm test:e2e
         env:
           CI: true

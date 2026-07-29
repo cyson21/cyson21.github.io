@@ -81,9 +81,9 @@ pnpm test:external-links:full    # 주간: 수집된 HTTPS URL 전체
 
 네트워크 정책:
 
-- HEAD 우선, 거부 시 제한된 GET fallback, redirect follow, timeout·bounded retry
-- 실패로 취급: 영구 broken(404/410 등)·invalid URL
-- 경고만(exit 0): 403/429, 일시적 5xx·timeout
+- HEAD 우선, 거부 시 `Range: bytes=0-0` GET fallback 후 response body cancel, redirect follow, timeout·bounded retry
+- 실패로 취급: 영구 broken(401/404/410 등)·invalid URL·ENOTFOUND
+- 경고만(exit 0): 403/429, 일시적 5xx·timeout·EAI_AGAIN
 - 예외는 `config/external-link-allowlist.json`에 url 또는 host, reason, expiresOn 필수
 
 axe:

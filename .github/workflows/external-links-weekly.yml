@@ -6,6 +6,9 @@ on:
     # Monday 03:17 UTC — avoid top-of-hour contention with other weekly jobs.
     - cron: '17 3 * * 1'
 
+permissions:
+  contents: read
+
 concurrency:
   group: portfolio-web-external-links-weekly
   cancel-in-progress: false

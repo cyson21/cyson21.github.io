@@ -58,8 +58,8 @@ Options:
   --retries=N         bounded retries for transient failures (default 2)
 
 Exit policy:
-  fail  -> permanent broken (404/410/invalid) not on allowlist
-  warn  -> 403/429/transient 5xx/network soft failures (exit 0)
+  fail  -> permanent broken (401/404/410/invalid/ENOTFOUND) not on allowlist
+  warn  -> 403/429/transient 5xx/EAI_AGAIN/timeout soft failures (exit 0)
 `);
 }
 
