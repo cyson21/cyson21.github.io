@@ -70,6 +70,28 @@ pnpm test:e2e
 - 구조·접근성·오버플로 검사는 모든 공개 경로를 대상으로 합니다.
 - 전체 페이지 시각 기준은 대표 레이아웃을 320px, 768px, 1440px에서 비교합니다.
 
+## 외부 링크와 axe best-practice
+
+내부 링크는 `pnpm test:links`(dist HTML)로 검사합니다. 외부 GitHub/demo/evidence URL은 콘텐츠 소스 기준의 별도 경로입니다.
+
+```bash
+pnpm test:external-links:smoke   # PR: host 단위 smoke
+pnpm test:external-links:full    # 주간: 수집된 HTTPS URL 전체
+```
+
+네트워크 정책:
+
+- HEAD 우선, 거부 시 `Range: bytes=0-0` GET fallback 후 response body cancel, redirect follow, timeout·bounded retry
+- 실패로 취급: 영구 broken(401/404/410 등)·invalid URL·ENOTFOUND
+- 경고만(exit 0): 403/429, 일시적 5xx·timeout·EAI_AGAIN
+- 예외는 `config/external-link-allowlist.json`에 url 또는 host, reason, expiresOn 필수
+
+axe:
+
+- WCAG A/AA는 계속 blocking
+- best-practice는 성공 실행에서도 Playwright attach와 `artifacts/playwright/axe-best-practice-*.json`으로 보존
+- 미승인 경고는 `config/axe-best-practice-policy.json`의 per-route budget과 ruleId/selector/reason/expiresOn allowlist로 관리
+
 ## Release 검증
 
 실제 origin을 사용해 정적 산출물을 새로 만듭니다. Preview의 `dist/`를 재사용하지 않습니다.

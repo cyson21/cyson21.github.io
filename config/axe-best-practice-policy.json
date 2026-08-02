@@ -1,0 +1,11 @@
+{
+  "maxUnapprovedWarnings": 0,
+  "entries": [
+    {
+      "ruleId": "landmark-unique",
+      "selector": ".resume-experience--current",
+      "reason": "Resume experience sections reuse complementary landmarks; tracked until unique accessible names are added without copy changes in a separate a11y polish task.",
+      "expiresOn": "2026-12-31"
+    }
+  ]
+}
