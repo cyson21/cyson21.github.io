@@ -10,7 +10,7 @@ if (!currentExperience) {
 }
 ---
 
-<BaseLayout title="경력" description="기업용 플랫폼과 공공·실시간 데이터 서비스에서 맡은 역할과 주요 업무를 정리했습니다.">
+<BaseLayout title="경력" description="Java · Spring Boot 기반 기업용 플랫폼과 공공·실시간 데이터 서비스에서 맡은 역할과 주요 업무를 정리했습니다.">
   <PageIntro title="경력" description={currentExperience.context} />
 
   <section class="section experience-section">
@@ -121,15 +121,20 @@ if (!currentExperience) {
 
   .experience-entry header {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(300px, 1fr);
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
     gap: 44px;
     align-items: end;
     padding-bottom: 28px;
     border-bottom: 1px solid var(--ink);
   }
 
+  .experience-entry header > * {
+    min-width: 0;
+  }
+
   .experience-entry h2 {
     font-size: var(--text-h2);
+    overflow-wrap: anywhere;
   }
 
   .role {
@@ -141,6 +146,7 @@ if (!currentExperience) {
   .context {
     color: var(--ink-soft);
     font-size: var(--text-dense);
+    overflow-wrap: anywhere;
   }
 
   .responsibilities {
@@ -164,27 +170,31 @@ if (!currentExperience) {
     margin: 0;
     padding: 0;
     list-style: none;
+    min-width: 0;
   }
 
   .responsibilities li {
     display: grid;
-    grid-template-columns: minmax(150px, 0.36fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 0.36fr) minmax(0, 1fr);
     gap: 24px;
+    min-width: 0;
   }
 
   .responsibilities h4 {
     font-size: var(--text-dense);
+    overflow-wrap: anywhere;
   }
 
   .responsibilities p {
     margin: 0;
     color: var(--ink-soft);
     font-size: var(--text-dense);
+    overflow-wrap: anywhere;
   }
 
   .experience-stack {
     display: grid;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 100px minmax(0, 1fr);
     gap: 18px;
     padding-top: 20px;
   }
@@ -198,11 +208,37 @@ if (!currentExperience) {
 
   @media (max-width: 959px) {
     .career-summary {
-      grid-template-columns: 160px minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
     }
 
     .career-summary a {
-      grid-column: 2;
+      grid-column: 1;
+    }
+
+    .experience-entry header,
+    .responsibilities,
+    .responsibilities li,
+    .experience-stack {
+      grid-template-columns: 1fr;
+    }
+
+    .experience-entry header {
+      gap: 14px;
+      align-items: start;
+      padding-bottom: 18px;
+    }
+
+    .responsibilities {
+      gap: 14px;
+    }
+
+    .responsibilities li {
+      gap: 5px;
+    }
+
+    .experience-stack {
+      gap: 8px;
     }
   }
 
@@ -216,42 +252,18 @@ if (!currentExperience) {
     }
 
     .career-summary {
-      grid-template-columns: 1fr;
-      gap: 12px;
       padding-top: 12px;
-    }
-
-    .career-summary a {
-      grid-column: 1;
     }
 
     .experience-list {
       gap: 48px;
     }
 
-    .experience-entry header,
-    .responsibilities,
-    .responsibilities li {
-      grid-template-columns: 1fr;
-    }
-
-    .experience-entry header {
-      gap: 14px;
-      padding-bottom: 18px;
-    }
-
     .responsibilities {
-      gap: 14px;
       padding-block: 20px;
     }
 
-    .responsibilities li {
-      gap: 5px;
-    }
-
     .experience-stack {
-      grid-template-columns: 1fr;
-      gap: 8px;
       padding-top: 14px;
     }
   }

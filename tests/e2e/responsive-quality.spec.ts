@@ -17,7 +17,9 @@ const roleRules: Array<{ role: TypeRole; selector: string; lineHeight?: number; 
   { role: 'h1', selector: 'main h1', lineHeight: 1.18 },
   { role: 'h2', selector: 'main h2', lineHeight: 1.25 },
   { role: 'h3', selector: 'main h3', excludeSelector: '.evidence-header h3, .skill-groups h3', lineHeight: 1.35 },
-  { role: 'lede', selector: 'main :is(.lede, .hero-statement, .project-lede)', lineHeight: 1.6 },
+  { role: 'lede', selector: 'main :is(.lede, .project-lede)', lineHeight: 1.6 },
+  // Approved home intro uses denser leading than page lede.
+  { role: 'lede', selector: 'main .hero-statement', lineHeight: 1.55 },
   { role: 'control', selector: ':is(header nav, .mobile-nav) a, main :is(a.button, button, [role="tab"], [role="radio"] + label)', lineHeight: 1.35 },
   { role: 'label', selector: 'main :is(.eyebrow, .intro-label, .status-label)', lineHeight: 1.5 },
   { role: 'code', selector: 'main :is(pre, pre code)', lineHeight: 1.55 },
@@ -276,8 +278,10 @@ for (const theme of ['b', 'c'] as const) {
       expect(layout.precedesPrevious, 'CTA must precede previous experience in DOM order').toBeTruthy();
 
       if (viewport.width <= 959) {
-        expect(layout.current.bottom).toBeLessThanOrEqual(layout.sidebar.top + 1);
-        expect(layout.sidebar.bottom).toBeLessThanOrEqual(layout.previous.top + 1);
+        // Approved mobile order: sidebar → summary → current → previous (single column).
+        expect(layout.sidebar.bottom).toBeLessThanOrEqual(layout.summary.top + 1);
+        expect(layout.summary.bottom).toBeLessThanOrEqual(layout.current.top + 1);
+        expect(layout.current.bottom).toBeLessThanOrEqual(layout.previous.top + 1);
       } else {
         const columnGap = layout.current.left - layout.sidebar.right;
         expect(layout.sidebar.left).toBeLessThan(layout.current.left);

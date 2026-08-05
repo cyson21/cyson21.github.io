@@ -428,11 +428,24 @@ p {
   }
 
   .button-row {
+    flex-direction: column;
     align-items: stretch;
   }
 
   .button-row .button:not(.button--text) {
     flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .button-row .button--text {
+    align-self: flex-start;
+    width: auto;
+  }
+
+  .tag {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 }
 

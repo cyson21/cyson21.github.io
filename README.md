@@ -21,7 +21,7 @@ Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트
 - 공개 자산: `public/` 아래에서 승인 목록과 SHA-256이 일치하는 파일
 - 통합 포트폴리오 HTML: `public/portfolio/index.html`
 - 설계 결정: `docs/decisions/`
-- 제외 대상: 원본 일감, 로컬 경로, 전화번호, ATS PDF
+- 제외 대상: 원본 일감, 로컬 경로, 전화번호, 비공개 이력서 원본
 
 공개 배포에서는 `PUBLIC_RELEASE=true`, `PUBLIC_SITE_URL`, `PUBLIC_RESUME_URL`을 설정합니다. 사이트 URL은 경로, query, fragment, 인증 정보가 없는 공개 HTTPS origin이어야 합니다. 공개 모드가 아니면 페이지와 `robots.txt`를 검색 제외 상태로 유지합니다.
 
