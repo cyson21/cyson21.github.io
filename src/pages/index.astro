@@ -155,6 +155,7 @@ const featured = projects.filter((project) => project.data.featured);
     display: grid;
     gap: 14px;
     max-width: min(760px, 42ic);
+    min-width: 0;
   }
 
   .hero-statement {
@@ -163,6 +164,7 @@ const featured = projects.filter((project) => project.data.featured);
     font-size: var(--text-lede);
     font-weight: 720;
     line-height: 1.55;
+    overflow-wrap: anywhere;
   }
 
   .hero-highlights {
@@ -171,6 +173,11 @@ const featured = projects.filter((project) => project.data.featured);
     color: var(--ink-soft);
     font-size: var(--text-body);
     line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-highlights li {
+    min-width: 0;
   }
 
   .hero-highlights li + li {
@@ -182,11 +189,13 @@ const featured = projects.filter((project) => project.data.featured);
     color: var(--ink-soft);
     font-size: var(--text-dense);
     line-height: 1.55;
+    overflow-wrap: anywhere;
   }
 
   .hero-actions {
     grid-area: actions;
     margin-top: 4px;
+    min-width: 0;
   }
 
   .section-link {
@@ -216,23 +225,26 @@ const featured = projects.filter((project) => project.data.featured);
     gap: 24px;
     padding-block: 24px;
     border-bottom: 1px solid var(--line-strong);
-  }
-
-  .career-list time {
-    color: var(--ink-faint);
-    font-family: var(--mono);
-    font-size: var(--text-label);
+    min-width: 0;
   }
 
   .career-list div {
     display: grid;
     gap: 6px;
     margin-top: 0;
+    min-width: 0;
   }
 
   .career-list span,
   .career-list p {
     color: var(--ink-soft);
+    overflow-wrap: anywhere;
+  }
+
+  .career-list time {
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: var(--text-label);
   }
 
   .career-list span {
@@ -274,20 +286,31 @@ const featured = projects.filter((project) => project.data.featured);
     .hero-copy {
       display: block;
       max-width: 800px;
+      min-width: 0;
     }
 
     .hero-person {
       margin-bottom: 20px;
+      min-width: 0;
+    }
+
+    .hero-person > div {
+      min-width: 0;
     }
 
     .hero-lede {
       margin-top: 20px;
+      max-width: none;
     }
 
     .hero-actions {
       margin-top: 26px;
     }
 
+    .career-list li {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
   }
 
   @media (max-width: 639px) {
@@ -299,6 +322,12 @@ const featured = projects.filter((project) => project.data.featured);
       margin-bottom: 14px;
     }
 
+    .hero-person img {
+      width: 66px;
+      height: 66px;
+      flex: 0 0 auto;
+    }
+
     .hero-actions {
       margin-top: 18px;
     }
@@ -306,19 +335,6 @@ const featured = projects.filter((project) => project.data.featured);
     .contact-inner {
       align-items: stretch;
       grid-template-columns: 1fr;
-    }
-
-  }
-
-  @media (max-width: 639px) {
-    .hero-person img {
-      width: 66px;
-      height: 66px;
-    }
-
-    .career-list li {
-      grid-template-columns: 1fr;
-      gap: 8px;
     }
 
     .career-list time {
