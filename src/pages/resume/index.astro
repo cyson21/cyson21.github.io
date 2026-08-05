@@ -2,7 +2,7 @@
 import { ArrowRight, ArrowUpRight, Download, Mail } from '@lucide/astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
-import { experiences, profile, resumeSummary, skillGroups } from '../../data/site';
+import { experiences, profile, resumeClosing, resumeHighlights, resumeIntro, skillGroups } from '../../data/site';
 
 const [currentExperience, ...previousExperiences] = experiences;
 if (!currentExperience) {
@@ -10,15 +10,18 @@ if (!currentExperience) {
 }
 ---
 
-<BaseLayout title="이력서" description="Java·Spring 백엔드 개발자 손찬양의 웹 이력서입니다. 플랫폼 API 개발·운영과 데이터 서비스 경험을 요약합니다.">
-  <PageIntro title="손찬양" description={resumeSummary[0]} />
+<BaseLayout title="이력서" description="Java · Spring Boot 기반의 6년 차 백엔드 개발자 손찬양의 웹 이력서입니다.">
+  <PageIntro title="손찬양" description={`${profile.role} · ${profile.subtitle}`} />
 
   <section class="section resume-section">
     <div class="container resume-layout">
       <section class="resume-summary">
         <h2>요약</h2>
-        <p>{resumeSummary[1]}</p>
-        <p>이전에는 공공·실시간 데이터를 수집·가공하고 REST API와 예측 결과 연동 기능을 개발했으며, Docker 기반 배포·운영도 담당했습니다.</p>
+        <p class="summary-intro">{resumeIntro}</p>
+        <ul class="summary-highlights">
+          {resumeHighlights.map((item) => <li>{item}</li>)}
+        </ul>
+        <p class="summary-closing">{resumeClosing}</p>
       </section>
 
       <section class="resume-experience resume-experience--current" aria-labelledby="resume-experience-title">
@@ -92,6 +95,33 @@ if (!currentExperience) {
     padding: clamp(20px, 2.4vw, 28px);
   }
 
+  .resume-summary .summary-intro {
+    margin-top: 10px;
+    color: var(--ink);
+    font-size: var(--text-lede);
+    font-weight: 720;
+    line-height: 1.55;
+  }
+
+  .resume-summary .summary-highlights {
+    margin: 14px 0 0;
+    padding-left: 1.15em;
+    color: var(--ink-soft);
+    font-size: var(--text-body);
+    line-height: 1.55;
+  }
+
+  .resume-summary .summary-highlights li + li {
+    margin-top: 0.35em;
+  }
+
+  .resume-summary .summary-closing {
+    margin-top: 14px;
+    color: var(--ink-soft);
+    font-size: var(--text-dense);
+    line-height: 1.55;
+  }
+
   .resume-sidebar {
     position: sticky;
     top: calc(var(--header-height) + 30px);
@@ -142,16 +172,6 @@ if (!currentExperience) {
   .resume-layout h2 {
     margin-bottom: 28px;
     font-size: var(--text-h2);
-  }
-
-  .resume-summary > p:not(.eyebrow) {
-    max-width: min(760px, 40ic);
-    color: var(--ink-soft);
-    font-size: var(--text-body);
-  }
-
-  .resume-summary > p + p {
-    margin-top: 14px;
   }
 
   .resume-experience--current {
