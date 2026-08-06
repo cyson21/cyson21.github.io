@@ -2,7 +2,7 @@
 import { ArrowRight, ArrowUpRight, Download, Mail } from '@lucide/astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
-import { experiences, profile, resumeSummary, skillGroups } from '../../data/site';
+import { experiences, profile, resumeClosing, resumeHighlights, resumeIntro, skillGroups } from '../../data/site';
 
 const [currentExperience, ...previousExperiences] = experiences;
 if (!currentExperience) {
@@ -10,28 +10,11 @@ if (!currentExperience) {
 }
 ---
 
-<BaseLayout title="이력서" description="Java·Spring 백엔드 개발자 손찬양의 웹 이력서입니다. 플랫폼 API 개발·운영과 데이터 서비스 경험을 요약합니다.">
-  <PageIntro title="손찬양" description={resumeSummary[0]} />
+<BaseLayout title="이력서" description="Java · Spring Boot 기반의 6년 차 백엔드 개발자 손찬양의 웹 이력서입니다.">
+  <PageIntro title="손찬양" description={`${profile.role} · ${profile.subtitle}`} />
 
   <section class="section resume-section">
     <div class="container resume-layout">
-      <section class="resume-summary">
-        <h2>요약</h2>
-        <p>{resumeSummary[1]}</p>
-        <p>이전에는 공공·실시간 데이터를 수집·가공하고 REST API와 예측 결과 연동 기능을 개발했으며, Docker 기반 배포·운영도 담당했습니다.</p>
-      </section>
-
-      <section class="resume-experience resume-experience--current" aria-labelledby="resume-experience-title">
-        <h2 id="resume-experience-title">경력</h2>
-        <div class="resume-job resume-job--current">
-          <header><div><h3>{currentExperience.company}</h3><p>{currentExperience.role}</p></div><time>{currentExperience.period}</time></header>
-          <p class="job-context">{currentExperience.context}</p>
-          <ul>
-            {currentExperience.responsibilities.map((responsibility) => <li><strong>{responsibility.title}</strong><span>{responsibility.description}</span></li>)}
-          </ul>
-        </div>
-      </section>
-
       <aside class="resume-sidebar">
         <img src="/media/profile.png" alt="손찬양 프로필 사진" width="220" height="220" />
         <div class="resume-contact">
@@ -44,6 +27,26 @@ if (!currentExperience) {
           <a class="button button--secondary" href="/projects/">프로젝트 보기 <ArrowRight size={17} aria-hidden="true" /></a>
         </div>
       </aside>
+
+      <section class="resume-summary">
+        <h2>요약</h2>
+        <p class="summary-intro">{resumeIntro}</p>
+        <ul class="summary-highlights">
+          {resumeHighlights.map((item) => <li>{item}</li>)}
+        </ul>
+        <p class="summary-closing">{resumeClosing}</p>
+      </section>
+
+      <section class="resume-experience resume-experience--current" aria-labelledby="resume-experience-title">
+        <h2 id="resume-experience-title">경력</h2>
+        <div class="resume-job resume-job--current">
+          <header><div><h3>{currentExperience.company}</h3><p>{currentExperience.role}</p></div><time>{currentExperience.period}</time></header>
+          <p class="job-context">{currentExperience.context}</p>
+          <ul>
+            {currentExperience.responsibilities.map((responsibility) => <li><strong>{responsibility.title}</strong><span>{responsibility.description}</span></li>)}
+          </ul>
+        </div>
+      </section>
 
       <section class="resume-experience resume-experience--previous" aria-labelledby="resume-experience-title">
         {previousExperiences.map((experience) => (
@@ -92,6 +95,40 @@ if (!currentExperience) {
     padding: clamp(20px, 2.4vw, 28px);
   }
 
+  .resume-summary .summary-intro {
+    margin-top: 10px;
+    color: var(--ink);
+    font-size: var(--text-lede);
+    font-weight: 720;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .resume-summary .summary-highlights {
+    margin: 14px 0 0;
+    padding-left: 1.15em;
+    color: var(--ink-soft);
+    font-size: var(--text-body);
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .resume-summary .summary-highlights li {
+    min-width: 0;
+  }
+
+  .resume-summary .summary-highlights li + li {
+    margin-top: 0.35em;
+  }
+
+  .resume-summary .summary-closing {
+    margin-top: 14px;
+    color: var(--ink-soft);
+    font-size: var(--text-dense);
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
   .resume-sidebar {
     position: sticky;
     top: calc(var(--header-height) + 30px);
@@ -100,6 +137,7 @@ if (!currentExperience) {
     grid-row: 1 / span 5;
     gap: 20px;
     padding: 18px;
+    min-width: 0;
   }
 
   .resume-sidebar > img {
@@ -142,16 +180,6 @@ if (!currentExperience) {
   .resume-layout h2 {
     margin-bottom: 28px;
     font-size: var(--text-h2);
-  }
-
-  .resume-summary > p:not(.eyebrow) {
-    max-width: min(760px, 40ic);
-    color: var(--ink-soft);
-    font-size: var(--text-body);
-  }
-
-  .resume-summary > p + p {
-    margin-top: 14px;
   }
 
   .resume-experience--current {
@@ -209,19 +237,22 @@ if (!currentExperience) {
 
   .resume-job li {
     display: grid;
-    grid-template-columns: 150px 1fr;
+    grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
     gap: 18px;
     padding-left: 16px;
     border-left: 3px solid var(--blue);
+    min-width: 0;
   }
 
   .resume-job li strong {
     font-size: var(--text-dense);
+    overflow-wrap: anywhere;
   }
 
   .resume-job li span {
     color: var(--ink-soft);
     font-size: var(--text-dense);
+    overflow-wrap: anywhere;
   }
 
   .skill-groups {
@@ -231,10 +262,11 @@ if (!currentExperience) {
 
   .skill-groups > div {
     display: grid;
-    grid-template-columns: 150px 1fr;
+    grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
     gap: 18px;
     padding-block: 16px;
     border-top: 1px solid var(--line);
+    min-width: 0;
   }
 
   .skill-label {
@@ -272,7 +304,7 @@ if (!currentExperience) {
       grid-template-columns: 128px minmax(0, 1fr);
       gap: 14px 22px;
       align-items: start;
-      margin: 16px 0 46px;
+      margin: 0 0 34px;
     }
 
     .resume-sidebar > img {
@@ -284,10 +316,23 @@ if (!currentExperience) {
     .resume-contact,
     .button-stack {
       grid-column: 2;
+      min-width: 0;
     }
 
     .button-stack {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .resume-job li,
+    .skill-groups > div {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+
+    .resume-job header {
+      flex-direction: column;
+      align-items: start;
+      gap: 5px;
     }
 
     .resume-experience--previous {
@@ -309,7 +354,7 @@ if (!currentExperience) {
     .resume-sidebar {
       grid-template-columns: 88px minmax(0, 1fr);
       gap: 12px 16px;
-      margin-block: 10px 38px;
+      margin-block: 0 28px;
       padding: 14px;
     }
 
@@ -330,11 +375,13 @@ if (!currentExperience) {
 
     .button-stack {
       grid-column: 1 / -1;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr;
       gap: 7px;
     }
 
     .button-stack .button {
+      width: 100%;
+      min-width: 0;
       min-height: 44px;
       padding: 7px 9px;
       font-size: 16px;
@@ -349,7 +396,7 @@ if (!currentExperience) {
     }
 
     .resume-summary {
-      margin-bottom: 34px;
+      margin-bottom: 24px;
       padding: 18px;
     }
 
@@ -358,13 +405,10 @@ if (!currentExperience) {
       padding-block: 18px;
     }
 
-    .resume-job header {
-      gap: 12px;
-    }
-
     .job-context {
       margin-top: 10px;
       font-size: var(--text-dense);
+      overflow-wrap: anywhere;
     }
 
     .resume-job ul {
@@ -377,12 +421,6 @@ if (!currentExperience) {
       flex-direction: column;
     }
 
-    .resume-job li,
-    .skill-groups > div {
-      grid-template-columns: 1fr;
-      gap: 4px;
-    }
-
     .resume-job li {
       padding-left: 12px;
     }
@@ -393,12 +431,6 @@ if (!currentExperience) {
 
     .skill-groups > div {
       padding-block: 12px;
-    }
-
-    .resume-job header {
-      align-items: start;
-      flex-direction: column;
-      gap: 5px;
     }
   }
 

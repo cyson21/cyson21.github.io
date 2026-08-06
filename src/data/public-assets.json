@@ -48,10 +48,10 @@
     "output": "public/downloads/resume.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/print/",
-    "sha256": "1b27395af15ab4dbc70367ac5e7f485ed748ab09d74614e35aa67d4063a7e39a",
+    "sha256": "cd6e5b0c855a6973d75c6aac44427e15e70691f0cd7fb514a2468449b411495f",
     "owner": "Son Chanyang",
     "usage": "Public two-page resume download",
-    "approvedAt": "2026-07-22"
+    "approvedAt": "2026-08-05"
   },
   {
     "output": "public/icons/favicon.svg",

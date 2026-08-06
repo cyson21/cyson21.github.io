@@ -98,18 +98,34 @@ test('Korean interface labels use the text font rather than the code font', asyn
 test('experience and resume show the approved problem-solution evidence', async ({ page }) => {
   await page.goto('/experience/');
   await expect(page.getByRole('heading', { name: '주요 업무' })).toHaveCount(2);
-  await expect(page.getByRole('heading', { name: '상태 변경 충돌 방지' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '시간대 경계 알림 오류' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '조회·삭제 조건 일치' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'AWS SDK v2 전환' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'DB 테스트 표준화' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '이엠캐스트㈜' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'REST API 설계·개발·운영' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '운영 장애·데이터 오류 개선' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '데이터 접근 계층·정합성' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'S3 연동·배포 운영' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '통합 테스트·회귀 검증' })).toBeVisible();
+  const currentExperience = page.locator('.experience-entry').first();
+  await expect(currentExperience.getByRole('heading', { name: '이엠캐스트㈜' })).toBeVisible();
+  await expect(currentExperience.locator('.context')).toHaveText(
+    'Java·Spring Boot 기반 기업용 플랫폼의 REST API 설계·개발 및 운영을 담당했습니다.',
+  );
 
   await page.goto('/resume/');
-  await expect(page.locator('.resume-job').first()).toContainText('상태 변경 충돌 방지');
-  await expect(page.locator('.resume-job').first()).toContainText('시간대 경계 알림 오류');
-  await expect(page.locator('.resume-job').first()).toContainText('조회·삭제 조건 일치');
-  await expect(page.locator('.resume-job').first()).toContainText('AWS SDK v2 전환');
-  await expect(page.locator('.resume-job').first()).toContainText('DB 테스트 표준화');
+  await expect(page.locator('.summary-intro')).toHaveText('Java·Spring Boot 기반의 6년 차 백엔드 개발자입니다.');
+  await expect(page.locator('.summary-highlights li')).toHaveCount(6);
+  await expect(page.locator('.summary-highlights')).toContainText('기업용 플랫폼의 요구사항 분석, API 설계, 데이터 모델링');
+  await expect(page.locator('.summary-highlights')).toContainText('복잡한 상태 변경과 데이터 정합성 문제 분석 및 개선');
+  await expect(page.locator('.summary-highlights')).toContainText('운영 이슈 재현, 원인 분석, 수정, 회귀 테스트까지 전 과정 수행');
+  await expect(page.getByRole('heading', { name: '이엠캐스트㈜' })).toBeVisible();
+  const currentJob = page.locator('.resume-job--current');
+  await expect(currentJob).toContainText('REST API 설계·개발·운영');
+  await expect(currentJob).toContainText('운영 장애·데이터 오류 개선');
+  await expect(currentJob).toContainText('데이터 접근 계층·정합성');
+  await expect(currentJob).toContainText('S3 연동·배포 운영');
+  await expect(currentJob).toContainText('통합 테스트·회귀 검증');
+  await expect(currentJob.locator('.job-context')).toHaveText(
+    'Java·Spring Boot 기반 기업용 플랫폼의 REST API 설계·개발 및 운영을 담당했습니다.',
+  );
 });
 
 test('featured project cards follow the approved evidence hierarchy', async ({ page }) => {

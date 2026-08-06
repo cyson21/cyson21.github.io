@@ -1,5 +1,5 @@
 const publicResumeUrl = import.meta.env.PUBLIC_RESUME_URL?.trim() || '/downloads/resume.pdf';
-const siteUpdatedAt = '2026-07-22';
+const siteUpdatedAt = '2026-08-05';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -11,29 +11,29 @@ const experienceRecords = [
   {
     start: '2024-03',
     end: null,
-    company: '이엠캐스트(주)',
+    company: '이엠캐스트㈜',
     role: '백엔드 개발자 · 주임',
-    context: '기업용 플랫폼에서 요구사항을 API·데이터 모델로 설계하고, 운영 이슈의 재현·수정·회귀 검증까지 맡았습니다.',
+    context: 'Java·Spring Boot 기반 기업용 플랫폼의 REST API 설계·개발 및 운영을 담당했습니다.',
     responsibilities: [
       {
-        title: '상태 변경 충돌 방지',
-        description: '사용자가 화면을 연 뒤 저장하기 전에 상태가 바뀌면, 이전 상태를 기준으로 저장되어 진행 상태와 완료 여부가 어긋나는 문제가 있었습니다. 저장 직전에 최신 상태를 다시 검증해, 이미 상태가 변경된 건은 저장되지 않도록 수정했습니다.',
+        title: 'REST API 설계·개발·운영',
+        description: 'Java·Spring Boot 기반 기업용 플랫폼의 REST API 설계·개발 및 운영',
       },
       {
-        title: '시간대 경계 알림 오류',
-        description: 'UTC로 저장된 날짜를 KST 발송 일정으로 해석하는 날짜 경계에서 알림이 누락되거나 하루 늦게 발송되는 오류를 재현했습니다. 변환과 발송 규칙을 수정하고, 경계 조건을 회귀 테스트로 확인했습니다.',
+        title: '운영 장애·데이터 오류 개선',
+        description: '운영 장애와 데이터 오류의 원인 분석 및 API·DB 로직 개선',
       },
       {
-        title: '조회·삭제 조건 일치',
-        description: '같은 사용자 ID에 서로 다른 유형의 데이터가 연결될 때 일부 행이 누락되고 페이지 합계가 달라지는 원인을 확인했습니다. ID와 데이터 유형을 함께 비교하도록 QueryDSL 조회·삭제 조건을 통일하고 통합 테스트로 검증했습니다.',
+        title: '데이터 접근 계층·정합성',
+        description: 'JPA·QueryDSL·MySQL 기반 데이터 접근 계층 설계와 정합성 관리',
       },
       {
-        title: 'AWS SDK v2 전환',
-        description: 'S3 연동에 섞여 있던 구형 AWS SDK 의존성을 v2로 통일하고, 업로드·인증 구현의 기준을 정리했습니다. 구형 의존성 제거와 모듈 테스트·빌드 검증으로 전환 범위를 확인했습니다.',
+        title: 'S3 연동·배포 운영',
+        description: 'AWS S3 연동 모듈 개선 및 Docker 기반 배포·운영',
       },
       {
-        title: 'DB 테스트 표준화',
-        description: '테스트마다 반복되던 MySQL 컨테이너와 설정을 Testcontainers 기반 공통 구성으로 묶었습니다. QueryDSL 조회와 시간대 처리 로직을 실제 MySQL 조건에서 일관되게 반복 검증할 수 있게 했습니다.',
+        title: '통합 테스트·회귀 검증',
+        description: 'Testcontainers 기반 통합 테스트 환경 구성과 회귀 검증',
       },
     ],
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'AWS S3', 'JUnit', 'Testcontainers'],
@@ -43,37 +43,58 @@ const experienceRecords = [
     end: '2024-03',
     company: '주식회사 화이트스캔',
     role: '백엔드·데이터 개발자 · 연구원',
-    context: '공공·실시간 데이터의 수집·가공, REST API 개발, 예측 결과 연동과 Docker 기반 배포·운영을 담당했습니다.',
+    context: '공공·실시간 데이터 기반 서비스의 백엔드와 데이터 처리, 배포·운영을 담당했습니다.',
     responsibilities: [
       {
-        title: '데이터 수집·가공',
-        description: '공공·실시간 데이터를 수집·정제·저장하고 서로 다른 외부 API 형식을 내부 데이터 구조로 통일했습니다.',
+        title: '실시간 데이터 파이프라인',
+        description: '서울 실시간 도시데이터 Open API 수집·가공 파이프라인과 조회 API 구현',
       },
       {
-        title: '서비스 API 개발',
-        description: '수집 데이터와 예측 결과를 저장·조회하는 REST API와 서비스 연동 기능을 개발했습니다.',
+        title: '스키마·REST API 설계',
+        description: '서비스별 요구사항에 맞춘 MySQL·MongoDB 스키마 및 REST API 설계',
       },
       {
-        title: '배포·운영',
-        description: '수집기, API와 데이터 처리 작업을 컨테이너화하고 실행 환경과 데이터베이스 구성을 관리했습니다.',
+        title: '데이터 백엔드 구현',
+        description: 'Spring Boot·Django·FastAPI로 데이터 조회·저장 백엔드 기능 구현',
+      },
+      {
+        title: '시계열 예측 연동',
+        description: '시계열 예측 결과를 서비스 지표와 기능에 연동',
+      },
+      {
+        title: 'Docker 배포·운영',
+        description: '관련 서비스를 Docker 컨테이너로 배포·운영',
       },
     ],
     stack: ['Java', 'Spring Boot', 'Python', 'FastAPI', 'Django', 'MySQL', 'MongoDB', 'Docker'],
   },
 ] as const;
 
-export const resumeSummary = [
-  '기업용 플랫폼의 API와 이벤트 모듈을 Java·Spring Boot로 개발·운영해 온 5년 경력 백엔드 개발자입니다.',
-  '운영 오류를 재현해 상태 변경과 시간대 처리의 경계 규칙을 바로잡고, 회귀 테스트로 재발 경로를 관리해 왔습니다.',
+export const resumeIntro = 'Java·Spring Boot 기반의 6년 차 백엔드 개발자입니다.';
+
+export const resumeHighlights = [
+  '기업용 플랫폼의 요구사항 분석, API 설계, 데이터 모델링',
+  '복잡한 상태 변경과 데이터 정합성 문제 분석 및 개선',
+  '운영 이슈 재현, 원인 분석, 수정, 회귀 테스트까지 전 과정 수행',
+  '비즈니스 규칙 정비와 통합 테스트를 통한 운영 안정성 강화',
+  '공공·실시간 데이터 수집·가공 및 REST API 개발',
+  '시계열 예측 결과 연동과 Docker 기반 배포·운영',
 ] as const;
+
+export const resumeClosing =
+  '기능 구현에 그치지 않고, 운영 환경에서 발생하는 문제를 구조적으로 해결하고 재발을 방지하는 데 강점이 있습니다.';
+
+export const resumeSummary = [resumeIntro, resumeClosing] as const;
 
 export const profile = {
   name: '손찬양',
   englishName: 'Son Chanyang',
-  role: 'Java·Spring 백엔드 개발자',
-  statement: resumeSummary.join(' '),
+  role: 'Java · Spring Boot 백엔드 개발자',
+  subtitle: '6년 차 · API 개발·운영 · 데이터 정합성',
+  statement: resumeIntro,
   email: 'cyson21@kakao.com',
   github: 'https://github.com/cyson21',
+  portfolio: 'https://cyson21.github.io/',
   resumePath: publicResumeUrl,
   updatedAt: siteUpdatedAt,
 } as const;

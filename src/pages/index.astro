@@ -3,24 +3,31 @@ import { getCollection } from 'astro:content';
 import { ArrowRight, ArrowUpRight, Download, Mail } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectRow from '../components/ProjectRow.astro';
-import { experiences, profile } from '../data/site';
+import { experiences, profile, resumeClosing, resumeHighlights } from '../data/site';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const featured = projects.filter((project) => project.data.featured);
 ---
 
-<BaseLayout title="손찬양" description="Java·Spring 기반 기업용 플랫폼 API 개발·운영과 데이터 모델 설계, 테스트 경험을 정리한 백엔드 개발자 손찬양의 포트폴리오입니다.">
+<BaseLayout title="손찬양" description="Java · Spring Boot 기반의 6년 차 백엔드 개발자 손찬양의 포트폴리오입니다. API 개발·운영과 데이터 정합성 경험을 정리했습니다.">
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-copy">
         <div class="hero-person">
           <img src="/media/profile.png" alt="손찬양 프로필 사진" width="112" height="112" />
           <div>
-            <p class="hero-role">Java·Spring 백엔드 개발자</p>
+            <p class="hero-role">{profile.role}</p>
+            <p class="hero-subtitle">{profile.subtitle}</p>
           </div>
         </div>
         <h1>손찬양</h1>
-        <p class="hero-statement">{profile.statement}</p>
+        <div class="hero-lede">
+          <p class="hero-statement">{profile.statement}</p>
+          <ul class="hero-highlights">
+            {resumeHighlights.map((item) => <li>{item}</li>)}
+          </ul>
+          <p class="hero-closing">{resumeClosing}</p>
+        </div>
         <div class="button-row hero-actions">
           <a class="button" href="/portfolio/">통합 포트폴리오 HTML <ArrowRight size={18} aria-hidden="true" /></a>
           <a class="button" href="/resume/">웹 이력서 <ArrowRight size={18} aria-hidden="true" /></a>
@@ -132,24 +139,63 @@ const featured = projects.filter((project) => project.data.featured);
     font-weight: 780;
   }
 
+  .hero-subtitle {
+    color: var(--ink-soft);
+    font-size: var(--text-label);
+    font-weight: 680;
+  }
+
   .hero h1 {
     grid-area: name;
     font-size: var(--text-h1);
   }
 
-  .hero-statement {
+  .hero-lede {
     grid-area: statement;
-    max-width: min(760px, 40ic);
-    margin-top: 6px;
-    color: var(--ink-soft);
+    display: grid;
+    gap: 14px;
+    max-width: min(760px, 42ic);
+    min-width: 0;
+  }
+
+  .hero-statement {
+    margin: 0;
+    color: var(--ink);
     font-size: var(--text-lede);
-    font-weight: 580;
-    line-height: 1.6;
+    font-weight: 720;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-highlights {
+    margin: 0;
+    padding-left: 1.15em;
+    color: var(--ink-soft);
+    font-size: var(--text-body);
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-highlights li {
+    min-width: 0;
+  }
+
+  .hero-highlights li + li {
+    margin-top: 0.35em;
+  }
+
+  .hero-closing {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: var(--text-dense);
+    line-height: 1.55;
+    overflow-wrap: anywhere;
   }
 
   .hero-actions {
     grid-area: actions;
     margin-top: 4px;
+    min-width: 0;
   }
 
   .section-link {
@@ -179,23 +225,26 @@ const featured = projects.filter((project) => project.data.featured);
     gap: 24px;
     padding-block: 24px;
     border-bottom: 1px solid var(--line-strong);
-  }
-
-  .career-list time {
-    color: var(--ink-faint);
-    font-family: var(--mono);
-    font-size: var(--text-label);
+    min-width: 0;
   }
 
   .career-list div {
     display: grid;
     gap: 6px;
     margin-top: 0;
+    min-width: 0;
   }
 
   .career-list span,
   .career-list p {
     color: var(--ink-soft);
+    overflow-wrap: anywhere;
+  }
+
+  .career-list time {
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: var(--text-label);
   }
 
   .career-list span {
@@ -237,20 +286,31 @@ const featured = projects.filter((project) => project.data.featured);
     .hero-copy {
       display: block;
       max-width: 800px;
+      min-width: 0;
     }
 
     .hero-person {
       margin-bottom: 20px;
+      min-width: 0;
     }
 
-    .hero-statement {
+    .hero-person > div {
+      min-width: 0;
+    }
+
+    .hero-lede {
       margin-top: 20px;
+      max-width: none;
     }
 
     .hero-actions {
       margin-top: 26px;
     }
 
+    .career-list li {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
   }
 
   @media (max-width: 639px) {
@@ -262,6 +322,12 @@ const featured = projects.filter((project) => project.data.featured);
       margin-bottom: 14px;
     }
 
+    .hero-person img {
+      width: 66px;
+      height: 66px;
+      flex: 0 0 auto;
+    }
+
     .hero-actions {
       margin-top: 18px;
     }
@@ -269,19 +335,6 @@ const featured = projects.filter((project) => project.data.featured);
     .contact-inner {
       align-items: stretch;
       grid-template-columns: 1fr;
-    }
-
-  }
-
-  @media (max-width: 639px) {
-    .hero-person img {
-      width: 66px;
-      height: 66px;
-    }
-
-    .career-list li {
-      grid-template-columns: 1fr;
-      gap: 8px;
     }
 
     .career-list time {
