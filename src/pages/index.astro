@@ -16,7 +16,7 @@ const featured = projects.filter((project) => project.data.featured);
         <div class="hero-person">
           <img src="/media/profile.png" alt="손찬양 프로필 사진" width="112" height="112" />
           <div>
-            <p class="hero-role">{profile.role}</p>
+            <p class="hero-role"><span>자바 스프링부트</span><span>백엔드 개발자</span></p>
             <p class="hero-subtitle">{profile.subtitle}</p>
           </div>
         </div>
@@ -137,6 +137,10 @@ const featured = projects.filter((project) => project.data.featured);
     color: var(--blue);
     font-size: var(--text-dense);
     font-weight: 780;
+  }
+
+  .hero-role span {
+    display: block;
   }
 
   .hero-subtitle {
