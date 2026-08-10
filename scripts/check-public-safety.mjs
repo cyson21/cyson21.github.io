@@ -16,7 +16,7 @@ const publicRoot = resolve(root, 'public');
 const scanRoots = [resolve(root, 'src/content'), resolve(root, 'src/data'), publicRoot, dist];
 const textExtensions = new Set(['.html', '.css', '.js', '.mjs', '.ts', '.tsx', '.json', '.md', '.txt', '.xml', '.svg', '.map']);
 const approvedBinaryExtensions = new Set(['.gif', '.ico', '.jpeg', '.jpg', '.pdf', '.png', '.webp']);
-const allowedEmails = new Set(['cyson21@kakao.com']);
+const allowedEmails = new Set(['cyson21@gmail.com']);
 const manifestFields = new Set(['output', 'sourceProject', 'sourcePath', 'sha256', 'owner', 'usage', 'approvedAt']);
 const findings = [];
 
