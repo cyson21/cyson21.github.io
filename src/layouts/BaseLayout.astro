@@ -11,11 +11,12 @@ interface Props {
   image?: string | undefined;
   imageAlt?: string;
   article?: boolean;
+  mainClass?: string;
   updatedAt?: Date;
   robots?: 'noindex,nofollow' | 'noindex,follow';
 }
 
-const { title, description, image, imageAlt = '손찬양 백엔드 개발자 포트폴리오', article = false, updatedAt, robots } = Astro.props;
+const { title, description, image, imageAlt = '손찬양 백엔드 개발자 포트폴리오', article = false, mainClass = '', updatedAt, robots } = Astro.props;
 const siteUrl = getReleaseOrigin(import.meta.env);
 const isPublicRelease = Boolean(siteUrl);
 const robotsContent = robots ?? (isPublicRelease ? 'index,follow,max-image-preview:large' : 'noindex,nofollow');
@@ -90,10 +91,10 @@ const structuredData = title === '손찬양'
     {imageUrl && <meta name="twitter:image:alt" content={socialImageAlt} />}
     {structuredData && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
   </head>
-  <body>
+  <body class:list={['site-body', mainClass && `${mainClass}-body`]}>
     <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
     <Header currentPath={Astro.url.pathname} />
-    <main id="main-content" class="page-main" tabindex="-1">
+    <main id="main-content" class:list={['page-main', mainClass]} tabindex="-1">
       <slot />
     </main>
     <Footer />

@@ -288,47 +288,13 @@ for (const theme of ['b', 'c'] as const) {
 
 for (const theme of ['b', 'c'] as const) {
   for (const viewport of [...canonicalViewports, ...boundaryViewports]) {
-    test(`theme ${theme.toUpperCase()} keeps one divider boundary at ${viewport.width}px`, async ({ page }) => {
+    test(`theme ${theme.toUpperCase()} keeps the home clear and detail boundaries at ${viewport.width}px`, async ({ page }) => {
       await page.setViewportSize(viewport);
 
       await gotoCanonicalRoute(page, '/');
       await applyPortfolioTheme(page, theme);
-      const homeHierarchy = await page.evaluate(() => {
-        const heading = document.querySelector<HTMLElement>('#featured-projects .section-heading');
-        const headingTitle = document.querySelector<HTMLElement>('#featured-projects .section-heading h2');
-        const experienceTeaser = document.querySelector<HTMLElement>('.experience-teaser');
-        const projectTeaserList = document.querySelector<HTMLElement>('#featured-projects .project-teaser-list');
-        const projectTeasers = Array.from(document.querySelectorAll<HTMLElement>('#featured-projects .project-teaser'));
-        const sectionLink = document.querySelector<HTMLElement>('.section-link');
-        const projectLink = document.querySelector<HTMLElement>('.project-teaser a');
-        if (!heading || !headingTitle || !experienceTeaser || !projectTeaserList || projectTeasers.length < 2 || !sectionLink || !projectLink) {
-          throw new Error('Home hierarchy must render');
-        }
-        const style = (element: HTMLElement) => getComputedStyle(element);
-        return {
-          headingTop: Number.parseFloat(style(heading).borderTopWidth),
-          headingAccent: Math.max(
-            Number.parseFloat(style(headingTitle).borderBottomWidth),
-            Number.parseFloat(getComputedStyle(headingTitle, '::after').height) || 0,
-          ),
-          experienceTop: Number.parseFloat(style(experienceTeaser).borderTopWidth),
-          projectListTop: Number.parseFloat(style(projectTeaserList).borderTopWidth),
-          lastProjectBottom: Number.parseFloat(style(projectTeasers.at(-1)!).borderBottomWidth),
-          sectionLinkDecoration: style(sectionLink).textDecorationLine,
-          sectionLinkWeight: Number.parseFloat(style(sectionLink).fontWeight),
-          projectLinkDecoration: style(projectLink).textDecorationLine,
-          projectLinkWeight: Number.parseFloat(style(projectLink).fontWeight),
-        };
-      });
-      expect(homeHierarchy.headingTop).toBe(0);
-      expect(homeHierarchy.headingAccent).toBeGreaterThan(0);
-      expect(homeHierarchy.experienceTop).toBeGreaterThan(0);
-      expect(homeHierarchy.projectListTop).toBeGreaterThan(0);
-      expect(homeHierarchy.lastProjectBottom).toBeGreaterThan(0);
-      expect(homeHierarchy.sectionLinkDecoration).toBe('none');
-      expect(homeHierarchy.sectionLinkWeight).toBeLessThanOrEqual(650);
-      expect(homeHierarchy.projectLinkDecoration).toBe('none');
-      expect(homeHierarchy.projectLinkWeight).toBeLessThanOrEqual(650);
+      await expect(page.locator('[aria-labelledby="experience-title"]')).toHaveCount(0);
+      await expect(page.locator('#featured-projects')).toHaveCount(0);
 
       await gotoCanonicalRoute(page, '/projects/');
       await applyPortfolioTheme(page, theme);

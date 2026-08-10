@@ -1,15 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import { ArrowRight, ArrowUpRight, Download } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { careerPeriod, profile, resumeClosing, resumeHighlights } from '../data/site';
-
-const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const featured = projects.filter((project) => project.data.featured);
-const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as const;
+import { profile, resumeClosing, resumeHighlights } from '../data/site';
 ---
 
-<BaseLayout title="손찬양" description="Java · Spring Boot 기반의 6년 차 백엔드 개발자 손찬양의 포트폴리오입니다. API 개발·운영과 데이터 정합성 경험을 정리했습니다.">
+<BaseLayout mainClass="home-main" title="손찬양" description="Java · Spring Boot 기반의 6년 차 백엔드 개발자 손찬양의 포트폴리오입니다. API 개발·운영과 데이터 정합성 경험을 정리했습니다.">
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-copy">
@@ -40,49 +35,6 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
     </div>
   </section>
 
-  <section class="section section--surface" aria-labelledby="experience-title">
-    <div class="container">
-      <div class="section-heading experience-heading">
-        <div>
-          <h2 id="experience-title">경력</h2>
-          <p class="section-deck">2021년부터 공공·실시간 데이터 서비스와 기업용 플랫폼의 백엔드를 개발했습니다.</p>
-        </div>
-      </div>
-      <div class="experience-teaser">
-        <div>
-          <strong>{careerPeriod}</strong>
-          <span>기업용 플랫폼·공공 데이터 서비스 백엔드</span>
-        </div>
-        <a class="section-link" href="/experience/">경력 상세 보기 <ArrowRight size={18} aria-hidden="true" /></a>
-      </div>
-    </div>
-  </section>
-
-  <section id="featured-projects" class="section" aria-labelledby="featured-title">
-    <div class="container">
-      <div class="section-heading featured-heading">
-        <div>
-          <h2 id="featured-title">대표 프로젝트</h2>
-          <p class="section-deck">실패 조건과 기술 선택, 확인 결과는 상세 페이지에서 확인할 수 있습니다.</p>
-        </div>
-        <a class="section-link" href="/projects/">6개 프로젝트 전체 보기 <ArrowRight size={18} aria-hidden="true" /></a>
-      </div>
-      <div class="project-teaser-list">
-        {featured.map((project) => (
-          <article class="project-teaser">
-            <a class="project-teaser-link" href={`/projects/${project.id}/`} aria-label={`${project.data.name} 프로젝트 상세 보기`}>
-              <span class="domain">{domainLabels[project.data.domain]}</span>
-              <span class="project-teaser-copy">
-                <strong>{project.data.name}</strong>
-                <span class="project-teaser-summary">{project.data.summary}</span>
-              </span>
-              <span class="project-teaser-action">상세 보기 <ArrowRight size={17} aria-hidden="true" /></span>
-            </a>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
@@ -200,102 +152,6 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
     min-width: 0;
   }
 
-  .section-link {
-    display: inline-flex;
-    min-height: 44px;
-    align-items: center;
-    gap: 6px;
-    margin-top: 16px;
-    font-size: 16px;
-    font-weight: 760;
-  }
-
-  .experience-heading {
-    margin-bottom: 20px;
-    padding-inline-start: 12px;
-  }
-
-  .experience-teaser {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 18px 12px;
-    border-block: 1px solid var(--line-strong);
-  }
-
-  .experience-teaser > div {
-    display: grid;
-    gap: 4px;
-  }
-
-  .experience-teaser strong {
-    color: var(--ink);
-    font-family: var(--mono);
-    font-size: var(--text-label);
-  }
-
-  .experience-teaser span {
-    color: var(--ink-soft);
-    font-size: var(--text-dense);
-  }
-
-  .featured-heading {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 20px;
-    padding-inline-start: 12px;
-  }
-
-  .project-teaser-list {
-    margin: 0;
-    padding-inline-start: 12px;
-    border-top: 1px solid var(--line-strong);
-  }
-
-  .project-teaser {
-    border-bottom: 1px solid var(--line-strong);
-  }
-
-  .project-teaser-link {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: 18px;
-    min-height: 88px;
-    align-items: center;
-    padding-block: 16px;
-    color: var(--ink);
-    text-decoration: none;
-  }
-
-  .project-teaser-copy {
-    display: grid;
-    gap: 3px;
-    min-width: 0;
-  }
-
-  .project-teaser-copy strong {
-    font-size: var(--text-h3);
-  }
-
-  .project-teaser-summary {
-    color: var(--ink-soft);
-    font-size: var(--text-dense);
-    overflow-wrap: anywhere;
-  }
-
-  .project-teaser-action {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    color: var(--blue);
-    font-size: var(--text-label);
-    font-weight: 760;
-    white-space: nowrap;
-  }
-
   @media (max-width: 959px) {
     .hero-copy {
       display: block;
@@ -324,20 +180,6 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
       margin-top: 26px;
     }
 
-    .featured-heading {
-      align-items: start;
-      display: block;
-    }
-
-    .featured-heading .section-link {
-      margin-top: 8px;
-    }
-
-    .experience-teaser {
-      align-items: start;
-      display: grid;
-      gap: 8px;
-    }
   }
 
   @media (max-width: 639px) {
@@ -359,12 +201,5 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
       margin-top: 18px;
     }
 
-    .project-teaser-link {
-      grid-template-columns: auto minmax(0, 1fr);
-    }
-
-    .project-teaser-action {
-      grid-column: 2;
-    }
   }
 </style>
