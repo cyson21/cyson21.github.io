@@ -278,7 +278,10 @@ for (const theme of ['b', 'c'] as const) {
       expect(layout.precedesPrevious, 'CTA must precede previous experience in DOM order').toBeTruthy();
 
       if (viewport.width <= 959) {
-        // Approved mobile order: sidebar → summary → current → previous (single column).
+        // Mobile order: sidebar → summary → current → previous (single column).
+        // Allowed by hub UI rule (2026-08-10): sidebar may precede summary when
+        // summary top < viewport height at 390x844 and 320x800.
+        // Source: side-projects/docs/standards/resume-portfolio-ui-design-rules.md
         expect(layout.sidebar.bottom).toBeLessThanOrEqual(layout.summary.top + 1);
         expect(layout.summary.bottom).toBeLessThanOrEqual(layout.current.top + 1);
         expect(layout.current.bottom).toBeLessThanOrEqual(layout.previous.top + 1);
