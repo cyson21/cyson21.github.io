@@ -93,7 +93,7 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
   .project-title-line {
     display: flex;
     align-items: start;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 20px;
   }
 
@@ -116,7 +116,8 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
     display: flex;
     flex: 0 0 auto;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    order: -1;
+    justify-content: flex-start;
     gap: 6px;
   }
 

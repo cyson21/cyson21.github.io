@@ -175,6 +175,10 @@ html[data-theme="b"] .hero-highlights {
   color: #e3ebef;
 }
 
+html[data-theme="b"] .hero-closing {
+  color: #d7e0e4;
+}
+
 html[data-theme="b"] .hero .button {
   border-color: var(--amber);
   background: var(--amber);
