@@ -143,13 +143,16 @@ test('resume route redirects to the unified experience page', async ({ page }) =
   }
 });
 
-test('featured project teasers keep the home page focused on detail routes', async ({ page }) => {
+test('home omits the temporary sections and keeps detail routes in the header', async ({ page, isMobile }) => {
   await page.goto('/');
-  const featuredProjects = page.locator('#featured-projects .project-teaser');
-  await expect(featuredProjects).toHaveCount(3);
-  await expect(featuredProjects.locator('.project-teaser-summary')).toHaveCount(3);
-  await expect(featuredProjects.locator('.project-card-evidence')).toHaveCount(0);
-  await expect(featuredProjects.getByRole('link', { name: /프로젝트 상세 보기/ })).toHaveCount(3);
+  await expect(page.locator('[aria-labelledby="experience-title"]')).toHaveCount(0);
+  await expect(page.locator('#featured-projects')).toHaveCount(0);
+  if (isMobile) {
+    await page.getByRole('button', { name: '탐색 메뉴 열기' }).click();
+  }
+  const navigation = page.getByRole('navigation', { name: isMobile ? '모바일 탐색' : '주요 탐색' });
+  await expect(navigation.getByRole('link', { name: '프로젝트' })).toHaveAttribute('href', '/projects/');
+  await expect(navigation.getByRole('link', { name: '경력·이력서' })).toHaveAttribute('href', '/experience/');
 });
 
 test('projects page heading levels do not skip from h1 to h3', async ({ page }) => {

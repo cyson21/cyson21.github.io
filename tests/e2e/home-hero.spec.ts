@@ -25,35 +25,43 @@ test('home layout keeps the name below the profile and makes the dark-theme high
   expect(highlightsColor).toBe('rgb(227, 235, 239)');
 });
 
-test('home experience and project teasers route to their detail pages', async ({ page }) => {
+test('home omits the temporary career and project sections while keeping detail routes visible', async ({ page }) => {
   await page.setViewportSize({ width: 1083, height: 1195 });
   await page.goto('/');
 
-  const containerLeft = await page.locator('.experience-heading').locator('..').evaluate((element) => element.getBoundingClientRect().left);
-  const headingLeft = await page.locator('.experience-heading h2').evaluate((element) => element.getBoundingClientRect().left);
-  expect(headingLeft - containerLeft).toBeGreaterThanOrEqual(8);
-  await expect(page.locator('.career-list')).toHaveCount(0);
-  await expect(page.locator('.experience-teaser')).toContainText('2021.07 → 현재');
-  await expect(page.locator('.experience-teaser .section-link')).toHaveAttribute('href', '/experience/');
-
-  const projectTeasers = page.locator('.project-teaser');
-  await expect(projectTeasers).toHaveCount(3);
-  await expect(projectTeasers.locator('.project-teaser-summary')).toHaveCount(3);
-  await expect(page.locator('.project-card-evidence')).toHaveCount(0);
-  await expect(projectTeasers.getByRole('link', { name: /프로젝트 상세 보기/ })).toHaveCount(3);
+  await expect(page.locator('[aria-labelledby="experience-title"]')).toHaveCount(0);
+  await expect(page.locator('#featured-projects')).toHaveCount(0);
+  await expect(page.getByRole('navigation', { name: '주요 탐색' }).getByRole('link', { name: '프로젝트' })).toHaveAttribute('href', '/projects/');
+  await expect(page.getByRole('navigation', { name: '주요 탐색' }).getByRole('link', { name: '경력·이력서' })).toHaveAttribute('href', '/experience/');
 });
 
-test('home feedback keeps supporting copy readable and groups project context below the heading', async ({ page }) => {
+test('home keeps supporting copy readable without the temporary sections', async ({ page }) => {
   await page.setViewportSize({ width: 1083, height: 1195 });
   await page.goto('/');
 
   const closingColor = await page.locator('.hero-closing').evaluate((element) => getComputedStyle(element).color);
   expect(closingColor).toBe('rgb(215, 224, 228)');
 
-  await expect(page.locator('.featured-heading .section-link')).toHaveAttribute('href', '/projects/');
-
   await expect(page.locator('.contact-band')).toHaveCount(0);
-  await expect(page.locator('.project-teaser').first()).toContainText('StockRush');
+});
+
+test('home does not reserve empty main-space after the hero', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/');
+
+  const heights = await page.evaluate(() => ({
+    main: document.querySelector('main')?.getBoundingClientRect().height ?? 0,
+    hero: document.querySelector('.hero')?.getBoundingClientRect().height ?? 0,
+  }));
+  expect(heights.main - heights.hero).toBeLessThanOrEqual(2);
+});
+
+test('home footer fills the remaining viewport after the hero', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/');
+
+  const footerBottom = await page.locator('.site-footer').evaluate((element) => element.getBoundingClientRect().bottom);
+  expect(footerBottom).toBeGreaterThanOrEqual(999);
 });
 
 test('footer avoids repeating the profile identity and aligns contact content to the left', async ({ page }) => {

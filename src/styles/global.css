@@ -130,6 +130,24 @@ textarea {
   min-height: calc(100vh - var(--header-height));
 }
 
+.page-main.home-main {
+  min-height: 0;
+}
+
+body.home-main-body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+body.home-main-body .page-main {
+  flex: 0 0 auto;
+}
+
+body.home-main-body .site-footer {
+  flex: 1 0 auto;
+}
+
 .section {
   padding-block: 64px;
 }
