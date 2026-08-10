@@ -25,6 +25,14 @@ test('home layout keeps the name below the profile and makes the dark-theme high
   expect(highlightsColor).toBe('rgb(227, 235, 239)');
 });
 
+test('home hero subtitle stays readable against the dark theme', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/');
+
+  const subtitleColor = await page.locator('.hero-subtitle').evaluate((element) => getComputedStyle(element).color);
+  expect(subtitleColor).toBe('rgb(227, 235, 239)');
+});
+
 test('home omits the temporary career and project sections while keeping detail routes visible', async ({ page }) => {
   await page.setViewportSize({ width: 1083, height: 1195 });
   await page.goto('/');

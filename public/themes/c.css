@@ -145,6 +145,10 @@ html[data-theme="c"] .hero-role {
   letter-spacing: -0.018em;
 }
 
+html[data-theme="c"] .hero-subtitle {
+  color: #3f4d48;
+}
+
 html[data-theme="c"] h1,
 html[data-theme="c"] h2,
 html[data-theme="c"] h3,

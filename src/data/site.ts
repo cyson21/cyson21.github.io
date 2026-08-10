@@ -92,7 +92,7 @@ export const profile = {
   role: 'Java · Spring Boot 백엔드 개발자',
   subtitle: '6년 차 · API 개발·운영 · 데이터 정합성',
   statement: resumeIntro,
-  email: 'cyson21@kakao.com',
+  email: 'cyson21@gmail.com',
   github: 'https://github.com/cyson21',
   portfolio: 'https://cyson21.github.io/',
   resumePath: publicResumeUrl,
