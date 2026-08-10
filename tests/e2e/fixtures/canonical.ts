@@ -44,6 +44,7 @@ export const visualViewports = [
   canonicalViewports[0],
   canonicalViewports[1],
   canonicalViewports[2],
+  canonicalViewports[3],
   canonicalViewports[4],
 ] as const;
 
