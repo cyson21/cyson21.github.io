@@ -13,14 +13,16 @@ const featured = projects.filter((project) => project.data.featured);
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-copy">
-        <div class="hero-person">
-          <img src="/media/profile.png" alt="손찬양 프로필 사진" width="112" height="112" />
-          <div>
-            <p class="hero-role">{profile.role}</p>
-            <p class="hero-subtitle">{profile.subtitle}</p>
+        <div class="hero-intro">
+          <div class="hero-person">
+            <img src="/media/profile.png" alt="손찬양 프로필 사진" width="112" height="112" />
+            <div>
+              <p class="hero-role"><span>자바 스프링부트</span><span>백엔드 개발자</span></p>
+              <p class="hero-subtitle">{profile.subtitle}</p>
+            </div>
           </div>
+          <h1>손찬양</h1>
         </div>
-        <h1>손찬양</h1>
         <div class="hero-lede">
           <p class="hero-statement">{profile.statement}</p>
           <ul class="hero-highlights">
@@ -108,16 +110,22 @@ const featured = projects.filter((project) => project.data.featured);
     max-width: 1080px;
     min-width: 0;
     grid-template-areas:
-      "person statement"
-      "name statement"
+      "intro statement"
       ". actions";
     grid-template-columns: minmax(270px, 0.72fr) minmax(0, 1.28fr);
     gap: 16px 64px;
     align-items: start;
   }
 
+  .hero-intro {
+    display: grid;
+    grid-area: intro;
+    gap: 16px;
+    align-content: start;
+    min-width: 0;
+  }
+
   .hero-person {
-    grid-area: person;
     display: flex;
     align-items: center;
     gap: 18px;
@@ -139,6 +147,10 @@ const featured = projects.filter((project) => project.data.featured);
     font-weight: 780;
   }
 
+  .hero-role span {
+    display: block;
+  }
+
   .hero-subtitle {
     color: var(--ink-soft);
     font-size: var(--text-label);
@@ -146,7 +158,6 @@ const featured = projects.filter((project) => project.data.featured);
   }
 
   .hero h1 {
-    grid-area: name;
     font-size: var(--text-h1);
   }
 
@@ -210,11 +221,12 @@ const featured = projects.filter((project) => project.data.featured);
 
   .experience-heading {
     margin-bottom: 28px;
+    padding-inline-start: 12px;
   }
 
   .career-list {
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 12px;
     border-top: 1px solid var(--line-strong);
     list-style: none;
   }
@@ -289,8 +301,11 @@ const featured = projects.filter((project) => project.data.featured);
       min-width: 0;
     }
 
+    .hero-intro {
+      gap: 14px;
+    }
+
     .hero-person {
-      margin-bottom: 20px;
       min-width: 0;
     }
 
@@ -319,7 +334,7 @@ const featured = projects.filter((project) => project.data.featured);
     }
 
     .hero-person {
-      margin-bottom: 14px;
+      gap: 12px;
     }
 
     .hero-person img {

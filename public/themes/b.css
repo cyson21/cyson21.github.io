@@ -152,7 +152,7 @@ html[data-theme="b"] .hero-person img {
   border: 2px solid var(--amber);
   border-radius: 3px;
   filter: grayscale(20%) contrast(1.08);
-  box-shadow: 7px 7px 0 var(--blue);
+  box-shadow: none;
 }
 
 html[data-theme="b"] .hero-role {
@@ -169,6 +169,10 @@ html[data-theme="b"] .hero h1 {
 
 html[data-theme="b"] .hero-statement {
   color: #d7e0e4;
+}
+
+html[data-theme="b"] .hero-highlights {
+  color: #e3ebef;
 }
 
 html[data-theme="b"] .hero .button {

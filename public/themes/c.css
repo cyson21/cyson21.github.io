@@ -136,9 +136,7 @@ html[data-theme="c"] .hero-inner {
 html[data-theme="c"] .hero-person img {
   border: 5px solid rgba(251, 252, 250, 0.92);
   outline: 1px solid var(--line);
-  box-shadow:
-    0 14px 30px rgba(49, 43, 51, 0.15),
-    0 0 0 7px rgba(112, 65, 99, 0.04);
+  box-shadow: none;
   filter: grayscale(14%) saturate(86%);
 }
 
@@ -161,6 +159,10 @@ html[data-theme="c"] .hero-statement,
 html[data-theme="c"] .lede,
 html[data-theme="c"] .section-deck {
   letter-spacing: -0.022em;
+}
+
+html[data-theme="c"] .hero-highlights {
+  color: #3f4d48;
 }
 
 html[data-theme="c"] .section--surface {
