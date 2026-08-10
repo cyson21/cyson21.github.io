@@ -8,8 +8,7 @@ interface Props {
 const { currentPath } = Astro.props;
 const links = [
   { href: '/projects/', label: '프로젝트' },
-  { href: '/experience/', label: '경력' },
-  { href: '/resume/', label: '이력서' },
+  { href: '/experience/', label: '경력·이력서' },
 ];
 const isActive = (href: string) => currentPath === href || (href !== '/' && currentPath.startsWith(href));
 ---

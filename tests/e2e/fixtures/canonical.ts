@@ -6,7 +6,6 @@ export const canonicalRoutes = [
   { id: 'project-stockrush', path: '/projects/stockrush/' },
   { id: 'project-enterprise-policy-rag', path: '/projects/enterprise-policy-rag/' },
   { id: 'experience', path: '/experience/' },
-  { id: 'resume', path: '/resume/' },
 ] as const;
 
 export const supplementalAuditRoutes = [
@@ -36,7 +35,6 @@ export const visualAuditRoutes = [
   canonicalRoutes[1],
   canonicalRoutes[2],
   canonicalRoutes[4],
-  canonicalRoutes[5],
   supplementalAuditRoutes[5],
 ] as const;
 

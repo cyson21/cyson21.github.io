@@ -10,7 +10,6 @@ const routes = [
   '/projects/cdc-data-platform/',
   '/projects/fashion-personalization-platform/',
   '/experience/',
-  '/resume/',
 ];
 const deprecatedLabels = [
   '최근 수정',
@@ -95,8 +94,14 @@ test('Korean interface labels use the text font rather than the code font', asyn
   ]);
 });
 
-test('experience and resume show the approved problem-solution evidence', async ({ page }) => {
+test('experience page unifies the résumé summary and career evidence', async ({ page }) => {
   await page.goto('/experience/');
+  await expect(page.getByRole('heading', { name: '경력·이력서' })).toBeVisible();
+  await expect(page.locator('.resume-overview .summary-intro')).toHaveText('Java·Spring Boot 기반의 6년 차 백엔드 개발자입니다.');
+  await expect(page.locator('.resume-overview .summary-highlights li')).toHaveCount(6);
+  await expect(page.locator('.resume-overview .summary-highlights')).toContainText('기업용 플랫폼의 요구사항 분석, API 설계, 데이터 모델링');
+  await expect(page.locator('.resume-overview .summary-highlights')).toContainText('복잡한 상태 변경과 데이터 정합성 문제 분석 및 개선');
+  await expect(page.locator('.resume-overview .summary-highlights')).toContainText('운영 이슈 재현, 원인 분석, 수정, 회귀 테스트까지 전 과정 수행');
   await expect(page.getByRole('heading', { name: '주요 업무' })).toHaveCount(2);
   await expect(page.getByRole('heading', { name: '이엠캐스트(주)' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'REST API 설계·개발·운영' })).toBeVisible();
@@ -109,23 +114,21 @@ test('experience and resume show the approved problem-solution evidence', async 
   await expect(currentExperience.locator('.context')).toHaveText(
     'Java·Spring Boot 기반 기업용 플랫폼의 REST API 설계·개발 및 운영을 담당했습니다.',
   );
+  await expect(page.locator('.experience-support .skill-groups')).toBeVisible();
+  await expect(page.getByRole('heading', { name: '학력' })).toBeVisible();
+});
 
+test('resume route redirects to the unified experience page', async ({ page }) => {
   await page.goto('/resume/');
-  await expect(page.locator('.summary-intro')).toHaveText('Java·Spring Boot 기반의 6년 차 백엔드 개발자입니다.');
-  await expect(page.locator('.summary-highlights li')).toHaveCount(6);
-  await expect(page.locator('.summary-highlights')).toContainText('기업용 플랫폼의 요구사항 분석, API 설계, 데이터 모델링');
-  await expect(page.locator('.summary-highlights')).toContainText('복잡한 상태 변경과 데이터 정합성 문제 분석 및 개선');
-  await expect(page.locator('.summary-highlights')).toContainText('운영 이슈 재현, 원인 분석, 수정, 회귀 테스트까지 전 과정 수행');
-  await expect(page.getByRole('heading', { name: '이엠캐스트(주)' })).toBeVisible();
-  const currentJob = page.locator('.resume-job--current');
-  await expect(currentJob).toContainText('REST API 설계·개발·운영');
-  await expect(currentJob).toContainText('운영 장애·데이터 오류 개선');
-  await expect(currentJob).toContainText('데이터 접근 계층·정합성');
-  await expect(currentJob).toContainText('S3 연동·배포 운영');
-  await expect(currentJob).toContainText('통합 테스트·회귀 검증');
-  await expect(currentJob.locator('.job-context')).toHaveText(
-    'Java·Spring Boot 기반 기업용 플랫폼의 REST API 설계·개발 및 운영을 담당했습니다.',
-  );
+  await page.waitForTimeout(250);
+  const path = new URL(page.url()).pathname;
+  if (path === '/resume/') {
+    await expect(page.locator('meta[http-equiv="refresh"]')).toHaveAttribute('content', '0;url=/experience/');
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', '/experience/');
+  } else {
+    expect(path).toBe('/experience/');
+    await expect(page.getByRole('heading', { name: '경력·이력서' })).toBeVisible();
+  }
 });
 
 test('featured project cards follow the approved evidence hierarchy', async ({ page }) => {

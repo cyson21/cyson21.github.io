@@ -671,13 +671,25 @@ html[data-theme="b"] .resume-section h2::after {
   content: "";
 }
 
+html[data-theme="b"] .experience-section .resume-overview h2,
+html[data-theme="b"] .experience-section .experience-entry h2,
+html[data-theme="b"] .experience-section .experience-support-panel h2 {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+html[data-theme="b"] .experience-section .resume-overview h2::after,
+html[data-theme="b"] .experience-section .experience-entry h2::after,
+html[data-theme="b"] .experience-section .experience-support-panel h2::after {
+  display: none;
+}
+
 html[data-theme="b"] .signal,
 html[data-theme="b"] .decision-item,
 html[data-theme="b"] .scope-grid > div,
 html[data-theme="b"] .project-resources,
 html[data-theme="b"] .code-panel,
 html[data-theme="b"] .evidence,
-html[data-theme="b"] .experience-entry,
 html[data-theme="b"] .resume-job,
 html[data-theme="b"] .resume-summary {
   border-radius: 2px;

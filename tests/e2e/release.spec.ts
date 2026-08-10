@@ -20,10 +20,10 @@ test('release robots and sitemap expose only public routes', async ({ request })
   const body = await sitemap.text();
   const locations = Array.from(body.matchAll(/<loc>([^<]+)<\/loc>/g))
     .flatMap((match) => match[1] ? [match[1]] : []);
-  expect(locations).toHaveLength(11);
+  expect(locations).toHaveLength(10);
   expect(locations.every((location) => location.startsWith(`${releaseOrigin}/`))).toBeTruthy();
   expect(locations).toContain(`${releaseOrigin}/portfolio/`);
-  expect(locations).toContain(`${releaseOrigin}/resume/`);
+  expect(locations).toContain(`${releaseOrigin}/experience/`);
   expect(body).not.toContain('/resume/print/');
   expect(body).not.toContain('/404');
 });

@@ -560,13 +560,24 @@ html[data-theme="c"] .resume-section h2::after {
   content: "";
 }
 
+html[data-theme="c"] .experience-section .resume-overview h2,
+html[data-theme="c"] .experience-section .experience-entry h2,
+html[data-theme="c"] .experience-section .experience-support-panel h2 {
+  padding-bottom: 0;
+}
+
+html[data-theme="c"] .experience-section .resume-overview h2::after,
+html[data-theme="c"] .experience-section .experience-entry h2::after,
+html[data-theme="c"] .experience-section .experience-support-panel h2::after {
+  display: none;
+}
+
 html[data-theme="c"] .signal,
 html[data-theme="c"] .decision-item,
 html[data-theme="c"] .scope-grid > div,
 html[data-theme="c"] .project-resources,
 html[data-theme="c"] .code-panel,
 html[data-theme="c"] .evidence,
-html[data-theme="c"] .experience-entry,
 html[data-theme="c"] .resume-job,
 html[data-theme="c"] .resume-summary {
   border-radius: 14px;
