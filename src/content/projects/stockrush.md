@@ -5,7 +5,7 @@ publicationState: public
 name: StockRush
 domain: Backend
 eyebrow: 이벤트 기반 커머스
-summary: 주문·재고·결제가 서로 다른 속도로 처리되는 상황을 전제로 설계했습니다. Saga와 Outbox로 부분 실패 뒤의 상태 수렴 경로를 구현했습니다.
+summary: 주문·재고·결제를 함께 처리하는 쇼핑몰 백엔드입니다. 한 단계가 실패해도 주문 상태가 꼬이지 않도록 Saga와 Outbox로 복구 흐름을 구현했습니다.
 cardEvidence:
   implementation: 주문 서비스가 상태 전이를 조율하고, DB 커밋과 이벤트 발행 사이의 실패는 Outbox 기록으로 남깁니다.
   result: 중복 이벤트는 후속 처리를 늘리지 않고, 취소 뒤 도착한 결제 승인은 종료 상태 조건에서 거절됩니다.
