@@ -11,7 +11,7 @@ const experienceRecords = [
   {
     start: '2024-03',
     end: null,
-    company: '이엠캐스트㈜',
+    company: '이엠캐스트(주)',
     role: '백엔드 개발자 · 주임',
     context: 'Java·Spring Boot 기반 기업용 플랫폼의 REST API 설계·개발 및 운영을 담당했습니다.',
     responsibilities: [
