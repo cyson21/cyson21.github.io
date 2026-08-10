@@ -248,6 +248,21 @@ html[data-theme="b"] .section-link {
   text-decoration: none;
 }
 
+html[data-theme="b"] .experience-teaser,
+html[data-theme="b"] .project-teaser-list,
+html[data-theme="b"] .project-teaser {
+  border-color: var(--line);
+}
+
+html[data-theme="b"] .experience-teaser strong,
+html[data-theme="b"] .project-teaser-action {
+  font-weight: 650;
+}
+
+html[data-theme="b"] .project-teaser-link {
+  text-decoration: none;
+}
+
 html[data-theme="b"] .career-list {
   border-top: 0;
 }

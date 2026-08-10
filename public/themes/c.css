@@ -196,6 +196,24 @@ html[data-theme="c"] .section-heading h2::after {
   content: "";
 }
 
+html[data-theme="c"] .experience-teaser,
+html[data-theme="c"] .project-teaser-list,
+html[data-theme="c"] .project-teaser {
+  border-color: var(--line);
+}
+
+html[data-theme="c"] .experience-teaser {
+  background: linear-gradient(90deg, rgba(251, 252, 250, 0), rgba(251, 252, 250, 0.72) 50%, rgba(251, 252, 250, 0));
+}
+
+html[data-theme="c"] .project-teaser-link {
+  text-decoration: none;
+}
+
+html[data-theme="c"] .project-teaser-action {
+  color: var(--blue);
+}
+
 html[data-theme="c"] .career-list {
   border-top: 0;
 }

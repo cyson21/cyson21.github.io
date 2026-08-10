@@ -296,12 +296,12 @@ for (const theme of ['b', 'c'] as const) {
       const homeHierarchy = await page.evaluate(() => {
         const heading = document.querySelector<HTMLElement>('#featured-projects .section-heading');
         const headingTitle = document.querySelector<HTMLElement>('#featured-projects .section-heading h2');
-        const careerList = document.querySelector<HTMLElement>('.career-list');
-        const careerItems = Array.from(document.querySelectorAll<HTMLElement>('.career-list li'));
-        const projectRows = Array.from(document.querySelectorAll<HTMLElement>('#featured-projects .project-row'));
+        const experienceTeaser = document.querySelector<HTMLElement>('.experience-teaser');
+        const projectTeaserList = document.querySelector<HTMLElement>('#featured-projects .project-teaser-list');
+        const projectTeasers = Array.from(document.querySelectorAll<HTMLElement>('#featured-projects .project-teaser'));
         const sectionLink = document.querySelector<HTMLElement>('.section-link');
-        const projectLink = document.querySelector<HTMLElement>('.project-links a');
-        if (!heading || !headingTitle || !careerList || careerItems.length < 2 || projectRows.length < 2 || !sectionLink || !projectLink) {
+        const projectLink = document.querySelector<HTMLElement>('.project-teaser a');
+        if (!heading || !headingTitle || !experienceTeaser || !projectTeaserList || projectTeasers.length < 2 || !sectionLink || !projectLink) {
           throw new Error('Home hierarchy must render');
         }
         const style = (element: HTMLElement) => getComputedStyle(element);
@@ -311,11 +311,9 @@ for (const theme of ['b', 'c'] as const) {
             Number.parseFloat(style(headingTitle).borderBottomWidth),
             Number.parseFloat(getComputedStyle(headingTitle, '::after').height) || 0,
           ),
-          careerTop: Number.parseFloat(style(careerList).borderTopWidth),
-          lastCareerBottom: Number.parseFloat(style(careerItems.at(-1)!).borderBottomWidth),
-          firstProjectTop: Number.parseFloat(style(projectRows[0]!).borderTopWidth),
-          secondProjectTop: Number.parseFloat(style(projectRows[1]!).borderTopWidth),
-          lastProjectBottom: Number.parseFloat(style(projectRows.at(-1)!).borderBottomWidth),
+          experienceTop: Number.parseFloat(style(experienceTeaser).borderTopWidth),
+          projectListTop: Number.parseFloat(style(projectTeaserList).borderTopWidth),
+          lastProjectBottom: Number.parseFloat(style(projectTeasers.at(-1)!).borderBottomWidth),
           sectionLinkDecoration: style(sectionLink).textDecorationLine,
           sectionLinkWeight: Number.parseFloat(style(sectionLink).fontWeight),
           projectLinkDecoration: style(projectLink).textDecorationLine,
@@ -324,11 +322,9 @@ for (const theme of ['b', 'c'] as const) {
       });
       expect(homeHierarchy.headingTop).toBe(0);
       expect(homeHierarchy.headingAccent).toBeGreaterThan(0);
-      expect(homeHierarchy.careerTop).toBe(0);
-      expect(homeHierarchy.lastCareerBottom).toBe(0);
-      expect(homeHierarchy.firstProjectTop).toBe(0);
-      expect(homeHierarchy.secondProjectTop).toBeGreaterThan(0);
-      expect(homeHierarchy.lastProjectBottom).toBe(0);
+      expect(homeHierarchy.experienceTop).toBeGreaterThan(0);
+      expect(homeHierarchy.projectListTop).toBeGreaterThan(0);
+      expect(homeHierarchy.lastProjectBottom).toBeGreaterThan(0);
       expect(homeHierarchy.sectionLinkDecoration).toBe('none');
       expect(homeHierarchy.sectionLinkWeight).toBeLessThanOrEqual(650);
       expect(homeHierarchy.projectLinkDecoration).toBe('none');
