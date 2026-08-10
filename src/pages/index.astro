@@ -1,12 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
-import { ArrowRight, ArrowUpRight, Download, Mail } from '@lucide/astro';
+import { ArrowRight, ArrowUpRight, Download } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectRow from '../components/ProjectRow.astro';
-import { experiences, profile, resumeClosing, resumeHighlights } from '../data/site';
+import { careerPeriod, profile, resumeClosing, resumeHighlights } from '../data/site';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const featured = projects.filter((project) => project.data.featured);
+const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as const;
 ---
 
 <BaseLayout title="손찬양" description="Java · Spring Boot 기반의 6년 차 백엔드 개발자 손찬양의 포트폴리오입니다. API 개발·운영과 데이터 정합성 경험을 정리했습니다.">
@@ -45,21 +45,16 @@ const featured = projects.filter((project) => project.data.featured);
       <div class="section-heading experience-heading">
         <div>
           <h2 id="experience-title">경력</h2>
-          <p class="section-deck">담당 역할과 업무 범위를 정리했습니다.</p>
-        </div>
-        <div>
-          <p class="lede">2021년부터 공공·실시간 데이터 서비스와 기업용 플랫폼의 백엔드를 개발했습니다.</p>
-          <a class="section-link" href="/experience/">경력 상세 보기 <ArrowRight size={18} aria-hidden="true" /></a>
+          <p class="section-deck">2021년부터 공공·실시간 데이터 서비스와 기업용 플랫폼의 백엔드를 개발했습니다.</p>
         </div>
       </div>
-      <ol class="career-list">
-        {experiences.map((experience) => (
-          <li>
-            <time>{experience.period}</time>
-            <div><strong>{experience.company}</strong><span>{experience.role}</span><p>{experience.context}</p></div>
-          </li>
-        ))}
-      </ol>
+      <div class="experience-teaser">
+        <div>
+          <strong>{careerPeriod}</strong>
+          <span>기업용 플랫폼·공공 데이터 서비스 백엔드</span>
+        </div>
+        <a class="section-link" href="/experience/">경력 상세 보기 <ArrowRight size={18} aria-hidden="true" /></a>
+      </div>
     </div>
   </section>
 
@@ -68,27 +63,23 @@ const featured = projects.filter((project) => project.data.featured);
       <div class="section-heading featured-heading">
         <div>
           <h2 id="featured-title">대표 프로젝트</h2>
-          <p class="section-deck">실패 조건과 기술 선택, 확인 결과를 정리했습니다.</p>
+          <p class="section-deck">실패 조건과 기술 선택, 확인 결과는 상세 페이지에서 확인할 수 있습니다.</p>
         </div>
-        <div>
-          <p class="lede">데이터 정합성과 복구 가능성을 기준으로 설계한 대표 프로젝트입니다.</p>
-          <a class="section-link" href="/projects/">6개 프로젝트 전체 보기 <ArrowRight size={18} aria-hidden="true" /></a>
-        </div>
+        <a class="section-link" href="/projects/">6개 프로젝트 전체 보기 <ArrowRight size={18} aria-hidden="true" /></a>
       </div>
-      <div class="project-list">
-        {featured.map((project) => <ProjectRow project={project} compact />)}
-      </div>
-    </div>
-  </section>
-
-  <section class="contact-band">
-    <div class="container contact-inner">
-      <div><h2>경력 및 프로젝트</h2><p>경력과 프로젝트에서 담당 범위와 구현 결과를 확인할 수 있습니다.</p></div>
-      <div class="button-row">
-        <a class="button" href="/portfolio/">통합 포트폴리오 HTML <ArrowRight size={17} aria-hidden="true" /></a>
-        <a class="button" href="/experience/">경력·이력서 <ArrowRight size={17} aria-hidden="true" /></a>
-        <a class="button button--secondary" href={profile.resumePath}>PDF <Download size={17} aria-hidden="true" /></a>
-        <a class="button button--text" href={`mailto:${profile.email}`}>이메일 <Mail size={17} aria-hidden="true" /></a>
+      <div class="project-teaser-list">
+        {featured.map((project) => (
+          <article class="project-teaser">
+            <a class="project-teaser-link" href={`/projects/${project.id}/`} aria-label={`${project.data.name} 프로젝트 상세 보기`}>
+              <span class="domain">{domainLabels[project.data.domain]}</span>
+              <span class="project-teaser-copy">
+                <strong>{project.data.name}</strong>
+                <span class="project-teaser-summary">{project.data.summary}</span>
+              </span>
+              <span class="project-teaser-action">상세 보기 <ArrowRight size={17} aria-hidden="true" /></span>
+            </a>
+          </article>
+        ))}
       </div>
     </div>
   </section>
@@ -220,90 +211,89 @@ const featured = projects.filter((project) => project.data.featured);
   }
 
   .experience-heading {
-    margin-bottom: 28px;
+    margin-bottom: 20px;
     padding-inline-start: 12px;
   }
 
-  .featured-heading {
-    display: block;
-  }
-
-  .featured-heading > div:last-child {
-    margin-top: 14px;
-  }
-
-  .featured-heading .section-link {
-    margin-top: 8px;
-  }
-
-  .career-list {
-    margin: 0;
-    padding: 0 0 0 12px;
-    border-top: 1px solid var(--line-strong);
-    list-style: none;
-  }
-
-  .career-list li {
-    display: grid;
-    grid-template-columns: 180px minmax(0, 1fr);
+  .experience-teaser {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 24px;
-    padding-block: 24px;
-    border-bottom: 1px solid var(--line-strong);
-    min-width: 0;
+    padding: 18px 12px;
+    border-block: 1px solid var(--line-strong);
   }
 
-  .career-list div {
+  .experience-teaser > div {
     display: grid;
-    gap: 6px;
-    margin-top: 0;
-    min-width: 0;
+    gap: 4px;
   }
 
-  .career-list span,
-  .career-list p {
-    color: var(--ink-soft);
-    overflow-wrap: anywhere;
-  }
-
-  .career-list time {
-    color: var(--ink-faint);
+  .experience-teaser strong {
+    color: var(--ink);
     font-family: var(--mono);
     font-size: var(--text-label);
   }
 
-  .career-list span {
+  .experience-teaser span {
+    color: var(--ink-soft);
     font-size: var(--text-dense);
-    font-weight: 720;
   }
 
-  .career-list p {
-    margin-top: 10px;
-    font-size: var(--text-body);
-  }
-
-  .contact-band {
-    padding-block: 54px;
-    border-top: 3px solid var(--amber);
-    background: var(--surface-muted);
-  }
-
-  .contact-inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
+  .featured-heading {
+    display: flex;
+    align-items: end;
     justify-content: space-between;
-    gap: 40px;
+    gap: 24px;
+    margin-bottom: 20px;
+    padding-inline-start: 12px;
   }
 
-  .contact-inner h2 {
-    font-size: var(--text-h2);
+  .project-teaser-list {
+    margin: 0;
+    padding-inline-start: 12px;
+    border-top: 1px solid var(--line-strong);
   }
 
-  .contact-inner > div:first-child p {
-    max-width: 680px;
-    margin-top: 9px;
-    color: var(--contact-copy, var(--ink-soft));
+  .project-teaser {
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .project-teaser-link {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 18px;
+    min-height: 88px;
+    align-items: center;
+    padding-block: 16px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .project-teaser-copy {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .project-teaser-copy strong {
+    font-size: var(--text-h3);
+  }
+
+  .project-teaser-summary {
+    color: var(--ink-soft);
     font-size: var(--text-dense);
+    overflow-wrap: anywhere;
+  }
+
+  .project-teaser-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--blue);
+    font-size: var(--text-label);
+    font-weight: 760;
+    white-space: nowrap;
   }
 
   @media (max-width: 959px) {
@@ -334,8 +324,18 @@ const featured = projects.filter((project) => project.data.featured);
       margin-top: 26px;
     }
 
-    .career-list li {
-      grid-template-columns: 1fr;
+    .featured-heading {
+      align-items: start;
+      display: block;
+    }
+
+    .featured-heading .section-link {
+      margin-top: 8px;
+    }
+
+    .experience-teaser {
+      align-items: start;
+      display: grid;
       gap: 8px;
     }
   }
@@ -359,13 +359,12 @@ const featured = projects.filter((project) => project.data.featured);
       margin-top: 18px;
     }
 
-    .contact-inner {
-      align-items: stretch;
-      grid-template-columns: 1fr;
+    .project-teaser-link {
+      grid-template-columns: auto minmax(0, 1fr);
     }
 
-    .career-list time {
-      padding-inline-start: var(--career-marker-gutter, 0);
+    .project-teaser-action {
+      grid-column: 2;
     }
   }
 </style>

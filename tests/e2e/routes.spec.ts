@@ -94,6 +94,18 @@ test('Korean interface labels use the text font rather than the code font', asyn
   ]);
 });
 
+test('detail pages expose an explicit route back to the portfolio home', async ({ page, isMobile }) => {
+  for (const route of ['/projects/stockrush/', '/experience/']) {
+    await page.goto(route);
+    if (isMobile) {
+      await page.getByRole('button', { name: '탐색 메뉴 열기' }).click();
+      await expect(page.getByRole('navigation', { name: '모바일 탐색' }).getByRole('link', { name: '홈' })).toHaveAttribute('href', '/');
+    } else {
+      await expect(page.getByRole('navigation', { name: '주요 탐색' }).getByRole('link', { name: '홈' })).toHaveAttribute('href', '/');
+    }
+  }
+});
+
 test('experience page unifies the résumé summary and career evidence', async ({ page }) => {
   await page.goto('/experience/');
   await expect(page.getByRole('heading', { name: '경력·이력서' })).toBeVisible();
@@ -131,13 +143,12 @@ test('resume route redirects to the unified experience page', async ({ page }) =
   }
 });
 
-test('featured project cards follow the approved evidence hierarchy', async ({ page }) => {
+test('featured project teasers keep the home page focused on detail routes', async ({ page }) => {
   await page.goto('/');
-  const featuredProjects = page.locator('#featured-projects .project-row');
+  const featuredProjects = page.locator('#featured-projects .project-teaser');
   await expect(featuredProjects).toHaveCount(3);
-  await expect(featuredProjects.locator('dt', { hasText: '핵심 구현' })).toHaveCount(3);
-  await expect(featuredProjects.locator('dt', { hasText: '확인 결과' })).toHaveCount(3);
-  await expect(featuredProjects.locator('.test-path')).toHaveCount(0);
+  await expect(featuredProjects.locator('.project-teaser-summary')).toHaveCount(3);
+  await expect(featuredProjects.locator('.project-card-evidence')).toHaveCount(0);
   await expect(featuredProjects.getByRole('link', { name: /프로젝트 상세 보기/ })).toHaveCount(3);
 });
 
