@@ -66,7 +66,7 @@
     "output": "public/themes/b.css",
     "sourceProject": "portfolio-web",
     "sourcePath": "public/themes/b.css",
-    "sha256": "157fca92ad4b33011d5021e49f79d095adf377a907eb4fabed1d662801efba2b",
+    "sha256": "112eca8c2e24f3e85cef5fed2fbf782d244f4c3eb299e98adaf2762aa7b9cb32",
     "owner": "Son Chanyang",
     "usage": "Public B Signal Grid visual theme",
     "approvedAt": "2026-08-10"
@@ -75,7 +75,7 @@
     "output": "public/themes/c.css",
     "sourceProject": "portfolio-web",
     "sourcePath": "public/themes/c.css",
-    "sha256": "722ca85b293921329bc73e8b05ba7b63a04ace9d1b667637b8a0d3c4d5b53b73",
+    "sha256": "e83ece3657bcd731f735ed61b0d0fe3ad2de5cc66c6fbe53e9cfae935fc809dd",
     "owner": "Son Chanyang",
     "usage": "Companion C Soft Organic visual theme",
     "approvedAt": "2026-08-10"

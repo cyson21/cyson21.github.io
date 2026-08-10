@@ -5,7 +5,7 @@ publicationState: public
 name: Enterprise Policy RAG
 domain: AI
 eyebrow: 권한 기반 RAG
-summary: 비인가 문서가 모델 입력에 들어가는 시점 자체를 막기 위해 검색 전에 권한 범위를 적용했습니다. 근거가 없으면 답변을 만들지 않습니다.
+summary: 회사 내부 규정을 검색하고 질문에 답하는 AI 시스템입니다. 사용자가 볼 수 있는 문서만 검색하고, 근거가 없으면 답변하지 않습니다.
 cardEvidence:
   implementation: 벡터 유사도 정렬 전에 작업 공간·소유자·공개 범위·부서 조건으로 후보를 제한합니다.
   result: 고정 문서 5건 중 허용된 3건만 반환하고, 검색 결과가 없으면 모델 호출 없이 거절합니다.
