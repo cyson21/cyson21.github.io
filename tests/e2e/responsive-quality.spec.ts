@@ -224,15 +224,15 @@ for (const viewport of canonicalViewports.filter(({ width }) => width <= 390)) {
 
 for (const theme of ['b', 'c'] as const) {
   for (const viewport of [...canonicalViewports, ...boundaryViewports]) {
-    test(`resume theme ${theme.toUpperCase()} keeps its information priority and control geometry at ${viewport.width}px`, async ({ page }) => {
+    test(`unified experience theme ${theme.toUpperCase()} keeps its information priority and control geometry at ${viewport.width}px`, async ({ page }) => {
       await page.setViewportSize(viewport);
-      await gotoCanonicalRoute(page, '/resume/');
+      await gotoCanonicalRoute(page, '/experience/');
       await applyPortfolioTheme(page, theme);
 
       const layout = await page.evaluate(() => {
         const rect = (selector: string) => {
           const element = document.querySelector<HTMLElement>(selector);
-          if (!element) throw new Error(`Missing resume element: ${selector}`);
+          if (!element) throw new Error(`Missing experience element: ${selector}`);
           const bounds = element.getBoundingClientRect();
           return {
             top: bounds.top,
@@ -243,24 +243,24 @@ for (const theme of ['b', 'c'] as const) {
             height: bounds.height,
           };
         };
-        const summary = document.querySelector<HTMLElement>('.resume-summary');
-        const firstButton = document.querySelector<HTMLElement>('.resume-sidebar .button');
-        const secondButton = document.querySelector<HTMLElement>('.resume-sidebar .button--secondary');
-        const current = document.querySelector<HTMLElement>('.resume-job--current');
-        const sidebar = document.querySelector<HTMLElement>('.resume-sidebar');
-        const previous = document.querySelector<HTMLElement>('.resume-job--previous');
-        if (!summary || !firstButton || !secondButton || !current || !sidebar || !previous) {
-          throw new Error('Resume priority elements must all render');
+        const summary = document.querySelector<HTMLElement>('.resume-overview');
+        const firstButton = document.querySelector<HTMLElement>('.resume-overview .button');
+        const secondButton = document.querySelector<HTMLElement>('.resume-overview .button--secondary');
+        const current = document.querySelector<HTMLElement>('.experience-entry');
+        const support = document.querySelector<HTMLElement>('.experience-support');
+        const context = document.querySelector<HTMLElement>('.experience-entry .context');
+        const company = document.querySelector<HTMLElement>('.experience-entry h2');
+        if (!summary || !firstButton || !secondButton || !current || !support || !context || !company) {
+          throw new Error('Unified experience priority elements must all render');
         }
         const summaryStyle = getComputedStyle(summary);
-        const precedesPrevious = Boolean(
-          sidebar.compareDocumentPosition(previous) & Node.DOCUMENT_POSITION_FOLLOWING,
-        );
+        const contextRect = context.getBoundingClientRect();
+        const companyRect = company.getBoundingClientRect();
+        const companyPseudo = getComputedStyle(company, '::after');
         return {
-          summary: rect('.resume-summary'),
-          current: rect('.resume-job--current'),
-          sidebar: rect('.resume-sidebar'),
-          previous: rect('.resume-job--previous'),
+          summary: rect('.resume-overview'),
+          current: rect('.experience-entry'),
+          support: rect('.experience-support'),
           summaryPaddingInline: [
             Number.parseFloat(summaryStyle.paddingLeft),
             Number.parseFloat(summaryStyle.paddingRight),
@@ -269,29 +269,19 @@ for (const theme of ['b', 'c'] as const) {
             firstButton.getBoundingClientRect().height,
             secondButton.getBoundingClientRect().height,
           ],
-          precedesPrevious,
+          contextLeft: contextRect.left,
+          companyLeft: companyRect.left,
+          companyGraphic: companyPseudo.display,
+          cardShadow: getComputedStyle(current).boxShadow,
         };
       });
 
       expect(layout.summaryPaddingInline.every((padding) => padding >= 18)).toBeTruthy();
       expect(layout.buttonHeights.every((height) => height >= 44)).toBeTruthy();
-      expect(layout.precedesPrevious, 'CTA must precede previous experience in DOM order').toBeTruthy();
-
-      if (viewport.width <= 959) {
-        // Mobile order: sidebar → summary → current → previous (single column).
-        // Allowed by hub UI rule (2026-08-10): sidebar may precede summary when
-        // summary top < viewport height at 390x844 and 320x800.
-        // Source: side-projects/docs/standards/resume-portfolio-ui-design-rules.md
-        expect(layout.sidebar.bottom).toBeLessThanOrEqual(layout.summary.top + 1);
-        expect(layout.summary.bottom).toBeLessThanOrEqual(layout.current.top + 1);
-        expect(layout.current.bottom).toBeLessThanOrEqual(layout.previous.top + 1);
-      } else {
-        const columnGap = layout.current.left - layout.sidebar.right;
-        expect(layout.sidebar.left).toBeLessThan(layout.current.left);
-        expect(columnGap).toBeGreaterThanOrEqual(24);
-        expect(columnGap).toBeLessThanOrEqual(32.1);
-        expect(Math.abs(layout.summary.left - layout.current.left)).toBeLessThanOrEqual(1);
-      }
+      expect(Math.abs(layout.contextLeft - layout.companyLeft)).toBeLessThanOrEqual(1);
+      expect(layout.companyGraphic).toBe('none');
+      expect(layout.cardShadow).toBe('none');
+      expect(layout.support.top).toBeGreaterThan(layout.current.bottom);
     });
   }
 }
@@ -368,33 +358,8 @@ for (const theme of ['b', 'c'] as const) {
       });
       expect(experienceBoundaries.listTop).toBe(0);
       expect(experienceBoundaries.entryTop).toBeGreaterThan(0);
-
-      await gotoCanonicalRoute(page, '/resume/');
-      await applyPortfolioTheme(page, theme);
-      const resumeBoundaries = await page.evaluate(() => {
-        const headings = Array.from(document.querySelectorAll<HTMLElement>('.resume-layout h2'));
-        const currentSection = document.querySelector<HTMLElement>('.resume-experience--current');
-        const previousSection = document.querySelector<HTMLElement>('.resume-experience--previous');
-        const currentJob = document.querySelector<HTMLElement>('.resume-job--current');
-        const previousJob = document.querySelector<HTMLElement>('.resume-job--previous');
-        if (!headings.length || !currentSection || !previousSection || !currentJob || !previousJob) {
-          throw new Error('Resume boundaries must render');
-        }
-        return {
-          headingBottoms: headings.map((heading) => Number.parseFloat(getComputedStyle(heading).borderBottomWidth)),
-          currentSectionTop: Number.parseFloat(getComputedStyle(currentSection).borderTopWidth),
-          previousSectionTop: Number.parseFloat(getComputedStyle(previousSection).borderTopWidth),
-          currentJobTop: Number.parseFloat(getComputedStyle(currentJob).borderTopWidth),
-          currentJobBottom: Number.parseFloat(getComputedStyle(currentJob).borderBottomWidth),
-          previousJobTop: Number.parseFloat(getComputedStyle(previousJob).borderTopWidth),
-        };
-      });
-      expect(resumeBoundaries.headingBottoms.every((width) => width === 0)).toBeTruthy();
-      expect(resumeBoundaries.currentSectionTop).toBe(0);
-      expect(resumeBoundaries.previousSectionTop).toBe(0);
-      expect(resumeBoundaries.currentJobTop).toBeGreaterThan(0);
-      expect(resumeBoundaries.currentJobBottom).toBeGreaterThan(0);
-      expect(resumeBoundaries.previousJobTop).toBeGreaterThan(0);
+      const support = await page.locator('.experience-support').evaluate((element) => getComputedStyle(element).borderTopWidth);
+      expect(Number.parseFloat(support)).toBe(0);
     });
   }
 }

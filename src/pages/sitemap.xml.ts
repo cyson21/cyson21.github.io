@@ -5,7 +5,7 @@ import { getReleaseOrigin } from '../lib/release-origin';
 export const GET: APIRoute = async () => {
   const releaseOrigin = getReleaseOrigin(import.meta.env);
   const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-  const routes = ['/', '/portfolio/', '/projects/', '/experience/', '/resume/', ...projects.map((project) => `/projects/${project.id}/`)];
+  const routes = ['/', '/portfolio/', '/projects/', '/experience/', ...projects.map((project) => `/projects/${project.id}/`)];
   const urls = releaseOrigin
     ? routes.map((route) => `<url><loc>${releaseOrigin}${route}</loc></url>`).join('')
     : '';

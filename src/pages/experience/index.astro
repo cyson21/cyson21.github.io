@@ -1,27 +1,56 @@
 ---
-import { ArrowRight } from '@lucide/astro';
+import { ArrowRight, Download } from '@lucide/astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
-import { careerPeriod, experiences } from '../../data/site';
+import {
+  careerPeriod,
+  experiences,
+  profile,
+  resumeClosing,
+  resumeHighlights,
+  resumeIntro,
+  skillGroups,
+} from '../../data/site';
 
 const currentExperience = experiences[0];
 if (!currentExperience) {
-  throw new Error('경력 페이지에는 현재 경력 항목이 필요합니다.');
+  throw new Error('경력·이력서 페이지에는 현재 경력 항목이 필요합니다.');
 }
 ---
 
-<BaseLayout title="경력" description="Java · Spring Boot 기반 기업용 플랫폼과 공공·실시간 데이터 서비스에서 맡은 역할과 주요 업무를 정리했습니다.">
-  <PageIntro title="경력" description={currentExperience.context} />
+<BaseLayout
+  title="경력·이력서"
+  description="Java · Spring Boot 기반의 6년 차 백엔드 개발자 손찬양의 경력과 이력서를 한 페이지에 정리했습니다."
+>
+  <PageIntro title="경력·이력서" description={currentExperience.context} />
 
   <section class="section experience-section">
     <div class="container experience-layout">
-      <div class="career-summary">
-        <div><span>전체 경력</span><strong>{careerPeriod}</strong></div>
-        <p>회사별 담당 범위와 직접 수행한 업무를 최근 경력부터 정리했습니다.</p>
-        <a href="/resume/">웹 이력서 보기 <ArrowRight size={17} aria-hidden="true" /></a>
-      </div>
+      <section class="resume-overview" aria-labelledby="overview-title">
+        <div>
+          <p class="eyebrow">프로필 요약</p>
+          <h2 id="overview-title">운영 문제를 구조적으로 해결하는 백엔드 개발자</h2>
+          <p class="summary-intro">{resumeIntro}</p>
+          <ul class="summary-highlights">
+            {resumeHighlights.map((item) => <li>{item}</li>)}
+          </ul>
+          <p class="summary-closing">{resumeClosing}</p>
+        </div>
+        <div class="overview-actions">
+          <a class="button" href={profile.resumePath}><Download size={17} aria-hidden="true" /> PDF 다운로드</a>
+          <a class="button button--secondary" href="/projects/"><ArrowRight size={17} aria-hidden="true" /> 프로젝트 보기</a>
+        </div>
+      </section>
 
-      <div class="experience-list">
+      <section class="career-summary" aria-labelledby="career-title">
+        <div>
+          <span>전체 경력</span>
+          <strong>{careerPeriod}</strong>
+        </div>
+        <p id="career-title">회사별 담당 범위와 직접 수행한 업무를 최근 경력부터 정리했습니다.</p>
+      </section>
+
+      <div class="experience-list" aria-label="경력 상세">
         {experiences.map((experience) => (
           <article class="experience-entry">
             <header>
@@ -52,32 +81,92 @@ if (!currentExperience) {
           </article>
         ))}
       </div>
+
+      <div class="experience-support">
+        <section class="experience-support-panel" aria-labelledby="skills-title">
+          <h2 id="skills-title">기술 스택</h2>
+          <div class="skill-groups">
+            {skillGroups.map((group) => (
+              <div>
+                <p class="skill-label">{group.label}</p>
+                <ul class="tag-list">{group.items.map((item) => <li class="tag">{item}</li>)}</ul>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="experience-support-panel resume-education" aria-labelledby="education-title">
+          <h2 id="education-title">학력</h2>
+          <div>
+            <strong>서울과학기술대학교</strong>
+            <span>영어영문학 학사 · 2018 졸업</span>
+          </div>
+        </section>
+      </div>
     </div>
   </section>
-
 </BaseLayout>
 
 <style>
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
   .experience-layout {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 64px;
+    gap: 32px;
     align-items: start;
+  }
+
+  .resume-overview {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 32px;
+    padding: clamp(22px, 3vw, 34px);
+    border-block: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .resume-overview h2 {
+    max-width: 760px;
+    font-size: var(--text-h2);
+  }
+
+  .summary-intro {
+    margin-top: 12px;
+    color: var(--ink);
+    font-size: var(--text-lede);
+    font-weight: 720;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .summary-highlights {
+    display: grid;
+    gap: 6px;
+    margin: 16px 0 0;
+    padding-left: 1.15em;
+    color: var(--ink-soft);
+    font-size: var(--text-dense);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .summary-closing {
+    max-width: 760px;
+    margin-top: 16px;
+    color: var(--ink-soft);
+    font-size: var(--text-dense);
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .overview-actions {
+    display: grid;
+    align-content: end;
+    gap: 8px;
+    min-width: 164px;
   }
 
   .career-summary {
     display: grid;
-    grid-template-columns: 190px minmax(0, 1fr) auto;
+    grid-template-columns: 190px minmax(0, 1fr);
     gap: 32px;
     align-items: center;
     padding-block: 20px;
@@ -100,32 +189,23 @@ if (!currentExperience) {
     font-size: var(--text-body);
   }
 
-  .career-summary > p {
+  .career-summary p {
     color: var(--ink-soft);
     font-size: var(--text-dense);
   }
 
-  .career-summary a {
-    display: inline-flex;
-    min-height: 44px;
-    align-items: center;
-    gap: 5px;
-    font-size: 16px;
-    font-weight: 900;
-  }
-
   .experience-list {
     display: grid;
-    gap: 64px;
+    gap: 32px;
   }
 
   .experience-entry header {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
-    gap: 44px;
-    align-items: end;
-    padding-bottom: 28px;
-    border-bottom: 1px solid var(--ink);
+    grid-template-columns: minmax(0, 760px);
+    gap: 14px;
+    align-items: start;
+    padding: clamp(22px, 3vw, 34px);
+    border-bottom: 1px solid var(--line-strong);
   }
 
   .experience-entry header > * {
@@ -144,6 +224,7 @@ if (!currentExperience) {
   }
 
   .context {
+    max-width: 760px;
     color: var(--ink-soft);
     font-size: var(--text-dense);
     overflow-wrap: anywhere;
@@ -153,7 +234,7 @@ if (!currentExperience) {
     display: grid;
     grid-template-columns: 100px minmax(0, 1fr);
     gap: 18px;
-    padding-block: 24px;
+    padding: 24px clamp(22px, 3vw, 34px);
     border-bottom: 1px solid var(--line-strong);
   }
 
@@ -196,7 +277,7 @@ if (!currentExperience) {
     display: grid;
     grid-template-columns: 100px minmax(0, 1fr);
     gap: 18px;
-    padding-top: 20px;
+    padding: 20px clamp(22px, 3vw, 34px) 24px;
   }
 
   .experience-stack > span {
@@ -206,39 +287,79 @@ if (!currentExperience) {
     font-weight: 800;
   }
 
+  .experience-support {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.55fr);
+    gap: 32px;
+  }
+
+  .experience-support-panel {
+    padding-top: 22px;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .skill-groups {
+    display: grid;
+    gap: 14px;
+  }
+
+  .skill-groups > div {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 18px;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--line);
+    min-width: 0;
+  }
+
+  .skill-label {
+    font-size: var(--text-dense);
+    font-weight: 800;
+  }
+
+  .resume-education > div {
+    display: grid;
+    gap: 8px;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .resume-education span {
+    color: var(--ink-soft);
+    font-size: var(--text-dense);
+  }
+
   @media (max-width: 959px) {
-    .career-summary {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 12px;
+    .resume-overview,
+    .experience-support {
+      grid-template-columns: 1fr;
     }
 
-    .career-summary a {
-      grid-column: 1;
+    .overview-actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-content: start;
+    }
+
+    .career-summary {
+      grid-template-columns: 1fr;
+      gap: 12px;
     }
 
     .experience-entry header,
     .responsibilities,
     .responsibilities li,
-    .experience-stack {
+    .experience-stack,
+    .skill-groups > div {
       grid-template-columns: 1fr;
     }
 
-    .experience-entry header {
-      gap: 14px;
-      align-items: start;
-      padding-bottom: 18px;
-    }
-
-    .responsibilities {
-      gap: 14px;
+    .responsibilities,
+    .experience-stack {
+      gap: 12px;
     }
 
     .responsibilities li {
       gap: 5px;
-    }
-
-    .experience-stack {
-      gap: 8px;
     }
   }
 
@@ -248,15 +369,26 @@ if (!currentExperience) {
     }
 
     .experience-layout {
-      gap: 30px;
+      gap: 28px;
     }
 
-    .career-summary {
-      padding-top: 12px;
+    .resume-overview {
+      gap: 22px;
+      padding: 20px;
+    }
+
+    .overview-actions {
+      grid-template-columns: 1fr;
     }
 
     .experience-list {
-      gap: 48px;
+      gap: 24px;
+    }
+
+    .experience-entry header,
+    .responsibilities,
+    .experience-stack {
+      padding-inline: 20px;
     }
 
     .responsibilities {
@@ -265,6 +397,7 @@ if (!currentExperience) {
 
     .experience-stack {
       padding-top: 14px;
+      padding-bottom: 20px;
     }
   }
 </style>
