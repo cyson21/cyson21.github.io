@@ -25,6 +25,10 @@ Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트
 
 공개 배포에서는 `PUBLIC_RELEASE=true`, `PUBLIC_SITE_URL`, `PUBLIC_RESUME_URL`을 설정합니다. 사이트 URL은 경로, query, fragment, 인증 정보가 없는 공개 HTTPS origin이어야 합니다. 공개 모드가 아니면 페이지와 `robots.txt`를 검색 제외 상태로 유지합니다.
 
+## 테마
+
+공개 포트폴리오 기본 테마는 B `Signal Grid`입니다. B와 C는 한 쌍으로 유지합니다. 시각 변경 시 `public/themes/b.css`와 `public/themes/c.css`를 함께 고칩니다.
+
 ## 개발과 검증
 
 ```bash
