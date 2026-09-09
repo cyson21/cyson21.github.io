@@ -148,4 +148,6 @@ seo:
 updatedAt: 2026-07-19
 ---
 
+> 실행 기준: **Core / 검증**은 In-memory 저장소와 Deterministic/Fake Embedding·Fake Provider로 재현합니다. **Optional Integration**으로 PostgreSQL·pgvector·OpenAI 연동 경로를 분리해 두었으며, 기본 실행이 해당 외부 서비스 운영을 의미하지는 않습니다.
+
 검색 정확도보다 먼저 권한 경계를 적용하고 답변 근거를 확인할 수 있게 만든 사내 정책 RAG 프로젝트입니다.
