@@ -119,7 +119,7 @@ test('experience page unifies the résumé summary and career evidence', async (
   await expect(page.getByRole('heading', { name: 'REST API 설계·개발·운영' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '운영 장애·데이터 오류 개선' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '기업 고객 서비스 개발·운영' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '배포·운영' })).toBeVisible();
+  await expect(page.locator('.experience-entry').first().getByRole('heading', { name: '배포·운영' })).toBeVisible();
   const currentExperience = page.locator('.experience-entry').first();
   await expect(currentExperience.getByRole('heading', { name: '이엠캐스트(주)' })).toBeVisible();
   await expect(currentExperience.locator('.context')).toHaveText(
