@@ -11,7 +11,7 @@ const experienceRecords = [
   {
     start: '2024-03',
     end: null,
-    company: '이엠케스트(주)',
+    company: '이엠캐스트(주)',
     role: '백엔드 개발자 · 주임',
     context: '백엔드 2명, 프론트엔드 1명의 3인 개발팀에서 20개 이상의 기업 고객 서비스를 Java·Spring Boot 기반으로 개발·운영했습니다.',
     responsibilities: [
