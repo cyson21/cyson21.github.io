@@ -3515,7 +3515,7 @@ tr:nth-child(even) td { background: #f8fafc; }
 
   <section class="page cover" data-page="01">
     <h1>손찬양 백엔드 엔지니어링 포트폴리오</h1>
-    <p class="lead">분산 상태 수렴, 동시성 제어, 접근 권한, 데이터 재처리와 AI 요청 정책을 구현하고 테스트로 검증했습니다.</p>
+    <p class="lead">분산 상태 수렴, 동시성 제어, 접근 권한, 데이터 재처리와 AI 요청 정책을 구현하고 테스트로 검증했습니다.<br><span class="compact-note">실무에서는 백엔드 2명, 프론트엔드 1명의 3인 개발팀에서 20개 이상의 기업 고객 서비스를 개발·운영했습니다.</span></p>
     <div class="cover-list">
       <section class="cover-group">
         <div class="cover-group-head"><h2>트랜잭션 · 권한 · 동시성</h2><span>상태 수렴과 업무 불변식 보호</span></div>
@@ -3559,18 +3559,11 @@ tr:nth-child(even) td { background: #f8fafc; }
       <article class="cover-row">
         <div class="num">05</div>
         <div>
-          <h3>CDC Data Platform</h3>
+          <h3>CDC Data Platform (프로토타입)</h3>
           <p>중복 CDC, 복구 이력 손실과 자동 연결되지 않은 구간의 종단 전달</p>
         </div>
       </article>
 
-      <article class="cover-row">
-        <div class="num">06</div>
-        <div>
-          <h3>Fashion Personalization Platform</h3>
-          <p>중복·실패 이벤트가 프로필과 추천 스냅샷을 오염함</p>
-        </div>
-      </article>
 
       </section>
     </div>
@@ -3586,95 +3579,6 @@ tr:nth-child(even) td { background: #f8fafc; }
       <div class="right">실패 조건 · 보호 설계 · 관찰 결과</div>
     </div>
     <div class="summary-project-grid">
-      <article class="summary-project-card" style="--project-accent: #1c5d99;">
-        <div class="summary-project-head">
-          <div class="summary-project-number">01</div>
-          <div>
-            <h3>StockRush</h3>
-            <p class="summary-project-domain">분산 커머스 / 주문 상태 수렴 / 이벤트 기반 백엔드</p>
-          </div>
-        </div>
-        <dl class="summary-project-facts">
-          <div><dt>문제</dt><dd>재시도 뒤 주문·재고·결제·조회 상태가 서로 어긋남</dd></div>
-          <div><dt>설계</dt><dd>Saga 상태 전이, 트랜잭션 Outbox, 멱등 소비, 종료 상태 SQL 조건</dd></div>
-          <div><dt>결과</dt><dd>동일 이벤트 2회에도 Outbox 1건, 늦은 결제 승인 무시, 발행 5회 실패 뒤 FAILED</dd></div>
-        </dl>
-      </article>
-
-      <article class="summary-project-card" style="--project-accent: #1c5d99;">
-        <div class="summary-project-head">
-          <div class="summary-project-number">03</div>
-          <div>
-            <h3>Member Event Consistency</h3>
-            <p class="summary-project-domain">동시성 / 업무 불변식 / DB 보호 조건 / Redis-RabbitMQ 비교</p>
-          </div>
-        </div>
-        <dl class="summary-project-facts">
-          <div><dt>문제</dt><dd>중복 보상, 쿠폰 초과 발급, 포인트 음수 잔액</dd></div>
-          <div><dt>설계</dt><dd>DB 제약·조건부 갱신을 최종 보호 조건으로 두고 Redis·RabbitMQ를 경합별 비교</dd></div>
-          <div><dt>결과</dt><dd>동시 8건→보상 1건, 60원 차감 2건→잔액 40, 용량 3→정확히 3건 발급</dd></div>
-        </dl>
-      </article>
-
-      <article class="summary-project-card" style="--project-accent: #1c5d99;">
-        <div class="summary-project-head">
-          <div class="summary-project-number">02</div>
-          <div>
-            <h3>Enterprise Policy RAG</h3>
-            <p class="summary-project-domain">AI 백엔드 / RAG / 권한 검색 / 운영 관측</p>
-          </div>
-        </div>
-        <dl class="summary-project-facts">
-          <div><dt>문제</dt><dd>비인가 문서 노출과 근거 없는 답변 생성</dd></div>
-          <div><dt>설계</dt><dd>검색 전 권한 필터, 인용 범위 재검사, 근거 없는 답변 거절, 질의 로그</dd></div>
-          <div><dt>결과</dt><dd>문서 5건 중 허용 3건만 검색, 근거가 없으면 답변과 인용을 비운 거절 응답</dd></div>
-        </dl>
-      </article>
-
-      <article class="summary-project-card" style="--project-accent: #1c5d99;">
-        <div class="summary-project-head">
-          <div class="summary-project-number">04</div>
-          <div>
-            <h3>AI Gateway</h3>
-            <p class="summary-project-domain">LLM Gateway / 라우팅 / 비용 보호 / 캐시 / 폴백 / 관측</p>
-          </div>
-        </div>
-        <dl class="summary-project-facts">
-          <div><dt>문제</dt><dd>애플리케이션마다 중복되는 LLM 정책과 외부 모델 장애 처리</dd></div>
-          <div><dt>설계</dt><dd>API 키·할당량, 2단계 캐시, 정책 라우팅, 제한된 재시도·대체 경로와 요청 기록</dd></div>
-          <div><dt>결과</dt><dd>8단계 처리 순서, 4개 실행 방식과 4개 라우팅 전략을 회귀 테스트로 고정</dd></div>
-        </dl>
-      </article>
-
-      <article class="summary-project-card" style="--project-accent: #1c5d99;">
-        <div class="summary-project-head">
-          <div class="summary-project-number">05</div>
-          <div>
-            <h3>CDC Data Platform</h3>
-            <p class="summary-project-domain">CDC / Kafka / Lakehouse / Lineage / Replay</p>
-          </div>
-        </div>
-        <dl class="summary-project-facts">
-          <div><dt>문제</dt><dd>중복 CDC, 복구 이력 손실과 자동 연결되지 않은 구간의 종단 전달</dd></div>
-          <div><dt>설계</dt><dd>독립 실행 환경·제어 API·레이크하우스 실험, 이벤트 ID, 처리 장부와 재처리 상태</dd></div>
-          <div><dt>결과</dt><dd>원본 7건 중 6건 반영·중복 1건 억제, 4개 원천 테이블과 분석 마트의 계보 추적</dd></div>
-        </dl>
-      </article>
-
-      <article class="summary-project-card" style="--project-accent: #1c5d99;">
-        <div class="summary-project-head">
-          <div class="summary-project-number">06</div>
-          <div>
-            <h3>Fashion Personalization Platform</h3>
-            <p class="summary-project-domain">Python API / 커머스 개인화 / 추천 배치 / 이벤트 처리</p>
-          </div>
-        </div>
-        <dl class="summary-project-facts">
-          <div><dt>문제</dt><dd>중복·실패 이벤트가 프로필과 추천 스냅샷을 오염함</dd></div>
-          <div><dt>설계</dt><dd>멱등 이벤트 처리, 재시도·DLQ, 규칙 기반 추천 순위와 배치 스냅샷</dd></div>
-          <div><dt>결과</dt><dd>동일 키 1회 반영, 3회 실패 뒤 DLQ, 상품 6개 추천 순위와 스냅샷 2개 이상·지연 0건</dd></div>
-        </dl>
-      </article>
 </div>
     <div class="quote">수치는 로컬 테스트·통합 시나리오·고정 입력에서 관찰한 결과이며 운영 환경의 성능이나 안정성으로 확대해 해석하지 않았습니다.</div>
   </section>
@@ -3702,7 +3606,7 @@ tr:nth-child(even) td { background: #f8fafc; }
         <dl>
           <div><dt>코드 근거</dt><dd>OutboxRelayService · FallbackChain · ReplayRequestService</dd></div>
           <div><dt>구현 결과</dt><dd>Kafka·Outbox 중단 뒤 재발행과 멱등 재처리 · LLM 대체 경로, CDC 재처리와 이벤트 재등록 경로</dd></div>
-          <div><dt>프로젝트</dt><dd>StockRush · AI Gateway · CDC Data Platform · Fashion Personalization</dd></div>
+          <div><dt>프로젝트</dt><dd>StockRush · AI Gateway · CDC Data Platform (프로토타입)</dd></div>
         </dl>
       </article>
 
@@ -3720,7 +3624,7 @@ tr:nth-child(even) td { background: #f8fafc; }
         <dl>
           <div><dt>코드 근거</dt><dd>AnswerService · CanonicalIngestService · rank_products</dd></div>
           <div><dt>구현 결과</dt><dd>인용·거절을 포함한 RAG 응답 흐름 · CDC 데이터 계보와 행동 기반 추천 스냅샷</dd></div>
-          <div><dt>프로젝트</dt><dd>Enterprise Policy RAG · CDC Data Platform · Fashion Personalization</dd></div>
+          <div><dt>프로젝트</dt><dd>Enterprise Policy RAG · CDC Data Platform (프로토타입)</dd></div>
         </dl>
       </article>
 
@@ -3729,7 +3633,7 @@ tr:nth-child(even) td { background: #f8fafc; }
         <dl>
           <div><dt>코드 근거</dt><dd>QueryLogRepository · UsageRollupAggregator · PipelineQualityService</dd></div>
           <div><dt>구현 결과</dt><dd>LLM 지연 시간·토큰·비용과 요청 기록 · 커넥터 지연·품질 기준·배치 최신성 리포트</dd></div>
-          <div><dt>프로젝트</dt><dd>Enterprise Policy RAG · AI Gateway · CDC Data Platform · Fashion Personalization</dd></div>
+          <div><dt>프로젝트</dt><dd>Enterprise Policy RAG · AI Gateway · CDC Data Platform (프로토타입) · Fashion Personalization</dd></div>
         </dl>
       </article>
 
@@ -3738,7 +3642,7 @@ tr:nth-child(even) td { background: #f8fafc; }
         <dl>
           <div><dt>코드 근거</dt><dd>MvpLiveInfrastructureIT · verify-static-demo · run_portfolio_audit</dd></div>
           <div><dt>구현 결과</dt><dd>Docker Compose와 Testcontainers 인프라 검증 · pytest, 오프라인 회귀 테스트와 감사 실행 자동화</dd></div>
-          <div><dt>프로젝트</dt><dd>StockRush · Member Event Consistency · AI Gateway · CDC Data Platform</dd></div>
+          <div><dt>프로젝트</dt><dd>StockRush · Member Event Consistency · AI Gateway · CDC Data Platform (프로토타입)</dd></div>
         </dl>
       </article>
 
@@ -4258,7 +4162,7 @@ if access_reason is None:
     <main class="case-main">
       <div class="case-hero">
         <h2 class="case-headline">예산 초과와 외부 모델 실패를 호출 전에 통제하는 LLM 게이트웨이</h2>
-        <p>서비스마다 흩어진 LLM 인증·예산·캐시·라우팅·복구 정책을 OpenAI 호환 WebFlux 게이트웨이의 한 요청 처리 순서로 통합했습니다.</p>
+        <p>서비스마다 흩어진 LLM 인증·예산·캐시·라우팅·복구 정책을 OpenAI 호환 WebFlux 게이트웨이의 한 요청 처리 순서로 통합했습니다.<br><br>사내 문서 검색, 상담 챗봇, 요약 기능처럼 여러 애플리케이션에서 LLM을 호출하는 사용 시나리오를 가정할 수 있으며, 이는 실제 운영 사례가 아닙니다.<br><br>요청 흐름: Auth → Quota → Guardrail → Cache → Router → Dispatch → Fallback → Guardrail → Record<br>Core / 검증: Java 21·Spring Boot WebFlux·메모리 기반 정책·Fake Provider·Deterministic/Fake Embedding<br>Optional Integration: Redis·PostgreSQL·pgvector·실제 provider 연동 경로</p>
       </div>
 
       <section class="case-visual" style="--case-accent: #1c5d99;">
@@ -4407,11 +4311,11 @@ if (quota != QuotaOutcome.ALLOWED) {
 
     <aside class="case-rail">
       <div class="rail-index">프로젝트 05</div>
-      <p class="case-project-name ">CDC Data Platform</p>
+      <p class="case-project-name ">CDC Data Platform (프로토타입)</p>
       <p class="rail-domain">CDC / Kafka / Lakehouse / Lineage / Replay</p>
       <div class="rail-block">
         <span class="rail-label">담당 범위</span>
-        <p class="rail-text">2026.06 / 개인 프로젝트 / CDC 데이터 플랫폼 백엔드 설계, 구현, 검증</p>
+        <p class="rail-text">2026.06 / 개인 프로젝트 / CDC 이벤트 처리 프로토타입 설계, 구현, 검증</p>
       </div>
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
@@ -4421,7 +4325,7 @@ if (quota != QuotaOutcome.ALLOWED) {
 
     <main class="case-main">
       <div class="case-hero">
-        <h2 class="case-headline">변경 캡처·복구·저장을 독립 경계에서 검증한 CDC 플랫폼</h2>
+        <h2 class="case-headline">변경 캡처·복구·저장을 독립 경계에서 검증한 CDC 프로토타입</h2>
         <p>PostgreSQL 변경 캡처, 표준 이벤트 제어와 레이크하우스 저장을 세 독립 실험으로 구현했습니다. 각 경계에서 원천 메타데이터, 중복 처리 장부, 재처리 상태와 데이터 계보를 검증했습니다.</p>
       </div>
 
@@ -4563,15 +4467,15 @@ boolean created = canonicalEventPublisher.recordCanonicalEvent(event, sourceOffs
       </section>
       <div class="case-source-links"><a href="https://github.com/cyson21/cdc-data-platform">코드 저장소</a><span> · </span><a href="https://github.com/cyson21/cdc-data-platform/blob/main/docs/portfolio/one-pager.md">설계·검증 문서</a></div>
     </main>
-    <div class="footer-note">손찬양 · CDC Data Platform</div>
+    <div class="footer-note">손찬양 · CDC Data Platform (프로토타입)</div>
   </section>
 
 
   <section class="page case-page case-study-page" data-page="09" style="--case-accent: #1c5d99;">
 
     <aside class="case-rail">
-      <div class="rail-index">프로젝트 06</div>
-      <p class="case-project-name ultra-compact">Fashion Personalization Platform</p>
+      <div class="rail-index">기타 실험</div>
+      <p class="case-project-name ultra-compact">기타 실험 · Fashion Personalization Platform</p>
       <p class="rail-domain">Python API / 커머스 개인화 / 추천 배치 / 이벤트 처리</p>
       <div class="rail-block">
         <span class="rail-label">담당 범위</span>
@@ -4726,7 +4630,7 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
       </section>
       <div class="case-source-links"><a href="https://github.com/cyson21/fashion-personalization-platform">코드 저장소</a><span> · </span><a href="https://github.com/cyson21/fashion-personalization-platform/blob/main/docs/architecture.md">설계·검증 문서</a></div>
     </main>
-    <div class="footer-note">손찬양 · Fashion Personalization Platform</div>
+    <div class="footer-note">손찬양 · 기타 실험 · Fashion Personalization Platform</div>
   </section>
 
 
@@ -4771,7 +4675,7 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
       </article>
 
       <article class="appendix-scope-card" style="--project-accent: #1c5d99;">
-        <header><span>05</span><h3>CDC Data Platform</h3></header>
+        <header><span>05</span><h3>CDC Data Platform (프로토타입)</h3></header>
         <dl>
           <div><dt>확인 결과</dt><dd>원본 7건 중 6건 반영·중복 1건 억제, 4개 원천 테이블과 분석 마트의 계보 추적</dd></div>
           <div><dt>아직 확인하지 않은 범위</dt><dd>AWS S3/Athena, 장기 Kafka Connect, Trino, 운영 규모 부하와 다중 리전</dd></div>
@@ -4779,7 +4683,7 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
       </article>
 
       <article class="appendix-scope-card" style="--project-accent: #1c5d99;">
-        <header><span>06</span><h3>Fashion Personalization Platform</h3></header>
+        <header><span>06</span><h3>기타 실험 · Fashion Personalization Platform</h3></header>
         <dl>
           <div><dt>확인 결과</dt><dd>동일 키 1회 반영, 3회 실패 뒤 DLQ, 상품 6개 추천 순위와 스냅샷 2개 이상·지연 0건</dd></div>
           <div><dt>아직 확인하지 않은 범위</dt><dd>PostgreSQL·SQS/EventBridge·S3 adapter, AWS 배포, 실제 ML·A/B 성과</dd></div>
