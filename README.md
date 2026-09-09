@@ -2,6 +2,8 @@
 
 Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트 처리와 데이터 흐름 문제를 해결한 프로젝트를 정리했습니다.
 
+실무에서는 백엔드 2명, 프론트엔드 1명의 3인 개발팀에서 20개 이상의 기업 고객 서비스를 개발·운영했습니다. 아래 대표 프로젝트는 개인 프로젝트에서 설계·구현·검증한 범위이며, 실무 운영 경험과 구분합니다.
+
 [웹 포트폴리오](https://cyson21.github.io/) · [통합 포트폴리오 HTML](https://cyson21.github.io/portfolio/) · [프로젝트 HTML](https://cyson21.github.io/projects/) · [이력서 PDF](https://github.com/cyson21/portfolio-hub/releases/download/latest/resume.pdf)
 
 ## 대표 프로젝트
@@ -9,10 +11,10 @@ Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트
 | 프로젝트 | 주요 내용 |
 |---|---|
 | [StockRush](https://cyson21.github.io/projects/stockrush/) | 중복 주문과 결제 실패, Kafka 중단 뒤 주문·재고·Outbox 상태 수렴 |
+| [Enterprise Policy RAG](https://cyson21.github.io/projects/enterprise-policy-rag/) | 검색 전 권한 적용과 근거 기반 응답 생성 제어 |
 | [Member Event Consistency](https://cyson21.github.io/projects/member-event-consistency/) | 최초 보상 1회, 쿠폰 수량, 포인트 잔액을 동시 요청에서도 보호 |
-| [CDC Data Platform](https://cyson21.github.io/projects/cdc-data-platform/) | PostgreSQL 변경 캡처, 중복 적재 방지, 실패 이벤트 재처리 |
 
-전체 프로젝트는 웹사이트에서 주제별로 볼 수 있으며, 각 프로젝트 페이지에서 주요 코드와 관련 테스트를 확인할 수 있습니다.
+전체 프로젝트는 웹사이트에서 주제별로 볼 수 있으며, 각 프로젝트 페이지에서 주요 코드와 관련 테스트를 확인할 수 있습니다. CDC는 독립 구성요소를 검증하는 프로토타입 범위로 소개합니다.
 
 ## 콘텐츠와 공개 경계
 
