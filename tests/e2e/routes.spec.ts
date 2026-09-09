@@ -57,10 +57,10 @@ for (const route of routes) {
 test('project filter works and code details keep implementation and tests visible', async ({ page }) => {
   await page.goto('/projects/');
   await page.getByRole('radio', { name: /^백엔드/ }).check();
-  await expect(page.locator('[data-project-domain="Backend"]')).toHaveCount(3);
+  await expect(page.locator('[data-project-domain="Backend"]')).toHaveCount(2);
   await expect(page.locator('[data-project-domain="AI"]:visible')).toHaveCount(0);
-  await expect(page.locator('#filter-status')).toHaveText('백엔드 3개 프로젝트');
-  await expect(page.locator('[data-project-domain="Backend"] .domain')).toHaveText(['백엔드', '백엔드', '백엔드']);
+  await expect(page.locator('#filter-status')).toHaveText('백엔드 2개 프로젝트');
+  await expect(page.locator('[data-project-domain="Backend"] .domain')).toHaveText(['백엔드', '백엔드']);
 
   await page.goto('/projects/stockrush/');
   const firstEvidence = page.locator('.evidence').first();
@@ -109,22 +109,21 @@ test('detail pages expose an explicit route back to the portfolio home', async (
 test('experience page unifies the résumé summary and career evidence', async ({ page }) => {
   await page.goto('/experience/');
   await expect(page.getByRole('heading', { name: '경력·이력서' })).toBeVisible();
-  await expect(page.locator('.resume-overview .summary-intro')).toHaveText('Java·Spring Boot 기반의 6년 차 백엔드 개발자입니다.');
+  await expect(page.locator('.resume-overview .summary-intro')).toHaveText('Java·Spring Boot 기반의 5년 차 백엔드 개발자입니다.');
   await expect(page.locator('.resume-overview .summary-highlights li')).toHaveCount(6);
   await expect(page.locator('.resume-overview .summary-highlights')).toContainText('기업용 플랫폼의 요구사항 분석, API 설계, 데이터 모델링');
-  await expect(page.locator('.resume-overview .summary-highlights')).toContainText('복잡한 상태 변경과 데이터 정합성 문제 분석 및 개선');
-  await expect(page.locator('.resume-overview .summary-highlights')).toContainText('운영 이슈 재현, 원인 분석, 수정, 회귀 테스트까지 전 과정 수행');
+  await expect(page.locator('.resume-overview .summary-highlights')).toContainText('20개 이상의 기업 고객 서비스를 개발·운영');
+  await expect(page.locator('.resume-overview .summary-highlights')).toContainText('백엔드 2명, 프론트엔드 1명의 3인 개발팀에서 협업');
   await expect(page.getByRole('heading', { name: '주요 업무' })).toHaveCount(2);
   await expect(page.getByRole('heading', { name: '이엠캐스트(주)' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'REST API 설계·개발·운영' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '운영 장애·데이터 오류 개선' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '데이터 접근 계층·정합성' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'S3 연동·배포 운영' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '통합 테스트·회귀 검증' })).toBeVisible();
-  const currentExperience = page.locator('.experience-entry').first();
+  await expect(page.getByRole('heading', { name: '기업 고객 서비스 개발·운영' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '배포·운영' })).toBeVisible();
+   const currentExperience = page.locator('.experience-entry').first();
   await expect(currentExperience.getByRole('heading', { name: '이엠캐스트(주)' })).toBeVisible();
   await expect(currentExperience.locator('.context')).toHaveText(
-    'Java·Spring Boot 기반 기업용 플랫폼의 REST API 설계·개발 및 운영을 담당했습니다.',
+    '백엔드 2명, 프론트엔드 1명의 3인 개발팀에서 20개 이상의 기업 고객 서비스를 Java·Spring Boot 기반으로 개발·운영했습니다.',
   );
   await expect(page.locator('.experience-support .skill-groups')).toBeVisible();
   await expect(page.getByRole('heading', { name: '학력' })).toBeVisible();
