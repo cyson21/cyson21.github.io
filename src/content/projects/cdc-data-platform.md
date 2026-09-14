@@ -4,10 +4,10 @@ featured: false
 publicationState: public
 name: CDC Data Platform
 domain: Data
-eyebrow: CDC 데이터 파이프라인
-summary: 재전달된 DB 변경을 같은 이벤트로 식별하고, 적재 실패 뒤에도 원천 위치와 처리 상태를 추적할 수 있도록 설계했습니다. 처리 장부와 재처리 경로를 구현했습니다.
+eyebrow: CDC 이벤트 처리 프로토타입
+summary: CDC runtime, control plane, lakehouse 구성요소를 독립적인 범위로 구현한 프로토타입입니다. 재전달된 DB 변경을 식별하고 적재 실패 뒤 원천 위치와 처리 상태를 추적하는 범위를 검증했습니다.
 period: "2026.06"
-role: 개인 프로젝트 · Debezium·Kafka 변경 수집, 표준 이벤트 변환, 처리 장부와 실패·재처리 API 직접 설계·구현
+role: 개인 프로젝트 · Debezium·Kafka 변경 수집, 표준 이벤트 변환, 처리 장부와 실패·재처리 API를 독립 범위로 설계·구현
 stack:
   - Java
   - Spring Boot

@@ -10,7 +10,7 @@ cardEvidence:
   implementation: 중복 보상은 고유 제약, 포인트는 조건부 차감, 쿠폰은 행 잠금과 용량 조건으로 보호합니다.
   result: 8건의 동시 보상은 1건만 반영되고, 잔액 100의 60 차감 요청 2건은 1건만 성공합니다.
 period: 2026.05–2026.06
-role: 개인 프로젝트 · Spring API, PostgreSQL 동시성 제어, Redis 잠금과 RabbitMQ 순차 처리 경로 직접 설계·구현
+role: 개인 프로젝트 · Spring API, PostgreSQL 동시성 제어, Redis 잠금과 RabbitMQ 단일 소비자 기반 캠페인 발급 경합 제어 경로 직접 설계·구현
 stack:
   - Java
   - Spring Boot

@@ -142,4 +142,6 @@ seo:
 updatedAt: 2026-07-19
 ---
 
+> 실행 기준: **Core / 검증**은 Java 21·Spring WebFlux와 메모리 기반 정책, Fake Provider·Deterministic/Fake Embedding으로 재현합니다. **Optional Integration**으로 Redis·PostgreSQL·pgvector와 실제 provider 연동 경로를 분리합니다.
+
 애플리케이션마다 중복되는 LLM 호출 정책과 장애 대응을 공통 경계로 모은 Gateway 프로젝트입니다.
