@@ -13,7 +13,7 @@ const experienceRecords = [
     end: null,
     company: '이엠캐스트(주)',
     role: '백엔드 개발자 · 주임',
-    context: 'Java·Spring Boot 기반 기업용 플랫폼의 REST API 설계·개발 및 운영을 담당했습니다.',
+    context: '실무에서는 4인 개발팀에서 20개 이상의 기업 고객 서비스를 Java·Spring Boot 기반으로 개발·운영했습니다.',
     responsibilities: [
       {
         title: 'REST API 설계·개발·운영',
@@ -73,12 +73,12 @@ const experienceRecords = [
 export const resumeIntro = 'Java·Spring Boot 기반의 6년 차 백엔드 개발자입니다.';
 
 export const resumeHighlights = [
+  '20개 이상의 기업 고객 서비스 개발·운영',
+  '4인 개발팀 협업',
   '기업용 플랫폼의 요구사항 분석, API 설계, 데이터 모델링',
   '복잡한 상태 변경과 데이터 정합성 문제 분석 및 개선',
   '운영 이슈 재현, 원인 분석, 수정, 회귀 테스트까지 전 과정 수행',
   '비즈니스 규칙 정비와 통합 테스트를 통한 운영 안정성 강화',
-  '공공·실시간 데이터 수집·가공 및 REST API 개발',
-  '시계열 예측 결과 연동과 Docker 기반 배포·운영',
 ] as const;
 
 export const resumeClosing =
