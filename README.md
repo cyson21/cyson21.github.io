@@ -2,8 +2,6 @@
 
 Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트 처리와 데이터 흐름 문제를 해결한 프로젝트를 정리했습니다.
 
-실무에서는 백엔드 2명, 프론트엔드 1명의 3인 개발팀에서 20개 이상의 기업 고객 서비스를 개발·운영했습니다. 아래 대표 프로젝트는 개인 프로젝트에서 설계·구현·검증한 범위이며, 실무 운영 경험과 구분합니다.
-
 [웹 포트폴리오](https://cyson21.github.io/) · [통합 포트폴리오 HTML](https://cyson21.github.io/portfolio/) · [프로젝트 HTML](https://cyson21.github.io/projects/) · [이력서 PDF](https://github.com/cyson21/portfolio-hub/releases/download/latest/resume.pdf)
 
 ## 대표 프로젝트
