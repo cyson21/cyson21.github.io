@@ -39,7 +39,7 @@ test('home omits the temporary career and project sections while keeping detail 
 
   await expect(page.locator('[aria-labelledby="experience-title"]')).toHaveCount(0);
   await expect(page.locator('#featured-projects')).toHaveCount(0);
-  await expect(page.getByRole('navigation', { name: '주요 탐색' }).getByRole('link', { name: '프로젝트' })).toHaveAttribute('href', '/projects/');
+  await expect(page.getByRole('navigation', { name: '주요 탐색' }).getByRole('link', { name: '개인 프로젝트' })).toHaveAttribute('href', '/projects/');
   await expect(page.getByRole('navigation', { name: '주요 탐색' }).getByRole('link', { name: '경력·이력서' })).toHaveAttribute('href', '/experience/');
 });
 
