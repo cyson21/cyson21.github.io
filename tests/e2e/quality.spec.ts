@@ -68,7 +68,7 @@ test('mobile menu opens, traps no content, and closes after navigation', async (
   await menu.click();
   await expect(menu).toHaveAttribute('aria-expanded', 'true');
   await expect(menu).toHaveAccessibleName('탐색 메뉴 닫기');
-  await page.getByRole('navigation', { name: '모바일 탐색' }).getByRole('link', { name: '프로젝트' }).click();
+  await page.getByRole('navigation', { name: '모바일 탐색' }).getByRole('link', { name: '개인 프로젝트' }).click();
   await expect(page).toHaveURL(/\/projects\/$/);
 });
 

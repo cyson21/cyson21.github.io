@@ -145,7 +145,7 @@ test('resume route redirects to the unified experience page', async ({ page }) =
   }
 });
 
-test('home omits the temporary sections and keeps detail routes in the header', async ({ page, isMobile }) => {
+test('home navigation prioritizes career and labels personal projects', async ({ page, isMobile }) => {
   await page.goto('/');
   await expect(page.locator('[aria-labelledby="experience-title"]')).toHaveCount(0);
   await expect(page.locator('#featured-projects')).toHaveCount(0);
@@ -153,8 +153,12 @@ test('home omits the temporary sections and keeps detail routes in the header', 
     await page.getByRole('button', { name: '탐색 메뉴 열기' }).click();
   }
   const navigation = page.getByRole('navigation', { name: isMobile ? '모바일 탐색' : '주요 탐색' });
-  await expect(navigation.getByRole('link', { name: '프로젝트' })).toHaveAttribute('href', '/projects/');
-  await expect(navigation.getByRole('link', { name: '경력·이력서' })).toHaveAttribute('href', '/experience/');
+  const links = navigation.getByRole('link');
+  await expect(links.nth(0)).toHaveText('홈');
+  await expect(links.nth(1)).toHaveText('경력·이력서');
+  await expect(links.nth(2)).toHaveText('개인 프로젝트');
+  await expect(links.nth(1)).toHaveAttribute('href', '/experience/');
+  await expect(links.nth(2)).toHaveAttribute('href', '/projects/');
 });
 
 test('projects page heading levels do not skip from h1 to h3', async ({ page }) => {
