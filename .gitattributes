@@ -1,0 +1,3 @@
+# Keep SHA-256-approved public text assets byte-stable on Windows.
+/public/portfolio/index.html text eol=lf
+/public/themes/*.css text eol=lf

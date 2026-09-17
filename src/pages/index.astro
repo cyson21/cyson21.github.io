@@ -21,7 +21,7 @@ import { profile, resumeClosing, resumeHighlights } from '../data/site';
         <div class="hero-lede">
           <p class="hero-statement">{profile.statement}</p>
           <ul class="hero-highlights">
-            {resumeHighlights.map((item) => <li>{item}</li>)}
+            {resumeHighlights.slice(2).map((item) => <li>{item}</li>)}
           </ul>
           <p class="hero-closing">{resumeClosing}</p>
         </div>
