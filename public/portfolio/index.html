@@ -59,6 +59,28 @@ h1 { color: var(--navy); font-size: 34px; line-height: 1.12; font-weight: 850; }
 h2 { color: var(--navy); font-size: 23px; line-height: 1.18; font-weight: 850; margin-bottom: 6px; }
 h3 { color: var(--navy); font-size: 14.7px; line-height: 1.22; font-weight: 850; margin-bottom: 5px; }
 a { color: var(--blue); text-decoration: none; font-weight: 800; }
+.portfolio-home-link {
+  position: fixed;
+  z-index: 20;
+  top: 18px;
+  right: 18px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 13px;
+  border: 1px solid #102033;
+  border-radius: 999px;
+  background: #102033;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(16, 32, 51, 0.2);
+  font-size: 13px;
+  font-weight: 850;
+}
+.portfolio-home-link:hover { background: #1f5fbf; color: #ffffff; }
+.portfolio-home-link:focus-visible {
+  outline: 3px solid #9fd1ff;
+  outline-offset: 3px;
+}
 .cover {
   color: var(--ink);
   background: var(--paper);
@@ -802,6 +824,12 @@ tr:nth-child(even) td { background: #f8fafc; }
   word-break: keep-all;
   overflow-wrap: break-word;
 }
+.rail-text.rail-text-compact {
+  font-size: 9.5px;
+  line-height: 1.22;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
 .rail-list {
   display: grid;
   gap: 3px;
@@ -811,7 +839,7 @@ tr:nth-child(even) td { background: #f8fafc; }
 }
 .stack-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 6px;
 }
 .stack-token {
@@ -835,7 +863,9 @@ tr:nth-child(even) td { background: #f8fafc; }
   font-size: 8.4px;
   line-height: 1.1;
   font-weight: 850;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 .case-main {
   display: flex;
@@ -2020,6 +2050,7 @@ tr:nth-child(even) td { background: #f8fafc; }
   line-height: 1.45;
   font-weight: 650;
 }
+.map-hero .compact-note { color: rgba(255,255,255,0.76); }
 .map-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2244,6 +2275,7 @@ tr:nth-child(even) td { background: #f8fafc; }
     font-size: 15px;
   }
   body::before { display: none; }
+  .portfolio-home-link { display: none; }
   .page {
     width: 210mm;
     height: 297mm;
@@ -2317,8 +2349,9 @@ tr:nth-child(even) td { background: #f8fafc; }
   }
   .stack-token span {
     font-size: 7.8px;
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
   }
   .cover-stack-mini {
     gap: 1.4mm;
@@ -3512,10 +3545,11 @@ tr:nth-child(even) td { background: #f8fafc; }
 </style>
 </head>
 <body>
+  <a class="portfolio-home-link" href="https://cyson21.github.io/">← 홈으로</a>
 
   <section class="page cover" data-page="01">
     <h1>손찬양 백엔드 엔지니어링 포트폴리오</h1>
-    <p class="lead">분산 상태 수렴, 동시성 제어, 접근 권한, 데이터 재처리와 AI 요청 정책을 구현하고 테스트로 검증했습니다.</p>
+    <p class="lead">분산 상태 수렴, 동시성 제어, 접근 권한, 데이터 재처리와 AI 요청 정책을 구현하고 테스트로 검증했습니다.<br><span class="compact-note">실무에서는 4인 실무 개발팀에서 20개 이상의 기업 고객 서비스를 개발·운영했습니다. 아래 프로젝트는 실무 경력과 구분되는 개인 프로젝트 검증 자료입니다.</span></p>
     <div class="cover-list">
       <section class="cover-group">
         <div class="cover-group-head"><h2>트랜잭션 · 권한 · 동시성</h2><span>상태 수렴과 업무 불변식 보호</span></div>
@@ -3546,7 +3580,7 @@ tr:nth-child(even) td { background: #f8fafc; }
 
       </section>
       <section class="cover-group">
-        <div class="cover-group-head"><h2>LLM · 데이터 · 개인화</h2><span>정책 파이프라인과 데이터 품질 추적</span></div>
+        <div class="cover-group-head"><h2>LLM · 데이터</h2><span>정책 파이프라인과 데이터 품질 추적</span></div>
 
       <article class="cover-row">
         <div class="num">04</div>
@@ -3559,21 +3593,14 @@ tr:nth-child(even) td { background: #f8fafc; }
       <article class="cover-row">
         <div class="num">05</div>
         <div>
-          <h3>CDC Data Platform</h3>
+          <h3>CDC Data Platform (프로토타입)</h3>
           <p>중복 CDC, 복구 이력 손실과 자동 연결되지 않은 구간의 종단 전달</p>
-        </div>
-      </article>
-
-      <article class="cover-row">
-        <div class="num">06</div>
-        <div>
-          <h3>Fashion Personalization Platform</h3>
-          <p>중복·실패 이벤트가 프로필과 추천 스냅샷을 오염함</p>
         </div>
       </article>
 
       </section>
     </div>
+    <p class="compact-note">기타 실험: Fashion Personalization Platform</p>
     <div class="footer-note">손찬양 · Backend Engineering Portfolio</div>
   </section>
 
@@ -3592,6 +3619,7 @@ tr:nth-child(even) td { background: #f8fafc; }
           <div>
             <h3>StockRush</h3>
             <p class="summary-project-domain">분산 커머스 / 주문 상태 수렴 / 이벤트 기반 백엔드</p>
+            <span class="summary-project-tier">정합성·권한·동시성</span>
           </div>
         </div>
         <dl class="summary-project-facts">
@@ -3607,6 +3635,7 @@ tr:nth-child(even) td { background: #f8fafc; }
           <div>
             <h3>Member Event Consistency</h3>
             <p class="summary-project-domain">동시성 / 업무 불변식 / DB 보호 조건 / Redis-RabbitMQ 비교</p>
+            <span class="summary-project-tier">정합성·권한·동시성</span>
           </div>
         </div>
         <dl class="summary-project-facts">
@@ -3622,6 +3651,7 @@ tr:nth-child(even) td { background: #f8fafc; }
           <div>
             <h3>Enterprise Policy RAG</h3>
             <p class="summary-project-domain">AI 백엔드 / RAG / 권한 검색 / 운영 관측</p>
+            <span class="summary-project-tier">정합성·권한·동시성</span>
           </div>
         </div>
         <dl class="summary-project-facts">
@@ -3637,6 +3667,7 @@ tr:nth-child(even) td { background: #f8fafc; }
           <div>
             <h3>AI Gateway</h3>
             <p class="summary-project-domain">LLM Gateway / 라우팅 / 비용 보호 / 캐시 / 폴백 / 관측</p>
+            <span class="summary-project-tier">LLM·데이터</span>
           </div>
         </div>
         <dl class="summary-project-facts">
@@ -3650,8 +3681,9 @@ tr:nth-child(even) td { background: #f8fafc; }
         <div class="summary-project-head">
           <div class="summary-project-number">05</div>
           <div>
-            <h3>CDC Data Platform</h3>
+            <h3>CDC Data Platform (프로토타입)</h3>
             <p class="summary-project-domain">CDC / Kafka / Lakehouse / Lineage / Replay</p>
+            <span class="summary-project-tier">LLM·데이터</span>
           </div>
         </div>
         <dl class="summary-project-facts">
@@ -3667,6 +3699,7 @@ tr:nth-child(even) td { background: #f8fafc; }
           <div>
             <h3>Fashion Personalization Platform</h3>
             <p class="summary-project-domain">Python API / 커머스 개인화 / 추천 배치 / 이벤트 처리</p>
+            <span class="summary-project-tier">기타 실험</span>
           </div>
         </div>
         <dl class="summary-project-facts">
@@ -3702,7 +3735,7 @@ tr:nth-child(even) td { background: #f8fafc; }
         <dl>
           <div><dt>코드 근거</dt><dd>OutboxRelayService · FallbackChain · ReplayRequestService</dd></div>
           <div><dt>구현 결과</dt><dd>Kafka·Outbox 중단 뒤 재발행과 멱등 재처리 · LLM 대체 경로, CDC 재처리와 이벤트 재등록 경로</dd></div>
-          <div><dt>프로젝트</dt><dd>StockRush · AI Gateway · CDC Data Platform · Fashion Personalization</dd></div>
+          <div><dt>프로젝트</dt><dd>StockRush · AI Gateway · CDC Data Platform (프로토타입)</dd></div>
         </dl>
       </article>
 
@@ -3720,7 +3753,7 @@ tr:nth-child(even) td { background: #f8fafc; }
         <dl>
           <div><dt>코드 근거</dt><dd>AnswerService · CanonicalIngestService · rank_products</dd></div>
           <div><dt>구현 결과</dt><dd>인용·거절을 포함한 RAG 응답 흐름 · CDC 데이터 계보와 행동 기반 추천 스냅샷</dd></div>
-          <div><dt>프로젝트</dt><dd>Enterprise Policy RAG · CDC Data Platform · Fashion Personalization</dd></div>
+          <div><dt>프로젝트</dt><dd>Enterprise Policy RAG · CDC Data Platform (프로토타입)</dd></div>
         </dl>
       </article>
 
@@ -3729,7 +3762,7 @@ tr:nth-child(even) td { background: #f8fafc; }
         <dl>
           <div><dt>코드 근거</dt><dd>QueryLogRepository · UsageRollupAggregator · PipelineQualityService</dd></div>
           <div><dt>구현 결과</dt><dd>LLM 지연 시간·토큰·비용과 요청 기록 · 커넥터 지연·품질 기준·배치 최신성 리포트</dd></div>
-          <div><dt>프로젝트</dt><dd>Enterprise Policy RAG · AI Gateway · CDC Data Platform · Fashion Personalization</dd></div>
+          <div><dt>프로젝트</dt><dd>Enterprise Policy RAG · AI Gateway · CDC Data Platform (프로토타입) · Fashion Personalization (기타 실험)</dd></div>
         </dl>
       </article>
 
@@ -3738,7 +3771,7 @@ tr:nth-child(even) td { background: #f8fafc; }
         <dl>
           <div><dt>코드 근거</dt><dd>MvpLiveInfrastructureIT · verify-static-demo · run_portfolio_audit</dd></div>
           <div><dt>구현 결과</dt><dd>Docker Compose와 Testcontainers 인프라 검증 · pytest, 오프라인 회귀 테스트와 감사 실행 자동화</dd></div>
-          <div><dt>프로젝트</dt><dd>StockRush · Member Event Consistency · AI Gateway · CDC Data Platform</dd></div>
+          <div><dt>프로젝트</dt><dd>StockRush · Member Event Consistency · AI Gateway · CDC Data Platform (프로토타입)</dd></div>
         </dl>
       </article>
 
@@ -3759,6 +3792,7 @@ tr:nth-child(even) td { background: #f8fafc; }
       </div>
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
+
         <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span>Spring Boot</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="16" cy="6" r="2.2"/><circle cx="16" cy="18" r="2.2"/><path d="M8 11l6-4M8 13l6 4"/></svg><span>Kafka</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span>PostgreSQL</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.2-2.6 7.7-7 10-4.4-2.3-7-5.8-7-10V6l7-3z"/><path d="M9 12l2 2 4-5"/></svg><span>Keycloak</span></div></div>
       </div>
     </aside>
@@ -3920,10 +3954,11 @@ outboxEventRepository.save(result.outboxEvent());</pre>
       <p class="rail-domain">동시성 / 업무 불변식 / DB 보호 조건 / Redis-RabbitMQ 비교</p>
       <div class="rail-block">
         <span class="rail-label">담당 범위</span>
-        <p class="rail-text">2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드</p>
+        <p class="rail-text rail-text-compact" title="2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드" aria-label="2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드">2026.05–06 · 개인 · 백엔드/인프라</p>
       </div>
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
+
         <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span>Spring Boot</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span>PostgreSQL</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l8 3-8 3-8-3 8-3z"/><path d="M4 11l8 3 8-3M4 15l8 3 8-3"/></svg><span>Redis</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 18V8h4v5h2V8h4v10H5z"/><path d="M17 13h2v5h-2zM7 6V3M13 6V3"/></svg><span>RabbitMQ</span></div></div>
       </div>
     </aside>
@@ -3931,7 +3966,7 @@ outboxEventRepository.save(result.outboxEvent());</pre>
     <main class="case-main">
       <div class="case-hero">
         <h2 class="case-headline">보상·쿠폰·포인트 불변식마다 다른 동시성 제어를 적용한 백엔드</h2>
-        <p>첫 로그인 보상·쿠폰 발급·포인트 차감의 불변식을 PostgreSQL에서 최종 보호하고, Redis 잠금과 RabbitMQ 단일 소비자의 적용 차이를 동시 요청으로 비교했습니다.</p>
+        <p>첫 로그인 보상·쿠폰 발급·포인트 차감의 불변식을 PostgreSQL에서 최종 보호하고, Redis 잠금과 RabbitMQ listener concurrency=1 경로의 적용 차이를 동시 요청으로 비교했습니다.</p>
       </div>
 
       <section class="case-visual" style="--case-accent: #1c5d99;">
@@ -4088,7 +4123,8 @@ for update</pre>
       </div>
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
-        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h5c1.7 0 3 1.3 3 3v3H8c-1.7 0-3 1.3-3 3v1"/><path d="M15 20h-5c-1.7 0-3-1.3-3-3v-3h9c1.7 0 3-1.3 3-3v-1"/><path d="M10 7h.1M14 17h.1"/></svg><span>Python API</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span>React/Vite</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span>PostgreSQL/pgvector</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span>외부 모델 선택 경로</span></div></div>
+        <p class="rail-text">Core / 검증: Python·FastAPI·In-memory 저장소·Deterministic/Fake Embedding·Fake Provider<br>Optional Integration: PostgreSQL·pgvector·OpenAI</p>
+        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h5c1.7 0 3 1.3 3 3v3H8c-1.7 0-3 1.3-3 3v1"/><path d="M15 20h-5c-1.7 0-3-1.3-3-3v-3h9c1.7 0 3-1.3 3-3v-1"/><path d="M10 7h.1M14 17h.1"/></svg><span>Python API</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span>React/Vite</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span>Optional: PostgreSQL/pgvector</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span>외부 모델 선택 경로</span></div></div>
       </div>
     </aside>
 
@@ -4251,6 +4287,7 @@ if access_reason is None:
       </div>
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
+        <p class="rail-text">Core / 검증: Java 21·Spring Boot WebFlux·메모리 기반 정책·요청 기록·Fake Provider·Deterministic/Fake Embedding<br>Optional Integration: Redis·PostgreSQL·pgvector·실제 provider 연동 경로</p>
         <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span>Java 21</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span>Spring Boot WebFlux</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l8 3-8 3-8-3 8-3z"/><path d="M4 11l8 3 8-3M4 15l8 3 8-3"/></svg><span>Redis</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span>PostgreSQL/pgvector</span></div></div>
       </div>
     </aside>
@@ -4258,7 +4295,7 @@ if access_reason is None:
     <main class="case-main">
       <div class="case-hero">
         <h2 class="case-headline">예산 초과와 외부 모델 실패를 호출 전에 통제하는 LLM 게이트웨이</h2>
-        <p>서비스마다 흩어진 LLM 인증·예산·캐시·라우팅·복구 정책을 OpenAI 호환 WebFlux 게이트웨이의 한 요청 처리 순서로 통합했습니다.</p>
+        <p>서비스마다 흩어진 LLM 인증·예산·캐시·라우팅·복구 정책을 OpenAI 호환 WebFlux 게이트웨이의 한 요청 처리 순서로 통합했습니다.<br><br>사내 문서 검색, 상담 챗봇, 요약 기능처럼 여러 애플리케이션에서 LLM을 호출하는 사용 시나리오를 가정할 수 있으며, 이는 실제 운영 사례가 아닙니다.<br><br>요청 흐름: Auth → Quota → Guardrail → Cache → Router → Dispatch → Fallback → Guardrail → Record</p>
       </div>
 
       <section class="case-visual" style="--case-accent: #1c5d99;">
@@ -4407,22 +4444,23 @@ if (quota != QuotaOutcome.ALLOWED) {
 
     <aside class="case-rail">
       <div class="rail-index">프로젝트 05</div>
-      <p class="case-project-name ">CDC Data Platform</p>
+      <p class="case-project-name compact">CDC Data Platform (프로토타입)</p>
       <p class="rail-domain">CDC / Kafka / Lakehouse / Lineage / Replay</p>
       <div class="rail-block">
         <span class="rail-label">담당 범위</span>
-        <p class="rail-text">2026.06 / 개인 프로젝트 / CDC 데이터 플랫폼 백엔드 설계, 구현, 검증</p>
+        <p class="rail-text">2026.06 / 개인 프로젝트 / CDC 이벤트 처리 프로토타입 설계, 구현, 검증</p>
       </div>
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
+
         <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span>Spring Boot</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span>PostgreSQL</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h6v6H5zM13 13h6v6h-6z"/><path d="M12 7h4a3 3 0 0 1 3 3v1M12 17H8a3 3 0 0 1-3-3v-1"/><path d="M14 5l2 2-2 2M10 19l-2-2 2-2"/></svg><span>Debezium</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="16" cy="6" r="2.2"/><circle cx="16" cy="18" r="2.2"/><path d="M8 11l6-4M8 13l6 4"/></svg><span>Kafka</span></div></div>
       </div>
     </aside>
 
     <main class="case-main">
       <div class="case-hero">
-        <h2 class="case-headline">변경 캡처·복구·저장을 독립 경계에서 검증한 CDC 플랫폼</h2>
-        <p>PostgreSQL 변경 캡처, 표준 이벤트 제어와 레이크하우스 저장을 세 독립 실험으로 구현했습니다. 각 경계에서 원천 메타데이터, 중복 처리 장부, 재처리 상태와 데이터 계보를 검증했습니다.</p>
+        <h2 class="case-headline">변경 캡처·복구·저장을 독립 경계에서 검증한 CDC 프로토타입</h2>
+        <p>CDC runtime, control plane, lakehouse 구성요소를 독립적인 범위로 구현했습니다. DB 변경 중복을 막고 적재 실패 원인과 재처리 상태를 원천 위치와 함께 추적하는 범위를 검증했습니다.</p>
       </div>
 
       <section class="case-visual" style="--case-accent: #1c5d99;">
@@ -4563,7 +4601,7 @@ boolean created = canonicalEventPublisher.recordCanonicalEvent(event, sourceOffs
       </section>
       <div class="case-source-links"><a href="https://github.com/cyson21/cdc-data-platform">코드 저장소</a><span> · </span><a href="https://github.com/cyson21/cdc-data-platform/blob/main/docs/portfolio/one-pager.md">설계·검증 문서</a></div>
     </main>
-    <div class="footer-note">손찬양 · CDC Data Platform</div>
+    <div class="footer-note">손찬양 · CDC Data Platform (프로토타입)</div>
   </section>
 
 
@@ -4579,6 +4617,7 @@ boolean created = canonicalEventPublisher.recordCanonicalEvent(event, sourceOffs
       </div>
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
+
         <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h5c1.7 0 3 1.3 3 3v3H8c-1.7 0-3 1.3-3 3v1"/><path d="M15 20h-5c-1.7 0-3-1.3-3-3v-3h9c1.7 0 3-1.3 3-3v-1"/><path d="M10 7h.1M14 17h.1"/></svg><span>Python 3.11+</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h5c1.7 0 3 1.3 3 3v3H8c-1.7 0-3 1.3-3 3v1"/><path d="M15 20h-5c-1.7 0-3-1.3-3-3v-3h9c1.7 0 3-1.3 3-3v-1"/><path d="M10 7h.1M14 17h.1"/></svg><span>선택형 FastAPI</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3v5l-4 8a3 3 0 0 0 2.7 4h8.6A3 3 0 0 0 19 16l-4-8V3"/><path d="M8 3h8M8 15h8"/></svg><span>pytest</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span>이벤트 처리</span></div></div>
       </div>
     </aside>
@@ -4739,7 +4778,7 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
     </div>
     <div class="appendix-scope-grid">
       <article class="appendix-scope-card" style="--project-accent: #1c5d99;">
-        <header><span>01</span><h3>StockRush</h3></header>
+          <header><span>01</span><h3>StockRush</h3></header>
         <dl>
           <div><dt>확인 결과</dt><dd>동일 이벤트 2회에도 Outbox 1건, 늦은 결제 승인 무시, 발행 5회 실패 뒤 FAILED</dd></div>
           <div><dt>아직 확인하지 않은 범위</dt><dd>실결제 연동, 다중 리전, 운영 규모 부하와 발행기 고가용성</dd></div>
@@ -4747,7 +4786,7 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
       </article>
 
       <article class="appendix-scope-card" style="--project-accent: #1c5d99;">
-        <header><span>03</span><h3>Member Event Consistency</h3></header>
+          <header><span>03</span><h3>Member Event Consistency</h3></header>
         <dl>
           <div><dt>확인 결과</dt><dd>동시 8건→보상 1건, 60원 차감 2건→잔액 40, 용량 3→정확히 3건 발급</dd></div>
           <div><dt>아직 확인하지 않은 범위</dt><dd>운영 규모 부하, 장시간 Redis/RabbitMQ 장애 복구와 실서비스 SLO</dd></div>
@@ -4755,7 +4794,7 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
       </article>
 
       <article class="appendix-scope-card" style="--project-accent: #1c5d99;">
-        <header><span>02</span><h3>Enterprise Policy RAG</h3></header>
+          <header><span>02</span><h3>Enterprise Policy RAG</h3></header>
         <dl>
           <div><dt>확인 결과</dt><dd>문서 5건 중 허용 3건만 검색, 근거가 없으면 답변과 인용을 비운 거절 응답</dd></div>
           <div><dt>아직 확인하지 않은 범위</dt><dd>운영 OIDC, 관리형 PostgreSQL/pgvector, 실제 OpenAI 호출과 배포 스모크 테스트</dd></div>
@@ -4763,7 +4802,7 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
       </article>
 
       <article class="appendix-scope-card" style="--project-accent: #1c5d99;">
-        <header><span>04</span><h3>AI Gateway</h3></header>
+          <header><span>04</span><h3>AI Gateway</h3></header>
         <dl>
           <div><dt>확인 결과</dt><dd>8단계 처리 순서, 4개 실행 방식과 4개 라우팅 전략을 회귀 테스트로 고정</dd></div>
           <div><dt>아직 확인하지 않은 범위</dt><dd>실제 OpenAI/Anthropic 전송, 운영 Redis/PostgreSQL, 클라우드 배포와 부하</dd></div>
@@ -4771,7 +4810,7 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
       </article>
 
       <article class="appendix-scope-card" style="--project-accent: #1c5d99;">
-        <header><span>05</span><h3>CDC Data Platform</h3></header>
+          <header><span>05</span><h3>CDC Data Platform (프로토타입)</h3></header>
         <dl>
           <div><dt>확인 결과</dt><dd>원본 7건 중 6건 반영·중복 1건 억제, 4개 원천 테이블과 분석 마트의 계보 추적</dd></div>
           <div><dt>아직 확인하지 않은 범위</dt><dd>AWS S3/Athena, 장기 Kafka Connect, Trino, 운영 규모 부하와 다중 리전</dd></div>
@@ -4779,7 +4818,7 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
       </article>
 
       <article class="appendix-scope-card" style="--project-accent: #1c5d99;">
-        <header><span>06</span><h3>Fashion Personalization Platform</h3></header>
+          <header><span>06</span><h3>기타 실험 · Fashion Personalization Platform</h3></header>
         <dl>
           <div><dt>확인 결과</dt><dd>동일 키 1회 반영, 3회 실패 뒤 DLQ, 상품 6개 추천 순위와 스냅샷 2개 이상·지연 0건</dd></div>
           <div><dt>아직 확인하지 않은 범위</dt><dd>PostgreSQL·SQS/EventBridge·S3 adapter, AWS 배포, 실제 ML·A/B 성과</dd></div>

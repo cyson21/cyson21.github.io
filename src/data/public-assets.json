@@ -39,10 +39,10 @@
     "output": "public/portfolio/index.html",
     "sourceProject": "side-projects",
     "sourcePath": "portfolio/portfolio-complete.html",
-    "sha256": "274f2cbd98aaeef558622de3614992f038a2f20c40eb8cb902b99a75b4424ce3",
+    "sha256": "5abee74b74e8a0b80fa6f89054b4738b811d6a0e6843e708ce484671c2f5366d",
     "owner": "Son Chanyang",
     "usage": "Public integrated portfolio HTML page",
-    "approvedAt": "2026-07-27"
+    "approvedAt": "2026-09-17"
   },
   {
     "output": "public/downloads/resume.pdf",
@@ -57,10 +57,10 @@
     "output": "public/icons/favicon.svg",
     "sourceProject": "portfolio-web",
     "sourcePath": "public/icons/favicon.svg",
-    "sha256": "cc75f11dcf1bc7159bc8fdd8efd80f017a3e280bacdf6cf0326da707681961c6",
+    "sha256": "d92d16972f4dc134b522f40912341d0e19b8ac947883419d45c89edf250a19c9",
     "owner": "Son Chanyang",
     "usage": "Public portfolio browser icon",
-    "approvedAt": "2026-07-15"
+    "approvedAt": "2026-09-17"
   },
   {
     "output": "public/themes/b.css",

@@ -20,6 +20,13 @@ function summaryGridBody(html) {
   return html.slice(start + openingTag.length, end);
 }
 
+function firstCssRule(html, selector) {
+  const start = html.indexOf(`${selector} {`);
+  assert.notEqual(start, -1, `integrated portfolio must style ${selector}`);
+  const end = html.indexOf('}', start);
+  assert.notEqual(end, -1, `integrated portfolio must close the ${selector} rule`);
+  return html.slice(start, end + 1);
+}
 test('integrated portfolio keeps the generated summary project cards', () => {
   const html = readIntegratedPortfolio();
   const summary = summaryGridBody(html);
@@ -40,6 +47,33 @@ test('integrated portfolio keeps the generated summary project cards', () => {
   assert.match(html, /운영 규모 부하/);
 });
 
+test('integrated portfolio provides a fixed link back to the portfolio home', () => {
+  const html = readIntegratedPortfolio();
+
+  assert.match(html, /<a class="portfolio-home-link" href="https:\/\/cyson21\.github\.io\/">← 홈으로<\/a>/);
+  assert.match(firstCssRule(html, '.portfolio-home-link'), /position:\s*fixed;/);
+});
+
+test('integrated portfolio renders one unwrapped technology token per rail row', () => {
+  const html = readIntegratedPortfolio();
+  const stackGrid = firstCssRule(html, '.stack-grid');
+  const stackTokenLabel = firstCssRule(html, '.stack-token span');
+
+  assert.match(stackGrid, /grid-template-columns:\s*1fr;/);
+  assert.doesNotMatch(stackGrid, /grid-template-columns:\s*1fr\s+1fr;/);
+  assert.match(stackTokenLabel, /white-space:\s*nowrap;/);
+});
+
+test('Member Event rail uses a compact visual scope while retaining the full scope', () => {
+  const html = readIntegratedPortfolio();
+  const fullScope = '2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드';
+  const compactScope = '2026.05–06 · 개인 · 백엔드/인프라';
+
+  assert.match(
+    html,
+    new RegExp(`<p class="rail-text rail-text-compact" title="${fullScope}" aria-label="${fullScope}">${compactScope}<\\/p>`),
+  );
+});
 test('project publication flags keep the three representative projects and detail-only projects', () => {
   const readFeatured = (slug) => {
     const source = readFileSync(join(projectsDirectory, `${slug}.md`), 'utf8');
