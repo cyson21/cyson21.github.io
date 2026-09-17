@@ -14,7 +14,7 @@ const source = resolve(
 const output = resolve(import.meta.dirname, '../public/portfolio/index.html');
 const temporaryOutput = resolve(dirname(output), `.portfolio-${process.pid}-${Date.now()}.tmp.html`);
 
-const html = readFileSync(source, 'utf8');
+const html = readFileSync(source, 'utf8').replace(/\r\n?/g, '\n');
 if (
   !html.trimStart().toLowerCase().startsWith('<!doctype html>')
   || !html.includes('<html lang="ko-KR">')
