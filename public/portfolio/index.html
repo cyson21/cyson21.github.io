@@ -81,6 +81,17 @@ a { color: var(--blue); text-decoration: none; font-weight: 800; }
   outline: 3px solid #9fd1ff;
   outline-offset: 3px;
 }
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .cover {
   color: var(--ink);
   background: var(--paper);
@@ -839,12 +850,14 @@ tr:nth-child(even) td { background: #f8fafc; }
 }
 .stack-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   gap: 6px;
 }
 .stack-token {
   display: grid;
-  grid-template-columns: 18px 1fr;
+  grid-template-columns: 18px minmax(0, 1fr);
+  min-width: 0;
   gap: 6px;
   align-items: center;
   min-height: 30px;
@@ -859,10 +872,13 @@ tr:nth-child(even) td { background: #f8fafc; }
   color: rgba(255,255,255,0.94);
 }
 .stack-token span {
+  min-width: 0;
+  overflow: hidden;
   color: rgba(255,255,255,0.88);
   font-size: 8.4px;
   line-height: 1.1;
   font-weight: 850;
+  text-overflow: ellipsis;
   white-space: nowrap;
   overflow-wrap: normal;
   word-break: normal;
@@ -2334,11 +2350,12 @@ tr:nth-child(even) td { background: #f8fafc; }
     gap: 2mm;
   }
   .stack-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
     gap: 1.2mm;
   }
   .stack-token {
-    grid-template-columns: 4mm 1fr;
+    grid-template-columns: 4mm minmax(0, 1fr);
     min-height: 6.2mm;
     padding: 1.4mm 1.2mm;
     border-radius: 2mm;
@@ -3793,7 +3810,7 @@ tr:nth-child(even) td { background: #f8fafc; }
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
 
-        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span>Spring Boot</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="16" cy="6" r="2.2"/><circle cx="16" cy="18" r="2.2"/><path d="M8 11l6-4M8 13l6 4"/></svg><span>Kafka</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span>PostgreSQL</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.2-2.6 7.7-7 10-4.4-2.3-7-5.8-7-10V6l7-3z"/><path d="M9 12l2 2 4-5"/></svg><span>Keycloak</span></div></div>
+        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span title="Spring Boot">Spring Boot</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="16" cy="6" r="2.2"/><circle cx="16" cy="18" r="2.2"/><path d="M8 11l6-4M8 13l6 4"/></svg><span title="Kafka">Kafka</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span title="PostgreSQL">PostgreSQL</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.2-2.6 7.7-7 10-4.4-2.3-7-5.8-7-10V6l7-3z"/><path d="M9 12l2 2 4-5"/></svg><span title="Keycloak">Keycloak</span></div></div>
       </div>
     </aside>
 
@@ -3954,12 +3971,12 @@ outboxEventRepository.save(result.outboxEvent());</pre>
       <p class="rail-domain">동시성 / 업무 불변식 / DB 보호 조건 / Redis-RabbitMQ 비교</p>
       <div class="rail-block">
         <span class="rail-label">담당 범위</span>
-        <p class="rail-text rail-text-compact" title="2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드" aria-label="2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드">2026.05–06 · 개인 · 백엔드/인프라</p>
+        <p class="rail-text rail-text-compact" title="2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드"><span aria-hidden="true">2026.05–06 · 개인 · 백엔드/인프라</span><span class="visually-hidden">2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드</span></p>
       </div>
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
 
-        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span>Spring Boot</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span>PostgreSQL</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l8 3-8 3-8-3 8-3z"/><path d="M4 11l8 3 8-3M4 15l8 3 8-3"/></svg><span>Redis</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 18V8h4v5h2V8h4v10H5z"/><path d="M17 13h2v5h-2zM7 6V3M13 6V3"/></svg><span>RabbitMQ</span></div></div>
+        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span title="Spring Boot">Spring Boot</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span title="PostgreSQL">PostgreSQL</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l8 3-8 3-8-3 8-3z"/><path d="M4 11l8 3 8-3M4 15l8 3 8-3"/></svg><span title="Redis">Redis</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 18V8h4v5h2V8h4v10H5z"/><path d="M17 13h2v5h-2zM7 6V3M13 6V3"/></svg><span title="RabbitMQ">RabbitMQ</span></div></div>
       </div>
     </aside>
 
@@ -4124,7 +4141,7 @@ for update</pre>
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
         <p class="rail-text">Core / 검증: Python·FastAPI·In-memory 저장소·Deterministic/Fake Embedding·Fake Provider<br>Optional Integration: PostgreSQL·pgvector·OpenAI</p>
-        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h5c1.7 0 3 1.3 3 3v3H8c-1.7 0-3 1.3-3 3v1"/><path d="M15 20h-5c-1.7 0-3-1.3-3-3v-3h9c1.7 0 3-1.3 3-3v-1"/><path d="M10 7h.1M14 17h.1"/></svg><span>Python API</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span>React/Vite</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span>Optional: PostgreSQL/pgvector</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span>외부 모델 선택 경로</span></div></div>
+        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h5c1.7 0 3 1.3 3 3v3H8c-1.7 0-3 1.3-3 3v1"/><path d="M15 20h-5c-1.7 0-3-1.3-3-3v-3h9c1.7 0 3-1.3 3-3v-1"/><path d="M10 7h.1M14 17h.1"/></svg><span title="Python API">Python API</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span title="React/Vite">React/Vite</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span title="Optional: PostgreSQL/pgvector">Optional: PostgreSQL/pgvector</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span title="외부 모델 선택 경로">외부 모델 선택 경로</span></div></div>
       </div>
     </aside>
 
@@ -4288,7 +4305,7 @@ if access_reason is None:
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
         <p class="rail-text">Core / 검증: Java 21·Spring Boot WebFlux·메모리 기반 정책·요청 기록·Fake Provider·Deterministic/Fake Embedding<br>Optional Integration: Redis·PostgreSQL·pgvector·실제 provider 연동 경로</p>
-        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span>Java 21</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span>Spring Boot WebFlux</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l8 3-8 3-8-3 8-3z"/><path d="M4 11l8 3 8-3M4 15l8 3 8-3"/></svg><span>Redis</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span>PostgreSQL/pgvector</span></div></div>
+        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span title="Java 21">Java 21</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span title="Spring Boot WebFlux">Spring Boot WebFlux</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l8 3-8 3-8-3 8-3z"/><path d="M4 11l8 3 8-3M4 15l8 3 8-3"/></svg><span title="Redis">Redis</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span title="PostgreSQL/pgvector">PostgreSQL/pgvector</span></div></div>
       </div>
     </aside>
 
@@ -4453,7 +4470,7 @@ if (quota != QuotaOutcome.ALLOWED) {
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
 
-        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span>Spring Boot</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span>PostgreSQL</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h6v6H5zM13 13h6v6h-6z"/><path d="M12 7h4a3 3 0 0 1 3 3v1M12 17H8a3 3 0 0 1-3-3v-1"/><path d="M14 5l2 2-2 2M10 19l-2-2 2-2"/></svg><span>Debezium</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="16" cy="6" r="2.2"/><circle cx="16" cy="18" r="2.2"/><path d="M8 11l6-4M8 13l6 4"/></svg><span>Kafka</span></div></div>
+        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.5 5.5C13 4 7 7.8 6.2 13.3c-.5 3.7 2.8 6.2 6.4 5.1 3.6-1.1 5.8-5.2 5-8.8"/><path d="M6 18c2.6-4.8 6.4-7.5 11.5-8.6"/></svg><span title="Spring Boot">Spring Boot</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7" ry="3"/><path d="M5 5.5v9c0 1.7 3.1 3 7 3s7-1.3 7-3v-9"/><path d="M5 10c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg><span title="PostgreSQL">PostgreSQL</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h6v6H5zM13 13h6v6h-6z"/><path d="M12 7h4a3 3 0 0 1 3 3v1M12 17H8a3 3 0 0 1-3-3v-1"/><path d="M14 5l2 2-2 2M10 19l-2-2 2-2"/></svg><span title="Debezium">Debezium</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="12" r="2.2"/><circle cx="16" cy="6" r="2.2"/><circle cx="16" cy="18" r="2.2"/><path d="M8 11l6-4M8 13l6 4"/></svg><span title="Kafka">Kafka</span></div></div>
       </div>
     </aside>
 
@@ -4618,7 +4635,7 @@ boolean created = canonicalEventPublisher.recordCanonicalEvent(event, sourceOffs
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
 
-        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h5c1.7 0 3 1.3 3 3v3H8c-1.7 0-3 1.3-3 3v1"/><path d="M15 20h-5c-1.7 0-3-1.3-3-3v-3h9c1.7 0 3-1.3 3-3v-1"/><path d="M10 7h.1M14 17h.1"/></svg><span>Python 3.11+</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h5c1.7 0 3 1.3 3 3v3H8c-1.7 0-3 1.3-3 3v1"/><path d="M15 20h-5c-1.7 0-3-1.3-3-3v-3h9c1.7 0 3-1.3 3-3v-1"/><path d="M10 7h.1M14 17h.1"/></svg><span>선택형 FastAPI</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3v5l-4 8a3 3 0 0 0 2.7 4h8.6A3 3 0 0 0 19 16l-4-8V3"/><path d="M8 3h8M8 15h8"/></svg><span>pytest</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span>이벤트 처리</span></div></div>
+        <div class="stack-grid"><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h5c1.7 0 3 1.3 3 3v3H8c-1.7 0-3 1.3-3 3v1"/><path d="M15 20h-5c-1.7 0-3-1.3-3-3v-3h9c1.7 0 3-1.3 3-3v-1"/><path d="M10 7h.1M14 17h.1"/></svg><span title="Python 3.11+">Python 3.11+</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h5c1.7 0 3 1.3 3 3v3H8c-1.7 0-3 1.3-3 3v1"/><path d="M15 20h-5c-1.7 0-3-1.3-3-3v-3h9c1.7 0 3-1.3 3-3v-1"/><path d="M10 7h.1M14 17h.1"/></svg><span title="선택형 FastAPI">선택형 FastAPI</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3v5l-4 8a3 3 0 0 0 2.7 4h8.6A3 3 0 0 0 19 16l-4-8V3"/><path d="M8 3h8M8 15h8"/></svg><span title="pytest">pytest</span></div><div class="stack-token"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h4M14 13h2"/></svg><span title="이벤트 처리">이벤트 처리</span></div></div>
       </div>
     </aside>
 

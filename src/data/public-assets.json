@@ -39,7 +39,7 @@
     "output": "public/portfolio/index.html",
     "sourceProject": "side-projects",
     "sourcePath": "portfolio/portfolio-complete.html",
-    "sha256": "5abee74b74e8a0b80fa6f89054b4738b811d6a0e6843e708ce484671c2f5366d",
+    "sha256": "5e6be64185d64d0dae02e6e42b04f1576a5dfb0a424712de489b136283aacd9e",
     "owner": "Son Chanyang",
     "usage": "Public integrated portfolio HTML page",
     "approvedAt": "2026-09-17"
@@ -57,7 +57,7 @@
     "output": "public/icons/favicon.svg",
     "sourceProject": "portfolio-web",
     "sourcePath": "public/icons/favicon.svg",
-    "sha256": "d92d16972f4dc134b522f40912341d0e19b8ac947883419d45c89edf250a19c9",
+    "sha256": "cc75f11dcf1bc7159bc8fdd8efd80f017a3e280bacdf6cf0326da707681961c6",
     "owner": "Son Chanyang",
     "usage": "Public portfolio browser icon",
     "approvedAt": "2026-09-17"

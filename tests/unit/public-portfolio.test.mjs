@@ -54,25 +54,34 @@ test('integrated portfolio provides a fixed link back to the portfolio home', ()
   assert.match(firstCssRule(html, '.portfolio-home-link'), /position:\s*fixed;/);
 });
 
-test('integrated portfolio renders one unwrapped technology token per rail row', () => {
+test('integrated portfolio renders one unwrapped technology token per rail row without rail overflow', () => {
   const html = readIntegratedPortfolio();
   const stackGrid = firstCssRule(html, '.stack-grid');
+  const stackToken = firstCssRule(html, '.stack-token');
   const stackTokenLabel = firstCssRule(html, '.stack-token span');
 
-  assert.match(stackGrid, /grid-template-columns:\s*1fr;/);
-  assert.doesNotMatch(stackGrid, /grid-template-columns:\s*1fr\s+1fr;/);
+  assert.match(stackGrid, /grid-template-columns:\s*minmax\(0,\s*1fr\);/);
+  assert.match(stackToken, /grid-template-columns:\s*18px minmax\(0,\s*1fr\);/);
+  assert.match(stackToken, /min-width:\s*0;/);
   assert.match(stackTokenLabel, /white-space:\s*nowrap;/);
+  assert.match(stackTokenLabel, /min-width:\s*0;/);
+  assert.match(stackTokenLabel, /overflow:\s*hidden;/);
+  assert.match(stackTokenLabel, /text-overflow:\s*ellipsis;/);
+  assert.ok(html.includes('<span title="Optional: PostgreSQL/pgvector">Optional: PostgreSQL/pgvector</span>'));
 });
 
-test('Member Event rail uses a compact visual scope while retaining the full scope', () => {
+test('Member Event rail uses a compact visual scope and exposes the full text to assistive technology', () => {
   const html = readIntegratedPortfolio();
   const fullScope = '2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드';
   const compactScope = '2026.05–06 · 개인 · 백엔드/인프라';
 
-  assert.match(
-    html,
-    new RegExp(`<p class="rail-text rail-text-compact" title="${fullScope}" aria-label="${fullScope}">${compactScope}<\\/p>`),
+  assert.ok(
+    html.includes(
+      `<p class="rail-text rail-text-compact" title="${fullScope}"><span aria-hidden="true">${compactScope}</span><span class="visually-hidden">${fullScope}</span></p>`,
+    ),
   );
+  assert.doesNotMatch(html, /<p[^>]*aria-label=/);
+  assert.match(firstCssRule(html, '.visually-hidden'), /clip:\s*rect\(0,\s*0,\s*0,\s*0\);/);
 });
 test('project publication flags keep the three representative projects and detail-only projects', () => {
   const readFeatured = (slug) => {
@@ -88,4 +97,14 @@ test('project publication flags keep the three representative projects and detai
   );
   assert.equal(readFeatured('cdc-data-platform'), false);
   assert.equal(readFeatured('fashion-personalization-platform'), false);
+});
+
+test('manifest-approved text assets use LF line endings', () => {
+  for (const relativePath of [
+    'public/portfolio/index.html',
+    'public/icons/favicon.svg',
+  ]) {
+    const contents = readFileSync(join(root, relativePath), 'utf8');
+    assert.doesNotMatch(contents, /\r/, `${relativePath} must use LF line endings so SHA-256 stays platform-independent`);
+  }
 });
