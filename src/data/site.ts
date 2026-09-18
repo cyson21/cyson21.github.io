@@ -36,7 +36,7 @@ const experienceRecords = [
         description: 'Testcontainers 기반 통합 테스트 환경 구성과 회귀 검증',
       },
     ],
-    stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'AWS S3', 'JUnit', 'Testcontainers'],
+    stack: ['Java', 'Spring Boot', 'Spring', 'Spring Data JPA', 'JPA', 'QueryDSL', 'MySQL', 'AWS S3', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
   },
   {
     start: '2021-07',
@@ -66,7 +66,7 @@ const experienceRecords = [
         description: '관련 서비스를 Docker 컨테이너로 배포·운영',
       },
     ],
-    stack: ['Java', 'Spring Boot', 'Python', 'FastAPI', 'Django', 'MySQL', 'MongoDB', 'Docker'],
+    stack: ['Java', 'Spring Boot', 'Python', 'FastAPI', 'Django', 'SQL', 'MySQL', 'MongoDB', 'Docker'],
   },
 ] as const;
 
@@ -108,19 +108,27 @@ export const careerPeriod = `${formatMonth(experienceRecords.at(-1)?.start ?? ex
 
 export const skillGroups = [
   {
-    label: '백엔드',
-    items: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL'],
+    label: 'Java·Spring',
+    items: ['Java', 'Spring Boot', 'Spring', 'Spring Data JPA', 'QueryDSL', 'WebFlux'],
   },
   {
-    label: '데이터베이스',
-    items: ['MySQL', 'PostgreSQL', 'MongoDB'],
+    label: 'DB·ORM',
+    items: ['MySQL', 'PostgreSQL', 'MongoDB', 'JPA'],
   },
   {
-    label: '테스트·인프라',
-    items: ['JUnit', 'Testcontainers', 'REST Docs', 'Docker', 'AWS S3'],
+    label: '메시징·비동기',
+    items: ['Kafka', 'RabbitMQ', 'Redis', 'Transactional Outbox', 'Saga', '멱등 처리'],
   },
   {
-    label: '데이터·메시징',
-    items: ['Python', 'FastAPI', 'Kafka', 'Redis', 'RabbitMQ'],
+    label: 'AWS·인프라',
+    items: ['AWS S3', 'AWS SDK v2', 'Docker', 'Docker Compose'],
+  },
+  {
+    label: 'CI/CD·검증 자동화',
+    items: ['GitHub Actions CI', 'Docker Build', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
+  },
+  {
+    label: '데이터·Python API',
+    items: ['Python', 'FastAPI', 'Django', 'SQL'],
   },
 ] as const;

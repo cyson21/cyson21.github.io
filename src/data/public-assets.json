@@ -39,10 +39,10 @@
     "output": "public/portfolio/index.html",
     "sourceProject": "side-projects",
     "sourcePath": "portfolio/portfolio-complete.html",
-    "sha256": "5e6be64185d64d0dae02e6e42b04f1576a5dfb0a424712de489b136283aacd9e",
+    "sha256": "b03b284d8112372aae8164a4a1cc533965d75f235dc8f923e19164c2d330b202",
     "owner": "Son Chanyang",
     "usage": "Public integrated portfolio HTML page",
-    "approvedAt": "2026-09-17"
+    "approvedAt": "2026-09-18"
   },
   {
     "output": "public/downloads/resume.pdf",
