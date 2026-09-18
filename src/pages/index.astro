@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, ArrowUpRight, Download } from '@lucide/astro';
+import { ArrowRight, Download } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile, resumeClosing, resumeHighlights } from '../data/site';
 ---
@@ -29,7 +29,6 @@ import { profile, resumeClosing, resumeHighlights } from '../data/site';
           <a class="button" href="/portfolio/">통합 포트폴리오 HTML <ArrowRight size={18} aria-hidden="true" /></a>
           <a class="button" href="/experience/">경력·이력서 <ArrowRight size={18} aria-hidden="true" /></a>
           <a class="button button--secondary" href={profile.resumePath}>PDF <Download size={17} aria-hidden="true" /></a>
-          <a class="button button--text" href={profile.github} target="_blank" rel="noreferrer" aria-label="손찬양 GitHub 프로필 새 창에서 열기">GitHub <ArrowUpRight size={17} aria-hidden="true" /></a>
         </div>
       </div>
     </div>
