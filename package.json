@@ -28,8 +28,8 @@
     "verify": "pnpm build && pnpm test:e2e"
   },
   "dependencies": {
-    "@lucide/astro": "1.28.0",
-    "astro": "7.1.6"
+    "@lucide/astro": "1.35.0",
+    "astro": "7.2.9"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
