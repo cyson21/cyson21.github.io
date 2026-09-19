@@ -113,26 +113,22 @@ export const careerPeriod = `${formatMonth(experienceRecords.at(-1)?.start ?? ex
 export const skillGroups = [
   {
     label: 'Java·Spring',
-    items: ['Java', 'Spring Boot', 'Spring', 'Spring Data JPA', 'QueryDSL', 'WebFlux'],
+    items: ['Java', 'Spring Boot', 'Spring', 'Spring Data JPA', 'QueryDSL'],
   },
   {
-    label: 'DB·ORM',
-    items: ['MySQL', 'PostgreSQL', 'MongoDB', 'JPA'],
+    label: 'DB·데이터',
+    items: ['SQL', 'PostgreSQL', 'MySQL'],
   },
   {
-    label: '메시징·비동기',
-    items: ['Kafka', 'RabbitMQ', 'Redis', 'Transactional Outbox', 'Saga', '멱등 처리'],
+    label: '메시징·캐시',
+    items: ['Redis', 'RabbitMQ'],
   },
   {
     label: 'AWS·인프라',
-    items: ['AWS S3', 'AWS SDK v2', 'Docker', 'Docker Compose'],
+    items: ['AWS', 'Docker'],
   },
   {
-    label: 'CI/CD·검증 자동화',
-    items: ['GitHub Actions CI', 'Docker Build', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
-  },
-  {
-    label: '데이터·Python API',
-    items: ['Python', 'FastAPI', 'Django', 'SQL'],
+    label: '형상관리·검증',
+    items: ['Git', 'JUnit', 'Testcontainers'],
   },
 ] as const;

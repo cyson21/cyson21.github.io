@@ -1,22 +1,22 @@
 import { expect, test } from '@playwright/test';
 
-test('experience page groups the verified backend strengths by delivery concern', async ({ page }) => {
+test('experience page uses the Saramin canonical skill set', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/experience/');
 
   await expect(page.locator('.skill-label')).toHaveText([
     'Java·Spring',
-    'DB·ORM',
-    '메시징·비동기',
+    'DB·데이터',
+    '메시징·캐시',
     'AWS·인프라',
-    'CI/CD·검증 자동화',
-    '데이터·Python API',
+    '형상관리·검증',
   ]);
 
-  const skills = page.locator('.skill-groups');
-  await expect(skills).toContainText('Spring Data JPA');
-  await expect(skills).toContainText('Transactional Outbox');
-  await expect(skills).toContainText('Docker Compose');
-  await expect(skills).toContainText('GitHub Actions CI');
-  await expect(skills).toContainText('Testcontainers');
+  await expect(page.locator('.skill-groups > div')).toHaveText([
+    'Java·SpringJavaSpring BootSpringSpring Data JPAQueryDSL',
+    'DB·데이터SQLPostgreSQLMySQL',
+    '메시징·캐시RedisRabbitMQ',
+    'AWS·인프라AWSDocker',
+    '형상관리·검증GitJUnitTestcontainers',
+  ]);
 });
