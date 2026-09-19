@@ -20,6 +20,7 @@ test('custom 404 renders useful content and remains noindex', async ({ page }) =
   await expect(main.getByRole('link', { name: '프로젝트' })).toHaveAttribute('href', '/projects/');
   await expect(main.getByRole('link', { name: '경력·이력서' })).toHaveAttribute('href', '/experience/');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
+  await expect(page.getByRole('link', { name: 'cyson21@gmail.com' })).toHaveCount(0);
 });
 
 test('unified experience page links to a valid two-page PDF', async ({ page, request }) => {
@@ -46,4 +47,5 @@ test('print resume exposes exactly two ready sheets and stays noindex', async ({
   await expect(page.locator('main > .sheet').first()).toHaveAttribute('aria-label', '이력서 1페이지');
   await expect(page.locator('main > .sheet').last()).toHaveAttribute('aria-label', '이력서 2페이지');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
+  await expect(page.getByRole('link', { name: 'cyson21@gmail.com' })).toHaveCount(0);
 });
