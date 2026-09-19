@@ -1,5 +1,5 @@
 const publicResumeUrl = import.meta.env.PUBLIC_RESUME_URL?.trim() || '/downloads/resume.pdf';
-const siteUpdatedAt = '2026-09-09';
+const siteUpdatedAt = '2026-09-19';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -16,24 +16,28 @@ const experienceRecords = [
     context: '실무에서는 4인 개발팀에서 20개 이상의 기업 고객 서비스를 Java·Spring Boot 기반으로 개발·운영했습니다.',
     responsibilities: [
       {
-        title: 'REST API 설계·개발·운영',
-        description: 'Java·Spring Boot 기반 기업용 플랫폼의 REST API 설계·개발 및 운영',
+        title: 'Anchor 플랫폼 REST API',
+        description: 'Java·Spring Boot·JPA·QueryDSL·MySQL 기반으로 Anchor 플랫폼 REST API를 설계·개발·운영하고, 관리자 기능 개편을 지원했습니다.',
       },
       {
-        title: '운영 장애·데이터 오류 개선',
-        description: '운영 장애와 데이터 오류의 원인 분석 및 API·DB 로직 개선',
+        title: 'Anchor 2.0 → 3.0 전환',
+        description: 'Anchor 2.0 → 3.0 전환에서 영향 범위를 점검해 기존 기능 회귀를 막고, 레거시 정리와 API·DB 구조 개선을 진행했습니다.',
       },
       {
-        title: '데이터 접근 계층·정합성',
-        description: 'JPA·QueryDSL·MySQL 기반 데이터 접근 계층 설계와 정합성 관리',
+        title: '장애 분석·회귀 검증',
+        description: '운영 장애와 데이터 오류를 재현·분석한 뒤 API·DB 로직을 수정하고, Testcontainers 기반 통합·회귀 테스트로 재발을 줄였습니다.',
       },
       {
-        title: 'S3 연동·배포 운영',
-        description: 'AWS S3 연동 모듈 개선 및 Docker 기반 배포·운영',
+        title: '데이터 접근 계층 개선',
+        description: 'JPA·QueryDSL 조회·저장 구조를 정리해 데이터 접근 계층의 정합성과 유지보수성을 높였습니다.',
       },
       {
-        title: '통합 테스트·회귀 검증',
-        description: 'Testcontainers 기반 통합 테스트 환경 구성과 회귀 검증',
+        title: 'AWS 배포·운영',
+        description: 'AWS(Lambda, CloudWatch, RDS, EC2, WAF 등) 기반 배포·모니터링·운영에 참여하고, Docker 배포·전환 이슈를 처리했습니다.',
+      },
+      {
+        title: 'CI/CD·배포 품질',
+        description: 'CI/CD 파이프라인 안정화와 코드리뷰 기반 배포 품질 관리에 참여했습니다.',
       },
     ],
     stack: ['Java', 'Spring Boot', 'Spring', 'Spring Data JPA', 'JPA', 'QueryDSL', 'MySQL', 'AWS S3', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
@@ -70,15 +74,15 @@ const experienceRecords = [
   },
 ] as const;
 
-export const resumeIntro = 'Java·Spring Boot 기반의 6년 차 백엔드 개발자입니다.';
+export const resumeIntro = 'Java·Spring Boot 기반의 5년 차 백엔드 개발자입니다.';
 
 export const resumeHighlights = [
-  '20개 이상의 기업 고객 서비스 개발·운영',
-  '4인 개발팀 협업',
   '기업용 플랫폼의 요구사항 분석, API 설계, 데이터 모델링',
   '복잡한 상태 변경과 데이터 정합성 문제 분석 및 개선',
   '운영 이슈 재현, 원인 분석, 수정, 회귀 테스트까지 전 과정 수행',
   '비즈니스 규칙 정비와 통합 테스트를 통한 운영 안정성 강화',
+  '공공·실시간 데이터 수집·가공 및 REST API 개발',
+  '시계열 예측 결과 연동과 Docker 기반 배포·운영',
 ] as const;
 
 export const resumeClosing =
@@ -90,7 +94,7 @@ export const profile = {
   name: '손찬양',
   englishName: 'Son Chanyang',
   role: 'Java · Spring Boot 백엔드 개발자',
-  subtitle: '6년 차 · API 개발·운영 · 데이터 정합성',
+  subtitle: '5년 차 · API 개발·운영 · 데이터 정합성',
   statement: resumeIntro,
   email: 'cyson21@gmail.com',
   github: 'https://github.com/cyson21',

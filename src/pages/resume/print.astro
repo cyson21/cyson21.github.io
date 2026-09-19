@@ -273,5 +273,24 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
     body { background: #fff; }
     main { display: block; padding: 0; }
     .sheet { box-shadow: none; }
+    .sheet:not(.sheet--first) { padding-top: 12mm; }
+    .sheet:not(.sheet--first) .page-header { padding-bottom: 2mm; }
+    .sheet:not(.sheet--first) .block--second { margin-top: 3mm; }
+    .sheet:not(.sheet--first) .section-title { margin-bottom: 1mm; }
+    .sheet:not(.sheet--first) .job > header { padding-top: 2mm; }
+    .sheet:not(.sheet--first) .context { margin-top: 1mm; }
+    .sheet:not(.sheet--first) .highlight-list { margin-top: 2mm; }
+    .sheet:not(.sheet--first) .highlight-list--compact { gap: 2mm; }
+    .sheet:not(.sheet--first) .highlight-list--compact > div { padding-block: 0.5mm; }
+    .sheet:not(.sheet--first) .projects { margin-top: 4mm; }
+    .sheet:not(.sheet--first) .project-list article { padding-block: 1mm; }
+    .sheet:not(.sheet--first) .project-list p { margin-top: 0.5mm; }
+    .sheet:not(.sheet--first) .project-list small { margin-top: 0.4mm; }
+    .sheet:not(.sheet--first) .additional-projects { padding-block: 1mm; }
+    .sheet:not(.sheet--first) .lower-grid { margin-top: 4mm; }
+    .sheet:not(.sheet--first) .skills > div { padding-block: 1mm; }
+    .sheet:not(.sheet--first) .education { padding-top: 1.5mm; }
+    .sheet:not(.sheet--first) .education p,
+    .sheet:not(.sheet--first) .education span { margin-top: 0.5mm; }
   }
 </style>
