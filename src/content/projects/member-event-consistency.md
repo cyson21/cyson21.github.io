@@ -5,12 +5,12 @@ publicationState: public
 name: Member Event Consistency
 domain: Backend
 eyebrow: 동시 요청 제어
-summary: 회원 보상·포인트·쿠폰을 동시에 처리해도 중복 지급과 초과 발급을 막는 백엔드 시스템입니다. 업무 규칙에 따라 PostgreSQL·Redis·RabbitMQ의 동시성 전략을 비교했습니다.
+summary: 회원 보상, 포인트, 쿠폰 요청이 동시에 몰려도 두 번 지급되거나 수량보다 많이 나가지 않게 만든 백엔드입니다. 같은 문제를 PostgreSQL, Redis, RabbitMQ로 각각 풀어 보고 비교했습니다.
 cardEvidence:
-  implementation: 중복 보상은 고유 제약, 포인트는 조건부 차감, 쿠폰은 행 잠금과 용량 조건으로 보호합니다.
-  result: 8건의 동시 보상은 1건만 반영되고, 잔액 100의 60 차감 요청 2건은 1건만 성공합니다.
+  implementation: 중복 보상은 유니크 제약으로, 포인트는 조건부 UPDATE로, 쿠폰은 행 잠금과 남은 수량 조건으로 막습니다.
+  result: 동시에 보상 요청 8건을 보내면 1건만 지급됩니다. 잔액 100에서 60씩 두 번 빼면 한 번만 성공합니다.
 period: 2026.05–2026.06
-role: 개인 프로젝트 · Spring API, PostgreSQL 동시성 제어, Redis 잠금과 RabbitMQ 단일 소비자 기반 캠페인 발급 경합 제어 경로 직접 설계·구현
+role: 개인 프로젝트 · 설계부터 구현, 테스트까지 혼자 진행
 stack:
   - Java
   - Spring Boot
@@ -18,16 +18,16 @@ stack:
   - Redis
   - RabbitMQ
   - Outbox
-problem: 모든 이벤트를 하나의 사용자 ID 잠금으로 묶으면 특정 키에 요청이 몰리고, 아무 제어 없이 처리하면 중복 보상, 쿠폰 초과 발급과 포인트 음수 잔액이 발생합니다.
+problem: 제어 없이 처리하면 첫 로그인 보상이 두 번 나가고, 쿠폰이 준비한 수량보다 많이 발급되고, 포인트가 마이너스가 됩니다. 반대로 회원 ID 하나로 전부 잠그면 한 사람에게 요청이 몰릴 때 다 같이 느려집니다.
 responsibilities:
-  - 최초 보상, 정원형 쿠폰 발급, 잔액 차감 API와 데이터 저장 경계를 구현했습니다.
-  - PostgreSQL 보호 조건, Redis 잠금과 RabbitMQ 단일 소비자 경로를 구현하고 같은 불변식 기준으로 기능 결과를 확인했습니다.
-  - 같은 요청 조건에서 각 제어 방식이 업무 규칙을 지키는지 비교할 수 있도록 결과 조회 화면을 구현했습니다.
+  - 첫 로그인 보상, 선착순 쿠폰 발급, 포인트 차감 API를 만들었습니다.
+  - 같은 기능을 PostgreSQL 제약, Redis 잠금, RabbitMQ 단일 소비자 세 가지 방식으로 구현하고 결과가 같은지 확인했습니다.
+  - 방식별 결과를 나란히 볼 수 있는 조회 화면을 붙였습니다.
 flow:
   normal:
     - 이벤트 시나리오 선택
-    - 불변식 식별
-    - DB 조건부 처리
+    - 지켜야 할 규칙 확인
+    - DB에서 조건부로 처리
     - Outbox 기록
     - 결과 비교
   failure:
@@ -35,45 +35,45 @@ flow:
     - 쿠폰 정원 초과 경쟁
     - 잔액보다 큰 동시 차감
   recovery:
-    - 고유·검사 제약과 조건부 갱신
-    - Redis 경합 완화
-    - RabbitMQ 집중 요청 캠페인 직렬화
+    - 유니크, CHECK 제약과 조건부 UPDATE
+    - Redis 잠금으로 DB 부담 줄이기
+    - 인기 캠페인은 RabbitMQ로 한 줄 세우기
 signals:
   - label: 최초 보상
-    expression: 동시 요청 8건 → 보상 1건
-    result: 7건 거절 · 중복 0건
+    expression: 동시 요청 8건
+    result: 1건 지급, 7건 거절
     tone: success
     source: FirstLoginRewardDbConcurrencyIT.uniqueRewardIssueConstraintAllowsOnlyOneFirstLoginRewardPerMemberUnderConcurrentAttempts
     sourceUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/test/java/com/example/consistency/integration/FirstLoginRewardDbConcurrencyIT.java
   - label: 포인트 차감
     expression: 100 - (2 × 60) → 40
-    result: 1건 성공 · 음수 잔액 0건
+    result: 1건만 성공, 잔액은 40
     tone: warning
     source: PointSpendDbConcurrencyIT.rowLockSpendAllowsOnlyOneConcurrentDebitWhenBalanceCanCoverOneRequest
     sourceUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/test/java/com/example/consistency/integration/PointSpendDbConcurrencyIT.java
   - label: 쿠폰 용량
     expression: 정원 3건 / 요청 8건
-    result: 3건 발급 · 5건 거절
+    result: 3건 발급, 5건 거절
     tone: danger
     source: MvpLiveInfrastructureIT.rabbitMqCouponCampaignRouteRunsOnlyWhenLiveDependenciesAreHealthy
     sourceUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/test/java/com/example/consistency/integration/MvpLiveInfrastructureIT.java
 decisions:
-  - title: DB를 최종 보호 경계로
-    choice: 고유·검사 제약, 조건부 갱신과 행 잠금으로 최종 불변식을 보호합니다.
-    alternative: Redis 분산 잠금만으로 정확성 보장
-    reason: 외부 잠금의 만료나 장애에도 저장소 경계가 잘못된 상태를 수락하지 않도록 했습니다.
-  - title: 불변식별 잠금
-    choice: Redis 잠금을 모든 회원 이벤트의 공통 규칙이 아니라 경합 완화 수단으로 사용합니다.
-    alternative: 사용자 ID 하나로 모든 작업을 직렬화
-    reason: 서로 다른 자원을 보호하는 이벤트를 불필요하게 같은 임계 구역에 묶지 않기 위해 선택했습니다.
-  - title: 집중 요청 직렬화
-    choice: RabbitMQ 단일 소비자로 집중 요청 캠페인의 발급을 직렬화합니다.
-    alternative: 모든 요청이 캠페인 DB 행 잠금을 직접 경쟁
-    reason: 집중된 캠페인 트래픽의 경합을 완화하면서 DB 용량 조건을 최종 보호 장치로 유지했습니다.
+  - title: 마지막 방어선은 DB
+    choice: 유니크, CHECK 제약과 조건부 UPDATE, 행 잠금으로 DB가 잘못된 값을 받지 않게 합니다.
+    alternative: Redis 분산 락만 믿기
+    reason: Redis 락은 만료되거나 Redis가 죽으면 풀립니다. 그때도 DB가 막아 주면 데이터는 안전합니다.
+  - title: 잠금은 필요한 곳에만
+    choice: Redis 잠금은 경합이 심한 곳에서 DB 부담을 덜어 주는 용도로만 씁니다.
+    alternative: 회원 ID 하나로 모든 작업을 줄 세우기
+    reason: 포인트 차감과 쿠폰 발급은 서로 상관이 없는데 같은 락을 기다릴 이유가 없습니다.
+  - title: 몰리는 캠페인은 큐로
+    choice: 요청이 몰리는 캠페인은 RabbitMQ 소비자 하나가 순서대로 발급합니다.
+    alternative: 모든 요청이 캠페인 행 잠금을 직접 경쟁
+    reason: 수천 건이 한 행을 두고 싸우는 대신 큐에서 기다리게 했습니다. 수량 조건은 그대로 DB에 남겨 두었습니다.
 protectionRules:
-  - 최초 로그인 보상은 같은 회원에게 한 번만 반영됩니다.
-  - 포인트 잔액은 어떤 동시 실행 순서에서도 0보다 작아질 수 없습니다.
-  - 쿠폰 발급 수는 캠페인 용량을 초과할 수 없습니다.
+  - 첫 로그인 보상은 한 회원에게 한 번만 나갑니다.
+  - 요청이 어떤 순서로 겹쳐도 포인트는 0 아래로 내려가지 않습니다.
+  - 쿠폰은 준비한 수량보다 많이 나가지 않습니다.
 codeEvidence:
   - symbol: SqlCouponCampaignRepository.issueWithCapacityGuard
     displayPath: backend/src/main/java/com/example/consistency/coupon/SqlCouponCampaignRepository.java
@@ -83,7 +83,7 @@ codeEvidence:
         and status = 'ACTIVE'
         and issued_count < capacity
       for update
-    proves: 캠페인 행 잠금과 용량 조건을 한 SQL 흐름에서 판정해 동시 요청의 초과 발급을 차단합니다.
+    proves: 캠페인 행을 잠그고 남은 수량을 SQL 한 번에 확인해서, 동시에 들어와도 수량을 넘겨 발급하지 않습니다.
     testName: SqlCouponCampaignRepositoryTest.issueWithCapacityGuardUsesSingleStatementWithCampaignRowLock
     testPath: backend/src/test/java/com/example/consistency/coupon/SqlCouponCampaignRepositoryTest.java
     testUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/test/java/com/example/consistency/coupon/SqlCouponCampaignRepositoryTest.java
@@ -95,7 +95,7 @@ codeEvidence:
       updated_at = now()
       where member_id = ?
         and balance >= ?
-    proves: 잔액이 지출액 이상일 때만 원자적으로 차감해 동시 요청에서도 음수 잔액을 허용하지 않습니다.
+    proves: 잔액이 충분할 때만 UPDATE가 적용되기 때문에 동시에 빼도 마이너스가 되지 않습니다.
     testName: SqlPointSpendRepositoryTest.conditionalDebitKeepsBalanceNonNegative
     testPath: backend/src/test/java/com/example/consistency/point/SqlPointSpendRepositoryTest.java
     testUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/test/java/com/example/consistency/point/SqlPointSpendRepositoryTest.java
@@ -108,36 +108,35 @@ codeEvidence:
           if (!tracker.isActive(command.operationId())) {
               return;
           }
-    proves: 단일 소비자로 집중 요청 캠페인을 직렬화하고 종료된 실행의 메시지를 무시합니다.
+    proves: 소비자 하나가 순서대로 처리하고, 이미 끝난 실행에서 온 메시지는 버립니다.
     testName: MvpLiveInfrastructureIT.rabbitMqCouponCampaignRouteRunsOnlyWhenLiveDependenciesAreHealthy
     testPath: backend/src/test/java/com/example/consistency/integration/MvpLiveInfrastructureIT.java
     testUrl: https://github.com/cyson21/member-event-consistency/blob/main/backend/src/test/java/com/example/consistency/integration/MvpLiveInfrastructureIT.java
 verification:
   - layer: container-smoke
-    method: PostgreSQL Testcontainers에 최초 보상 동시 요청 8건을 전달합니다.
-    result: 1건만 지급되고 7건이 거절됩니다.
+    method: Testcontainers PostgreSQL에 첫 로그인 보상 요청 8건을 동시에 보냅니다.
+    result: 1건 지급, 7건 거절
   - layer: container-smoke
-    method: 잔액 100에서 60 차감 요청 2건을 동시에 실행합니다.
-    result: 1건만 성공하고 최종 잔액은 40입니다.
+    method: 잔액 100에서 60 차감을 두 번 동시에 요청합니다.
+    result: 1건만 성공하고 잔액은 40입니다.
   - layer: container-smoke
-    method: Redis·RabbitMQ·PostgreSQL 환경에서 용량 3 캠페인에 8건을 요청합니다.
-    result: 3건 발급, 5건 거절, 초과 발급 0건입니다.
+    method: Redis, RabbitMQ, PostgreSQL을 띄우고 수량 3개짜리 캠페인에 8건을 요청합니다.
+    result: 3건 발급, 5건 거절
 limitations:
-  - 운영 규모 부하, 장시간 메시지 장애와 복구 SLO는 포함하지 않았습니다.
-  - Redis와 RabbitMQ 결과는 잠금·단일 소비자 구현과 정합성 확인이며 동일 부하에서 처리량이나 꼬리 지연 시간을 측정한 성능 비교가 아닙니다.
+  - 실제 운영 수준의 트래픽이나 메시지 브로커 장기 장애는 해 보지 않았습니다.
+  - 세 방식 모두 결과가 맞는지만 확인했고, 어느 쪽이 더 빠른지는 아직 재 보지 않았습니다.
 next:
-  - 전략별 처리량과 상위 지연 시간을 같은 부하 조건에서 비교합니다.
+  - 같은 부하에서 방식별 처리량과 p99 지연을 비교해 보려고 합니다.
 links:
   github: https://github.com/cyson21/member-event-consistency
   design: https://github.com/cyson21/member-event-consistency/blob/main/docs/portfolio/one-pager.md
   testReport: https://github.com/cyson21/member-event-consistency/tree/main/backend/src/test
 visual:
   kind: diagram
-  alt: 이벤트 시나리오별 불변식을 PostgreSQL 제약 조건과 Redis·RabbitMQ 비교 경로로 연결한 구성도
+  alt: 보상, 포인트, 쿠폰 시나리오를 PostgreSQL 제약과 Redis, RabbitMQ 경로로 연결한 구성도
 seo:
-  title: Member Event Consistency · 불변식 기반 동시성 제어
-  description: PostgreSQL 제약 조건을 최종 보호 장치로 두고 Redis와 RabbitMQ 동시성 전략을 비교한 Java 백엔드 프로젝트입니다.
-updatedAt: 2026-07-19
+  title: Member Event Consistency · 쿠폰, 포인트 동시성 처리
+  description: 쿠폰 초과 발급, 포인트 마이너스, 중복 보상을 PostgreSQL, Redis, RabbitMQ로 막아 보고 비교한 Java 백엔드 프로젝트입니다.
+updatedAt: 2026-09-23
 ---
-
-하나의 동시성 도구가 아니라 업무 불변식별로 적합한 제어 경계를 선택하고 비교한 프로젝트입니다.
+동시성 문제를 한 가지 도구로 다 풀기보다, 문제마다 어디서 막는 게 맞는지 비교해 본 프로젝트입니다.
