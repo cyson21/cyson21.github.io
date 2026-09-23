@@ -6,7 +6,6 @@ import {
   readFileSync,
   readdirSync,
 } from 'node:fs';
-import { homedir } from 'node:os';
 import { extname, join, relative, resolve, sep } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
@@ -20,12 +19,6 @@ const allowedEmails = new Set(['cyson21@gmail.com']);
 const manifestFields = new Set(['output', 'sourceProject', 'sourcePath', 'sha256', 'owner', 'usage', 'approvedAt']);
 const findings = [];
 
-const bundledPython = resolve(
-  homedir(),
-  process.platform === 'win32'
-    ? '.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe'
-    : '.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3',
-);
 const pdfTextPython = String.raw`from pypdf import PdfReader
 import sys
 sys.stdout.reconfigure(encoding="utf-8")
@@ -89,10 +82,9 @@ function extractPdfText(path) {
   if (!extraction.error) return { ...extraction, extractor: binary };
   if (extraction.error.code !== 'ENOENT') return { ...extraction, extractor: binary };
 
-  const pythonCandidates = [process.env.PYTHON_BIN?.trim(), 'python3', bundledPython]
+  const pythonCandidates = [process.env.PYTHON_BIN?.trim(), 'python3']
     .filter((candidate, index, items) => candidate && items.indexOf(candidate) === index);
   for (const python of pythonCandidates) {
-    if (python === bundledPython && !existsSync(python)) continue;
     const fallback = spawnSync(python, ['-c', pdfTextPython, path], {
       encoding: 'utf8',
       maxBuffer: 16 * 1024 * 1024,
