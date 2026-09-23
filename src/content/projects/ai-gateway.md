@@ -5,9 +5,9 @@ publicationState: public
 name: AI Gateway
 domain: AI
 eyebrow: LLM API 게이트웨이
-summary: 애플리케이션마다 반복되는 인증·사용량·캐시·장애 복구 정책을 공통 경계로 모았습니다. 모델 호출 전후의 정책 순서와 제한된 복구 범위를 구현했습니다.
+summary: 서비스마다 LLM을 붙일 때 반복되는 인증, 사용량 제한, 캐시, 장애 대응을 게이트웨이 한곳에 모았습니다. 모델이 죽었을 때 끝없이 재시도하지 않도록 복구 범위도 제한했습니다.
 period: "2026.06"
-role: 개인 프로젝트 · Java WebFlux 요청 처리, 조직별 사용량·캐시 격리, 모델 선택과 제한된 장애 복구 직접 설계·구현
+role: 개인 프로젝트 · 설계부터 구현, 테스트까지 혼자 진행
 stack:
   - Java 21
   - Spring Boot WebFlux
@@ -15,66 +15,66 @@ stack:
   - PostgreSQL
   - pgvector
   - Testcontainers
-problem: LLM 기능을 여러 애플리케이션에 붙이면 외부 모델 연동, 장애 대응, 토큰·비용 예산, 캐시와 요청 기록이 서비스마다 중복됩니다.
+problem: LLM 기능을 여러 서비스에 붙이면 모델 연동, 장애 대응, 토큰 예산, 캐시, 호출 기록을 서비스마다 따로 만들게 됩니다.
 responsibilities:
-  - OpenAI 호환 게이트웨이 API와 인증 뒤 공통 정책이 적용되는 요청 처리 순서를 구현했습니다.
-  - 정확 일치·의미 유사도 캐시, 할당량, 라우팅, 재시도 예산, 회로 차단과 대체 경로를 구성했습니다.
-  - JSON 일괄 응답, SSE 스트리밍, 도구 호출과 정적 운영 콘솔을 테스트했습니다.
+  - OpenAI 호환 API를 만들고, 인증 뒤에 공통 정책이 정해진 순서대로 돌게 했습니다.
+  - 캐시(똑같은 요청, 비슷한 질문), 할당량, 모델 선택, 재시도 한도, 서킷 브레이커, 대체 모델 전환을 넣었습니다.
+  - 일반 응답, SSE 스트리밍, 도구 호출, 관리 화면까지 테스트했습니다.
 flow:
   normal:
-    - API 키 인증·사용자 조직 확인
+    - API 키 인증, 조직 확인
     - 할당량 검사
     - 입력 검사
-    - 정확 일치·의미 유사도 캐시
-    - 정책 라우팅
+    - 캐시 조회
+    - 모델 선택
     - 외부 모델 호출
-    - 제한된 대체 경로
+    - 실패하면 대체 모델
     - 출력 검사
     - 요청 기록
   failure:
-    - 사용자 조직 할당량 초과
-    - 우선 외부 모델 실패
-    - 재시도 예산 소진
+    - 조직 할당량 초과
+    - 기본 모델 장애
+    - 재시도 한도 소진
   recovery:
-    - 외부 모델 호출 전 차단
-    - 회로 차단
-    - 제한된 대체 경로
+    - 모델 호출 전에 거절
+    - 서킷 브레이커
+    - 대체 모델은 정해진 횟수까지만
 signals:
   - label: 비용 보호
-    expression: 사용량 초과 → 모델 호출 0회
-    result: 외부 호출 전에 요청 차단
+    expression: 할당량 넘긴 요청
+    result: 모델을 부르지 않고 거절
     tone: success
     source: backend/src/main/java/com/example/gateway/api/GatewayPipeline.java
     sourceUrl: https://github.com/cyson21/ai-gateway/blob/main/backend/src/main/java/com/example/gateway/api/GatewayPipeline.java
   - label: 캐시 재사용
-    expression: 같은 요청 2회 → 모델 호출 1회
-    result: 두 번째 요청은 정확 일치 캐시 사용
+    expression: 같은 요청 2번
+    result: 모델 호출은 1번, 두 번째는 캐시에서 응답
     tone: warning
     source: TwoStageCacheTest.identicalRepeatHitsExactlyAndSkipsProvider
     sourceUrl: https://github.com/cyson21/ai-gateway/blob/main/backend/src/test/java/com/example/gateway/cache/TwoStageCacheTest.java
   - label: 복구 범위
-    expression: 재시도 예산 0 → 추가 호출 0회
-    result: 후보 전환 중단과 실패 사유 기록
+    expression: 재시도 한도를 다 씀
+    result: 다른 모델로 넘어가지 않고 실패 이유를 기록
     tone: danger
     source: FallbackChainTest.exhaustedBudgetBlocksFallbackWithoutCallingProvider
     sourceUrl: https://github.com/cyson21/ai-gateway/blob/main/backend/src/test/java/com/example/gateway/resilience/FallbackChainTest.java
 decisions:
-  - title: 공통 호환 API
-    choice: OpenAI 호환 /v1/chat/completions를 공통 진입점으로 사용합니다.
-    alternative: 애플리케이션별 전용 API와 외부 모델 SDK 직접 연결
-    reason: 호출부 변경을 줄이고 정책을 게이트웨이 경계에서 일관되게 적용하기 위해 선택했습니다.
-  - title: 고정된 정책 순서
-    choice: 인증 뒤 할당량·입력 검사·캐시·라우팅·호출·대체 경로·출력 검사·기록 순서를 코드로 고정합니다.
-    alternative: 각 기능을 독립 WebFilter로 등록해 순서를 런타임 구성에 의존
-    reason: 외부 모델 호출 전 비용 보호와 실패 기록의 선후 관계를 테스트할 수 있도록 했습니다.
-  - title: 제한된 복구
-    choice: 재시도 예산과 회로 차단 뒤에 제한된 대체 경로를 둡니다.
-    alternative: 성공할 때까지 외부 모델을 순환 호출
-    reason: 장애가 호출 폭증과 비용 증가로 확대되는 것을 막기 위해 복구 범위를 제한했습니다.
+  - title: OpenAI 호환 API 하나로
+    choice: 모든 서비스가 OpenAI 호환 /v1/chat/completions로 호출합니다.
+    alternative: 서비스마다 전용 API를 두거나 모델 SDK를 직접 붙이기
+    reason: 이미 OpenAI SDK를 쓰는 코드는 주소만 바꾸면 되고, 정책은 게이트웨이에서 한 번에 적용됩니다.
+  - title: 정책 순서는 코드로
+    choice: 인증 뒤 할당량, 입력 검사, 캐시, 모델 선택, 호출, 대체 모델, 출력 검사, 기록 순서를 코드에 박아 두었습니다.
+    alternative: 기능마다 WebFilter로 등록하고 순서는 설정에 맡기기
+    reason: 할당량 검사가 모델 호출보다 먼저 도는지 테스트로 확인할 수 있어야 했습니다. 설정에 맡기면 순서가 바뀌어도 알기 어렵습니다.
+  - title: 재시도에는 한도를
+    choice: 재시도 한도와 서킷 브레이커를 거친 뒤에만 대체 모델로 넘어갑니다.
+    alternative: 성공할 때까지 모델을 돌아가며 호출
+    reason: 모델 하나가 죽었을 때 무작정 재시도하면 호출 수와 비용이 같이 폭증합니다.
 protectionRules:
-  - 할당량 또는 예산을 초과한 요청은 외부 모델 호출 전에 종료됩니다.
-  - 정확 일치 캐시가 적중하면 의미 유사도 검색과 외부 모델 호출을 실행하지 않습니다.
-  - 재시도 예산을 소진하면 다음 대체 외부 모델을 호출하지 않습니다.
+  - 할당량이나 예산을 넘긴 요청은 모델을 부르기 전에 끝납니다.
+  - 똑같은 요청이 캐시에 있으면 유사도 검색도, 모델 호출도 하지 않습니다.
+  - 재시도 한도를 다 쓰면 다음 대체 모델을 부르지 않습니다.
 codeEvidence:
   - symbol: GatewayPipeline.execute
     displayPath: backend/src/main/java/com/example/gateway/api/GatewayPipeline.java
@@ -84,7 +84,7 @@ codeEvidence:
       if (quota != QuotaOutcome.ALLOWED) {
           return rejected(request, mode, quota, elapsed(start));
       }
-    proves: 예상 토큰으로 사용자 조직의 할당량을 먼저 검사해 초과 요청을 외부 모델 호출 전에 종료합니다.
+    proves: 예상 토큰으로 조직 할당량부터 확인하고, 넘으면 모델을 부르기 전에 끝냅니다.
     testName: RequestLogStoreTest.quotaRejectPathCreatesRowWithNullProviderAndOutcome
     testPath: backend/src/test/java/com/example/gateway/observability/RequestLogStoreTest.java
     testUrl: https://github.com/cyson21/ai-gateway/blob/main/backend/src/test/java/com/example/gateway/observability/RequestLogStoreTest.java
@@ -96,7 +96,7 @@ codeEvidence:
           return exactLookup;
       }
       return semantic.lookup(request);
-    proves: 동일 요청은 정확 일치 캐시에서 반환하고 결과가 없을 때만 의미 유사도 캐시로 확장합니다.
+    proves: 똑같은 요청은 바로 캐시에서 돌려주고, 없을 때만 비슷한 질문을 찾습니다.
     testName: TwoStageCacheTest.differentlyWordedSimilarPromptFallsThroughToSemanticHit
     testPath: backend/src/test/java/com/example/gateway/cache/TwoStageCacheTest.java
     testUrl: https://github.com/cyson21/ai-gateway/blob/main/backend/src/test/java/com/example/gateway/cache/TwoStageCacheTest.java
@@ -109,39 +109,38 @@ codeEvidence:
           attempt, candidate.provider(), candidate.model(), lastErrorType
       ));
       return FallbackResult.ofFailure(attempt, lastErrorType, events);
-    proves: 재시도 예산이 소진되면 다음 외부 모델 호출을 차단하고 추적 가능한 실패 이벤트를 남깁니다.
+    proves: 재시도 한도를 다 쓰면 다음 모델을 부르지 않고 실패 이벤트를 남깁니다.
     testName: FallbackChainTest.exhaustedBudgetBlocksFallbackWithoutCallingProvider
     testPath: backend/src/test/java/com/example/gateway/resilience/FallbackChainTest.java
     testUrl: https://github.com/cyson21/ai-gateway/blob/main/backend/src/test/java/com/example/gateway/resilience/FallbackChainTest.java
 verification:
   - layer: unit
-    method: 할당량·캐시·라우팅·대체 경로를 고정 응답 외부 모델로 각각 실행합니다.
-    result: 정책 적용 순서와 외부 모델 호출 여부가 예상한 조건대로 유지됩니다.
+    method: 할당량, 캐시, 모델 선택, 대체 모델을 가짜 모델로 하나씩 돌려 봅니다.
+    result: 정책 순서와 모델 호출 여부가 예상대로 나옵니다.
   - layer: integration
-    method: WebFlux API에서 JSON과 SSE 요청을 분리해 호출합니다.
-    result: 일괄, 스트리밍과 도구 호출 응답 인터페이스가 유지됩니다.
+    method: WebFlux API로 일반 요청과 SSE 요청을 각각 보냅니다.
+    result: 일반, 스트리밍, 도구 호출 응답 형식이 맞게 나옵니다.
   - layer: static-demo
-    method: 고정 입력을 사용하는 운영 콘솔을 정적 파일로 빌드합니다.
-    result: 요청 흐름과 라우팅 결과를 서버 없이 탐색할 수 있습니다.
+    method: 관리 화면을 정적 파일로 빌드합니다.
+    result: 서버 없이도 요청 흐름과 모델 선택 결과를 둘러볼 수 있습니다.
 limitations:
-  - 기본 실행은 고정 응답 모델과 메모리 저장소를 사용하며 실제 외부 모델 호출, 운영 저장소와 클라우드 배포는 포함하지 않았습니다.
-  - API 키 인증은 요청 처리 흐름 앞의 WebFilter에서 수행합니다.
-  - SSE는 완료된 고정 응답을 조각으로 나눈 방식이며 실제 외부 모델 토큰을 실시간 중계한 결과가 아닙니다.
+  - 기본 실행은 가짜 모델과 메모리 저장소입니다. 실제 모델 호출과 클라우드 배포는 해 보지 않았습니다.
+  - API 키 인증은 파이프라인 앞의 WebFilter에서 합니다.
+  - SSE는 완성된 가짜 응답을 잘라서 보내는 방식이라, 실제 모델 토큰을 실시간으로 중계한 건 아닙니다.
 next:
-  - 실제 외부 모델을 선택적으로 연결하고 정책별 비용·지연 데이터를 분리해 측정합니다.
+  - 실제 모델을 붙여서 정책별 비용과 지연을 따로 재 보려고 합니다.
 links:
   github: https://github.com/cyson21/ai-gateway
   design: https://github.com/cyson21/ai-gateway/blob/main/docs/portfolio-one-pager.md
   testReport: https://github.com/cyson21/ai-gateway/tree/main/backend/src/test
 visual:
   kind: diagram
-  alt: OpenAI 호환 요청이 인증, 비용 보호, 캐시, 라우팅과 제한된 폴백을 통과하는 AI Gateway 구성도
+  alt: OpenAI 호환 요청이 인증, 할당량, 캐시, 모델 선택, 대체 모델을 거치는 구성도
 seo:
-  title: AI Gateway · LLM 정책과 제한된 복구
-  description: 조직별 사용량과 캐시를 분리하고 모델 장애가 호출 폭증으로 이어지지 않도록 복구 범위를 제한한 Java WebFlux 프로젝트입니다.
-updatedAt: 2026-07-19
+  title: AI Gateway · 여러 서비스의 LLM 호출을 한곳에서
+  description: 조직별 사용량과 캐시를 나누고, 모델 장애가 호출 폭증으로 번지지 않게 재시도를 제한한 Java WebFlux 게이트웨이입니다.
+updatedAt: 2026-09-23
 ---
+테스트와 기본 실행은 Java 21, Spring WebFlux, 메모리 저장소, 가짜 모델로 돌아갑니다. Redis, PostgreSQL, pgvector, 실제 모델 연동은 설정을 켜면 동작하도록 따로 분리해 두었습니다.
 
-> 실행 기준: **Core / 검증**은 Java 21·Spring WebFlux와 메모리 기반 정책, Fake Provider·Deterministic/Fake Embedding으로 재현합니다. **Optional Integration**으로 Redis·PostgreSQL·pgvector와 실제 provider 연동 경로를 분리합니다.
-
-애플리케이션마다 중복되는 LLM 호출 정책과 장애 대응을 공통 경계로 모은 Gateway 프로젝트입니다.
+서비스마다 따로 만들던 LLM 호출 정책을 게이트웨이 하나로 모은 프로젝트입니다.
