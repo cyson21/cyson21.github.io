@@ -115,8 +115,8 @@ test('experience page unifies the résumé summary and career evidence', async (
     '복잡한 상태 변경과 데이터 정합성 문제 분석 및 개선',
     '운영 이슈 재현, 원인 분석, 수정, 회귀 테스트까지 전 과정 수행',
     '비즈니스 규칙 정비와 통합 테스트를 통한 운영 안정성 강화',
-    '공공·실시간 데이터 수집·가공 및 REST API 개발',
-    '시계열 예측 결과 연동과 Docker 기반 배포·운영',
+    '서비스 요구사항에 맞춘 REST API 설계·개발',
+    'Docker 기반 서비스 배포·운영',
   ]);
   await expect(page.getByRole('heading', { name: '주요 업무' })).toHaveCount(2);
   const currentExperience = page.locator('.experience-entry').first();
