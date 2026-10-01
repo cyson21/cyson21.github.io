@@ -133,7 +133,7 @@ test('experience page unifies the résumé summary and career evidence', async (
   await expect(currentExperience.locator('.context')).toHaveText(
     '4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 Anchor 플랫폼의 백엔드 개발·운영을 담당했습니다.',
   );
-  await expect(page.locator('.experience-support .skill-groups')).toBeVisible();
+  await expect(page.locator('.experience-support .skill-groups:not(.project-skill-groups)')).toBeVisible();
   await expect(page.getByRole('heading', { name: '학력' })).toBeVisible();
 });
 
