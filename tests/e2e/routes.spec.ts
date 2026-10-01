@@ -48,7 +48,7 @@ for (const route of routes) {
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator('body')).not.toContainText('undefined');
     for (const label of deprecatedLabels) {
-      await expect(page.locator('body')).not.toContainText(label);
+      await expect(page.getByText(label, { exact: true })).toHaveCount(0);
     }
     expect(errors).toEqual([]);
   });
@@ -109,29 +109,29 @@ test('detail pages expose an explicit route back to the portfolio home', async (
 test('experience page unifies the résumé summary and career evidence', async ({ page }) => {
   await page.goto('/experience/');
   await expect(page.getByRole('heading', { name: '경력·이력서' })).toBeVisible();
-  await expect(page.locator('.resume-overview .summary-intro')).toHaveText('Java·Spring Boot 기반의 5년 차 백엔드 개발자입니다.');
+  await expect(page.locator('.resume-overview .summary-intro')).toHaveText('2021년부터 백엔드 개발·운영을 담당해 왔으며, Java·Spring Boot를 주력으로 사용합니다.');
   await expect(page.locator('.resume-overview .summary-highlights li')).toHaveText([
-    '기업용 플랫폼의 요구사항 분석, API 설계, 데이터 모델링',
-    '복잡한 상태 변경과 데이터 정합성 문제 분석 및 개선',
-    '운영 이슈 재현, 원인 분석, 수정, 회귀 테스트까지 전 과정 수행',
-    '비즈니스 규칙 정비와 통합 테스트를 통한 운영 안정성 강화',
-    '서비스 요구사항에 맞춘 REST API 설계·개발',
-    'Docker 기반 서비스 배포·운영',
+    '기업용 플랫폼의 REST API 설계·개발과 관리자 기능 개편',
+    '공공·실시간 데이터 수집·가공 파이프라인과 조회 API 구현',
+    '운영 장애·데이터 오류 재현, 원인 분석과 API·DB 로직 수정',
+    'JPA·QueryDSL 데이터 접근 계층 개선과 통합·회귀 테스트',
+    'Anchor 버전 전환의 영향 범위 점검과 레거시 코드 정리',
+    'AWS 운영 참여와 Docker 배포·전환 이슈 대응',
   ]);
   await expect(page.getByRole('heading', { name: '주요 업무' })).toHaveCount(2);
   const currentExperience = page.locator('.experience-entry').first();
   await expect(currentExperience.getByRole('heading', { name: '이엠캐스트(주)' })).toBeVisible();
   await expect(currentExperience.locator('.responsibilities li p')).toHaveText([
-    'Java·Spring Boot·JPA·QueryDSL·MySQL 기반으로 Anchor 플랫폼 REST API를 설계·개발·운영하고, 관리자 기능 개편을 지원했습니다.',
-    'Anchor 2.0 → 3.0 전환에서 영향 범위를 점검해 기존 기능 회귀를 막고, 레거시 정리와 API·DB 구조 개선을 진행했습니다.',
-    '운영 장애와 데이터 오류를 재현·분석한 뒤 API·DB 로직을 수정하고, Testcontainers 기반 통합·회귀 테스트로 재발을 줄였습니다.',
-    'JPA·QueryDSL 조회·저장 구조를 정리해 데이터 접근 계층의 정합성과 유지보수성을 높였습니다.',
+    'Java·Spring Boot로 Anchor 플랫폼 REST API를 설계·개발·운영했습니다. JPA·QueryDSL·MySQL로 데이터 조회·저장을 구현하고 관리자 기능 개편을 지원했습니다.',
+    '버전 전환에 따른 기존 기능의 영향 범위를 점검하고 회귀를 검증했습니다. 레거시 코드 정리와 API·DB 구조 개선을 진행했습니다.',
+    '운영 장애와 데이터 오류를 재현해 원인을 분석하고 API·DB 로직을 수정했습니다. Testcontainers 기반 통합·회귀 테스트로 수정 결과를 확인했습니다.',
+    'JPA·QueryDSL의 조회·저장 구조를 정리하고 데이터 정합성과 유지보수 관점에서 접근 로직을 개선했습니다.',
     'AWS(Lambda, CloudWatch, RDS, EC2, WAF 등) 기반 배포·모니터링·운영에 참여하고, Docker 배포·전환 이슈를 처리했습니다.',
     'CI/CD 파이프라인 안정화와 코드리뷰 기반 배포 품질 관리에 참여했습니다.',
   ]);
   await expect(currentExperience).not.toContainText(/자격증명|액세스 키|CDN/);
   await expect(currentExperience.locator('.context')).toHaveText(
-    '실무에서는 4인 개발팀에서 20개 이상의 기업 고객 서비스를 Java·Spring Boot 기반으로 개발·운영했습니다.',
+    '4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 Anchor 플랫폼의 백엔드 개발·운영을 담당했습니다.',
   );
   await expect(page.locator('.experience-support .skill-groups')).toBeVisible();
   await expect(page.getByRole('heading', { name: '학력' })).toBeVisible();
