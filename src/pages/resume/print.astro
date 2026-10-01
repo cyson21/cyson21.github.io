@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { experiences, profile, resumeClosing, resumeHighlights, resumeIntro, skillGroups } from '../../data/site';
+import { experiences, profile, projectSkillGroups, resumeClosing, resumeHighlights, resumeIntro, skillGroups } from '../../data/site';
 
 const projects = await getCollection('projects');
 const [primaryExperience, previousExperience] = experiences;
@@ -108,11 +108,11 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
         </section>
 
         <section class="projects block">
-          <div class="section-title"><h2>대표 프로젝트</h2></div>
+          <div class="section-title"><h2>대표 개인 프로젝트</h2></div>
           <div class="project-list">
             {featuredProjects.map((project) => (
               <article>
-                <h3>{project.data.name}</h3>
+                <h3><a href={`${profile.portfolio}projects/${project.id}/`}>{project.data.name}</a></h3>
                 <em>{project.data.eyebrow}</em>
                 <p>{project.data.summary}</p>
                 <small>{firstVerificationLabel(project)} · {firstSignalResult(project)}</small>
@@ -129,10 +129,11 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
 
         <div class="lower-grid block">
           <section>
-            <div class="section-title"><h2>기술 스택</h2></div>
+            <div class="section-title"><h2>실무 기술 스택</h2></div>
             <div class="skills">
               {skillGroups.map((group) => <div><strong>{group.label}</strong><p>{group.items.join(' · ')}</p></div>)}
             </div>
+            <p class="context">개인 프로젝트: {projectSkillGroups.flatMap((group) => group.items).join(' · ')}</p>
           </section>
           <section>
             <div class="section-title"><h2>학력</h2></div>

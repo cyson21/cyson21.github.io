@@ -37,9 +37,9 @@
   },
   {
     "output": "public/portfolio/index.html",
-    "sourceProject": "side-projects",
-    "sourcePath": "portfolio/portfolio-complete.html",
-    "sha256": "16182f662110995c78f2c6b650fa7377c2a395347a25efc058e9ba7d5666106e",
+    "sourceProject": "portfolio-web",
+    "sourcePath": "public/portfolio/index.html",
+    "sha256": "6bcf24a1699ea9e6899a30510362a99cd5879c2e539788e7e97bcfcb858d7108",
     "owner": "Son Chanyang",
     "usage": "Public integrated portfolio HTML page",
     "approvedAt": "2026-10-01"

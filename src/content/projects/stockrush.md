@@ -5,12 +5,12 @@ publicationState: public
 name: StockRush
 domain: Backend
 eyebrow: 이벤트 기반 커머스
-summary: 주문, 재고, 결제가 서비스별로 나뉜 쇼핑몰 백엔드입니다. 결제가 중간에 실패하거나 Kafka가 멈춰도 주문이 '결제 대기'에 걸려 있지 않도록 Saga와 Outbox로 되돌리는 흐름을 만들었습니다.
+summary: 주문·재고·결제를 분리한 커머스 백엔드입니다. Saga와 Transactional Outbox로 결제 실패 시 보상 처리, 중복 이벤트 처리 방지, 발행 실패 후 재처리 흐름을 구현했습니다.
 cardEvidence:
-  implementation: 주문 서비스가 다음 단계를 지시하고, 이벤트는 DB에 먼저 적어 둔 뒤 따로 발행합니다.
-  result: 같은 이벤트가 두 번 와도 한 번만 처리되고, 취소한 주문에 뒤늦게 결제 승인이 와도 주문이 다시 살아나지 않습니다.
+  implementation: 주문과 이벤트를 같은 DB 트랜잭션에 저장하고, 주문 서비스가 Saga 상태 전이와 보상 처리를 조정합니다.
+  result: PostgreSQL 통합 테스트에서 중복 이벤트의 후속 Outbox 1건과 취소 후 늦은 결제 승인 무시를 확인했습니다.
 period: "2026"
-role: 개인 프로젝트 · 설계부터 구현, 테스트까지 혼자 진행
+role: 개인 프로젝트 · 백엔드 설계·구현·테스트
 stack:
   - Java
   - Spring Boot
@@ -18,11 +18,11 @@ stack:
   - PostgreSQL
   - Keycloak
   - Docker Compose
-problem: 주문 저장, 재고 차감, 결제 승인, 이벤트 발행을 한 트랜잭션으로 묶을 수 없습니다. 그래서 결제가 늦거나 Kafka가 잠깐 멈추면 재고는 빠졌는데 주문은 대기 중이고, 조회 화면은 또 다른 상태를 보여 주는 일이 생깁니다.
+problem: 주문 저장, 재고 예약, 결제 승인과 이벤트 발행은 서비스 경계 때문에 하나의 DB 트랜잭션으로 처리할 수 없습니다. 부분 실패와 이벤트 재전달에 대비해 상태 전이, 보상 처리와 재발행을 구분해야 합니다.
 responsibilities:
-  - 게이트웨이, 상품, 재고, 주문, 결제, 프로모션, 출고, 조회용 서비스로 나누고 각자 자기 DB 스키마를 갖게 했습니다.
-  - 주문 Saga와 서비스별 Outbox 발행기를 만들고, 발행에 실패한 이벤트를 관리자가 다시 보낼 수 있는 API를 붙였습니다.
-  - 로그인 확인은 게이트웨이(OIDC/JWT)에서 하고, '이 주문이 이 사람 것인지'는 각 서비스에서 한 번 더 확인합니다.
+  - 게이트웨이와 도메인별 서비스를 분리하고 서비스별 PostgreSQL 스키마를 구성했습니다.
+  - 주문 Saga, 서비스별 Outbox 발행기와 발행 실패 이벤트의 관리자 재처리 API를 구현했습니다.
+  - 게이트웨이의 OIDC/JWT 인증과 서비스의 리소스 소유권 검사를 분리했습니다.
 flow:
   normal:
     - 게이트웨이 인증
@@ -61,11 +61,11 @@ decisions:
   - title: 주문 서비스가 흐름을 지휘
     choice: 재고, 결제, 쿠폰, 출고의 다음 단계는 주문 서비스가 정합니다.
     alternative: 각 서비스가 이벤트를 받아 다음 서비스로 알아서 넘기는 방식
-    reason: 실패했을 때 무엇을 어떤 순서로 되돌릴지 한곳에서 보여야 디버깅할 수 있다고 판단했습니다. 문제가 생기면 주문 서비스만 보면 됩니다.
+    reason: 다음 단계와 보상 순서를 주문 서비스에 모아 상태 전이를 추적하기 위한 선택입니다. 각 서비스의 처리 결과와 Outbox 상태도 함께 확인해야 합니다.
   - title: 이벤트는 DB에 먼저 기록
     choice: 주문을 저장할 때 보낼 이벤트도 같은 트랜잭션으로 Outbox 테이블에 넣습니다.
     alternative: 커밋한 다음 코드에서 바로 Kafka로 보내기
-    reason: 커밋 직후 서버가 죽거나 Kafka가 안 받으면 이벤트가 사라집니다. 테이블에 남아 있으면 나중에 다시 보낼 수 있습니다.
+    reason: DB 커밋과 Kafka 발행 사이에 실패하더라도 발행할 이벤트가 DB에 남아 재시도할 수 있습니다.
   - title: 권한 확인은 두 번
     choice: 게이트웨이에서 로그인을 확인하고, 서비스에서 주문 주인을 다시 확인합니다.
     alternative: 게이트웨이를 통과했으면 믿기
@@ -111,7 +111,7 @@ codeEvidence:
       order by created_at, id
       limit :batchSize
       for update skip locked
-    proves: 발행기를 여러 대 띄워도 SKIP LOCKED 덕분에 같은 이벤트를 두 대가 동시에 잡지 않습니다.
+    proves: SKIP LOCKED로 잠긴 행을 건너뛰고 선택한 이벤트를 PUBLISHING으로 전환합니다. 연결 테스트는 재시도 한도 초과 후 FAILED 전환을 확인합니다.
     testName: OutboxRelayServiceIntegrationTest.marks_failed_when_publish_retry_count_is_exhausted
     testPath: services/order-service/src/test/java/com/stockrush/order/infra/outbox/OutboxRelayServiceIntegrationTest.java
     testUrl: https://github.com/cyson21/stockrush/blob/main/services/order-service/src/test/java/com/stockrush/order/infra/outbox/OutboxRelayServiceIntegrationTest.java
@@ -126,7 +126,8 @@ verification:
     method: 항상 실패하는 발행기를 넣고 재시도를 끝까지 돌립니다.
     result: 다섯 번째 실패 뒤 FAILED로 바뀝니다.
 limitations:
-  - 실제 PG 연동, 대규모 트래픽, Kafka가 오래 죽어 있는 상황은 아직 해 보지 않았습니다.
+  - 결제·출고는 내부 시뮬레이션입니다. 실제 PG·물류 연동과 운영 규모의 처리량·지연 시간은 검증하지 않았습니다.
+  - Kafka 중단·재개는 로컬 단일 브로커 시나리오 범위이며, 장기 장애와 발행기 고가용성은 검증하지 않았습니다.
 next:
   - OpenTelemetry로 주문 하나가 서비스를 거치는 경로를 추적하고, Kafka가 오래 멈췄다가 살아났을 때 복구에 얼마나 걸리는지 재 보려고 합니다.
 links:
@@ -138,9 +139,9 @@ visual:
   src: /media/stockrush-architecture.png
   alt: Gateway에서 주문 Saga, 서비스별 Outbox와 Kafka, 조회 모델로 이어지는 StockRush 구성도
 seo:
-  title: StockRush · 결제가 실패해도 주문이 꼬이지 않는 쇼핑몰 백엔드
-  description: Saga와 Transactional Outbox로 결제 실패, 중복 이벤트, Kafka 중단 상황을 처리한 Java/Spring 개인 프로젝트입니다.
-updatedAt: 2026-09-23
+  title: StockRush · 주문 상태 전이와 이벤트 재처리
+  description: Saga와 Transactional Outbox로 결제 실패, 중복 이벤트와 발행 실패의 복구 흐름을 구현한 Java·Spring Boot 개인 프로젝트입니다.
+updatedAt: 2026-10-01
 ---
 
 주문이 잘 되는 경우보다, 중간에 뭔가 실패했을 때 데이터가 어떻게 남는지를 더 많이 들여다본 프로젝트입니다.
