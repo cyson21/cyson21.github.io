@@ -11,7 +11,7 @@ test('home hero shows the Korean two-line role without a profile image shadow', 
   expect(profileImageShadow).toBe('none');
 });
 
-test('home layout keeps the name below the profile and makes the dark-theme highlights readable', async ({ page }) => {
+test('home layout keeps the name below the profile and makes the highlights readable', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/');
 
@@ -22,15 +22,15 @@ test('home layout keeps the name below the profile and makes the dark-theme high
   expect(nameBox!.y).toBeGreaterThanOrEqual(profileBox!.y + profileBox!.height);
 
   const highlightsColor = await page.locator('.hero-highlights').evaluate((element) => getComputedStyle(element).color);
-  expect(highlightsColor).toBe('rgb(227, 235, 239)');
+  expect(highlightsColor).toBe('rgb(75, 91, 112)');
 });
 
-test('home hero subtitle stays readable against the dark theme', async ({ page }) => {
+test('home hero subtitle stays readable against the hero surface', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/');
 
   const subtitleColor = await page.locator('.hero-subtitle').evaluate((element) => getComputedStyle(element).color);
-  expect(subtitleColor).toBe('rgb(227, 235, 239)');
+  expect(subtitleColor).toBe('rgb(75, 91, 112)');
 });
 
 test('home omits the temporary career and project sections while keeping detail routes visible', async ({ page }) => {
@@ -48,7 +48,7 @@ test('home keeps supporting copy readable without the temporary sections', async
   await page.goto('/');
 
   const closingColor = await page.locator('.hero-closing').evaluate((element) => getComputedStyle(element).color);
-  expect(closingColor).toBe('rgb(215, 224, 228)');
+  expect(closingColor).toBe('rgb(75, 91, 112)');
 
   await expect(page.locator('.contact-band')).toHaveCount(0);
 });

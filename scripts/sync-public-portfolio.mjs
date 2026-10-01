@@ -6,6 +6,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { dirname, resolve } from 'node:path';
+import { applyReadingLayout } from './portfolio-reading-layout.mjs';
 
 const source = resolve(
   process.env.PORTFOLIO_HTML_SOURCE?.trim()
@@ -14,7 +15,10 @@ const source = resolve(
 const output = resolve(import.meta.dirname, '../public/portfolio/index.html');
 const temporaryOutput = resolve(dirname(output), `.portfolio-${process.pid}-${Date.now()}.tmp.html`);
 
-const html = readFileSync(source, 'utf8').replace(/\r\n?/g, '\n');
+const screenStyle = readFileSync(resolve(import.meta.dirname, '../src/styles/portfolio-screen.css'), 'utf8');
+const html = applyReadingLayout(readFileSync(source, 'utf8').replace(/\r\n?/g, '\n'))
+  .replace(/\/\* Quiet Slate screen refinement:[\s\S]*?(?=<\/style>)/, '')
+  .replace('</style>', `${screenStyle}\n</style>`);
 if (
   !html.trimStart().toLowerCase().startsWith('<!doctype html>')
   || !html.includes('<html lang="ko-KR">')

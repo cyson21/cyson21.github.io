@@ -60,7 +60,7 @@ async function applyPortfolioTheme(page: Page, theme: 'b' | 'c'): Promise<void> 
     },
     {
       expectedTheme: theme,
-      expectedRadius: theme === 'b' ? '2px' : '14px',
+      expectedRadius: theme === 'b' ? '6px' : '14px',
     },
   );
   await page.evaluate(() => new Promise<void>((resolve) => {
