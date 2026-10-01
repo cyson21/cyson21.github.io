@@ -57,3 +57,7 @@ PDFTOTEXT_BIN=/path/to/pdftotext pnpm test:privacy
 ```
 
 릴리스와 되돌리기 기준은 [`docs/release/runbook.md`](docs/release/runbook.md)에 기록합니다.
+
+## 의존성 유지보수
+
+포트폴리오의 유지보수 비용을 줄이기 위해 Dependabot의 일반 버전 업데이트 PR은 생성하지 않습니다. 보안 취약점 알림과 보안 업데이트는 활성화하며, 보안 업데이트 PR은 패키지 생태계별로 묶습니다. 일반 버전 업그레이드는 필요한 기능이나 호환성 문제가 있을 때 진행합니다.
