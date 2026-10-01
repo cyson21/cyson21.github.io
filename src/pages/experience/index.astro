@@ -6,6 +6,7 @@ import {
   careerPeriod,
   experiences,
   profile,
+  projectSkillGroups,
   resumeClosing,
   resumeHighlights,
   resumeIntro,
@@ -20,7 +21,7 @@ if (!currentExperience) {
 
 <BaseLayout
   title="경력·이력서"
-  description="Java · Spring Boot 기반의 5년 차 백엔드 개발자 손찬양의 경력과 이력서를 한 페이지에 정리했습니다."
+  description="손찬양의 Java·Spring Boot 백엔드 실무 경력과 이력서입니다. 회사별 담당 업무와 개인 프로젝트 기술 경험을 구분해 정리했습니다."
 >
   <PageIntro title="경력·이력서" description={currentExperience.context} />
 
@@ -84,9 +85,19 @@ if (!currentExperience) {
 
       <div class="experience-support">
         <section class="experience-support-panel" aria-labelledby="skills-title">
-          <h2 id="skills-title">기술 스택</h2>
+          <h2 id="skills-title">실무 기술 스택</h2>
           <div class="skill-groups">
             {skillGroups.map((group) => (
+              <div>
+                <p class="skill-label">{group.label}</p>
+                <ul class="tag-list">{group.items.map((item) => <li class="tag">{item}</li>)}</ul>
+              </div>
+            ))}
+          </div>
+          <h3>개인 프로젝트 기술</h3>
+          <p>공개 저장소에서 구현·테스트한 기술입니다. 적용 환경과 검증 범위는 프로젝트 상세에 정리했습니다.</p>
+          <div class="skill-groups project-skill-groups">
+            {projectSkillGroups.map((group) => (
               <div>
                 <p class="skill-label">{group.label}</p>
                 <ul class="tag-list">{group.items.map((item) => <li class="tag">{item}</li>)}</ul>

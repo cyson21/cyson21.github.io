@@ -25,7 +25,8 @@
     "test:e2e": "playwright test",
     "test:e2e:quality": "playwright test tests/e2e/quality.spec.ts",
     "test:e2e:release": "playwright test tests/e2e/release.spec.ts --project=desktop",
-    "verify": "pnpm build && pnpm test:e2e"
+    "verify": "pnpm build && pnpm test:e2e",
+    "test:e2e:content": "playwright test tests/e2e/routes.spec.ts tests/e2e/experience-skills.spec.ts tests/e2e/publishing.spec.ts tests/e2e/portfolio-reading.spec.ts tests/e2e/layout-health.spec.ts"
   },
   "dependencies": {
     "@lucide/astro": "1.35.0",

@@ -1,5 +1,5 @@
 const publicResumeUrl = import.meta.env.PUBLIC_RESUME_URL?.trim() || '/downloads/resume.pdf';
-const siteUpdatedAt = '2026-09-29';
+const siteUpdatedAt = '2026-10-01';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -13,23 +13,23 @@ const experienceRecords = [
     end: null,
     company: '이엠캐스트(주)',
     role: '백엔드 개발자 · 주임',
-    context: '실무에서는 4인 개발팀에서 20개 이상의 기업 고객 서비스를 Java·Spring Boot 기반으로 개발·운영했습니다.',
+    context: '4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 B2B 리테일 교육 플랫폼의 백엔드 개발·운영을 담당했습니다.',
     responsibilities: [
       {
-        title: 'Anchor 플랫폼 REST API',
-        description: 'Java·Spring Boot·JPA·QueryDSL·MySQL 기반으로 Anchor 플랫폼 REST API를 설계·개발·운영하고, 관리자 기능 개편을 지원했습니다.',
+        title: '교육 플랫폼 REST API',
+        description: 'Java·Spring Boot로 B2B 리테일 교육 플랫폼의 REST API를 설계·개발·운영했습니다. JPA·QueryDSL·MySQL로 데이터 조회·저장을 구현하고 관리자 기능 개편을 지원했습니다.',
       },
       {
-        title: 'Anchor 2.0 → 3.0 전환',
-        description: 'Anchor 2.0 → 3.0 전환에서 영향 범위를 점검해 기존 기능 회귀를 막고, 레거시 정리와 API·DB 구조 개선을 진행했습니다.',
+        title: '플랫폼 2.0 → 3.0 전환',
+        description: '버전 전환에 따른 기존 기능의 영향 범위를 점검하고 회귀를 검증했습니다. 레거시 코드 정리와 API·DB 구조 개선을 진행했습니다.',
       },
       {
         title: '장애 분석·회귀 검증',
-        description: '운영 장애와 데이터 오류를 재현·분석한 뒤 API·DB 로직을 수정하고, Testcontainers 기반 통합·회귀 테스트로 재발을 줄였습니다.',
+        description: '운영 장애와 데이터 오류를 재현해 원인을 분석하고 API·DB 로직을 수정했습니다. Testcontainers 기반 통합·회귀 테스트로 수정 결과를 확인했습니다.',
       },
       {
         title: '데이터 접근 계층 개선',
-        description: 'JPA·QueryDSL 조회·저장 구조를 정리해 데이터 접근 계층의 정합성과 유지보수성을 높였습니다.',
+        description: 'JPA·QueryDSL의 조회·저장 구조를 정리하고 데이터 정합성과 유지보수 관점에서 접근 로직을 개선했습니다.',
       },
       {
         title: 'AWS 배포·운영',
@@ -40,7 +40,7 @@ const experienceRecords = [
         description: 'CI/CD 파이프라인 안정화와 코드리뷰 기반 배포 품질 관리에 참여했습니다.',
       },
     ],
-    stack: ['Java', 'Spring Boot', 'Spring', 'Spring Data JPA', 'JPA', 'QueryDSL', 'MySQL', 'AWS S3', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
+    stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'AWS EC2', 'AWS RDS', 'AWS S3', 'AWS Lambda', 'CloudWatch', 'AWS WAF', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
   },
   {
     start: '2021-07',
@@ -51,42 +51,42 @@ const experienceRecords = [
     responsibilities: [
       {
         title: '실시간 데이터 파이프라인',
-        description: '서울 실시간 도시데이터 Open API 수집·가공 파이프라인과 조회 API 구현',
+        description: '서울 실시간 도시데이터 Open API를 수집·가공하는 파이프라인과 조회 API를 구현했습니다.',
       },
       {
         title: '스키마·REST API 설계',
-        description: '서비스별 요구사항에 맞춘 MySQL·MongoDB 스키마 및 REST API 설계',
+        description: '서비스별 요구사항에 맞춰 MySQL·MongoDB 스키마와 REST API를 설계했습니다.',
       },
       {
         title: '데이터 백엔드 구현',
-        description: 'Spring Boot·Django·FastAPI로 데이터 조회·저장 백엔드 기능 구현',
+        description: 'Spring Boot·Django·FastAPI로 데이터 조회·저장 기능을 구현했습니다.',
       },
       {
         title: '시계열 예측 연동',
-        description: '시계열 예측 결과를 서비스 지표와 기능에 연동',
+        description: '시계열 예측 결과를 서비스 지표와 기능에 연동했습니다.',
       },
       {
         title: 'Docker 배포·운영',
-        description: '관련 서비스를 Docker 컨테이너로 배포·운영',
+        description: '관련 서비스를 Docker 컨테이너로 배포·운영했습니다.',
       },
     ],
     stack: ['Java', 'Spring Boot', 'Python', 'FastAPI', 'Django', 'SQL', 'MySQL', 'MongoDB', 'Docker'],
   },
 ] as const;
 
-export const resumeIntro = 'Java·Spring Boot 기반의 5년 차 백엔드 개발자입니다.';
+export const resumeIntro = '2021년부터 백엔드 개발·운영을 담당해 왔으며, Java·Spring Boot를 주력으로 사용합니다.';
 
 export const resumeHighlights = [
-  '기업용 플랫폼의 요구사항 분석, API 설계, 데이터 모델링',
-  '복잡한 상태 변경과 데이터 정합성 문제 분석 및 개선',
-  '운영 이슈 재현, 원인 분석, 수정, 회귀 테스트까지 전 과정 수행',
-  '비즈니스 규칙 정비와 통합 테스트를 통한 운영 안정성 강화',
-  '서비스 요구사항에 맞춘 REST API 설계·개발',
-  'Docker 기반 서비스 배포·운영',
+  'B2B 리테일 교육 플랫폼의 REST API 설계·개발과 관리자 기능 개편',
+  '공공·실시간 데이터 수집·가공 파이프라인과 조회 API 구현',
+  '운영 장애·데이터 오류 재현, 원인 분석과 API·DB 로직 수정',
+  'JPA·QueryDSL 데이터 접근 계층 개선과 통합·회귀 테스트',
+  '교육 플랫폼 버전 전환의 영향 범위 점검과 레거시 코드 정리',
+  'AWS 운영 참여와 Docker 배포·전환 이슈 대응',
 ] as const;
 
 export const resumeClosing =
-  '기능 구현에 그치지 않고, 운영 환경에서 발생하는 문제를 구조적으로 해결하고 재발을 방지하는 데 강점이 있습니다.';
+  '운영 문제의 재현부터 로직 수정과 회귀 검증까지 연결합니다. 개인 프로젝트에서는 동시성 제어와 이벤트 처리의 실패·복구 흐름을 구현하고 테스트했습니다.';
 
 export const resumeSummary = [resumeIntro, resumeClosing] as const;
 
@@ -94,7 +94,7 @@ export const profile = {
   name: '손찬양',
   englishName: 'Son Chanyang',
   role: 'Java · Spring Boot 백엔드 개발자',
-  subtitle: '5년 차 · API 개발·운영 · 데이터 정합성',
+  subtitle: '2021년부터 · API 개발·운영 · 데이터 정합성',
   statement: resumeIntro,
   email: 'cyson21@gmail.com',
   github: 'https://github.com/cyson21',
@@ -113,15 +113,15 @@ export const careerPeriod = `${formatMonth(experienceRecords.at(-1)?.start ?? ex
 export const skillGroups = [
   {
     label: 'Java·Spring',
-    items: ['Java', 'Spring Boot', 'Spring', 'Spring Data JPA', 'QueryDSL'],
+    items: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL'],
   },
   {
     label: 'DB·데이터',
-    items: ['SQL', 'PostgreSQL', 'MySQL'],
+    items: ['SQL', 'MySQL', 'MongoDB'],
   },
   {
-    label: '메시징·캐시',
-    items: ['Redis', 'RabbitMQ'],
+    label: 'Python·웹',
+    items: ['Python', 'Django', 'FastAPI'],
   },
   {
     label: 'AWS·인프라',
@@ -129,6 +129,13 @@ export const skillGroups = [
   },
   {
     label: '형상관리·검증',
-    items: ['Git', 'JUnit', 'Testcontainers'],
+    items: ['Git', 'JUnit', 'Testcontainers', 'REST Docs'],
   },
+] as const;
+
+// 공개 프로젝트의 구현·테스트 경험이며 실무 운영 경험을 뜻하지 않습니다.
+export const projectSkillGroups = [
+  { label: 'DB·캐시', items: ['PostgreSQL', 'Redis', 'pgvector'] },
+  { label: '이벤트·CDC', items: ['Kafka', 'RabbitMQ', 'Debezium'] },
+  { label: 'API·인증', items: ['Spring WebFlux', 'Keycloak'] },
 ] as const;

@@ -5,23 +5,23 @@ publicationState: public
 name: Enterprise Policy RAG
 domain: AI
 eyebrow: 권한 기반 RAG
-summary: 사내 규정 문서를 검색해서 질문에 답하는 RAG입니다. 볼 권한이 있는 문서만 검색하고, 근거 문서가 없으면 답하지 않습니다.
+summary: 사내 규정 문서의 권한 기반 검색·답변 흐름을 구현한 RAG 개인 프로젝트입니다. 검색 후보에 권한 조건을 적용하고, 허용된 근거가 없으면 답변 생성을 중단합니다.
 cardEvidence:
   implementation: 벡터 검색을 하기 전에 워크스페이스, 작성자, 공개 범위, 부서 조건으로 먼저 걸러 냅니다.
   result: 문서 5건 중 볼 수 있는 3건만 나오고, 검색 결과가 없으면 모델을 부르지 않고 바로 거절합니다.
 period: 2026.05–2026.06
-role: 개인 프로젝트 · 백엔드 API와 React 관리 화면까지 혼자 진행
+role: 개인 프로젝트 · FastAPI 백엔드·React 관리 화면 구현
 stack:
   - Python
   - FastAPI
   - React
   - PostgreSQL
   - pgvector
-  - OpenAI 연동
+  - OpenAI 연동 어댑터
 problem: 사내 문서 RAG는 검색이 잘 되는 것만으로는 부족합니다. 인사팀 문서가 다른 부서 사람 질문에 섞여 나오면 안 되고, 근거가 없는데 그럴듯하게 답해도 안 됩니다.
 responsibilities:
   - 문서 등록과 분할, 권한별 검색, 출처를 붙인 답변과 거절 응답 API를 만들었습니다.
-  - pgvector 저장소와 OpenAI 연동은 인터페이스 뒤로 빼서, 외부 서비스 없이도 테스트할 수 있게 했습니다.
+  - 저장소와 모델을 인터페이스로 분리해 메모리·테스트 모델로 회귀 테스트를 구성하고, PostgreSQL·pgvector와 OpenAI 어댑터를 별도 설정으로 연결했습니다.
   - 검색 결과, 문서 관리, 질문 이력을 볼 수 있는 관리 화면과 정적 데모를 만들었습니다.
 flow:
   normal:
@@ -33,11 +33,11 @@ flow:
   failure:
     - 볼 권한 없는 문서가 후보에 섞임
     - 관련 문서가 하나도 없음
-    - 답변이 권한 밖 문서를 인용
+    - 출처 목록에 권한 밖 문서가 포함될 위험
   recovery:
     - 검색 전에 권한 필터
     - 근거 없으면 거절
-    - 인용한 문서를 한 번 더 권한 확인
+    - 권한 확인을 거친 검색 결과로 출처 구성
 signals:
   - label: 권한 검색
     expression: 문서 5건 검색
@@ -51,9 +51,9 @@ signals:
     tone: warning
     source: test_answer_api.py::test_answer_api_refuses_when_no_evidence_is_available
     sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_answer_api.py
-  - label: 인용 범위 검사
-    expression: 권한 밖 문서 인용
-    result: 인용 목록에서 빠짐
+  - label: 출처 범위
+    expression: 접근 권한 없는 부서 문서
+    result: 응답 출처 목록에 포함되지 않음
     tone: danger
     source: test_answer_api.py::test_answer_api_keeps_retrieval_permission_filter_for_citations
     sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_answer_api.py
@@ -124,13 +124,17 @@ verification:
   - layer: integration
     method: 관련 문서가 없는 질문을 답변 API에 보냅니다.
     result: insufficient_evidence로 거절합니다.
+  - layer: integration
+    method: 선택 실행 PostgreSQL 테스트에서 권한이 다른 문서와 색인 대기 문서를 등록합니다.
+    result: SQL 후보 조회와 검색 결과에서 허용된 문서만 반환하도록 검증합니다.
   - layer: static-demo
     method: 관리 화면을 정적 빌드로 띄워 봅니다.
-    result: 공개 데모에서 검색 결과, 출처, 평가 지표를 볼 수 있습니다.
+    result: 고정 데이터로 검색 결과·출처·질문 이력을 보여 줍니다. 실제 백엔드 검색 결과는 아닙니다.
 limitations:
   - 기본 실행은 메모리 저장소와 가짜 모델입니다. 실제 사내 인증 연동이나 운영 환경 pgvector는 해 보지 않았습니다.
   - 화면의 토큰 수와 비용은 글자 수로 어림잡은 값이라 실제 청구액과 다릅니다.
-  - 검색 적중률은 테스트 사례 3개로만 잰 값이라 일반적인 품질 지표로 보기는 어렵습니다.
+  - 고정 질문 평가는 권한·검색·출처 회귀 확인용입니다. 실제 모델의 답변 품질이나 RAG 검색 품질을 일반화할 수 없습니다.
+  - 출처는 권한 확인을 거친 검색 결과에서 구성합니다. 생성 답변의 모든 문장이 출처에 근거하는지 자동 검증하는 기능은 없습니다.
 next:
   - 사내 인증과 감사 로그를 붙이고, 실제 모델로 평가를 따로 쌓아 보려고 합니다.
 links:
@@ -145,7 +149,7 @@ visual:
 seo:
   title: Enterprise Policy RAG · 권한을 지키는 사내 문서 검색
   description: 볼 권한이 없는 문서는 검색 단계에서 빼고, 근거가 없으면 답하지 않는 사내 규정 RAG 프로젝트입니다.
-updatedAt: 2026-09-23
+updatedAt: 2026-10-01
 ---
 테스트와 기본 실행은 메모리 저장소와 가짜 모델로 돌아갑니다. PostgreSQL, pgvector, OpenAI 연동은 설정을 켜면 동작하도록 따로 분리해 두었습니다.
 

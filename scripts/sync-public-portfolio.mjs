@@ -10,7 +10,7 @@ import { applyReadingLayout } from './portfolio-reading-layout.mjs';
 
 const source = resolve(
   process.env.PORTFOLIO_HTML_SOURCE?.trim()
-    || resolve(import.meta.dirname, '../../../portfolio/portfolio-complete.html'),
+    || resolve(import.meta.dirname, '../public/portfolio/index.html'),
 );
 const output = resolve(import.meta.dirname, '../public/portfolio/index.html');
 const temporaryOutput = resolve(dirname(output), `.portfolio-${process.pid}-${Date.now()}.tmp.html`);
