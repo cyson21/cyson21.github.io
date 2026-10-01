@@ -81,7 +81,7 @@ export const resumeHighlights = [
   '운영 장애·데이터 오류 재현, 원인 분석과 API·DB 로직 수정',
   'JPA·QueryDSL 데이터 접근 계층 개선과 통합·회귀 테스트',
   'B2B 교육 플랫폼 버전 전환의 영향 범위 점검과 레거시 코드 정리',
-  'AWS 운영 참여와 Docker 배포·전환 이슈 대응',
+  'AWS 인프라 운영과 CI/CD 파이프라인 안정화, Docker 기반 배포',
 ] as const;
 
 export const resumeClosing =
