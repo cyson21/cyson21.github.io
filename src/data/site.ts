@@ -1,4 +1,3 @@
-const publicResumeUrl = import.meta.env.PUBLIC_RESUME_URL?.trim() || '/downloads/resume.pdf';
 const siteUpdatedAt = '2026-10-01';
 
 const formatMonth = (value: string) => value.replace('-', '.');
@@ -99,7 +98,7 @@ export const profile = {
   email: 'cyson21@gmail.com',
   github: 'https://github.com/cyson21',
   portfolio: 'https://cyson21.github.io/',
-  resumePath: publicResumeUrl,
+  resumePath: '/downloads/resume.pdf',
   updatedAt: siteUpdatedAt,
 } as const;
 

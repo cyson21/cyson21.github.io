@@ -1,4 +1,6 @@
 import { expect, test } from '@playwright/test';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 
 const releaseOrigin = process.env.PUBLIC_SITE_URL?.replace(/\/$/, '');
 
@@ -41,4 +43,16 @@ test('release 404 remains noindex', async ({ page }) => {
   const response = await page.goto('/missing-release-check/');
   expect(response?.status()).toBe(404);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
+});
+
+test('release PDF links serve the resume included in this deployment', async ({ page, request }) => {
+  for (const route of ['/', '/experience/']) {
+    await page.goto(route);
+    await expect(page.locator('a[href$="resume.pdf"]')).toHaveAttribute('href', '/downloads/resume.pdf');
+  }
+  const response = await request.get('/downloads/resume.pdf');
+  expect(response.ok()).toBeTruthy();
+  expect(response.headers()['content-type']).toContain('application/pdf');
+  const digest = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
+  expect(digest(await response.body())).toBe(digest(readFileSync('public/downloads/resume.pdf')));
 });

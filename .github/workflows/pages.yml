@@ -21,7 +21,6 @@ jobs:
     env:
       PUBLIC_RELEASE: 'true'
       PUBLIC_SITE_URL: https://cyson21.github.io
-      PUBLIC_RESUME_URL: https://github.com/cyson21/portfolio-hub/releases/download/latest/resume.pdf
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
