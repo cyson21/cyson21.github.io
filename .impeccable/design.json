@@ -1,0 +1,377 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-01T05:59:23.004505+00:00",
+  "title": "Design System: 손찬양 포트폴리오 — Quiet Slate B",
+  "extensions": {
+    "colorMeta": {
+      "blue": {
+        "role": "primary",
+        "displayName": "Blue",
+        "tonalRamp": [
+          "oklch(0.150 0.0857 249.64)",
+          "oklch(0.264 0.0857 249.64)",
+          "oklch(0.379 0.0857 249.64)",
+          "oklch(0.493 0.0857 249.64)",
+          "oklch(0.607 0.0857 249.64)",
+          "oklch(0.721 0.0857 249.64)",
+          "oklch(0.836 0.0857 249.64)",
+          "oklch(0.950 0.0857 249.64)"
+        ]
+      },
+      "blue-soft": {
+        "role": "primary",
+        "displayName": "Blue Soft",
+        "tonalRamp": [
+          "oklch(0.150 0.0120 247.95)",
+          "oklch(0.264 0.0120 247.95)",
+          "oklch(0.379 0.0120 247.95)",
+          "oklch(0.493 0.0120 247.95)",
+          "oklch(0.607 0.0120 247.95)",
+          "oklch(0.721 0.0120 247.95)",
+          "oklch(0.836 0.0120 247.95)",
+          "oklch(0.950 0.0120 247.95)"
+        ]
+      },
+      "green": {
+        "role": "semantic",
+        "displayName": "Green",
+        "tonalRamp": [
+          "oklch(0.150 0.0753 166.11)",
+          "oklch(0.264 0.0753 166.11)",
+          "oklch(0.379 0.0753 166.11)",
+          "oklch(0.493 0.0753 166.11)",
+          "oklch(0.607 0.0753 166.11)",
+          "oklch(0.721 0.0753 166.11)",
+          "oklch(0.836 0.0753 166.11)",
+          "oklch(0.950 0.0753 166.11)"
+        ]
+      },
+      "green-soft": {
+        "role": "semantic",
+        "displayName": "Green Soft",
+        "tonalRamp": [
+          "oklch(0.150 0.0107 158.85)",
+          "oklch(0.264 0.0107 158.85)",
+          "oklch(0.379 0.0107 158.85)",
+          "oklch(0.493 0.0107 158.85)",
+          "oklch(0.607 0.0107 158.85)",
+          "oklch(0.721 0.0107 158.85)",
+          "oklch(0.836 0.0107 158.85)",
+          "oklch(0.950 0.0107 158.85)"
+        ]
+      },
+      "amber": {
+        "role": "semantic",
+        "displayName": "Amber",
+        "tonalRamp": [
+          "oklch(0.150 0.0851 73.70)",
+          "oklch(0.264 0.0851 73.70)",
+          "oklch(0.379 0.0851 73.70)",
+          "oklch(0.493 0.0851 73.70)",
+          "oklch(0.607 0.0851 73.70)",
+          "oklch(0.721 0.0851 73.70)",
+          "oklch(0.836 0.0851 73.70)",
+          "oklch(0.950 0.0851 73.70)"
+        ]
+      },
+      "amber-soft": {
+        "role": "semantic",
+        "displayName": "Amber Soft",
+        "tonalRamp": [
+          "oklch(0.150 0.0164 79.35)",
+          "oklch(0.264 0.0164 79.35)",
+          "oklch(0.379 0.0164 79.35)",
+          "oklch(0.493 0.0164 79.35)",
+          "oklch(0.607 0.0164 79.35)",
+          "oklch(0.721 0.0164 79.35)",
+          "oklch(0.836 0.0164 79.35)",
+          "oklch(0.950 0.0164 79.35)"
+        ]
+      },
+      "red": {
+        "role": "semantic",
+        "displayName": "Red",
+        "tonalRamp": [
+          "oklch(0.150 0.1195 20.48)",
+          "oklch(0.264 0.1195 20.48)",
+          "oklch(0.379 0.1195 20.48)",
+          "oklch(0.493 0.1195 20.48)",
+          "oklch(0.607 0.1195 20.48)",
+          "oklch(0.721 0.1195 20.48)",
+          "oklch(0.836 0.1195 20.48)",
+          "oklch(0.950 0.1195 20.48)"
+        ]
+      },
+      "red-soft": {
+        "role": "semantic",
+        "displayName": "Red Soft",
+        "tonalRamp": [
+          "oklch(0.150 0.0141 17.40)",
+          "oklch(0.264 0.0141 17.40)",
+          "oklch(0.379 0.0141 17.40)",
+          "oklch(0.493 0.0141 17.40)",
+          "oklch(0.607 0.0141 17.40)",
+          "oklch(0.721 0.0141 17.40)",
+          "oklch(0.836 0.0141 17.40)",
+          "oklch(0.950 0.0141 17.40)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(0.150 0.0029 264.54)",
+          "oklch(0.264 0.0029 264.54)",
+          "oklch(0.379 0.0029 264.54)",
+          "oklch(0.493 0.0029 264.54)",
+          "oklch(0.607 0.0029 264.54)",
+          "oklch(0.721 0.0029 264.54)",
+          "oklch(0.836 0.0029 264.54)",
+          "oklch(0.950 0.0029 264.54)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "oklch(0.150 0.0000 89.88)",
+          "oklch(0.264 0.0000 89.88)",
+          "oklch(0.379 0.0000 89.88)",
+          "oklch(0.493 0.0000 89.88)",
+          "oklch(0.607 0.0000 89.88)",
+          "oklch(0.721 0.0000 89.88)",
+          "oklch(0.836 0.0000 89.88)",
+          "oklch(0.950 0.0000 89.88)"
+        ]
+      },
+      "surface-muted": {
+        "role": "neutral",
+        "displayName": "Surface Muted",
+        "tonalRamp": [
+          "oklch(0.150 0.0069 247.90)",
+          "oklch(0.264 0.0069 247.90)",
+          "oklch(0.379 0.0069 247.90)",
+          "oklch(0.493 0.0069 247.90)",
+          "oklch(0.607 0.0069 247.90)",
+          "oklch(0.721 0.0069 247.90)",
+          "oklch(0.836 0.0069 247.90)",
+          "oklch(0.950 0.0069 247.90)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(0.150 0.0433 255.50)",
+          "oklch(0.264 0.0433 255.50)",
+          "oklch(0.379 0.0433 255.50)",
+          "oklch(0.493 0.0433 255.50)",
+          "oklch(0.607 0.0433 255.50)",
+          "oklch(0.721 0.0433 255.50)",
+          "oklch(0.836 0.0433 255.50)",
+          "oklch(0.950 0.0433 255.50)"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "tonalRamp": [
+          "oklch(0.150 0.0396 255.36)",
+          "oklch(0.264 0.0396 255.36)",
+          "oklch(0.379 0.0396 255.36)",
+          "oklch(0.493 0.0396 255.36)",
+          "oklch(0.607 0.0396 255.36)",
+          "oklch(0.721 0.0396 255.36)",
+          "oklch(0.836 0.0396 255.36)",
+          "oklch(0.950 0.0396 255.36)"
+        ]
+      },
+      "ink-faint": {
+        "role": "neutral",
+        "displayName": "Ink Faint",
+        "tonalRamp": [
+          "oklch(0.150 0.0390 257.87)",
+          "oklch(0.264 0.0390 257.87)",
+          "oklch(0.379 0.0390 257.87)",
+          "oklch(0.493 0.0390 257.87)",
+          "oklch(0.607 0.0390 257.87)",
+          "oklch(0.721 0.0390 257.87)",
+          "oklch(0.836 0.0390 257.87)",
+          "oklch(0.950 0.0390 257.87)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(0.150 0.0133 251.57)",
+          "oklch(0.264 0.0133 251.57)",
+          "oklch(0.379 0.0133 251.57)",
+          "oklch(0.493 0.0133 251.57)",
+          "oklch(0.607 0.0133 251.57)",
+          "oklch(0.721 0.0133 251.57)",
+          "oklch(0.836 0.0133 251.57)",
+          "oklch(0.950 0.0133 251.57)"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Line Strong",
+        "tonalRamp": [
+          "oklch(0.150 0.0271 253.61)",
+          "oklch(0.264 0.0271 253.61)",
+          "oklch(0.379 0.0271 253.61)",
+          "oklch(0.493 0.0271 253.61)",
+          "oklch(0.607 0.0271 253.61)",
+          "oklch(0.721 0.0271 253.61)",
+          "oklch(0.836 0.0271 253.61)",
+          "oklch(0.950 0.0271 253.61)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page names; responsive size variants are recorded in DESIGN.md."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Korean prose and technical explanations."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Code, paths, test names, and technical notation."
+      }
+    },
+    "shadows": [
+      {
+        "name": "flat",
+        "value": "none",
+        "purpose": "Active B theme uses flat surfaces."
+      }
+    ],
+    "motion": [
+      {
+        "name": "button-color",
+        "value": "background-color 160ms ease-out, border-color 160ms ease-out, color 160ms ease-out",
+        "purpose": "Button state color changes, removed for reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "640px"
+      },
+      {
+        "name": "single-column",
+        "value": "960px"
+      },
+      {
+        "name": "wide",
+        "value": "1280px"
+      }
+    ],
+    "sourceFiles": [
+      "public/themes/b.css",
+      "src/styles/global.css",
+      "src/pages/index.astro",
+      "src/components/Header.astro",
+      "src/components/ProjectRow.astro",
+      "src/layouts/BaseLayout.astro"
+    ],
+    "rampNote": "Tonal ramps are synthesized OKLCH display metadata, not additional shipped palette tokens."
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Slate action with a muted blue hover.",
+      "html": "<a class=\"ds-primary\" href=\"#\">통합 포트폴리오 HTML</a>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:9px 15px;border:1px solid var(--ink,#243449);border-radius:var(--radius,6px);font-family:var(--sans,\"Pretendard Variable\", Pretendard, \"Apple SD Gothic Neo\", \"Noto Sans KR\", \"Malgun Gothic\", system-ui, sans-serif);font-size:16px;font-weight:600;line-height:1.35;text-decoration:none;box-shadow:none;transition:background-color 160ms ease-out,border-color 160ms ease-out,color 160ms ease-out;background:var(--ink,#243449);color:var(--surface,#fff)}.ds-primary:hover{border-color:var(--blue,#315d88);background:var(--blue,#315d88)}.ds-primary:focus-visible{outline:3px solid var(--focus,#315d88);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "White supporting action with a pale blue hover.",
+      "html": "<a class=\"ds-secondary\" href=\"#\">경력·이력서</a>",
+      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:9px 15px;border:1px solid var(--ink,#243449);border-radius:var(--radius,6px);font-family:var(--sans,\"Pretendard Variable\", Pretendard, \"Apple SD Gothic Neo\", \"Noto Sans KR\", \"Malgun Gothic\", system-ui, sans-serif);font-size:16px;font-weight:600;line-height:1.35;text-decoration:none;box-shadow:none;transition:background-color 160ms ease-out,border-color 160ms ease-out,color 160ms ease-out;border-color:var(--line-strong,#a7b4c4);background:var(--surface,#fff);color:var(--ink,#243449)}.ds-secondary:hover{border-color:var(--blue,#315d88);background:var(--blue-soft,#eaf1f8);color:var(--blue,#315d88)}.ds-secondary:focus-visible{outline:3px solid var(--focus,#315d88);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none}}"
+    },
+    {
+      "name": "Text Button",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Transparent supporting action.",
+      "html": "<a class=\"ds-text\" href=\"#\">자세히 보기</a>",
+      "css": ".ds-text{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:9px 15px;border:1px solid var(--ink,#243449);border-radius:var(--radius,6px);font-family:var(--sans,\"Pretendard Variable\", Pretendard, \"Apple SD Gothic Neo\", \"Noto Sans KR\", \"Malgun Gothic\", system-ui, sans-serif);font-size:16px;font-weight:600;line-height:1.35;text-decoration:none;box-shadow:none;transition:background-color 160ms ease-out,border-color 160ms ease-out,color 160ms ease-out;padding-inline:4px;border-color:transparent;background:transparent;color:var(--ink,#243449)}.ds-text:hover{color:var(--blue,#315d88)}.ds-text:focus-visible{outline:3px solid var(--focus,#315d88);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-text{transition:none}}"
+    },
+    {
+      "name": "Technology Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Noninteractive technology label.",
+      "html": "<span class=\"ds-tag\">Spring Boot</span>",
+      "css": ".ds-tag{display:inline-flex;align-items:center;min-height:32px;padding:4px 9px;border:1px solid var(--line,#dce3eb);border-radius:4px;background:var(--surface,#fff);color:var(--ink-soft,#4b5b70);font-family:var(--sans,\"Pretendard Variable\", Pretendard, \"Apple SD Gothic Neo\", \"Noto Sans KR\", \"Malgun Gothic\", system-ui, sans-serif);font-size:14px;font-weight:600;line-height:1.3}"
+    },
+    {
+      "name": "Domain Badge",
+      "kind": "chip",
+      "refersTo": "domain",
+      "description": "Noninteractive domain indicator.",
+      "html": "<span class=\"ds-domain\">백엔드</span>",
+      "css": ".ds-domain{display:inline-flex;padding:3px 7px;border:1px solid var(--line,#dce3eb);border-radius:4px;background:var(--blue-soft,#eaf1f8);color:var(--blue,#315d88);font-family:var(--sans,\"Pretendard Variable\", Pretendard, \"Apple SD Gothic Neo\", \"Noto Sans KR\", \"Malgun Gothic\", system-ui, sans-serif);font-size:15px;font-weight:600;line-height:1.68}"
+    },
+    {
+      "name": "Desktop Navigation",
+      "kind": "nav",
+      "description": "Soft slate navigation with a blue current-page indicator.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"주요 탐색\"><a href=\"#\" aria-current=\"page\">홈</a><a href=\"#\">경력·이력서</a><a href=\"#\">개인 프로젝트</a></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;gap:24px;padding-bottom:24px;font-family:var(--sans,\"Pretendard Variable\", Pretendard, \"Apple SD Gothic Neo\", \"Noto Sans KR\", \"Malgun Gothic\", system-ui, sans-serif)} .ds-nav a{position:relative;color:var(--ink-soft,#4b5b70);font-size:16px;font-weight:600;line-height:1.35;text-decoration:none}.ds-nav a:hover,.ds-nav a[aria-current=page]{color:var(--blue,#315d88)}.ds-nav a[aria-current=page]::after{position:absolute;right:0;bottom:-23px;left:0;height:2px;background:var(--blue,#315d88);content:\"\"}.ds-nav a:focus-visible{outline:3px solid var(--focus,#315d88);outline-offset:4px;}"
+    },
+    {
+      "name": "Experience Record",
+      "kind": "card",
+      "refersTo": "experience-record",
+      "description": "Flat white record boundary, preserving content hierarchy.",
+      "html": "<article class=\"ds-record\"><h3>담당 업무</h3><p>API 개발·운영</p></article>",
+      "css": ".ds-record{margin-block:16px;padding:22px;border:1px solid var(--line,#dce3eb);background:var(--surface,#fff);color:var(--ink,#243449);font-family:var(--sans,\"Pretendard Variable\", Pretendard, \"Apple SD Gothic Neo\", \"Noto Sans KR\", \"Malgun Gothic\", system-ui, sans-serif);font-size:18px;line-height:1.68}.ds-record h3{margin:0;font-size:23px;font-weight:650;line-height:1.35;letter-spacing:-.02em}.ds-record p{margin:0;color:var(--ink-soft,#4b5b70)}@media(max-width:639px){.ds-record{padding:16px;font-size:17px}.ds-record h3{font-size:22px}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Quiet Slate",
+    "overview": "Quiet Slate makes the existing Korean portfolio easier to read through cool paper, slate text, restrained blue, and flat surfaces. It supports recruiters reading career and technical evidence without decorative competition.\n\nThis record describes the active B theme in public/themes/b.css and the layout and component rules it inherits. The companion C theme and /resume/print/ document retain their own presentation. The standalone /portfolio/ screen uses the same palette through src/styles/portfolio-screen.css; its composition and print styles remain independent. No PRODUCT.md predated this pass; the companion PRODUCT.md now records existing purpose and user-approved scope. This document records visual evidence without adding product claims.",
+    "keyCharacteristics": [
+      "Cool paper and slate text.",
+      "Readable Korean sans typography.",
+      "Flat surfaces, thin borders, and restrained state color."
+    ],
+    "rules": [
+      {
+        "name": "The Functional Color Rule",
+        "body": "Blue supports navigation and information; green indicates passing or convergent results, amber indicates limits, and red indicates failure.",
+        "section": "colors"
+      },
+      {
+        "name": "The Korean Reading Rule",
+        "body": "Use sans for Korean labels and prose; reserve mono for code, paths, test names, and technical notation.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Surface Rule",
+        "body": "Separate content through spacing, tonal surfaces, and thin borders rather than shadows or glow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use the active B palette for themed pages.",
+      "Do preserve readable Korean body text and visible keyboard focus.",
+      "Do use flat records and restrained separators for technical evidence."
+    ],
+    "donts": [
+      "Don't add decorative gradients, glow, background grids, or shadows to the B theme.",
+      "Don't turn Korean navigation or field labels into monospace text.",
+      "Don't treat companion C or standalone document styling as B tokens."
+    ]
+  }
+}
