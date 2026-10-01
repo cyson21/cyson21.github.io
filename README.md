@@ -27,7 +27,7 @@ Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트
 - 설계 결정: `docs/decisions/`
 - 제외 대상: 원본 일감, 로컬 경로, 전화번호, 비공개 이력서 원본
 
-공개 배포에서는 `PUBLIC_RELEASE=true`, `PUBLIC_SITE_URL`, `PUBLIC_RESUME_URL`을 설정합니다. 사이트 URL은 경로, query, fragment, 인증 정보가 없는 공개 HTTPS origin이어야 합니다. 공개 모드가 아니면 페이지와 `robots.txt`를 검색 제외 상태로 유지합니다.
+공개 배포에서는 `PUBLIC_RELEASE=true`, `PUBLIC_SITE_URL`을 설정합니다. PDF 다운로드는 같은 배포에 포함된 `/downloads/resume.pdf`를 사용합니다. 사이트 URL은 경로, query, fragment, 인증 정보가 없는 공개 HTTPS origin이어야 합니다. 공개 모드가 아니면 페이지와 `robots.txt`를 검색 제외 상태로 유지합니다.
 
 통합 HTML은 프로젝트 Markdown과 별도로 관리하므로 문구 변경 시 두 파일을 함께 확인합니다. `generate:portfolio`의 기본 입력은 저장소의 통합 HTML이며 목차·화면 스타일을 다시 적용합니다. 외부 원본을 가져올 때만 `PORTFOLIO_HTML_SOURCE`를 지정합니다. 이력서 PDF는 `/resume/print/`에서 다시 생성하고, 두 공개 자산의 SHA-256도 `public-assets.json`에 반영합니다.
 
