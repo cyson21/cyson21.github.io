@@ -108,3 +108,16 @@ test('manifest-approved text assets use LF line endings', () => {
     assert.doesNotMatch(contents, /\r/, `${relativePath} must use LF line endings so SHA-256 stays platform-independent`);
   }
 });
+
+test('integrated reading layout keeps one main landmark across regeneration', async () => {
+  const { applyReadingLayout } = await import('../../scripts/portfolio-reading-layout.mjs');
+  const source = '<body><section class="page case-page" data-page="04"><main class="case-main"><h2>Evidence</h2></main></section></body>';
+  const once = applyReadingLayout(source);
+  const twice = applyReadingLayout(once);
+  for (const html of [once, twice]) {
+    assert.equal((html.match(/<main[ >]/g) ?? []).length, 1);
+    assert.equal((html.match(/<\/main>/g) ?? []).length, 1);
+    assert.equal((html.match(/<nav /g) ?? []).length, 1);
+    assert.match(html, /<div class="case-main"><h2>Evidence<\/h2><\/div>/);
+  }
+});

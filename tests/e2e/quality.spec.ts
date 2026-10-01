@@ -12,7 +12,7 @@ import { gotoAuditRoute, publicAuditRoutes } from './fixtures/canonical';
 const wcagTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 const policy = loadAxeBestPracticePolicy();
 
-for (const route of publicAuditRoutes) {
+for (const route of [...publicAuditRoutes, { id: 'integrated-portfolio', path: '/portfolio/' }]) {
   test(`${route.path} has no WCAG A or AA axe violations`, async ({ page }, testInfo) => {
     await gotoAuditRoute(page, route);
     const results = await new AxeBuilder({ page }).withTags([...wcagTags, 'best-practice']).analyze();
