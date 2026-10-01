@@ -4112,6 +4112,7 @@ tr:nth-child(even) td { background: #f8fafc; }
 </head>
 <body>
 <nav class="portfolio-reading-nav" aria-label="통합 포트폴리오 목차"><a href="/">홈</a><a href="#portfolio-intro">소개·프로젝트</a><a href="#portfolio-results">문제와 검증 결과</a><a href="#portfolio-capabilities">구현 역량</a><a href="#stockrush">상세 근거</a><a href="#portfolio-scope">검증 범위</a></nav>
+<main id="portfolio-document">
 <a class="portfolio-home-link" href="https://cyson21.github.io/">← 홈으로</a>
 
   <section class="page cover" id="portfolio-intro" data-page="01">
@@ -4363,7 +4364,7 @@ tr:nth-child(even) td { background: #f8fafc; }
       </div>
     </aside>
 
-    <main class="case-main">
+    <div class="case-main">
       <div class="case-hero">
         <h2 class="case-headline">결제 지연과 이벤트 중복 뒤에도 주문 상태를 수렴시키는 커머스</h2>
         <p>한정 재고 주문에서 결제 지연·이벤트 중복·Kafka 중단이 겹쳐도 주문을 취소·확정 상태로 수렴시키도록 Saga, Outbox, 멱등 소비자를 구현했습니다.</p>
@@ -4507,7 +4508,7 @@ outboxEventRepository.save(result.outboxEvent());</pre>
         </div>
       </section>
       <div class="case-source-links"><a href="https://github.com/cyson21/stockrush">코드 저장소</a><span> · </span><a href="https://github.com/cyson21/stockrush/blob/main/docs/test-strategy.md">설계·검증 문서</a></div>
-    </main>
+    </div>
     <div class="footer-note">손찬양 · StockRush</div>
   </section>
 
@@ -4529,7 +4530,7 @@ outboxEventRepository.save(result.outboxEvent());</pre>
       </div>
     </aside>
 
-    <main class="case-main">
+    <div class="case-main">
       <div class="case-hero">
         <h2 class="case-headline">보상·쿠폰·포인트 불변식마다 다른 동시성 제어를 적용한 백엔드</h2>
         <p>첫 로그인 보상·쿠폰 발급·포인트 차감의 불변식을 PostgreSQL에서 최종 보호하고, Redis 잠금과 RabbitMQ listener concurrency=1 경로의 적용 차이를 동시 요청으로 비교했습니다.</p>
@@ -4672,7 +4673,7 @@ for update</pre>
         </div>
       </section>
       <div class="case-source-links"><a href="https://github.com/cyson21/member-event-consistency">코드 저장소</a><span> · </span><a href="https://github.com/cyson21/member-event-consistency/blob/main/infra/local/README.md">설계·검증 문서</a></div>
-    </main>
+    </div>
     <div class="footer-note">손찬양 · Member Event Consistency</div>
   </section>
 
@@ -4694,7 +4695,7 @@ for update</pre>
       </div>
     </aside>
 
-    <main class="case-main">
+    <div class="case-main">
       <div class="case-hero">
         <h2 class="case-headline">비인가 검색과 근거 없는 생성을 답변 전에 차단하는 정책 RAG</h2>
         <p>권한 조건을 적용한 검색 결과로 모델 입력과 출처를 구성했습니다. 허용된 근거가 없으면 모델을 호출하지 않고 거절 응답을 반환합니다.</p>
@@ -4836,7 +4837,7 @@ if access_reason is None:
         </div>
       </section>
       <div class="case-source-links"><a href="https://github.com/cyson21/enterprise-policy-rag">코드 저장소</a><span> · </span><a href="https://enterprise-policy-rag.vercel.app">실행 화면</a><span> · </span><a href="https://github.com/cyson21/enterprise-policy-rag/blob/main/docs/runbooks/production-hardening-checklist.md">설계·검증 문서</a></div>
-    </main>
+    </div>
     <div class="footer-note">손찬양 · Enterprise Policy RAG</div>
   </section>
 
@@ -4858,7 +4859,7 @@ if access_reason is None:
       </div>
     </aside>
 
-    <main class="case-main">
+    <div class="case-main">
       <div class="case-hero">
         <h2 class="case-headline">예산 초과와 외부 모델 실패를 호출 전에 통제하는 LLM 게이트웨이</h2>
         <p>서비스마다 흩어진 LLM 인증·예산·캐시·라우팅·복구 정책을 OpenAI 호환 WebFlux 게이트웨이의 한 요청 처리 순서로 통합했습니다.<br><br>사내 문서 검색, 상담 챗봇, 요약 기능처럼 여러 애플리케이션에서 LLM을 호출하는 사용 시나리오를 가정할 수 있으며, 이는 실제 운영 사례가 아닙니다.<br><br>요청 흐름: Auth → Quota → Guardrail → Cache → Router → Dispatch → Fallback → Guardrail → Record</p>
@@ -5001,7 +5002,7 @@ if (quota != QuotaOutcome.ALLOWED) {
         </div>
       </section>
       <div class="case-source-links"><a href="https://github.com/cyson21/ai-gateway">코드 저장소</a><span> · </span><a href="https://github.com/cyson21/ai-gateway/blob/main/web/scripts/verify-static-demo.mjs">설계·검증 문서</a></div>
-    </main>
+    </div>
     <div class="footer-note">손찬양 · AI Gateway</div>
   </section>
 
@@ -5023,7 +5024,7 @@ if (quota != QuotaOutcome.ALLOWED) {
       </div>
     </aside>
 
-    <main class="case-main">
+    <div class="case-main">
       <div class="case-hero">
         <h2 class="case-headline">변경 캡처·복구·저장을 독립 경계에서 검증한 CDC 프로토타입</h2>
         <p>CDC runtime, control plane, lakehouse 구성요소를 독립적인 범위로 구현했습니다. DB 변경 중복을 막고 적재 실패 원인과 재처리 상태를 원천 위치와 함께 추적하는 범위를 검증했습니다.</p>
@@ -5166,7 +5167,7 @@ boolean created = canonicalEventPublisher.recordCanonicalEvent(event, sourceOffs
         </div>
       </section>
       <div class="case-source-links"><a href="https://github.com/cyson21/cdc-data-platform">코드 저장소</a><span> · </span><a href="https://github.com/cyson21/cdc-data-platform/blob/main/docs/portfolio/one-pager.md">설계·검증 문서</a></div>
-    </main>
+    </div>
     <div class="footer-note">손찬양 · CDC Data Platform (프로토타입)</div>
   </section>
 
@@ -5188,7 +5189,7 @@ boolean created = canonicalEventPublisher.recordCanonicalEvent(event, sourceOffs
       </div>
     </aside>
 
-    <main class="case-main">
+    <div class="case-main">
       <div class="case-hero">
         <h2 class="case-headline">실패 이벤트를 격리하고 추천 최신성을 추적하는 개인화 백엔드</h2>
         <p>중복·실패 행동 이벤트가 사용자 프로필을 오염시키지 않도록 멱등 처리와 DLQ를 적용하고, 추천 점수와 스냅샷 최신성을 함께 기록했습니다.</p>
@@ -5330,7 +5331,7 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
         </div>
       </section>
       <div class="case-source-links"><a href="https://github.com/cyson21/fashion-personalization-platform">코드 저장소</a><span> · </span><a href="https://github.com/cyson21/fashion-personalization-platform/blob/main/docs/architecture.md">설계·검증 문서</a></div>
-    </main>
+    </div>
     <div class="footer-note">손찬양 · Fashion Personalization Platform</div>
   </section>
 
@@ -5395,5 +5396,6 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
     <div class="footer-note">손찬양 · 프로젝트별 검증 범위</div>
   </section>
 
+</main>
 </body>
 </html>

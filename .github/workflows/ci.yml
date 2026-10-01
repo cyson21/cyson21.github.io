@@ -47,12 +47,6 @@ jobs:
             artifacts/playwright
             playwright-report
             !artifacts/playwright/**/*.zip
-      - uses: actions/upload-artifact@v7
-        if: failure()
-        with:
-          name: preview-linux-visual-snapshots
-          path: tests/e2e/visual-regression.spec.ts-snapshots/*-linux-canonical-chromium.png
-          if-no-files-found: ignore
 
   release:
     runs-on: ubuntu-latest
