@@ -13,14 +13,14 @@ const experienceRecords = [
     end: null,
     company: '이엠캐스트(주)',
     role: '백엔드 개발자 · 주임',
-    context: '4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 Anchor 플랫폼의 백엔드 개발·운영을 담당했습니다.',
+    context: '4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 B2B 리테일 교육 플랫폼의 백엔드 개발·운영을 담당했습니다.',
     responsibilities: [
       {
-        title: 'Anchor 플랫폼 REST API',
-        description: 'Java·Spring Boot로 Anchor 플랫폼 REST API를 설계·개발·운영했습니다. JPA·QueryDSL·MySQL로 데이터 조회·저장을 구현하고 관리자 기능 개편을 지원했습니다.',
+        title: '교육 플랫폼 REST API',
+        description: 'Java·Spring Boot로 B2B 리테일 교육 플랫폼의 REST API를 설계·개발·운영했습니다. JPA·QueryDSL·MySQL로 데이터 조회·저장을 구현하고 관리자 기능 개편을 지원했습니다.',
       },
       {
-        title: 'Anchor 2.0 → 3.0 전환',
+        title: '플랫폼 2.0 → 3.0 전환',
         description: '버전 전환에 따른 기존 기능의 영향 범위를 점검하고 회귀를 검증했습니다. 레거시 코드 정리와 API·DB 구조 개선을 진행했습니다.',
       },
       {
@@ -77,11 +77,11 @@ const experienceRecords = [
 export const resumeIntro = '2021년부터 백엔드 개발·운영을 담당해 왔으며, Java·Spring Boot를 주력으로 사용합니다.';
 
 export const resumeHighlights = [
-  '기업용 플랫폼의 REST API 설계·개발과 관리자 기능 개편',
+  'B2B 리테일 교육 플랫폼의 REST API 설계·개발과 관리자 기능 개편',
   '공공·실시간 데이터 수집·가공 파이프라인과 조회 API 구현',
   '운영 장애·데이터 오류 재현, 원인 분석과 API·DB 로직 수정',
   'JPA·QueryDSL 데이터 접근 계층 개선과 통합·회귀 테스트',
-  'Anchor 버전 전환의 영향 범위 점검과 레거시 코드 정리',
+  '교육 플랫폼 버전 전환의 영향 범위 점검과 레거시 코드 정리',
   'AWS 운영 참여와 Docker 배포·전환 이슈 대응',
 ] as const;
 

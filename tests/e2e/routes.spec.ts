@@ -111,18 +111,18 @@ test('experience page unifies the résumé summary and career evidence', async (
   await expect(page.getByRole('heading', { name: '경력·이력서' })).toBeVisible();
   await expect(page.locator('.resume-overview .summary-intro')).toHaveText('2021년부터 백엔드 개발·운영을 담당해 왔으며, Java·Spring Boot를 주력으로 사용합니다.');
   await expect(page.locator('.resume-overview .summary-highlights li')).toHaveText([
-    '기업용 플랫폼의 REST API 설계·개발과 관리자 기능 개편',
+    'B2B 리테일 교육 플랫폼의 REST API 설계·개발과 관리자 기능 개편',
     '공공·실시간 데이터 수집·가공 파이프라인과 조회 API 구현',
     '운영 장애·데이터 오류 재현, 원인 분석과 API·DB 로직 수정',
     'JPA·QueryDSL 데이터 접근 계층 개선과 통합·회귀 테스트',
-    'Anchor 버전 전환의 영향 범위 점검과 레거시 코드 정리',
+    '교육 플랫폼 버전 전환의 영향 범위 점검과 레거시 코드 정리',
     'AWS 운영 참여와 Docker 배포·전환 이슈 대응',
   ]);
   await expect(page.getByRole('heading', { name: '주요 업무' })).toHaveCount(2);
   const currentExperience = page.locator('.experience-entry').first();
   await expect(currentExperience.getByRole('heading', { name: '이엠캐스트(주)' })).toBeVisible();
   await expect(currentExperience.locator('.responsibilities li p')).toHaveText([
-    'Java·Spring Boot로 Anchor 플랫폼 REST API를 설계·개발·운영했습니다. JPA·QueryDSL·MySQL로 데이터 조회·저장을 구현하고 관리자 기능 개편을 지원했습니다.',
+    'Java·Spring Boot로 B2B 리테일 교육 플랫폼의 REST API를 설계·개발·운영했습니다. JPA·QueryDSL·MySQL로 데이터 조회·저장을 구현하고 관리자 기능 개편을 지원했습니다.',
     '버전 전환에 따른 기존 기능의 영향 범위를 점검하고 회귀를 검증했습니다. 레거시 코드 정리와 API·DB 구조 개선을 진행했습니다.',
     '운영 장애와 데이터 오류를 재현해 원인을 분석하고 API·DB 로직을 수정했습니다. Testcontainers 기반 통합·회귀 테스트로 수정 결과를 확인했습니다.',
     'JPA·QueryDSL의 조회·저장 구조를 정리하고 데이터 정합성과 유지보수 관점에서 접근 로직을 개선했습니다.',
@@ -131,7 +131,7 @@ test('experience page unifies the résumé summary and career evidence', async (
   ]);
   await expect(currentExperience).not.toContainText(/자격증명|액세스 키|CDN/);
   await expect(currentExperience.locator('.context')).toHaveText(
-    '4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 Anchor 플랫폼의 백엔드 개발·운영을 담당했습니다.',
+    '4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 B2B 리테일 교육 플랫폼의 백엔드 개발·운영을 담당했습니다.',
   );
   await expect(page.locator('.experience-support .skill-groups:not(.project-skill-groups)')).toBeVisible();
   await expect(page.getByRole('heading', { name: '학력' })).toBeVisible();
