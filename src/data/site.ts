@@ -80,7 +80,7 @@ export const resumeHighlights = [
   '공공·실시간 데이터 수집·가공 파이프라인과 조회 API 구현',
   '운영 장애·데이터 오류 재현, 원인 분석과 API·DB 로직 수정',
   'JPA·QueryDSL 데이터 접근 계층 개선과 통합·회귀 테스트',
-  '교육 플랫폼 버전 전환의 영향 범위 점검과 레거시 코드 정리',
+  'B2B 교육 플랫폼 버전 전환의 영향 범위 점검과 레거시 코드 정리',
   'AWS 운영 참여와 Docker 배포·전환 이슈 대응',
 ] as const;
 
@@ -93,7 +93,7 @@ export const profile = {
   name: '손찬양',
   englishName: 'Son Chanyang',
   role: 'Java · Spring Boot 백엔드 개발자',
-  subtitle: '2021년부터 · API 개발·운영 · 데이터 정합성',
+  subtitle: 'API 개발·운영 · 데이터 정합성',
   statement: resumeIntro,
   email: 'cyson21@gmail.com',
   github: 'https://github.com/cyson21',
