@@ -23,9 +23,15 @@ for (const width of [320, 390, 768, 1440]) {
         expect(fact.clipped).toBe(false);
       }
     }
+    await page.getByRole('navigation', { name: '통합 포트폴리오 목차' }).getByRole('link', { name: '실무 문제 해결' }).click();
+    await expect(page).toHaveURL(/#work-cases$/);
+    await expect(page.locator('#work-cases .work-case')).toHaveCount(3);
+    await expect(page.locator('#work-policy h3')).toBeVisible();
+    await page.locator('#work-policy').getByRole('link', { name: 'StockRush', exact: true }).click();
+    await expect(page).toHaveURL(/#stockrush$/);
     await page.getByRole('navigation', { name: '통합 포트폴리오 목차' }).getByRole('link', { name: '문제와 검증 결과' }).click();
     await expect(page).toHaveURL(/#portfolio-results$/);
-    await page.locator('#portfolio-results').getByRole('link', { name: 'StockRush', exact: true }).click();
+    await page.locator('#portfolio-results .summary-project-card').getByRole('link', { name: 'StockRush', exact: true }).click();
     await expect(page).toHaveURL(/#stockrush$/);
     await expect(page.locator('#stockrush .case-code-snippet')).toBeVisible();
   });

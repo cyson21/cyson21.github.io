@@ -39,10 +39,10 @@
     "output": "public/portfolio/index.html",
     "sourceProject": "portfolio-web",
     "sourcePath": "public/portfolio/index.html",
-    "sha256": "dfb0c2f94ea60ba99e8be6fd5bb8c931409b98290b42d0560e8f1714796ce964",
+    "sha256": "89f74a0223f2dc203f6b96dcc2389441fcf557044e8749be358a869661795ef3",
     "owner": "Son Chanyang",
-    "usage": "Public integrated portfolio HTML page",
-    "approvedAt": "2026-10-01"
+    "usage": "Public backend problem-solving case studies",
+    "approvedAt": "2026-10-02"
   },
   {
     "output": "public/downloads/resume.pdf",

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>통합 포트폴리오</title>
+  <title>손찬양 · 백엔드 문제 해결 사례</title>
   <style>
 :root {
   --ink: #17202a;
@@ -4108,16 +4108,102 @@ tr:nth-child(even) td { background: #f8fafc; }
   .page .summary-project-facts div { grid-template-columns: 32px minmax(0, 1fr); gap: 8px; }
 }
 
+@media screen {
+  .work-cases { height: auto; }
+  .work-case { padding-block: 28px; border-top: 1px solid var(--line); scroll-margin-top: 90px; }
+  .work-case h3 { font-size: 24px; line-height: 1.45; margin: 0 0 16px; text-wrap: balance; }
+  .work-case p { max-width: 78ch; line-height: 1.8; }
+  .work-case h3, .work-case p, .work-case-facts dd, .cover .lead { word-break: keep-all; overflow-wrap: break-word; }
+  .work-case-facts { display: grid; gap: 20px; margin-block: 24px; }
+  .work-case-facts > div { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 20px; }
+  .work-case-facts dt { font-weight: 650; color: var(--ink); }
+  .work-case-facts dd { margin: 0; line-height: 1.8; overflow-wrap: anywhere; }
+  .work-case-link { margin-top: 24px; }
+  #portfolio-intro .cover-row { grid-template-columns: minmax(0, 1fr); }
+  #work-cases { scroll-margin-top: 90px; }
+}
+@media screen and (max-width: 640px) {
+  .work-case h3 { font-size: 21px; }
+  #work-cases, .work-case { scroll-margin-top: 120px; }
+  .work-case-facts > div { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+}
+@media print {
+  .work-cases { height: auto; overflow: visible; }
+  .work-case { break-inside: avoid; margin-block: 8mm; }
+}
 </style>
 </head>
 <body>
-<nav class="portfolio-reading-nav" aria-label="통합 포트폴리오 목차"><a href="/">홈</a><a href="#portfolio-intro">소개·프로젝트</a><a href="#portfolio-results">문제와 검증 결과</a><a href="#portfolio-capabilities">구현 역량</a><a href="#stockrush">상세 근거</a><a href="#portfolio-scope">검증 범위</a></nav>
+<nav class="portfolio-reading-nav" aria-label="통합 포트폴리오 목차"><a href="/">홈</a><a href="#portfolio-intro">소개</a><a href="#work-cases">실무 문제 해결</a><a href="#portfolio-results">문제와 검증 결과</a><a href="#portfolio-capabilities">구현 역량</a><a href="#stockrush">상세 근거</a><a href="#portfolio-scope">검증 범위</a></nav>
 <main id="portfolio-document">
 <a class="portfolio-home-link" href="https://cyson21.github.io/">← 홈으로</a>
 
   <section class="page cover" id="portfolio-intro" data-page="01">
-    <h1>손찬양 백엔드 엔지니어링 포트폴리오</h1>
-    <p class="lead">분산 상태 수렴, 동시성 제어, 접근 권한, 데이터 재처리와 AI 요청 정책을 구현하고 테스트로 검증했습니다.<br><span class="compact-note">실무에서는 4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 B2B 리테일 교육 플랫폼의 백엔드 개발·운영을 담당했습니다. <span class="intro-project-note">아래 프로젝트는 실무 경력과 구분되는 개인 프로젝트 검증 자료입니다.</span></span></p>
+    <h1>손찬양 · 백엔드 문제 해결 사례</h1>
+    <p class="lead">운영 중 드러난 상태 변경과 시간대 오류를 추적하고, 수정한 동작을 회귀 테스트로 확인하는 백엔드 개발자입니다.<br><span class="compact-note">B2B 리테일 교육 플랫폼의 개발·운영에서 맡았던 문제와 판단을 먼저 소개합니다. 이어서 개인 프로젝트에서 구현한 정합성·권한·실패 복구의 코드와 테스트를 보여드립니다.</span></p>
+    <div class="cover-list">
+      <section class="cover-group">
+        <div class="cover-group-head"><h2>실무에서 해결한 문제</h2></div>
+        <article class="cover-row"><div><h3><a href="#work-policy">저장 직전에 바뀐 상태를 다시 검증하기</a></h3><p>정책 변경과 학습 진행 상태가 엇갈리는 경로를 차단</p></div></article>
+        <article class="cover-row"><div><h3><a href="#work-timezone">날짜는 같아도 발송 시각은 달라지는 문제</a></h3><p>UTC 저장과 KST 서비스의 알림 경계 조건 정리</p></div></article>
+        <article class="cover-row"><div><h3><a href="#work-db-tests">DB 테스트가 운영 환경을 따라가게 만들기</a></h3><p>중복된 JPA 테스트 설정을 공통 환경으로 이관</p></div></article>
+      </section>
+      <section class="cover-group">
+        <div class="cover-group-head"><h2>개인 프로젝트로 확장한 검증</h2></div>
+        <article class="cover-row"><div><h3><a href="#portfolio-results">상태 변경·동시 요청·실패 복구</a></h3><p>StockRush, Member Event Consistency와 나머지 프로젝트의 설계·테스트 근거</p></div></article>
+        <article class="cover-row"><div><h3><a href="/experience/">경력과 담당 범위</a></h3><p>이엠캐스트·화이트스캔의 전체 경력과 이력서</p></div></article>
+      </section>
+    </div>
+    <p class="compact-note">기타 실험: Fashion Personalization Platform</p>
+    <div class="footer-note">손찬양 · Backend Engineering Portfolio</div>
+  </section>
+
+
+  <section class="page work-cases" id="work-cases" aria-labelledby="work-cases-title">
+    <h2 id="work-cases-title">실무에서 해결한 문제</h2>
+    <p>이엠캐스트 · B2B 리테일 교육 플랫폼 · 백엔드 개발·운영</p>
+    <p>아래 사례는 회사 업무 기록을 바탕으로 재구성했습니다. 내부 서비스명과 고객 정보는 생략했으며, 공개 코드와 실행 결과는 뒤의 개인 프로젝트에서 확인할 수 있습니다.</p>
+    <article class="work-case" id="work-policy">
+      <h3>저장 직전에 바뀐 상태를 다시 검증하기</h3>
+      <p>정책 수정 화면을 열었을 때는 변경 가능한 상태였지만, 저장 전에 학습이 시작되면 이전 수료 조건과 새 정책이 엇갈릴 수 있었습니다.</p>
+      <dl class="work-case-facts">
+        <div><dt>원인 추적</dt><dd>화면 진입 시점과 저장 시점의 상태 판정 차이를 비교하고, 학습자별 수료 조건이 생성되는 흐름을 추적했습니다.</dd></div>
+        <div><dt>판단·수정</dt><dd>화면의 판단에 의존하지 않고 서버가 저장 시점에 상태를 다시 검증하도록 했습니다. 대기 상태가 유지될 때만 수료 조건을 재생성하고, 학습이 시작됐다면 정책 수정을 차단했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>서버 재검증 규칙 정의, 저장 차단 경로 구현, 테스트와 Stage QA.</dd></div>
+        <div><dt>검증 범위</dt><dd>정상 재생성과 도중 학습 시작 시 차단을 단위·통합 테스트와 Stage QA의 확인 항목으로 삼았습니다. 작업 기록상 완료된 사례이며, 별도 실행 로그와 운영 개선 수치는 확보하지 않았습니다.</dd></div>
+      </dl>
+      <p class="work-case-link">개인 프로젝트에서는 <a href="#stockrush">StockRush</a>의 종료 상태 변경 차단과 <a href="#member-event-consistency">Member Event Consistency</a>의 조건부 갱신으로 상태 보호 규칙을 검증했습니다.</p>
+    </article>
+    <article class="work-case" id="work-timezone">
+      <h3>날짜는 같아도 발송 시각은 달라지는 문제</h3>
+      <p>UTC로 저장한 날짜를 KST 기준으로 처리하는 경계에서 학습 시작 알림이 하루 늦어지거나, 등록 시각에 따라 누락되는 문제가 있었습니다.</p>
+      <dl class="work-case-facts">
+        <div><dt>원인 추적</dt><dd>기간제·무기한 과정의 날짜 변환을 비교하고, 발송일 당일 등록이 이미 지난 시각으로 판정되는 경로를 확인했습니다.</dd></div>
+        <div><dt>판단·수정</dt><dd>학습 시작일을 KST 기준으로 정규화하고 등록 시각에 따라 당일·익일 발송 정책을 나눴습니다. 날짜 변환과 정해진 발송 시각의 스케줄 계산을 수정했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>오류 재현, 날짜 변환·스케줄 계산 수정, 회귀 테스트와 Stage QA.</dd></div>
+        <div><dt>검증 범위</dt><dd>시간대 경계와 등록 시각을 포함한 재현 시나리오를 확인 항목으로 정리했습니다. 작업 기록상 수정은 완료됐으나 실제 발송 로그와 운영 관찰 결과는 별도로 확보하지 않았습니다.</dd></div>
+      </dl>
+      <p class="work-case-link">날짜 변환과 정책 판단을 함께 확인해야 한다는 사례입니다. 뒤의 개인 프로젝트 결과도 테스트 입력과 관찰된 동작을 함께 적었습니다.</p>
+    </article>
+    <article class="work-case" id="work-db-tests">
+      <h3>DB 테스트가 운영 환경을 따라가게 만들기</h3>
+      <p>이벤트 처리 모듈의 JPA 테스트가 수동 설정과 중복된 컨테이너 환경에 의존해, 다른 모듈과 같은 기준으로 회귀를 확인하기 어려웠습니다.</p>
+      <dl class="work-case-facts">
+        <div><dt>원인 추적</dt><dd>기존 API 모듈의 테스트 표준과 비교하고, 멀티테넌트 DataSource 충돌과 Repository 탐색 범위를 확인했습니다.</dd></div>
+        <div><dt>판단·수정</dt><dd>Testcontainers MySQL 8.4와 공통 초기화 스키마를 사용하는 DataJpaTest 환경으로 이관했습니다. 테스트 전용 tenant resolver와 제한된 Repository 탐색을 적용하고 수동 JPA·중복 컨테이너 설정을 제거했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>공통 테스트 환경·fixture 이관, Repository 회귀 테스트 재구성과 KST/UTC 경계 쿼리 테스트 유지.</dd></div>
+        <div><dt>검증 범위</dt><dd>DataJpaTest smoke, 이벤트 모듈 테스트와 API 모듈 회귀가 확인 항목입니다. 작업 기록에서 환경 일원화를 확인했으며, 테스트 출력과 전후 비교 자료는 별도로 확보하지 않았습니다.</dd></div>
+      </dl>
+      <p class="work-case-link">개인 프로젝트의 <a href="#member-event-consistency">동시 요청 검증</a>에서도 DB의 최종 상태를 관찰 대상으로 삼았습니다. 실무의 운영 성과와 개인 프로젝트 테스트 결과는 각각의 범위로 설명합니다.</p>
+    </article>
+  </section>
+  <section class="page complete-sheet" id="portfolio-results" data-page="02">
+    <div class="section-head">
+      <div>
+        <h2>개인 프로젝트 · 문제와 검증 결과</h2>
+      </div>
+    </div>
+    <p>아래는 개인 프로젝트에서 직접 구현한 실패 조건과 보호 규칙입니다. 회사 서비스의 코드나 운영 성과를 재현한 결과로 읽히지 않도록 테스트 조건과 구현 범위를 함께 제시합니다.</p>
     <div class="cover-list">
       <section class="cover-group">
         <div class="cover-group-head"><h2>트랜잭션 · 권한 · 동시성</h2><span>상태 수렴과 업무 불변식 보호</span></div>
@@ -4167,17 +4253,6 @@ tr:nth-child(even) td { background: #f8fafc; }
       </article>
 
       </section>
-    </div>
-    <p class="compact-note">기타 실험: Fashion Personalization Platform</p>
-    <div class="footer-note">손찬양 · Backend Engineering Portfolio</div>
-  </section>
-
-
-  <section class="page complete-sheet" id="portfolio-results" data-page="02">
-    <div class="section-head">
-      <div>
-        <h2>문제와 검증 결과</h2>
-      </div>
     </div>
     <div class="summary-project-grid">
       <article class="summary-project-card" style="--project-accent: #1c5d99;">

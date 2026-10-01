@@ -109,6 +109,19 @@ test('manifest-approved text assets use LF line endings', () => {
   }
 });
 
+test('reading layout retains work-case navigation when regenerated', async () => {
+  const { applyReadingLayout } = await import('../../scripts/portfolio-reading-layout.mjs');
+  const source = '<body><section class="page work-cases" id="work-cases"><article id="work-policy">Policy</article></section><section class="page complete-sheet" data-page="02">Projects</section></body>';
+  const once = applyReadingLayout(source);
+  const twice = applyReadingLayout(once);
+  for (const html of [once, twice]) {
+    assert.match(html, /href="#work-cases"/);
+    assert.match(html, /id="work-policy"/);
+    assert.match(html, /id="portfolio-results"/);
+    assert.equal((html.match(/<nav /g) ?? []).length, 1);
+  }
+});
+
 test('integrated reading layout keeps one main landmark across regeneration', async () => {
   const { applyReadingLayout } = await import('../../scripts/portfolio-reading-layout.mjs');
   const source = '<body><section class="page case-page" data-page="04"><main class="case-main"><h2>Evidence</h2></main></section></body>';

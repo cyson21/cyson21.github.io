@@ -3,7 +3,7 @@ export function applyReadingLayout(html) {
   const ids = ['portfolio-intro','portfolio-results','portfolio-capabilities','stockrush','member-event-consistency','enterprise-policy-rag','ai-gateway','cdc-data-platform','fashion-personalization-platform','portfolio-scope'];
   html = html.replace(/<section class="page([^\"]*)"(?: id="[^"]*")? data-page="(\d+)"/g, (match, classes, number) => `<section class="page${classes}" id="${ids[Number(number)-1]}" data-page="${number}"`);
   html = html.replace(/<nav class="portfolio-reading-nav"[\s\S]*?<\/nav>\s*/g, '');
-  const nav = '<nav class="portfolio-reading-nav" aria-label="통합 포트폴리오 목차"><a href="/">홈</a><a href="#portfolio-intro">소개·프로젝트</a><a href="#portfolio-results">문제와 검증 결과</a><a href="#portfolio-capabilities">구현 역량</a><a href="#stockrush">상세 근거</a><a href="#portfolio-scope">검증 범위</a></nav>';
+  const nav = '<nav class="portfolio-reading-nav" aria-label="통합 포트폴리오 목차"><a href="/">홈</a><a href="#portfolio-intro">소개</a><a href="#work-cases">실무 문제 해결</a><a href="#portfolio-results">문제와 검증 결과</a><a href="#portfolio-capabilities">구현 역량</a><a href="#stockrush">상세 근거</a><a href="#portfolio-scope">검증 범위</a></nav>';
   html = html.replace('<body>', `<body>\n${nav}`);
   const names = {'StockRush':'stockrush','Member Event Consistency':'member-event-consistency','Enterprise Policy RAG':'enterprise-policy-rag','AI Gateway':'ai-gateway','CDC Data Platform (프로토타입)':'cdc-data-platform','Fashion Personalization Platform':'fashion-personalization-platform'};
   for (const [name,id] of Object.entries(names)) html = html.replaceAll(`<h3>${name}</h3>`, `<h3><a href="#${id}">${name}</a></h3>`);
