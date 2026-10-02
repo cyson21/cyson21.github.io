@@ -1,5 +1,9 @@
 import { expect, type Page } from '@playwright/test';
 
+const affectedRoutes: string[] | null = JSON.parse(process.env.CI_AUDIT_ROUTES ?? 'null');
+export const isAuditRouteSelected = (path: string) => affectedRoutes === null || affectedRoutes.includes(path);
+export const selectAuditRoutes = <T extends { path: string }>(routes: readonly T[]): T[] => routes.filter(route => isAuditRouteSelected(route.path));
+
 export const canonicalRoutes = [
   { id: 'home', path: '/' },
   { id: 'projects', path: '/projects/' },
@@ -62,7 +66,7 @@ export async function gotoAuditRoute(
   route: { path: string; expectedStatus?: number },
 ): Promise<void> {
   await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
-  const response = await page.goto(route.path, { waitUntil: 'networkidle' });
+  const response = await page.goto(route.path, { waitUntil: 'load' });
   if (route.expectedStatus) {
     expect(response?.status(), `${route.path} should return ${route.expectedStatus}`).toBe(route.expectedStatus);
   } else {

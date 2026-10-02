@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { canonicalViewports, publicAuditRoutes, gotoAuditRoute, expectNoHorizontalDocumentOverflow } from './fixtures/canonical';
+import { canonicalViewports, publicAuditRoutes, gotoAuditRoute, expectNoHorizontalDocumentOverflow, selectAuditRoutes } from './fixtures/canonical';
 import { auditReadingLayout } from './fixtures/layout-health';
 
-const routes = [...publicAuditRoutes.filter(route => route.path !== '/resume/print/'), { id: 'integrated-portfolio', path: '/portfolio/' }];
+const routes = selectAuditRoutes([...publicAuditRoutes.filter(route => route.path !== '/resume/print/'), { id: 'integrated-portfolio', path: '/portfolio/' }]);
 // Exercise both sides of the integrated document's actual transition as well.
-const viewports = [...canonicalViewports, { width: 959, height: 986 }, { width: 960, height: 986 }];
+const widths = process.env.CI_TEST_SCOPE === 'targeted' ? canonicalViewports.filter(viewport => [320, 1440].includes(viewport.width)) : canonicalViewports;
+const viewports = [...widths, { width: 959, height: 986 }, { width: 960, height: 986 }];
 for (const viewport of viewports) {
   test(`public content remains usable at ${viewport.width}px`, async ({ page }, testInfo) => {
     await page.setViewportSize(viewport);

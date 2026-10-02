@@ -1,5 +1,27 @@
 import { expect, test } from '@playwright/test';
 
+import { isAuditRouteSelected } from './fixtures/canonical';
+
+const testRoutes: Record<string, string[]> = {
+  'project filter works and code details keep implementation and tests visible': ['/projects/', '/projects/stockrush/'],
+  'Korean interface labels use the text font rather than the code font': ['/projects/', '/projects/stockrush/'],
+  'detail pages expose an explicit route back to the portfolio home': ['/projects/stockrush/', '/experience/'],
+  'experience page unifies the résumé summary and career evidence': ['/experience/'],
+  'print résumé keeps page-two content above the footer': ['/resume/print/'],
+  'resume route redirects to the unified experience page': ['/experience/'],
+  'home navigation prioritizes career and labels personal projects': ['/'],
+  'projects page heading levels do not skip from h1 to h3': ['/projects/'],
+  'navigation, document flow, and code evidence remain readable without JavaScript': ['/projects/stockrush/'],
+  'mobile project contents precede the article and follow the current section': ['/projects/stockrush/'],
+};
+test.beforeEach(({}, testInfo) => {
+  const dependencies = testRoutes[testInfo.title];
+  if (dependencies) test.skip(!dependencies.some(isAuditRouteSelected), 'unaffected route');
+  if (testInfo.title.startsWith('print résumé')) {
+    test.skip(!isAuditRouteSelected('/resume/print/') || testInfo.project.name === 'mobile', 'print uses one A4 geometry');
+  }
+});
+
 const routes = [
   '/',
   '/projects/',
@@ -36,7 +58,7 @@ const deprecatedLabels = [
   'AWS SDK 전환과 테스트 표준화',
 ];
 
-for (const route of routes) {
+for (const route of routes.filter(isAuditRouteSelected)) {
   test(`${route} renders one H1 without console errors`, async ({ page }) => {
     const errors: string[] = [];
     page.on('console', (message) => {
