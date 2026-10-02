@@ -4146,7 +4146,7 @@ tr:nth-child(even) td { background: #f8fafc; }
     <div class="cover-list">
       <section class="cover-group">
         <div class="cover-group-head"><h2>실무에서 해결한 문제</h2></div>
-        <article class="cover-row"><div><h3><a href="#work-policy">저장 직전에 바뀐 상태를 다시 검증하기</a></h3><p>정책 변경과 학습 진행 상태가 엇갈리는 경로를 차단</p></div></article>
+        <article class="cover-row"><div><h3><a href="#work-policy">저장 직전에 바뀐 상태를 다시 검증하기</a></h3><p>설정 변경과 작업 시작이 겹칠 때 발생하는 데이터 불일치 방지</p></div></article>
         <article class="cover-row"><div><h3><a href="#work-timezone">날짜는 같아도 발송 시각은 달라지는 문제</a></h3><p>UTC 저장과 KST 서비스의 알림 경계 조건 정리</p></div></article>
         <article class="cover-row"><div><h3><a href="#work-db-tests">DB 테스트가 운영 환경을 따라가게 만들기</a></h3><p>중복된 JPA 테스트 설정을 공통 환경으로 이관</p></div></article>
       </section>
@@ -4167,34 +4167,34 @@ tr:nth-child(even) td { background: #f8fafc; }
     <p>아래 사례는 회사 업무 기록을 바탕으로 재구성했습니다. 내부 서비스명과 고객 정보는 생략했으며, 공개 코드와 실행 결과는 뒤의 개인 프로젝트에서 확인할 수 있습니다.</p>
     <article class="work-case" id="work-policy">
       <h3>저장 직전에 바뀐 상태를 다시 검증하기</h3>
-      <p>정책 수정 화면을 열었을 때는 변경 가능한 상태였지만, 저장 전에 학습이 시작되면 이전 수료 조건과 새 정책이 엇갈릴 수 있었습니다.</p>
+      <p>설정 변경 화면을 연 뒤 관련 작업이 시작되면, 이전 상태를 기준으로 저장하면서 진행 중인 작업에 서로 다른 처리 기준이 적용될 수 있었습니다.</p>
       <dl class="work-case-facts">
-        <div><dt>원인 추적</dt><dd>화면 진입 시점과 저장 시점의 상태 판정 차이를 비교하고, 학습자별 수료 조건이 생성되는 흐름을 추적했습니다.</dd></div>
-        <div><dt>판단·수정</dt><dd>화면의 판단에 의존하지 않고 서버가 저장 시점에 상태를 다시 검증하도록 했습니다. 대기 상태가 유지될 때만 수료 조건을 재생성하고, 학습이 시작됐다면 정책 수정을 차단했습니다.</dd></div>
-        <div><dt>담당 범위</dt><dd>서버 재검증 규칙 정의, 저장 차단 경로 구현, 테스트와 Stage QA.</dd></div>
-        <div><dt>검증 범위</dt><dd>정상 재생성과 도중 학습 시작 시 차단을 단위·통합 테스트와 Stage QA의 확인 항목으로 삼았습니다. 작업 기록상 완료된 사례이며, 별도 실행 로그와 운영 개선 수치는 확보하지 않았습니다.</dd></div>
+        <div><dt>원인 추적</dt><dd>화면을 연 시점과 저장 시점의 상태 차이를 비교하고, 처리 기준이 데이터에 반영되는 흐름을 추적했습니다.</dd></div>
+        <div><dt>판단·수정</dt><dd>서버가 저장 직전에 현재 상태를 다시 확인하도록 수정했습니다. 작업이 시작되기 전에는 새 설정을 적용하고, 이미 시작됐다면 변경을 차단해 기존 데이터를 보호했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>서버 재검증 규칙 정의, 저장 차단 경로 구현, 테스트와 별도 검증 환경의 수동 확인.</dd></div>
+        <div><dt>검증 범위</dt><dd>정상 변경과 진행 중 변경 차단을 단위·통합 테스트와 별도 검증 환경의 확인 항목으로 삼았습니다. 작업 기록상 완료된 사례이며, 별도 실행 로그와 운영 개선 수치는 확보하지 않았습니다.</dd></div>
       </dl>
       <p class="work-case-link">개인 프로젝트에서는 <a href="#stockrush">StockRush</a>의 종료 상태 변경 차단과 <a href="#member-event-consistency">Member Event Consistency</a>의 조건부 갱신으로 상태 보호 규칙을 검증했습니다.</p>
     </article>
     <article class="work-case" id="work-timezone">
       <h3>날짜는 같아도 발송 시각은 달라지는 문제</h3>
-      <p>UTC로 저장한 날짜를 KST 기준으로 처리하는 경계에서 학습 시작 알림이 하루 늦어지거나, 등록 시각에 따라 누락되는 문제가 있었습니다.</p>
+      <p>데이터 저장 시간대(UTC)와 국내 서비스 시간대(KST)를 변환할 때 날짜가 달라져, 알림이 하루 늦거나 등록 시점에 따라 발송이 누락되는 문제가 있었습니다.</p>
       <dl class="work-case-facts">
-        <div><dt>원인 추적</dt><dd>기간제·무기한 과정의 날짜 변환을 비교하고, 발송일 당일 등록이 이미 지난 시각으로 판정되는 경로를 확인했습니다.</dd></div>
-        <div><dt>판단·수정</dt><dd>학습 시작일을 KST 기준으로 정규화하고 등록 시각에 따라 당일·익일 발송 정책을 나눴습니다. 날짜 변환과 정해진 발송 시각의 스케줄 계산을 수정했습니다.</dd></div>
-        <div><dt>담당 범위</dt><dd>오류 재현, 날짜 변환·스케줄 계산 수정, 회귀 테스트와 Stage QA.</dd></div>
+        <div><dt>원인 추적</dt><dd>여러 발송 조건에서 날짜 변환 결과를 비교하고, 당일 등록이 이미 지난 발송 시각으로 처리되는 경로를 확인했습니다.</dd></div>
+        <div><dt>판단·수정</dt><dd>발송일 계산을 한국 시간 기준으로 통일하고 등록 시각에 따라 당일·다음 날 발송을 구분했습니다. 날짜 변환과 예약 발송 시각 계산을 수정했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>오류 재현, 날짜 변환·스케줄 계산 수정, 회귀 테스트와 별도 검증 환경의 수동 확인.</dd></div>
         <div><dt>검증 범위</dt><dd>시간대 경계와 등록 시각을 포함한 재현 시나리오를 확인 항목으로 정리했습니다. 작업 기록상 수정은 완료됐으나 실제 발송 로그와 운영 관찰 결과는 별도로 확보하지 않았습니다.</dd></div>
       </dl>
-      <p class="work-case-link">날짜 변환과 정책 판단을 함께 확인해야 한다는 사례입니다. 뒤의 개인 프로젝트 결과도 테스트 입력과 관찰된 동작을 함께 적었습니다.</p>
+      <p class="work-case-link">날짜 변환과 발송 조건을 함께 확인해야 한다는 사례입니다. 뒤의 개인 프로젝트 결과도 테스트 입력과 관찰된 동작을 함께 적었습니다.</p>
     </article>
     <article class="work-case" id="work-db-tests">
       <h3>DB 테스트가 운영 환경을 따라가게 만들기</h3>
       <p>이벤트 처리 모듈의 JPA 테스트가 수동 설정과 중복된 컨테이너 환경에 의존해, 다른 모듈과 같은 기준으로 회귀를 확인하기 어려웠습니다.</p>
       <dl class="work-case-facts">
-        <div><dt>원인 추적</dt><dd>기존 API 모듈의 테스트 표준과 비교하고, 멀티테넌트 DataSource 충돌과 Repository 탐색 범위를 확인했습니다.</dd></div>
-        <div><dt>판단·수정</dt><dd>Testcontainers MySQL 8.4와 공통 초기화 스키마를 사용하는 DataJpaTest 환경으로 이관했습니다. 테스트 전용 tenant resolver와 제한된 Repository 탐색을 적용하고 수동 JPA·중복 컨테이너 설정을 제거했습니다.</dd></div>
-        <div><dt>담당 범위</dt><dd>공통 테스트 환경·fixture 이관, Repository 회귀 테스트 재구성과 KST/UTC 경계 쿼리 테스트 유지.</dd></div>
-        <div><dt>검증 범위</dt><dd>DataJpaTest smoke, 이벤트 모듈 테스트와 API 모듈 회귀가 확인 항목입니다. 작업 기록에서 환경 일원화를 확인했으며, 테스트 출력과 전후 비교 자료는 별도로 확보하지 않았습니다.</dd></div>
+        <div><dt>원인 추적</dt><dd>기존 API 모듈의 테스트 기준과 비교하고, 고객별 DB 연결 설정의 충돌과 데이터 접근 코드의 탐색 범위를 확인했습니다.</dd></div>
+        <div><dt>판단·수정</dt><dd>Testcontainers MySQL 기반 공통 테스트 환경에 운영 DB와 같은 테이블 구조를 적용했습니다. 고객별 DB 연결 설정과 데이터 접근 코드의 탐색 범위를 정리하고, 수동 설정·중복 컨테이너를 제거했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>공통 테스트 환경과 테스트용 데이터 이관, DB 조회 테스트 재구성과 시간대 변환 테스트 유지.</dd></div>
+        <div><dt>검증 범위</dt><dd>DB 기본 동작, 관련 서비스와 API의 기존 기능 유지 여부가 확인 항목입니다. 작업 기록에서 환경 일원화를 확인했으며, 테스트 출력과 전후 비교 자료는 별도로 확보하지 않았습니다.</dd></div>
       </dl>
       <p class="work-case-link">개인 프로젝트의 <a href="#member-event-consistency">동시 요청 검증</a>에서도 DB의 최종 상태를 관찰 대상으로 삼았습니다. 실무의 운영 성과와 개인 프로젝트 테스트 결과는 각각의 범위로 설명합니다.</p>
     </article>
