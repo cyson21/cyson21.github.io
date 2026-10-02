@@ -15,28 +15,20 @@ const experienceRecords = [
     context: '4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 B2B 리테일 교육 플랫폼의 백엔드 개발·운영을 담당했습니다.',
     responsibilities: [
       {
-        title: '교육 플랫폼 REST API',
-        description: 'Java·Spring Boot로 B2B 리테일 교육 플랫폼의 REST API를 설계·개발·운영했습니다. JPA·QueryDSL·MySQL로 데이터 조회·저장을 구현하고 관리자 기능 개편을 지원했습니다.',
+        title: '교육 플랫폼 API 개발·운영',
+        description: 'Java·Spring Boot로 B2B 리테일 교육 플랫폼의 REST API를 설계·개발·운영했습니다. JPA·QueryDSL·MySQL로 조회·저장을 구현하고 관리자 기능 개편을 지원했습니다.',
       },
       {
-        title: '플랫폼 2.0 → 3.0 전환',
-        description: '버전 전환에 따른 기존 기능의 영향 범위를 점검하고 회귀를 검증했습니다. 레거시 코드 정리와 API·DB 구조 개선을 진행했습니다.',
+        title: '버전 전환·데이터 접근 계층 개선',
+        description: '플랫폼 2.0 → 3.0 전환의 영향 범위를 점검하고 기존 기능의 회귀를 검증했습니다. 레거시 코드와 API·DB 구조, JPA·QueryDSL 조회·저장 로직을 정리했습니다.',
       },
       {
-        title: '장애 분석·회귀 검증',
-        description: '운영 장애와 데이터 오류를 재현해 원인을 분석하고 API·DB 로직을 수정했습니다. Testcontainers 기반 통합·회귀 테스트로 수정 결과를 확인했습니다.',
+        title: '운영 오류 분석·수정·회귀 검증',
+        description: '운영 장애와 데이터 오류를 재현해 원인을 추적하고 API·DB 로직을 수정했습니다. 상태 변경과 시간대 경계 문제를 다루고 Testcontainers 기반 통합·회귀 테스트를 정리했습니다.',
       },
       {
-        title: '데이터 접근 계층 개선',
-        description: 'JPA·QueryDSL의 조회·저장 구조를 정리하고 데이터 정합성과 유지보수 관점에서 접근 로직을 개선했습니다.',
-      },
-      {
-        title: 'AWS 배포·운영',
-        description: 'AWS(Lambda, CloudWatch, RDS, EC2, WAF 등) 기반 배포·모니터링·운영에 참여하고, Docker 배포·전환 이슈를 처리했습니다.',
-      },
-      {
-        title: 'CI/CD·배포 품질',
-        description: 'CI/CD 파이프라인 안정화와 코드리뷰 기반 배포 품질 관리에 참여했습니다.',
+        title: 'AWS 인프라·CI/CD·배포 운영',
+        description: 'AWS EC2·RDS·Lambda·CloudWatch·WAF 기반 배포·모니터링·운영에 참여했습니다. Docker 배포·전환 이슈에 대응하고 CI/CD 파이프라인 안정화와 코드리뷰 기반 배포 품질 관리에 참여했습니다.',
       },
     ],
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'AWS EC2', 'AWS RDS', 'AWS S3', 'AWS Lambda', 'CloudWatch', 'AWS WAF', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
@@ -49,50 +41,42 @@ const experienceRecords = [
     context: '공공·실시간 데이터 기반 서비스의 백엔드와 데이터 처리, 배포·운영을 담당했습니다.',
     responsibilities: [
       {
-        title: '실시간 데이터 파이프라인',
+        title: '도시데이터 수집·가공·조회 API',
         description: '서울 실시간 도시데이터 Open API를 수집·가공하는 파이프라인과 조회 API를 구현했습니다.',
       },
       {
-        title: '스키마·REST API 설계',
-        description: '서비스별 요구사항에 맞춰 MySQL·MongoDB 스키마와 REST API를 설계했습니다.',
+        title: '데이터 모델·백엔드 개발',
+        description: '서비스 요구사항에 맞춰 MySQL·MongoDB 스키마와 REST API를 설계하고, Spring Boot·Django·FastAPI로 데이터 조회·저장 기능을 구현했습니다.',
       },
       {
-        title: '데이터 백엔드 구현',
-        description: 'Spring Boot·Django·FastAPI로 데이터 조회·저장 기능을 구현했습니다.',
-      },
-      {
-        title: '시계열 예측 연동',
-        description: '시계열 예측 결과를 서비스 지표와 기능에 연동했습니다.',
-      },
-      {
-        title: 'Docker 배포·운영',
-        description: '관련 서비스를 Docker 컨테이너로 배포·운영했습니다.',
+        title: '예측 결과 연동·Docker 운영',
+        description: '시계열 예측 결과를 서비스 지표와 기능에 연동하고 관련 서비스를 Docker 컨테이너로 배포·운영했습니다.',
       },
     ],
     stack: ['Java', 'Spring Boot', 'Python', 'FastAPI', 'Django', 'SQL', 'MySQL', 'MongoDB', 'Docker'],
   },
 ] as const;
 
-export const professionalSummary = 'B2B 리테일 교육 플랫폼과 공공·실시간 데이터 서비스의 API 개발·운영을 담당했습니다. 운영 장애와 데이터 오류의 원인을 추적하고, 로직 수정과 통합·회귀 검증까지 수행합니다.';
+export const professionalSummary = 'B2B 리테일 교육 플랫폼과 공공·실시간 데이터 서비스의 API를 개발·운영했습니다. 상태 변경·시간대 경계에서 발생한 오류를 추적하고, 서버 로직과 회귀 테스트를 개선했습니다.';
 
 export const resumeWorkCases = [
   {
-    title: '정책 변경 중 시작된 학습의 상태 충돌 처리',
-    problem: '화면 진입 후 학습이 시작되면, 처음 조회한 대기 상태를 기준으로 정책을 변경하는 경로에서 진행 상태와 완료 조건이 어긋날 수 있었습니다.',
-    change: '저장 시 서버에서 학습 상태를 다시 확인하도록 수정했습니다. 대기 상태인 경우에만 완료 조건을 재생성하고, 학습이 시작된 경우에는 변경을 차단했습니다.',
-    verification: '대기 상태의 정상 재생성과 학습 시작 후 변경 차단을 단위·통합 테스트 및 Stage QA의 검증 항목으로 정리했습니다.',
+    title: '학습 시작과 정책 변경이 겹칠 때 수료 조건 보호',
+    problem: '정책 수정 화면을 연 뒤 학습이 시작되면, 처음 조회한 대기 상태를 기준으로 저장하면서 수료 조건과 진척률이 어긋날 수 있었습니다.',
+    change: '저장 시 서버에서 대상 학습자의 상태를 다시 검증했습니다. 모두 대기 상태일 때만 수료 조건을 재생성하고, 학습이 시작된 경우에는 정책 변경을 차단했습니다.',
+    verification: '정상 재생성·학습 시작 후 변경 차단의 단위·통합 테스트, Stage 수동 QA.',
   },
   {
-    title: 'UTC 저장과 KST 알림 기준의 날짜 경계 정리',
-    problem: '등록 시각과 학습 시작일의 날짜 경계에 따라 알림이 하루 밀리거나 누락되는 경로를 추적했습니다.',
-    change: '학습 시작일을 KST 기준으로 해석하고, 등록 시점에 따른 당일·다음 날 발송 조건을 분리했습니다. 정기 발송 시각도 KST 기준으로 정리했습니다.',
-    verification: '고정·무제한 과정, 날짜 경계와 시작일 경과 후 등록의 조합을 회귀 테스트 및 Stage QA의 검증 항목으로 정리했습니다.',
+    title: '등록 시각에 따라 지연·누락되는 학습 시작 알림 수정',
+    problem: 'UTC 저장값과 KST 발송일의 날짜 경계가 어긋나 알림이 하루 늦거나, 당일 등록 시 이미 지난 발송 시각으로 처리되어 누락되는 경로를 추적했습니다.',
+    change: '학습 시작일을 KST 기준으로 정규화했습니다. 등록 시점에 따른 당일·익일 발송 조건을 분리하고, 정기 발송을 KST 12시 기준으로 계산하도록 수정했습니다.',
+    verification: '기간제·무기한 과정과 날짜 경계의 재현 시나리오 4개, 단위·통합 테스트와 Stage 수동 QA.',
   },
   {
-    title: '분산된 JPA 테스트 설정을 공통 환경으로 통합',
-    problem: '모듈별 수동 JPA 설정과 중복 컨테이너 때문에 테스트의 데이터 접근 환경을 일관되게 유지하기 어려웠습니다.',
-    change: '공통 DataJpaTest와 Testcontainers MySQL 환경으로 이관했습니다. 테넌트 데이터 소스와 저장소 스캔 범위를 정리하고 수동 설정·중복 컨테이너를 제거했습니다.',
-    verification: '모듈 스모크 테스트와 기존 QueryDSL·UTC/KST 회귀 시나리오를 유지하도록 검증 범위를 정리했습니다.',
+    title: '운영 스키마를 사용하는 JPA 회귀 테스트 환경 정리',
+    problem: '수동 JPA 설정과 중복 컨테이너에 의존하는 모듈 테스트를 공통 테스트 환경으로 이관해야 했습니다. 테넌트 데이터 소스 충돌과 저장소 스캔 범위를 함께 점검했습니다.',
+    change: '공통 DataJpaTest에 Testcontainers MySQL과 초기화 스키마를 적용했습니다. 수동 JPA·중복 컨테이너 설정을 제거하고 UTC/KST QueryDSL 회귀 시나리오를 유지했습니다.',
+    verification: 'DataJpaTest 스모크, 대상 모듈 테스트와 API 모듈 회귀 확인.',
   },
 ];
 

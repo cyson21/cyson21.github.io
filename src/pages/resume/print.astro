@@ -24,6 +24,10 @@ import { experiences, profile, professionalSummary, resumeIntro, resumeWorkCases
           <strong>{resumeIntro}</strong>
           <p>{professionalSummary}</p>
         </section>
+        <section class="core-skills block" aria-labelledby="core-skills-title">
+          <h2 id="core-skills-title">실무 기술</h2>
+          <p>{skillGroups.flatMap(group => group.items).join(' · ')}</p>
+        </section>
         <section class="experience block">
           <h2>경력</h2>
           {experiences.map((experience) => (
@@ -58,12 +62,6 @@ import { experiences, profile, professionalSummary, resumeIntro, resumeWorkCases
           ))}
         </section>
         <div class="lower-grid block">
-          <section>
-            <h2>실무 기술 스택</h2>
-            <div class="skills">
-              {skillGroups.map((group) => <div><strong>{group.label}</strong><p>{group.items.join(' · ')}</p></div>)}
-            </div>
-          </section>
           <section class="education">
             <h2>학력</h2><strong>서울과학기술대학교</strong><p>영어영문학 학사 · 2018 졸업</p>
           </section>
@@ -77,7 +75,7 @@ import { experiences, profile, professionalSummary, resumeIntro, resumeWorkCases
   @page { size: A4; margin: 0; }
   * { box-sizing: border-box; }
   html, body { margin: 0; background: #e7eaf0; color: #202b3b; font-family: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif; }
-  body { font-size: 9.5pt; line-height: 1.5; }
+  body { font-size: 10pt; line-height: 1.5; }
   a { color: inherit; text-decoration: none; }
   main { display: grid; justify-content: center; gap: 10mm; padding-block: 10mm; }
   .sheet { position: relative; width: 210mm; height: 297mm; padding: 13mm 15mm 24mm; overflow: hidden; background: #fff; break-after: page; }
@@ -93,6 +91,8 @@ import { experiences, profile, professionalSummary, resumeIntro, resumeWorkCases
   .contact-row { display: flex; flex-wrap: wrap; gap: 5mm; margin-top: 3mm; padding-block: 2mm; border-block: 0.25mm solid #c7cdd6; font-size: 8pt; }
   .summary strong { font-size: 10pt; }
   .summary p { margin-top: 1.5mm; color: #4d5968; }
+  .core-skills h2 { font-size: 10pt; margin-bottom: 1.5mm; }
+  .core-skills p { color: #4d5968; font-size: 9pt; }
   .job { border-top: 0.3mm solid #596779; padding-top: 2mm; }
   .job + .job { margin-top: 5mm; }
   .job header { display: flex; justify-content: space-between; gap: 6mm; }
