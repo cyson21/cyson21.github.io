@@ -18,6 +18,8 @@ Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트
 
 ## 콘텐츠와 공개 경계
 
+현재 내용 원본·출력·검증 기록은 [콘텐츠 SoT](docs/content/current-sot.md)에서 관리합니다. 이력서와 PDF의 실무 대표 4개는 공통 원본을 공유하며, 포트폴리오는 RabbitMQ를 추가한 상세 5개로 확장합니다.
+
 - 프로젝트 콘텐츠: `src/content/`
 - 경력·소개·기술 스택: `src/data/site.ts` (실무와 개인 프로젝트 기술 구분)
 - 경력 근거와 미확인 항목: `docs/content/career_profile.md`
