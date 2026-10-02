@@ -139,7 +139,7 @@ test('experience page unifies the résumé summary and career evidence', async (
   await expect(currentExperience.locator('.responsibilities li p')).toHaveText([
     'Java·Spring Boot로 B2B 리테일 교육 플랫폼의 REST API를 설계·개발·운영했습니다. JPA·QueryDSL·MySQL로 조회·저장을 구현하고 관리자 기능 개편을 지원했습니다.',
     '플랫폼 2.0 → 3.0 전환의 영향 범위를 점검하고 기존 기능의 회귀를 검증했습니다. 레거시 코드와 API·DB 구조, JPA·QueryDSL 조회·저장 로직을 정리했습니다.',
-    '운영 장애와 데이터 오류를 재현해 원인을 추적하고 API·DB 로직을 수정했습니다. 상태 변경과 시간대 경계 문제를 다루고 Testcontainers 기반 통합·회귀 테스트를 정리했습니다.',
+    '운영 장애와 데이터 오류를 재현해 원인을 추적하고 API·DB 로직을 수정했습니다. 저장 시점 상태 검증, 분산락 기반 배치 제어와 구매 API 트랜잭션 분리, 복합 식별자 처리와 회귀 테스트를 다뤘습니다.',
     'AWS EC2·RDS·Lambda·CloudWatch·WAF 기반 배포·모니터링·운영에 참여했습니다. Docker 배포·전환 이슈에 대응하고 CI/CD 파이프라인 안정화와 코드리뷰 기반 배포 품질 관리에 참여했습니다.',
   ]);
   await expect(currentExperience).not.toContainText(/자격증명|액세스 키|CDN/);
@@ -157,7 +157,7 @@ test('print résumé keeps professional experience and cases above each footer',
   await expect(page.locator('.sheet')).toHaveCount(2);
 
   await expect(page.locator('.sheet').first().locator('.job')).toHaveCount(2);
-  await expect(page.locator('.sheet').nth(1).locator('.work-case-list article')).toHaveCount(3);
+  await expect(page.locator('.sheet').nth(1).locator('.work-case-list article')).toHaveCount(4);
   await expect(page.locator('main')).not.toContainText(/대표 개인 프로젝트|StockRush|Member Event Consistency|Enterprise Policy RAG/);
   for (const sheet of await page.locator('.sheet').all()) {
     const contentBottom = await sheet.locator('footer').evaluate((element) => element.previousElementSibling!.getBoundingClientRect().bottom);

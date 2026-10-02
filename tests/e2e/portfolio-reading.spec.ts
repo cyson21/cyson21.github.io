@@ -25,7 +25,7 @@ for (const width of [320, 390, 768, 1440]) {
     }
     await page.getByRole('navigation', { name: '통합 포트폴리오 목차' }).getByRole('link', { name: '실무 문제 해결' }).click();
     await expect(page).toHaveURL(/#work-cases$/);
-    await expect(page.locator('#work-cases .work-case')).toHaveCount(3);
+    await expect(page.locator('#work-cases .work-case')).toHaveCount(5);
     await expect(page.locator('#work-policy h3')).toBeVisible();
     await page.locator('#work-policy').getByRole('link', { name: 'StockRush', exact: true }).click();
     await expect(page).toHaveURL(/#stockrush$/);

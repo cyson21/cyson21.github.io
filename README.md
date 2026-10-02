@@ -4,7 +4,7 @@ Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트
 
 실무에서는 4인 개발팀에서 20개 이상의 기업 고객 서비스를 개발·운영했으며, 아래 공개 저장소의 대표 프로젝트는 개인 프로젝트로 설계·구현·검증한 범위입니다.
 
-[웹 포트폴리오](https://cyson21.github.io/) · [통합 포트폴리오 HTML](https://cyson21.github.io/portfolio/) · [프로젝트 HTML](https://cyson21.github.io/projects/) · [이력서 PDF](https://cyson21.github.io/downloads/resume.pdf)
+[웹 포트폴리오](https://cyson21.github.io/) · [백엔드 문제 해결 사례](https://cyson21.github.io/portfolio/) · [개인 프로젝트](https://cyson21.github.io/projects/) · [이력서 PDF](https://cyson21.github.io/downloads/resume.pdf)
 
 ## 대표 프로젝트
 
@@ -23,7 +23,7 @@ Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트
 - 경력 근거와 미확인 항목: `docs/content/career_profile.md`
 - 승인 자산 목록: `src/data/public-assets.json`
 - 공개 자산: `public/` 아래에서 승인 목록과 SHA-256이 일치하는 파일
-- 통합 포트폴리오 HTML: `public/portfolio/index.html`
+- 실무 사례와 개인 프로젝트의 구현 근거: `public/portfolio/index.html`
 - 설계 결정: `docs/decisions/`
 - 제외 대상: 원본 일감, 로컬 경로, 전화번호, 비공개 이력서 원본
 
