@@ -6,9 +6,8 @@ import {
   careerPeriod,
   experiences,
   profile,
-  projectSkillGroups,
-  resumeClosing,
-  resumeHighlights,
+  professionalSummary,
+  resumeWorkCases,
   resumeIntro,
   skillGroups,
 } from '../../data/site';
@@ -21,7 +20,7 @@ if (!currentExperience) {
 
 <BaseLayout
   title="경력·이력서"
-  description="손찬양의 Java·Spring Boot 백엔드 실무 경력과 이력서입니다. 회사별 담당 업무와 개인 프로젝트 기술 경험을 구분해 정리했습니다."
+  description="손찬양의 Java·Spring Boot 백엔드 실무 경력과 이력서입니다. 회사별 담당 업무와 실제 운영 문제 해결 사례를 정리했습니다."
 >
   <PageIntro title="경력·이력서" description={currentExperience.context} />
 
@@ -32,14 +31,11 @@ if (!currentExperience) {
           <p class="eyebrow">프로필 요약</p>
           <h2 id="overview-title">운영 문제를 구조적으로 해결하는 백엔드 개발자</h2>
           <p class="summary-intro">{resumeIntro}</p>
-          <ul class="summary-highlights">
-            {resumeHighlights.map((item) => <li>{item}</li>)}
-          </ul>
-          <p class="summary-closing">{resumeClosing}</p>
+          <p class="summary-closing">{professionalSummary}</p>
         </div>
         <div class="overview-actions">
           <a class="button" href={profile.resumePath}><Download size={17} aria-hidden="true" /> PDF 다운로드</a>
-          <a class="button button--secondary" href="/projects/"><ArrowRight size={17} aria-hidden="true" /> 프로젝트 보기</a>
+          <a class="button button--secondary" href="/portfolio/"><ArrowRight size={17} aria-hidden="true" /> 문제 해결 사례</a>
         </div>
       </section>
 
@@ -75,6 +71,20 @@ if (!currentExperience) {
               </ul>
             </section>
 
+            {experience === currentExperience && (
+              <section class="work-case-list" aria-labelledby="work-cases-title">
+                <h3 id="work-cases-title">대표 실무 문제 해결</h3>
+                {resumeWorkCases.map((item) => (
+                  <article>
+                    <h4>{item.title}</h4>
+                    <p><strong>문제</strong> {item.problem}</p>
+                    <p><strong>수정</strong> {item.change}</p>
+                    <p><strong>검증 항목</strong> {item.verification}</p>
+                  </article>
+                ))}
+              </section>
+            )}
+
             <div class="experience-stack">
               <span>기술 스택</span>
               <ul class="tag-list">{experience.stack.map((item) => <li class="tag">{item}</li>)}</ul>
@@ -88,16 +98,6 @@ if (!currentExperience) {
           <h2 id="skills-title">실무 기술 스택</h2>
           <div class="skill-groups">
             {skillGroups.map((group) => (
-              <div>
-                <p class="skill-label">{group.label}</p>
-                <ul class="tag-list">{group.items.map((item) => <li class="tag">{item}</li>)}</ul>
-              </div>
-            ))}
-          </div>
-          <h3>개인 프로젝트 기술</h3>
-          <p>공개 저장소에서 구현·테스트한 기술입니다. 적용 환경과 검증 범위는 프로젝트 상세에 정리했습니다.</p>
-          <div class="skill-groups project-skill-groups">
-            {projectSkillGroups.map((group) => (
               <div>
                 <p class="skill-label">{group.label}</p>
                 <ul class="tag-list">{group.items.map((item) => <li class="tag">{item}</li>)}</ul>
@@ -119,6 +119,13 @@ if (!currentExperience) {
 </BaseLayout>
 
 <style>
+  .work-case-list { padding: 24px clamp(22px, 3vw, 34px); border-bottom: 1px solid var(--line-strong); }
+  .work-case-list article { max-width: 820px; padding-block: 20px; }
+  .work-case-list article + article { border-top: 1px solid var(--line); }
+  .work-case-list h4 { margin-bottom: 12px; font-size: var(--text-lede); }
+  .work-case-list p { margin-top: 8px; color: var(--ink-soft); font-size: var(--text-dense); }
+  .work-case-list strong { color: var(--ink); }
+
   .experience-layout {
     display: grid;
     gap: 32px;

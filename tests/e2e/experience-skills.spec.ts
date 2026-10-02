@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('experience page separates professional skills from personal project skills', async ({ page }) => {
+test('experience page presents professional skills without promoting personal projects', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/experience/');
 
@@ -21,9 +21,8 @@ test('experience page separates professional skills from personal project skills
     'AWS·인프라AWSDocker',
     '형상관리·검증GitJUnitTestcontainersREST Docs',
   ]);
-  await expect(projectSkills).toContainText('PostgreSQL');
-  await expect(projectSkills).toContainText('Kafka');
-  await expect(projectSkills).toContainText('RabbitMQ');
+  await expect(projectSkills).toHaveCount(0);
+  await expect(page.locator('.work-case-list article')).toHaveCount(3);
   await expect(professionalSkills).not.toContainText('Kafka');
   await expect(professionalSkills).not.toContainText('RabbitMQ');
 });

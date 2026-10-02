@@ -1,38 +1,6 @@
 ---
-import { getCollection } from 'astro:content';
-import { experiences, profile, projectSkillGroups, resumeClosing, resumeHighlights, resumeIntro, skillGroups } from '../../data/site';
-
-const projects = await getCollection('projects');
-const [primaryExperience, previousExperience] = experiences;
-if (!primaryExperience || !previousExperience) {
-  throw new Error('이력서 출력에는 경력 항목이 두 개 이상 필요합니다.');
-}
-const projectMap = new Map(projects.map((project) => [project.id, project]));
-const selectedIds = ['stockrush', 'member-event-consistency', 'enterprise-policy-rag', 'ai-gateway', 'cdc-data-platform'];
-const representativeProjects = selectedIds
-  .map((id) => projectMap.get(id))
-  .filter((project): project is NonNullable<typeof project> => Boolean(project));
-const featuredProjects = representativeProjects.slice(0, 3);
-const additionalProjects = representativeProjects.slice(3);
-const verificationLabels = {
-  unit: '단위 테스트',
-  integration: '통합 테스트',
-  'container-smoke': '컨테이너 테스트',
-  'static-demo': '정적 데모',
-  'live-demo': '공개 데모',
-  cloud: '클라우드 환경',
-} as const;
-const firstVerificationLabel = (project: (typeof representativeProjects)[number]) => {
-  const verification = project.data.verification.at(0);
-  return verification ? verificationLabels[verification.layer] : '테스트 기록';
-};
-const firstSignalResult = (project: (typeof representativeProjects)[number]) => {
-  const signal = project.data.signals.at(0);
-  if (!signal) throw new Error(`${project.id} 프로젝트에 테스트 결과가 없습니다.`);
-  return signal.result;
-};
+import { experiences, profile, professionalSummary, resumeIntro, resumeWorkCases, skillGroups } from '../../data/site';
 ---
-
 <!doctype html>
 <html lang="ko-KR">
   <head>
@@ -45,252 +13,114 @@ const firstSignalResult = (project: (typeof representativeProjects)[number]) => 
     <main>
       <section class="sheet sheet--first" aria-label="이력서 1페이지">
         <header class="masthead">
-          <div>
-            <h1>{profile.name}</h1>
-            <p class="role-line">{profile.role}</p>
-            <p class="subtitle-line">{profile.subtitle}</p>
-          </div>
-          <img src="/media/profile.png" alt="손찬양 프로필 사진" width="116" height="116" />
+          <div><h1>{profile.name}</h1><p class="role-line">{profile.role}</p></div>
+          <img src="/media/profile.png" alt="손찬양 프로필 사진" width="100" height="100" />
         </header>
-
         <div class="contact-row">
-          <a href={profile.github}>github.com/cyson21</a>
-          <a href={profile.portfolio}>cyson21.github.io</a>
+          <a href={profile.github}>GitHub · github.com/cyson21</a>
+          <a href={`${profile.portfolio}portfolio/`}>포트폴리오 · cyson21.github.io/portfolio/</a>
         </div>
-
         <section class="summary block">
-          <h2>요약</h2>
-          <div>
-            <strong>{resumeIntro}</strong>
-            <ul class="summary-list">
-              {resumeHighlights.map((item) => <li>{item}</li>)}
-            </ul>
-            <p>{resumeClosing}</p>
-          </div>
+          <strong>{resumeIntro}</strong>
+          <p>{professionalSummary}</p>
         </section>
-
         <section class="experience block">
-          <div class="section-title"><h2>경력</h2></div>
-          <article class="job">
-            <header>
-              <div><h3>{primaryExperience.company}</h3><p>{primaryExperience.role}</p></div>
-              <time>{primaryExperience.period}</time>
-            </header>
-            <p class="context">{primaryExperience.context}</p>
-            <div class="highlight-list">
-              {primaryExperience.responsibilities.map((responsibility) => (
-                <div><strong>{responsibility.title}</strong><p>{responsibility.description}</p></div>
-              ))}
-            </div>
-          </article>
+          <h2>경력</h2>
+          {experiences.map((experience) => (
+            <article class="job">
+              <header>
+                <div><h3>{experience.company}</h3><p>{experience.role}</p></div>
+                <time>{experience.period}</time>
+              </header>
+              <p class="context">{experience.context}</p>
+              <ul class="highlight-list">
+                {experience.responsibilities.map((item) => (
+                  <li><strong>{item.title}</strong><p>{item.description}</p></li>
+                ))}
+              </ul>
+            </article>
+          ))}
         </section>
-
         <footer><span>손찬양 · 이력서</span><span>01 / 02</span></footer>
       </section>
-
       <section class="sheet" aria-label="이력서 2페이지">
         <header class="page-header"><strong>{profile.name}</strong><span>{profile.role}</span></header>
-
-        <section class="experience block block--second">
-          <div class="section-title"><h2>이전 경력</h2></div>
-          <article class="job">
-            <header>
-              <div><h3>{previousExperience.company}</h3><p>{previousExperience.role}</p></div>
-              <time>{previousExperience.period}</time>
-            </header>
-            <p class="context">{previousExperience.context}</p>
-            <div class="highlight-list highlight-list--compact">
-              {previousExperience.responsibilities.map((responsibility) => (
-                <div><strong>{responsibility.title}</strong><p>{responsibility.description}</p></div>
-              ))}
-            </div>
-          </article>
+        <section class="work-case-list block">
+          <h2>대표 실무 문제 해결</h2>
+          <p class="section-context">이엠캐스트 · B2B 리테일 교육 플랫폼 개발·운영</p>
+          {resumeWorkCases.map((item) => (
+            <article>
+              <h3>{item.title}</h3>
+              <p><strong>문제</strong> {item.problem}</p>
+              <p><strong>수정</strong> {item.change}</p>
+              <p><strong>검증 항목</strong> {item.verification}</p>
+            </article>
+          ))}
         </section>
-
-        <section class="projects block">
-          <div class="section-title"><h2>대표 개인 프로젝트</h2></div>
-          <div class="project-list">
-            {featuredProjects.map((project) => (
-              <article>
-                <h3><a href={`${profile.portfolio}projects/${project.id}/`}>{project.data.name}</a></h3>
-                <em>{project.data.eyebrow}</em>
-                <p>{project.data.summary}</p>
-                <small>{firstVerificationLabel(project)} · {firstSignalResult(project)}</small>
-              </article>
-            ))}
-          </div>
-          <div class="additional-projects">
-            <strong>추가 프로젝트</strong>
-            {additionalProjects.map((project) => (
-              <span>{project.data.name} · {firstVerificationLabel(project)}</span>
-            ))}
-          </div>
-        </section>
-
         <div class="lower-grid block">
           <section>
-            <div class="section-title"><h2>실무 기술 스택</h2></div>
+            <h2>실무 기술 스택</h2>
             <div class="skills">
               {skillGroups.map((group) => <div><strong>{group.label}</strong><p>{group.items.join(' · ')}</p></div>)}
             </div>
-            <p class="context">개인 프로젝트: {projectSkillGroups.flatMap((group) => group.items).join(' · ')}</p>
           </section>
-          <section>
-            <div class="section-title"><h2>학력</h2></div>
-            <div class="education"><strong>서울과학기술대학교</strong><p>영어영문학 학사</p><span>2018 졸업</span></div>
+          <section class="education">
+            <h2>학력</h2><strong>서울과학기술대학교</strong><p>영어영문학 학사 · 2018 졸업</p>
           </section>
         </div>
-
-        <footer><a href={profile.github}>포트폴리오 · github.com/cyson21</a><span>02 / 02</span></footer>
+        <footer><a href={`${profile.portfolio}portfolio/`}>문제 해결 사례 · cyson21.github.io/portfolio/</a><span>02 / 02</span></footer>
       </section>
     </main>
   </body>
 </html>
-
 <style is:global>
   @page { size: A4; margin: 0; }
-
   * { box-sizing: border-box; }
-
-  html,
-  body { margin: 0; background: #dfe3e1; color: #171a1d; font-family: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif; letter-spacing: 0; }
-
-  body { font-size: 10pt; line-height: 1.55; }
-
+  html, body { margin: 0; background: #e7eaf0; color: #202b3b; font-family: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif; }
+  body { font-size: 9.5pt; line-height: 1.5; }
   a { color: inherit; text-decoration: none; }
-
   main { display: grid; justify-content: center; gap: 10mm; padding-block: 10mm; }
-
-  .sheet { position: relative; width: 210mm; height: 297mm; overflow: hidden; padding: 14mm 15mm 24mm; background: #fff; break-after: page; }
+  .sheet { position: relative; width: 210mm; height: 297mm; padding: 13mm 15mm 24mm; overflow: hidden; background: #fff; break-after: page; }
   .sheet:last-child { break-after: auto; }
-
-  h1,
-  h2,
-  h3,
-  p { margin: 0; overflow-wrap: normal; word-break: keep-all; }
-
-  h1 { margin-top: 1.5mm; font-size: 31pt; line-height: 1.05; }
-  h2 { font-size: 15pt; line-height: 1.25; }
-  h3 { font-size: 11.2pt; line-height: 1.25; }
-
-  .label { color: #1c5d99; font-family: "SFMono-Regular", Consolas, monospace; font-size: 8.5pt; font-weight: 800; letter-spacing: 0.06em; }
-  .block { margin-top: 8mm; }
-
-  .masthead { display: grid; grid-template-columns: 1fr 27mm; gap: 8mm; align-items: center; }
-  .masthead img { width: 27mm; height: 27mm; border: 0.3mm solid #818b86; border-radius: 1.4mm; object-fit: cover; }
-  .role-line { margin-top: 1.5mm; color: #1c5d99; font-size: 9.5pt; font-weight: 800; }
-  .subtitle-line { margin-top: 1mm; color: #4d5752; font-size: 9pt; font-weight: 700; }
-
-  .contact-row { display: flex; gap: 7mm; margin-top: 4mm; padding-block: 3mm; border-block: 0.25mm solid #cbd2cd; color: #4d5752; font-family: "SFMono-Regular", Consolas, monospace; font-size: 8.5pt; font-weight: 700; }
-
-  .summary { display: grid; grid-template-columns: 29mm 1fr; gap: 6mm; }
-  .summary > div > strong { font-size: 10pt; line-height: 1.5; }
-  .summary-list { margin: 2mm 0 0; padding-left: 4.5mm; color: #4d5752; font-size: 9.5pt; line-height: 1.5; }
-  .summary-list li + li { margin-top: 0.8mm; }
-  .summary > div > p { margin-top: 1.8mm; color: #4d5752; font-size: 9.5pt; line-height: 1.5; }
-
-  .section-title { margin-bottom: 2.5mm; }
-
-  .job { border-top: 0.4mm solid #171a1d; }
-  .job > header { display: flex; justify-content: space-between; gap: 8mm; padding-top: 3mm; }
-  .job > header p,
-  .job time { margin-top: 0.7mm; color: #4d5752; font-size: 8.5pt; }
-  .job time { flex: 0 0 auto; font-family: "SFMono-Regular", Consolas, monospace; }
-  .context { margin-top: 2.2mm; color: #4d5752; font-size: 10pt; line-height: 1.55; }
-  .highlight-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4.5mm 6mm; margin-top: 4mm; }
-  .highlight-list > div { min-height: 0; padding-left: 3.5mm; border-left: 0.8mm solid #1c5d99; }
-  .highlight-list strong { font-size: 10pt; }
-  .highlight-list p { margin-top: 1mm; color: #4d5752; font-size: 9.5pt; line-height: 1.5; }
-
-  .sheet--first .highlight-list { grid-template-columns: 1fr; gap: 0; }
-  .sheet--first .block { margin-top: 6mm; }
-  .sheet--first .highlight-list { margin-top: 2.5mm; }
-  .sheet--first .highlight-list > div { display: grid; grid-template-columns: 42mm 1fr; gap: 5mm; padding-block: 2.5mm; border-bottom: 0.25mm solid #cbd2cd; }
-  .sheet--first .highlight-list strong { text-wrap: balance; }
-  .sheet--first .highlight-list p { margin-top: 0; font-size: 9.5pt; line-height: 1.5; }
-
-  footer { position: absolute; right: 15mm; bottom: 14mm; left: 15mm; display: flex; justify-content: space-between; padding-top: 2mm; border-top: 0.25mm solid #cbd2cd; color: #4d5752; font-family: "SFMono-Regular", Consolas, monospace; font-size: 7.5pt; line-height: 1.5; }
-
-  .page-header { display: flex; justify-content: space-between; padding-bottom: 3mm; border-bottom: 0.4mm solid #171a1d; }
+  h1, h2, h3, p { margin: 0; word-break: keep-all; }
+  h1 { font-size: 29pt; line-height: 1.1; }
+  h2 { font-size: 14pt; margin-bottom: 3mm; }
+  h3 { font-size: 11pt; line-height: 1.4; }
+  .block { margin-top: 5mm; }
+  .masthead { display: flex; align-items: center; justify-content: space-between; }
+  .masthead img { width: 23mm; height: 23mm; object-fit: cover; border: 0.25mm solid #c7cdd6; border-radius: 50%; }
+  .role-line { margin-top: 2mm; font-weight: 700; color: #315579; }
+  .contact-row { display: flex; flex-wrap: wrap; gap: 5mm; margin-top: 3mm; padding-block: 2mm; border-block: 0.25mm solid #c7cdd6; font-size: 8pt; }
+  .summary strong { font-size: 10pt; }
+  .summary p { margin-top: 1.5mm; color: #4d5968; }
+  .job { border-top: 0.3mm solid #596779; padding-top: 2mm; }
+  .job + .job { margin-top: 5mm; }
+  .job header { display: flex; justify-content: space-between; gap: 6mm; }
+  .job header p, .job time { font-size: 8.5pt; color: #4d5968; }
+  .job time { flex-shrink: 0; }
+  .context { margin-top: 1.5mm; color: #4d5968; }
+  .highlight-list { margin: 2mm 0 0; padding-left: 4mm; }
+  .highlight-list li { padding-left: 0.5mm; margin-top: 1.5mm; }
+  .highlight-list strong { font-size: 9pt; }
+  .highlight-list p { color: #4d5968; font-size: 9pt; }
+  .page-header { display: flex; justify-content: space-between; padding-bottom: 3mm; border-bottom: 0.3mm solid #596779; }
   .page-header strong { font-size: 12pt; }
-  .page-header span { color: #4d5752; font-family: "SFMono-Regular", Consolas, monospace; font-size: 8.5pt; }
-  .block--second { margin-top: 7mm; }
-  .highlight-list--compact { grid-template-columns: repeat(3, 1fr); gap: 4mm; }
-  .highlight-list--compact > div { min-height: 0; padding-block: 1mm; }
-
-  .project-list { border-top: 0.4mm solid #171a1d; }
-  .project-list article { padding-block: 4mm; border-bottom: 0.25mm solid #cbd2cd; }
-  .project-list h3 { display: inline; margin-right: 2.4mm; font-size: 11pt; }
-  .project-list em { color: #1c5d99; font-size: 8.5pt; font-style: normal; font-weight: 800; }
-  .project-list p { margin-top: 1mm; color: #4d5752; font-size: 9.5pt; line-height: 1.5; }
-  .project-list small { display: block; margin-top: 0.8mm; color: #187a55; font-size: 8.5pt; font-weight: 750; }
-  .additional-projects { display: flex; flex-wrap: wrap; gap: 1.4mm 5mm; padding: 3mm 0; border-bottom: 0.25mm solid #cbd2cd; color: #4d5752; font-size: 8.5pt; }
-  .additional-projects strong { color: #171a1d; }
-
-  .lower-grid { display: grid; grid-template-columns: 1.35fr 0.65fr; gap: 10mm; margin-top: 7mm; }
-  .lower-grid > section { min-width: 0; }
-  .skills { border-top: 0.4mm solid #171a1d; }
-  .skills > div { display: grid; grid-template-columns: 34mm 1fr; gap: 3mm; padding-block: 3mm; border-bottom: 0.25mm solid #cbd2cd; }
-  .skills strong { font-size: 9.5pt; }
-  .skills p { color: #4d5752; font-size: 9.5pt; line-height: 1.5; }
-  .education { padding-top: 2.5mm; border-top: 0.4mm solid #171a1d; }
-  .education strong { font-size: 10pt; }
-  .education p,
-  .education span { display: block; margin-top: 1mm; color: #4d5752; font-size: 9.5pt; }
-
-  @media screen {
-    .sheet { box-shadow: 0 6mm 14mm rgba(23, 26, 29, 0.12); }
-  }
-
+  .page-header span, .section-context { color: #4d5968; font-size: 8.5pt; }
+  .work-case-list article { padding-block: 4mm; border-bottom: 0.25mm solid #c7cdd6; }
+  .work-case-list article p { margin-top: 1.5mm; color: #4d5968; }
+  .work-case-list article strong { color: #202b3b; }
+  .lower-grid { display: grid; grid-template-columns: 1fr; gap: 5mm; }
+  .skills { border-top: 0.3mm solid #596779; }
+  .skills > div { display: grid; grid-template-columns: 32mm 1fr; gap: 4mm; padding-block: 1.6mm; border-bottom: 0.25mm solid #c7cdd6; }
+  .skills p { color: #4d5968; }
+  .education p { margin-top: 1mm; color: #4d5968; }
+  footer { position: absolute; bottom: 13mm; left: 15mm; right: 15mm; display: flex; justify-content: space-between; border-top: 0.25mm solid #c7cdd6; padding-top: 2mm; color: #4d5968; font-size: 7.5pt; }
   @media screen and (max-width: 839px) {
     main { display: block; padding: 12px; }
-    .sheet {
-      width: 100%;
-      height: auto;
-      min-height: 297mm;
-      margin-bottom: 16px;
-      overflow: visible;
-      padding: 24px 20px 64px;
-    }
-    .masthead { grid-template-columns: minmax(0, 1fr) 84px; gap: 16px; }
-    .masthead > div,
-    .summary > div,
-    .job > header > div { min-width: 0; }
-    .masthead img { width: 84px; height: 84px; }
-    .contact-row { flex-wrap: wrap; gap: 8px 20px; }
-    .contact-row a { overflow-wrap: anywhere; }
-    .summary { grid-template-columns: 1fr; gap: 12px; }
-    .focus-list article,
-    .sheet--first .highlight-list > div { grid-template-columns: 1fr; gap: 6px; }
-    .highlight-list,
-    .highlight-list--compact,
-    .lower-grid { grid-template-columns: 1fr; }
-    footer { right: 20px; bottom: 20px; left: 20px; }
+    .sheet { width: 100%; height: auto; min-height: 297mm; margin-bottom: 16px; padding: 24px 20px 64px; overflow: visible; }
+    .job header { flex-wrap: wrap; }
+    .skills > div { grid-template-columns: 1fr; gap: 4px; }
+    footer { left: 20px; right: 20px; bottom: 20px; }
   }
-
-  @media print {
-    html,
-    body { background: #fff; }
-    main { display: block; padding: 0; }
-    .sheet { box-shadow: none; }
-    .sheet:not(.sheet--first) { padding-top: 12mm; }
-    .sheet:not(.sheet--first) .page-header { padding-bottom: 2mm; }
-    .sheet:not(.sheet--first) .block--second { margin-top: 3mm; }
-    .sheet:not(.sheet--first) .section-title { margin-bottom: 1mm; }
-    .sheet:not(.sheet--first) .job > header { padding-top: 2mm; }
-    .sheet:not(.sheet--first) .context { margin-top: 1mm; }
-    .sheet:not(.sheet--first) .highlight-list { margin-top: 2mm; }
-    .sheet:not(.sheet--first) .highlight-list--compact { gap: 2mm; }
-    .sheet:not(.sheet--first) .highlight-list--compact > div { padding-block: 0.5mm; }
-    .sheet:not(.sheet--first) .projects { margin-top: 4mm; }
-    .sheet:not(.sheet--first) .project-list article { padding-block: 1mm; }
-    .sheet:not(.sheet--first) .project-list p { margin-top: 0.5mm; }
-    .sheet:not(.sheet--first) .project-list small { margin-top: 0.4mm; }
-    .sheet:not(.sheet--first) .additional-projects { padding-block: 1mm; }
-    .sheet:not(.sheet--first) .lower-grid { margin-top: 4mm; }
-    .sheet:not(.sheet--first) .skills > div { padding-block: 1mm; }
-    .sheet:not(.sheet--first) .education { padding-top: 1.5mm; }
-    .sheet:not(.sheet--first) .education p,
-    .sheet:not(.sheet--first) .education span { margin-top: 0.5mm; }
-  }
+  @media print { html, body { background: #fff; } main { display: block; padding: 0; } }
 </style>

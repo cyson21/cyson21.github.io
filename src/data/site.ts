@@ -73,6 +73,29 @@ const experienceRecords = [
   },
 ] as const;
 
+export const professionalSummary = 'B2B 리테일 교육 플랫폼과 공공·실시간 데이터 서비스의 API 개발·운영을 담당했습니다. 운영 장애와 데이터 오류의 원인을 추적하고, 로직 수정과 통합·회귀 검증까지 수행합니다.';
+
+export const resumeWorkCases = [
+  {
+    title: '정책 변경 중 시작된 학습의 상태 충돌 처리',
+    problem: '화면 진입 후 학습이 시작되면, 처음 조회한 대기 상태를 기준으로 정책을 변경하는 경로에서 진행 상태와 완료 조건이 어긋날 수 있었습니다.',
+    change: '저장 시 서버에서 학습 상태를 다시 확인하도록 수정했습니다. 대기 상태인 경우에만 완료 조건을 재생성하고, 학습이 시작된 경우에는 변경을 차단했습니다.',
+    verification: '대기 상태의 정상 재생성과 학습 시작 후 변경 차단을 단위·통합 테스트 및 Stage QA의 검증 항목으로 정리했습니다.',
+  },
+  {
+    title: 'UTC 저장과 KST 알림 기준의 날짜 경계 정리',
+    problem: '등록 시각과 학습 시작일의 날짜 경계에 따라 알림이 하루 밀리거나 누락되는 경로를 추적했습니다.',
+    change: '학습 시작일을 KST 기준으로 해석하고, 등록 시점에 따른 당일·다음 날 발송 조건을 분리했습니다. 정기 발송 시각도 KST 기준으로 정리했습니다.',
+    verification: '고정·무제한 과정, 날짜 경계와 시작일 경과 후 등록의 조합을 회귀 테스트 및 Stage QA의 검증 항목으로 정리했습니다.',
+  },
+  {
+    title: '분산된 JPA 테스트 설정을 공통 환경으로 통합',
+    problem: '모듈별 수동 JPA 설정과 중복 컨테이너 때문에 테스트의 데이터 접근 환경을 일관되게 유지하기 어려웠습니다.',
+    change: '공통 DataJpaTest와 Testcontainers MySQL 환경으로 이관했습니다. 테넌트 데이터 소스와 저장소 스캔 범위를 정리하고 수동 설정·중복 컨테이너를 제거했습니다.',
+    verification: '모듈 스모크 테스트와 기존 QueryDSL·UTC/KST 회귀 시나리오를 유지하도록 검증 범위를 정리했습니다.',
+  },
+];
+
 export const resumeIntro = '2021년부터 백엔드 개발·운영을 담당해 왔으며, Java·Spring Boot를 주력으로 사용합니다.';
 
 export const resumeHighlights = [
