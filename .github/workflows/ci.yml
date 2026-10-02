@@ -1,52 +1,59 @@
 name: portfolio-web-ci
-
 on:
   workflow_dispatch:
   pull_request:
-
+  schedule:
+    - cron: '37 3 * * 1'
 concurrency:
   group: portfolio-web-ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-
 jobs:
   preview:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      scope: ${{ steps.plan.outputs.scope }}
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Select checks before installing tools
+        id: plan
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: node scripts/ci-test-scope.mjs "$BASE_SHA" --github >> "$GITHUB_OUTPUT"
       - uses: pnpm/action-setup@v6
+        if: steps.plan.outputs.scope != 'docs'
         with:
           version: 11.1.3
       - uses: actions/setup-node@v7
+        if: steps.plan.outputs.scope != 'docs'
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - run: pnpm exec playwright install --with-deps chromium
+        if: steps.plan.outputs.scope != 'docs'
+      - run: pnpm exec playwright install --with-deps --only-shell chromium
+        if: steps.plan.outputs.scope != 'docs'
       - run: sudo apt-get update && sudo apt-get install -y poppler-utils
-      - run: pnpm build
-      - name: External link smoke (PR)
+        if: steps.plan.outputs.scope != 'docs'
+      - name: Common checks and preview build
+        run: pnpm build
+        if: steps.plan.outputs.scope != 'docs'
+      - name: External link smoke when link sources change
+        if: steps.plan.outputs.external_links == 'true'
         run: node scripts/check-external-links.mjs --mode=smoke --report artifacts/external-links-smoke.json
-        # Permanent broken (401/404/…) fails the job; 403/429/transient soft warnings only.
-      - name: Select browser checks
-        id: browser-scope
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: echo "scope=$(node scripts/ci-test-scope.mjs "$BASE_SHA")" >> "$GITHUB_OUTPUT"
-      - name: Content browser checks
-        if: steps.browser-scope.outputs.scope == 'content'
-        run: pnpm test:e2e:content
+      - name: Selected browser checks
+        if: steps.plan.outputs.scope != 'docs'
+        run: pnpm test:e2e:changed
         env:
           CI: true
-      - name: Full browser regression
-        if: steps.browser-scope.outputs.scope == 'full'
-        run: pnpm test:e2e
-        env:
-          CI: true
+          CI_BROWSER_PLAN: ${{ steps.plan.outputs.plan }}
       - uses: actions/upload-artifact@v7
-        if: always()
+        if: always() && steps.plan.outputs.scope != 'docs'
         with:
           name: preview-quality-artifacts
           path: |
@@ -61,33 +68,41 @@ jobs:
             artifacts/playwright
             playwright-report
             !artifacts/playwright/**/*.zip
-
+          if-no-files-found: ignore
   release:
+    needs: preview
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     env:
       PUBLIC_RELEASE: 'true'
       PUBLIC_SITE_URL: https://cyson21.github.io
     steps:
       - uses: actions/checkout@v7
+        if: needs.preview.outputs.scope != 'docs'
       - uses: pnpm/action-setup@v6
+        if: needs.preview.outputs.scope != 'docs'
         with:
           version: 11.1.3
       - uses: actions/setup-node@v7
+        if: needs.preview.outputs.scope != 'docs'
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile --prefer-offline
-      - run: pnpm exec playwright install --with-deps chromium
+        if: needs.preview.outputs.scope != 'docs'
       - run: sudo apt-get update && sudo apt-get install -y poppler-utils
-      - run: pnpm build
-      - run: pnpm test:e2e:release
+        if: needs.preview.outputs.scope != 'docs'
+      - name: Release output checks (common checks already passed in preview)
+        if: needs.preview.outputs.scope != 'docs'
+        run: pnpm build:raw && pnpm test:privacy && pnpm test:links
+      - name: Release HTTP checks without a browser installation
+        if: needs.preview.outputs.scope != 'docs'
+        run: pnpm test:e2e:release
         env:
           CI: true
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
-          name: release-playwright-artifacts
-          path: |
-            artifacts/playwright
-            playwright-report
+          name: release-test-artifacts
+          path: playwright-report
+          if-no-files-found: ignore

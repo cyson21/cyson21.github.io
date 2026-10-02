@@ -1,142 +1,62 @@
-# Portfolio Web 릴리스 Runbook
+# Portfolio Web 검증·릴리스 Runbook
 
-## 목적
+## 로컬 기본
 
-Preview의 검색 제외 상태와 공개 릴리스의 HTTPS 메타데이터를 별도로 검증하고, 승인된 `dist/`만 배포합니다. 로컬 성공, CI 성공, 실제 배포 확인은 각각 독립된 증거로 기록합니다.
+- 문구·콘텐츠·개별 화면: 최종 편집 후 `pnpm verify:local` 한 번. 정적 빌드·공개 안전성·내부 링크와 변경 영역의 최소 확인만 수행한다.
+- 문서만 변경: `git diff --check`. 사이트 빌드·브라우저 검사 없음.
+- 로직 변경: 관련 단위 테스트의 실패→통과만 확인한다.
+- 검사 도구·CI 변경: 관련 단위 테스트와 구문·diff 확인. 실제 workflow와 전체 검사는 PR CI에 맡긴다.
+- CI 검사 전체를 로컬에서 선행·반복하지 않는다. 실패 재현이나 명시적 전체 검증 요청이 있을 때만 범위를 넓힌다.
+- 사용자 요청 없이 로컬 미리보기를 열거나 링크를 제공하지 않는다.
 
-## 사전 조건
+Node 22, pnpm 11.1.3을 사용한다. 공개 안전 검사에는 pdftotext 또는 지원되는 Python PDF 추출기가 필요하다. pdftotext 경로는 `PDFTOTEXT_BIN`으로 지정할 수 있다.
 
-- 저장소가 보호 브랜치가 아닌 작업 브랜치에 있어야 합니다.
-- Node 22와 `pnpm@11.1.3`을 사용합니다.
-- Playwright Chromium이 준비되어 있어야 합니다.
-- `pdftotext`가 PATH에 있거나 `PDFTOTEXT_BIN`에 실행 파일 절대경로가 설정되어 있어야 합니다.
-- `PUBLIC_SITE_URL`은 경로, query, fragment, 인증 정보가 없는 공개 HTTPS origin이어야 합니다.
+## PDF 갱신
 
-```bash
-export PDFTOTEXT_BIN=/absolute/path/to/pdftotext
-```
+PDF 내용이 바뀐 경우에만 수행한다.
 
-## 이력서 PDF 갱신
-
-PDF 내용이 바뀐 경우에만 이 단계를 수행합니다.
-
-1. Preview를 실행합니다.
-
-   ```bash
-   pnpm build:raw
-   pnpm preview --host 127.0.0.1
-   ```
-
-2. 다른 터미널에서 PDF를 생성합니다. 생성기는 HTTP 성공 상태, `main > .sheet` 2개, 글꼴 준비를 확인한 뒤 임시 PDF를 최종 경로로 원자적으로 교체합니다.
-
-   ```bash
-   pnpm generate:resume
-   ```
-
-3. 페이지 수, A4 크기, 텍스트 잘림, 겹침, 글자 가독성을 실제 렌더로 확인합니다.
-
-   ```bash
-   pdfinfo public/downloads/resume.pdf
-   pdftoppm -png public/downloads/resume.pdf tmp/resume
-   ```
-
-4. SHA-256을 확인하고 검토 승인 뒤 `src/data/public-assets.json`의 이력서 항목과 `approvedAt`을 갱신합니다.
-
-   ```bash
-   shasum -a 256 public/downloads/resume.pdf
-   ```
-
-5. 공개 안전 검사를 다시 실행합니다. manifest를 갱신하지 않았거나 PDF 텍스트 추출이 실패하면 이 단계는 실패해야 합니다.
-
-   ```bash
-   pnpm build:raw
-   pnpm test:privacy
-   ```
-
-## Preview 검증
+1. 인쇄 소스 편집을 정리한 뒤 `pnpm build:raw` 한 번으로 출력한다. 내부 검증 서버를 실행한다.
+2. `pnpm generate:resume`으로 PDF를 한 번 생성한다. 생성기는 HTTP 상태, 인쇄 시트 2개, 글꼴 준비를 확인하고 원자적으로 교체한다.
+3. `pdfinfo`로 A4 2페이지를 확인하고, 바뀐 페이지만 `pdftoppm`으로 렌더해 잘림·겹침을 확인한다.
+4. `src/data/public-assets.json`의 PDF SHA-256과 승인일을 갱신한다.
+5. 그 사이 인쇄 소스가 바뀌지 않았다면 재빌드하지 않고 PDF만 dist에 동기화한다.
 
 ```bash
-pnpm build
-pnpm test:e2e
+node --input-type=module -e "import {copyFileSync} from 'node:fs'; copyFileSync('public/downloads/resume.pdf', 'dist/downloads/resume.pdf')"
+pnpm test:privacy
+pnpm test:links
 ```
 
-확인 결과:
+다른 페이지 소스도 추가로 바뀌었다면 `pnpm verify:local`로 최종 출력한다. PDF·manifest 변경만으로 타입·전체 단위·브라우저 검사를 다시 실행하지 않는다.
 
-- 일반 페이지와 404가 `noindex,nofollow`입니다.
-- `robots.txt`가 전체 경로를 차단합니다.
-- `sitemap.xml`에 `<loc>`가 없습니다.
-- 웹 이력서, 인쇄 화면 2페이지, 공개 PDF 2페이지가 모두 열립니다.
-- 승인되지 않은 `public/` 파일과 manifest SHA 불일치가 없습니다.
-- 구조·접근성·오버플로 검사는 모든 공개 경로를 대상으로 합니다.
-- 전체 페이지 시각 기준은 대표 레이아웃을 320px, 768px, 1440px에서 비교합니다.
+## PR CI
 
-## 외부 링크와 axe best-practice
+보호 브랜치의 필수 잡 이름 `preview`, `release`를 유지한다.
 
-내부 링크는 `pnpm test:links`(dist HTML)로 검사합니다. 외부 GitHub/demo/evidence URL은 콘텐츠 소스 기준의 별도 경로입니다.
+- 문서만 변경: 두 잡은 성공으로 종료하고 도구 설치·사이트 검사·Pages 재배포를 생략한다.
+- 페이지·콘텐츠·알려진 관련 테스트 변경: 영향받은 경로와 관련 테스트 선택. 접근성·이미지·앵커·잘림·겹침·가로 넘침을 검사한다. 320·959·960·1440px를 사용한다.
+- 공통 레이아웃·컴포넌트·스타일·의존성·설정·검사 인프라·알 수 없는 변경: 전체 회귀를 수행한다.
+- 주간·수동 CI: 전체 회귀와 전체 화면 폭·경계 검사.
 
-```bash
-pnpm test:external-links:smoke   # PR: host 단위 smoke
-pnpm test:external-links:full    # 주간: 수집된 HTTPS URL 전체
-```
+preview에서 타입·콘텐츠 불변식·테마·단위 검사와 브라우저 검사를 한 번 수행한다. Chromium headless shell은 preview에만 설치한다. release는 preview 성공에 의존하며 공통 검사를 반복하지 않는다. 공개 모드 정적 빌드·공개 안전성·내부 링크와 APIRequestContext 기반 HTTP 검사는 release에서 수행한다. 정적 산출물의 robots·canonical·sitemap·404·PDF 링크와 해시를 검사하므로 release에 브라우저 설치가 필요하지 않다.
 
-네트워크 정책:
+공개 모드는 `PUBLIC_RELEASE=true`, `PUBLIC_SITE_URL=https://cyson21.github.io`를 사용한다. preview 출력은 검색 제외이며 공개 출력과 따로 생성한다. origin 유효성 단위 검사는 preview 공통 검사에 유지한다.
 
-- HEAD 우선, 거부 시 `Range: bytes=0-0` GET fallback 후 response body cancel, redirect follow, timeout·bounded retry
-- 실패로 취급: 영구 broken(401/404/410 등)·invalid URL·ENOTFOUND
-- 경고만(exit 0): 403/429, 일시적 5xx·timeout·EAI_AGAIN
-- 예외는 `config/external-link-allowlist.json`에 url 또는 host, reason, expiresOn 필수
+## 외부 링크·진단
 
-axe:
+- 링크 소스 변경 PR: host 단위 외부 링크 smoke.
+- 주간 외부 링크 workflow: 수집된 HTTPS URL 전체.
+- 영구 broken·잘못된 URL은 실패, 403·429·일시적 오류는 경고. 예외에는 이유·만료일이 필요하다.
+- WCAG A/AA는 차단 검사로 유지한다. axe best-practice 정책·JSON 보고서도 유지한다.
+- 실패한 검사에는 화면·추적·JSON 근거를 남긴다. 성공 결과는 상태만 확인하고 화면을 다시 일괄 검토하지 않는다.
 
-- WCAG A/AA는 계속 blocking
-- best-practice는 성공 실행에서도 Playwright attach와 `artifacts/playwright/axe-best-practice-*.json`으로 보존
-- 미승인 경고는 `config/axe-best-practice-policy.json`의 per-route budget과 ruleId/selector/reason/expiresOn allowlist로 관리
+## 배포
 
-## Release 검증
-
-실제 origin을 사용해 정적 산출물을 새로 만듭니다. Preview의 `dist/`를 재사용하지 않습니다.
-
-```bash
-export PUBLIC_RELEASE=true
-export PUBLIC_SITE_URL=https://portfolio.example.com
-pnpm build
-pnpm test:e2e:release
-```
-
-확인 결과:
-
-- 일반 페이지는 `index,follow,max-image-preview:large`와 HTTPS canonical을 가집니다.
-- 404는 공개 모드에서도 `noindex,nofollow`입니다.
-- `robots.txt`의 Sitemap URL과 `sitemap.xml`의 모든 `<loc>`가 같은 HTTPS origin을 사용합니다.
-- 인쇄 이력서와 404는 sitemap에서 제외됩니다.
-
-`PUBLIC_RELEASE=true`에서 origin이 누락되거나 HTTP, 로컬 주소, 경로 포함 URL이면 빌드 실패가 정상입니다.
-
-## 배포와 확인
-
-1. 보호된 `main`에는 `preview`, `release`가 모두 성공한 PR만 병합합니다.
-2. 병합 뒤 Pages workflow가 같은 `main` tree를 공개 환경으로 다시 빌드합니다. `pnpm build`에 포함된 타입·콘텐츠·단위·공개 안전·링크 검사를 통과한 `dist/`만 배포합니다.
-3. 전체 E2E는 PR에서 한 번 수행하며 Pages workflow에서는 반복하지 않습니다.
-4. 배포 식별자, commit SHA, 공개 origin, 배포 시각을 릴리스 기록에 남깁니다.
-5. 실제 배포 주소에서 다음을 다시 확인합니다.
-
-   ```bash
-   curl -fsS https://portfolio.example.com/robots.txt
-   curl -fsS https://portfolio.example.com/sitemap.xml
-   curl -fsSI https://portfolio.example.com/downloads/resume.pdf
-   ```
-
-6. 브라우저에서 홈, 프로젝트 상세, 웹 이력서, 존재하지 않는 경로를 확인합니다.
-7. 검색 도구 등록이나 캐시 purge는 실제 배포 확인 뒤 별도 단계로 수행합니다.
+1. 사이트 변경 PR은 preview·release가 모두 성공한 뒤 squash merge한다.
+2. Pages는 병합된 main을 공개 모드로 다시 빌드·검사한다. 병합 결과가 PR head와 다를 수 있으므로 이 공통 검사는 유지한다. 브라우저 회귀는 반복하지 않는다.
+3. 문서만 변경한 push에는 Pages를 실행하지 않는다. 수동 배포는 항상 실행한다.
+4. 실제 공개 origin에서 robots·sitemap·PDF 다운로드 상태만 확인한다. 기능 변경이 있으면 해당 경로만 확인한다. 모든 페이지를 다시 순회하지 않는다.
 
 ## 되돌리기
 
-다음 중 하나라도 발생하면 직전 검증 완료 산출물로 되돌립니다.
-
-- 공개하면 안 되는 문자열이나 자산이 노출됩니다.
-- canonical, robots, sitemap origin이 실제 공개 origin과 다릅니다.
-- 404가 색인 허용 상태입니다.
-- 이력서 PDF가 열리지 않거나 2페이지가 아닙니다.
-- 주요 경로가 404 또는 5xx를 반환합니다.
-
-되돌린 뒤 새 배포 식별자와 확인 결과를 기록하고, 실패 원인을 수정한 새 commit으로 전체 Preview/Release 검증을 다시 수행합니다.
+비공개 문자열·미승인 자산 노출, origin 불일치, 404 색인 허용, PDF 손상·페이지 수 오류, 주요 경로 404/5xx가 있으면 직전 검증 완료 배포로 되돌린다. 수정 후 원인에 해당하는 검사를 실행하며, 공통 코드·배포 설정 문제는 전체 PR CI로 확인한다.
