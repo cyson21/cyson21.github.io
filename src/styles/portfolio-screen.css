@@ -340,3 +340,29 @@
 @media screen and (max-width: 480px) {
   .page .summary-project-facts div { grid-template-columns: 32px minmax(0, 1fr); gap: 8px; }
 }
+
+@media screen {
+  .work-cases { height: auto; }
+  .work-case { padding-block: 28px; border-top: 1px solid var(--line); scroll-margin-top: 90px; }
+  .work-case h3 { font-size: 24px; line-height: 1.45; margin: 0 0 16px; text-wrap: balance; }
+  .work-case p { max-width: 78ch; line-height: 1.8; }
+  .work-case h3, .work-case p, .work-case-facts dd, .cover .lead { word-break: keep-all; overflow-wrap: break-word; }
+  .work-case-facts { display: grid; gap: 20px; margin-block: 24px; }
+  .work-case-facts > div { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 20px; }
+  .work-case-facts dt { font-weight: 650; color: var(--ink); }
+  .work-case-facts dd { margin: 0; line-height: 1.8; overflow-wrap: anywhere; }
+  .work-case-link { margin-top: 24px; }
+  #portfolio-intro .cover-list { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  #portfolio-intro .cover-row { grid-template-columns: minmax(0, 1fr); }
+  #portfolio-intro .cover-group-head { padding-top: 20px; }
+  #work-cases { scroll-margin-top: 90px; }
+}
+@media screen and (max-width: 640px) {
+  .work-case h3 { font-size: 21px; }
+  #work-cases, .work-case { scroll-margin-top: 120px; }
+  .work-case-facts > div { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+}
+@media print {
+  .work-cases { height: auto; overflow: visible; }
+  .work-case { break-inside: avoid; margin-block: 8mm; }
+}
