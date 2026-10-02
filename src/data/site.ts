@@ -112,6 +112,7 @@ export const profile = {
   github: 'https://github.com/cyson21',
   portfolio: 'https://cyson21.github.io/',
   resumePath: '/downloads/resume.pdf',
+  careerDescriptionPath: '/downloads/career-description.pdf',
   updatedAt: siteUpdatedAt,
 } as const;
 

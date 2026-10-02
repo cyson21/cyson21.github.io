@@ -8,11 +8,19 @@ import {
 } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
-const output = resolve(import.meta.dirname, '../public/downloads/resume.pdf');
-const temporaryOutput = resolve(dirname(output), `.resume-${process.pid}-${Date.now()}.tmp.pdf`);
-const sourceUrl = process.env.RESUME_SOURCE_URL?.trim() || 'http://127.0.0.1:4321/resume/print/';
+const documentKind = process.argv[2]?.replace(/^--document=/, '') || 'resume';
+if (!['resume', 'career'].includes(documentKind) || process.argv.length > 3) {
+  throw new Error(`Unknown document: ${documentKind}`);
+}
+const career = documentKind === 'career';
+const filename = career ? 'career-description.pdf' : 'resume.pdf';
+const output = resolve(import.meta.dirname, `../public/downloads/${filename}`);
+const temporaryOutput = resolve(dirname(output), `.${documentKind}-${process.pid}-${Date.now()}.tmp.pdf`);
+const sourceUrl = career
+  ? process.env.CAREER_SOURCE_URL?.trim() || 'http://127.0.0.1:4321/resume/career/'
+  : process.env.RESUME_SOURCE_URL?.trim() || 'http://127.0.0.1:4321/resume/print/';
 const readyMarker = process.env.RESUME_READY_SELECTOR?.trim() || 'main > .sheet';
-const expectedPages = 2;
+const expectedPages = career ? 3 : 2;
 
 mkdirSync(dirname(output), { recursive: true });
 
