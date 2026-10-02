@@ -1,4 +1,4 @@
-const siteUpdatedAt = '2026-10-01';
+const siteUpdatedAt = '2026-10-02';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -24,14 +24,14 @@ const experienceRecords = [
       },
       {
         title: '운영 오류 분석·수정·회귀 검증',
-        description: '운영 장애와 데이터 오류를 재현해 원인을 추적하고 API·DB 로직을 수정했습니다. 상태 변경과 시간대 경계 문제를 다루고 Testcontainers 기반 통합·회귀 테스트를 정리했습니다.',
+        description: '운영 장애와 데이터 오류를 재현해 원인을 추적하고 API·DB 로직을 수정했습니다. 저장 시점 상태 검증, 분산락 기반 배치 제어와 구매 API 트랜잭션 분리, 복합 식별자 처리와 회귀 테스트를 다뤘습니다.',
       },
       {
         title: 'AWS 인프라·CI/CD·배포 운영',
         description: 'AWS EC2·RDS·Lambda·CloudWatch·WAF 기반 배포·모니터링·운영에 참여했습니다. Docker 배포·전환 이슈에 대응하고 CI/CD 파이프라인 안정화와 코드리뷰 기반 배포 품질 관리에 참여했습니다.',
       },
     ],
-    stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'AWS EC2', 'AWS RDS', 'AWS S3', 'AWS Lambda', 'CloudWatch', 'AWS WAF', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
+    stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'Redis', 'ShedLock', 'Redisson', 'RabbitMQ', 'AWS EC2', 'AWS RDS', 'AWS S3', 'AWS Lambda', 'CloudWatch', 'AWS WAF', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
   },
   {
     start: '2021-07',
@@ -57,26 +57,32 @@ const experienceRecords = [
   },
 ] as const;
 
-export const professionalSummary = 'B2B 리테일 교육 플랫폼과 공공·실시간 데이터 서비스의 API를 개발·운영했습니다. 상태 변경·시간대 경계에서 발생한 오류를 추적하고, 서버 로직과 회귀 테스트를 개선했습니다.';
+export const professionalSummary = 'B2B 리테일 교육 플랫폼과 공공·실시간 데이터 서비스의 API를 개발·운영했습니다. 상태 변경, 다중 서버의 배치 중복 실행, 구매 API 락 경합과 데이터 식별자 오류를 분석하고 서버 로직을 수정했습니다.';
 
 export const resumeWorkCases = [
   {
     title: '저장 시점의 상태 변경으로 발생하는 데이터 오류 방지',
     problem: '설정 변경 화면을 연 뒤 관련 작업이 시작되면, 이전 상태를 기준으로 저장하면서 진행 중인 작업에 서로 다른 처리 기준이 적용될 수 있었습니다.',
     change: '저장 직전 서버에서 현재 상태를 다시 확인하도록 수정했습니다. 작업이 시작되기 전에는 새 설정을 적용하고, 이미 시작됐다면 변경을 차단해 기존 데이터를 보호했습니다.',
-    verification: '정상 변경과 진행 중 변경 차단의 단위·통합 테스트, 별도 검증 환경에서의 수동 확인.',
+    verification: '정상 변경·저장 전 상태 전이·필수 입력 누락을 다루는 단위 테스트와 저장된 검증 기록.',
   },
   {
-    title: '시간대 차이로 발생한 알림 지연·누락 수정',
-    problem: '데이터 저장 시간대(UTC)와 국내 서비스 시간대(KST)를 변환할 때 날짜가 달라져, 알림이 하루 늦거나 등록 시점에 따라 발송이 누락되는 경로가 있었습니다.',
-    change: '알림 발송일을 한국 시간 기준으로 계산하도록 통일했습니다. 등록 시각에 따라 당일·다음 날 발송을 구분하고, 이미 지난 시각으로 처리되는 경로를 수정했습니다.',
-    verification: '발송 조건과 날짜 경계를 조합한 재현 사례 4개, 단위·통합 테스트와 별도 검증 환경의 수동 확인.',
+    title: '구매 API의 락 경합과 트랜잭션 경계 조정',
+    problem: '동시 구매 요청에서 주문 저장 중 DB 데드락이 발생했습니다. 결제 처리를 별도 트랜잭션으로 옮기자 앞 단계의 미커밋 상태를 읽는 문제도 드러났습니다.',
+    change: '주문 단위 분산락과 별도 트랜잭션, 락 오류의 제한적 재시도를 적용했습니다. 결제 요청 상태를 먼저 커밋하도록 호출 경계를 조정하고, 재처리 시 결제 완료 상태를 확인했습니다.',
+    verification: '동시 요청·락 예외·결제 완료 재처리 테스트 정의. 저장된 초기 QA 기록의 추가 검증 항목은 별도로 관리.',
   },
   {
-    title: '실제 운영 환경에 맞춘 데이터베이스 테스트 정리',
-    problem: '서비스별로 다른 DB 설정과 중복된 테스트 환경을 사용하고 있었습니다. 실제 운영 DB와 같은 조건에서 오류를 확인할 수 있도록 환경을 통일할 필요가 있었습니다.',
-    change: '공통 테스트용 DB에 운영 환경과 같은 테이블 구조를 적용했습니다. 중복 설정을 제거하고, 데이터 조회와 시간대 변환을 확인하는 기존 테스트를 유지했습니다.',
-    verification: 'DB 기본 동작, 관련 서비스와 API의 기존 기능 유지 여부.',
+    title: '다중 서버에서 동일 배치의 중복 실행 제어',
+    problem: '서버마다 Spring 스케줄러가 실행되면서 같은 배치가 중복 처리됐습니다. 작업 기록에는 조치 전 서버를 한 대로 제한한 임시 대응이 남아 있습니다.',
+    change: 'ShedLock과 Redis 기반 분산락을 스케줄러에 적용해 락을 획득한 서버가 배치를 실행하도록 변경했습니다. 배치별 락 이름과 유지 시간을 설정했습니다.',
+    verification: 'Redis 락 공급자 설정과 여러 스케줄러의 락 적용 커밋. 다중 서버 실행 로그와 운영 개선 수치는 별도 미확인.',
+  },
+  {
+    title: '복합 식별자 누락으로 발생한 삭제·페이지 집계 오류 수정',
+    problem: '같은 사용자의 여러 그룹 데이터를 사용자 ID만으로 구분해 삭제 대상이 누락되고, 조회 제외 조건과 페이지 집계도 실제 행 수와 어긋났습니다.',
+    change: '사용자 ID와 그룹 유형의 복합 식별자를 조회·삭제·컬렉션 동등성에 적용했습니다. 제외 조건을 DB 쿼리로 옮기고 페이지 집계를 맞췄습니다.',
+    verification: '같은 사용자·다른 그룹의 동시 삭제, 일부 그룹 제외와 페이지 경계를 다루는 테스트 및 저장된 검증 기록.',
   },
 ];
 
@@ -92,7 +98,7 @@ export const resumeHighlights = [
 ] as const;
 
 export const resumeClosing =
-  '운영 문제의 재현부터 로직 수정과 회귀 검증까지 연결합니다. 개인 프로젝트에서는 동시성 제어와 이벤트 처리의 실패·복구 흐름을 구현하고 테스트했습니다.';
+  '운영 문제의 재현과 원인 분석을 서버 로직 수정으로 연결합니다. 실무의 상태 보호·락 경합·데이터 정합성 사례를 중심으로 소개합니다.';
 
 export const resumeSummary = [resumeIntro, resumeClosing] as const;
 
@@ -124,6 +130,10 @@ export const skillGroups = [
   {
     label: 'DB·데이터',
     items: ['SQL', 'MySQL', 'MongoDB'],
+  },
+  {
+    label: '분산락·메시징',
+    items: ['Redis', 'ShedLock', 'Redisson', 'RabbitMQ'],
   },
   {
     label: 'Python·웹',

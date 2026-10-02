@@ -4142,61 +4142,89 @@ tr:nth-child(even) td { background: #f8fafc; }
 
   <section class="page cover" id="portfolio-intro" data-page="01">
     <h1>손찬양 · 백엔드 문제 해결 사례</h1>
-    <p class="lead">운영 중 드러난 상태 변경과 시간대 오류를 추적하고, 수정한 동작을 회귀 테스트로 확인하는 백엔드 개발자입니다.<br><span class="compact-note">B2B 리테일 교육 플랫폼의 개발·운영에서 맡았던 문제와 판단을 먼저 소개합니다. 이어서 개인 프로젝트에서 구현한 정합성·권한·실패 복구의 코드와 테스트를 보여드립니다.</span></p>
+    <p class="lead">상태 변경, 락 경합과 데이터 식별자 오류를 분석하고 서버 로직을 수정한 백엔드 개발자입니다.</p>
+    <p class="compact-note">B2B 리테일 교육 플랫폼에서 맡았던 실무 문제와 구현 판단을 먼저 소개합니다. 각 사례는 확인한 코드·업무 기록·테스트의 범위를 함께 설명합니다.</p>
     <div class="cover-list">
       <section class="cover-group">
-        <div class="cover-group-head"><h2>실무에서 해결한 문제</h2></div>
-        <article class="cover-row"><div><h3><a href="#work-policy">저장 직전에 바뀐 상태를 다시 검증하기</a></h3><p>설정 변경과 작업 시작이 겹칠 때 발생하는 데이터 불일치 방지</p></div></article>
-        <article class="cover-row"><div><h3><a href="#work-timezone">날짜는 같아도 발송 시각은 달라지는 문제</a></h3><p>UTC 저장과 KST 서비스의 알림 경계 조건 정리</p></div></article>
-        <article class="cover-row"><div><h3><a href="#work-db-tests">DB 테스트가 운영 환경을 따라가게 만들기</a></h3><p>중복된 JPA 테스트 설정을 공통 환경으로 이관</p></div></article>
+        <div class="cover-group-head"><h2>실무 문제 해결 사례</h2></div>
+        <article class="cover-row"><div><h3><a href="#work-policy">저장 직전에 바뀐 상태를 다시 검증하기</a></h3><p>화면 진입과 저장 사이의 상태 전이로 발생하는 데이터 불일치</p></div></article>
+        <article class="cover-row"><div><h3><a href="#work-purchase">구매 API의 락 경합과 커밋 경계 조정</a></h3><p>동시 결제의 분산락·재시도와 트랜잭션 간 상태 가시성</p></div></article>
+        <article class="cover-row"><div><h3><a href="#work-batch">여러 서버에서 같은 배치가 실행되는 문제</a></h3><p>ShedLock·Redis로 스케줄러의 실행 주체 제어</p></div></article>
+        <article class="cover-row"><div><h3><a href="#work-identity">같은 사용자라도 서로 다른 행으로 처리하기</a></h3><p>조회·삭제·Set 동등성과 페이지 집계를 복합 식별자로 통일</p></div></article>
+        <article class="cover-row"><div><h3><a href="#work-expiry">Redis 만료 이벤트를 여러 서버가 처리하는 문제</a></h3><p>Redisson 락 실행기로 구독 인스턴스 간 경합 제어</p></div></article>
       </section>
       <section class="cover-group">
-        <div class="cover-group-head"><h2>개인 프로젝트로 확장한 검증</h2></div>
-        <article class="cover-row"><div><h3><a href="#portfolio-results">상태 변경·동시 요청·실패 복구</a></h3><p>StockRush, Member Event Consistency와 나머지 프로젝트의 설계·테스트 근거</p></div></article>
-        <article class="cover-row"><div><h3><a href="/experience/">경력과 담당 범위</a></h3><p>이엠캐스트·화이트스캔의 전체 경력과 이력서</p></div></article>
+        <div class="cover-group-head"><h2>함께 볼 자료</h2></div>
+        <article class="cover-row"><div><h3><a href="/experience/">경력과 이력서</a></h3><p>회사별 담당 범위와 대표 실무 사례</p></div></article>
+        <article class="cover-row"><div><h3><a href="#portfolio-results">개인 프로젝트 · 구현과 검증</a></h3><p>상태 보호·동시 요청·실패 복구를 확장한 공개 코드와 테스트</p></div></article>
       </section>
     </div>
-    <p class="compact-note">기타 실험: Fashion Personalization Platform</p>
     <div class="footer-note">손찬양 · Backend Engineering Portfolio</div>
   </section>
-
 
   <section class="page work-cases" id="work-cases" aria-labelledby="work-cases-title">
     <h2 id="work-cases-title">실무에서 해결한 문제</h2>
     <p>이엠캐스트 · B2B 리테일 교육 플랫폼 · 백엔드 개발·운영</p>
-    <p>아래 사례는 회사 업무 기록을 바탕으로 재구성했습니다. 내부 서비스명과 고객 정보는 생략했으며, 공개 코드와 실행 결과는 뒤의 개인 프로젝트에서 확인할 수 있습니다.</p>
+    <p>회사 업무 기록과 로컬 코드·커밋을 대조해 재구성했습니다. 회사 코드와 고객 정보는 공개하지 않으며, 구현 확인·테스트 정의·저장된 검증 기록을 실제 운영 결과와 구분합니다.</p>
     <article class="work-case" id="work-policy">
       <h3>저장 직전에 바뀐 상태를 다시 검증하기</h3>
-      <p>설정 변경 화면을 연 뒤 관련 작업이 시작되면, 이전 상태를 기준으로 저장하면서 진행 중인 작업에 서로 다른 처리 기준이 적용될 수 있었습니다.</p>
+      <p>설정 화면을 연 뒤 관련 작업이 시작되면, 이전 상태를 기준으로 저장하면서 기존 데이터와 변경된 처리 기준이 달라질 수 있었습니다.</p>
       <dl class="work-case-facts">
-        <div><dt>원인 추적</dt><dd>화면을 연 시점과 저장 시점의 상태 차이를 비교하고, 처리 기준이 데이터에 반영되는 흐름을 추적했습니다.</dd></div>
-        <div><dt>판단·수정</dt><dd>서버가 저장 직전에 현재 상태를 다시 확인하도록 수정했습니다. 작업이 시작되기 전에는 새 설정을 적용하고, 이미 시작됐다면 변경을 차단해 기존 데이터를 보호했습니다.</dd></div>
-        <div><dt>담당 범위</dt><dd>서버 재검증 규칙 정의, 저장 차단 경로 구현, 테스트와 별도 검증 환경의 수동 확인.</dd></div>
-        <div><dt>검증 범위</dt><dd>정상 변경과 진행 중 변경 차단을 단위·통합 테스트와 별도 검증 환경의 확인 항목으로 삼았습니다. 작업 기록상 완료된 사례이며, 별도 실행 로그와 운영 개선 수치는 확보하지 않았습니다.</dd></div>
+        <div><dt>원인 추적</dt><dd>화면 진입 시점에만 확인한 상태를 저장 단계가 그대로 사용했습니다. 변경 적용 전의 서버 조회와 후속 데이터 갱신 조건을 함께 확인했습니다.</dd></div>
+        <div><dt>판단·수정</dt><dd>저장 직전 현재 이력을 다시 조회하고, 화면 진입 후 작업이 시작됐다면 변경을 차단했습니다. 입력된 이전 상태가 없으면 요청을 거절하고 후속 데이터 갱신도 같은 조회 기준으로 통일했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>서버 재검증·변경 차단·후속 갱신 조건 수정과 회귀 테스트.</dd></div>
+        <div><dt>검증 근거</dt><dd>상태 유지·저장 전 상태 전이·기존 이력·필수 입력 누락 테스트가 있습니다. 저장된 단위 검증 기록을 검토했으며, 이번 자료 분석에서 회사 테스트를 재실행하지 않았습니다.</dd></div>
+        <div><dt>확인 한계</dt><dd>서버 재조회가 DB 수준의 원자적 동시성 제어를 의미하지는 않습니다. 전체 통합 테스트와 운영 개선 수치는 별도로 확인해야 합니다.</dd></div>
       </dl>
-      <p class="work-case-link">개인 프로젝트에서는 <a href="#stockrush">StockRush</a>의 종료 상태 변경 차단과 <a href="#member-event-consistency">Member Event Consistency</a>의 조건부 갱신으로 상태 보호 규칙을 검증했습니다.</p>
+      <p class="work-case-link">개인 프로젝트의 <a href="#stockrush">StockRush</a>와 <a href="#member-event-consistency">Member Event Consistency</a>에서 상태 보호 규칙의 공개 구현을 확인할 수 있습니다.</p>
     </article>
-    <article class="work-case" id="work-timezone">
-      <h3>날짜는 같아도 발송 시각은 달라지는 문제</h3>
-      <p>데이터 저장 시간대(UTC)와 국내 서비스 시간대(KST)를 변환할 때 날짜가 달라져, 알림이 하루 늦거나 등록 시점에 따라 발송이 누락되는 문제가 있었습니다.</p>
+    <article class="work-case" id="work-purchase">
+      <h3>구매 API의 락 경합과 커밋 경계 조정</h3>
+      <p>동시 구매 요청에서 주문 저장 중 DB 데드락이 발생했습니다. 결제 처리를 별도 트랜잭션으로 옮긴 뒤에는 앞 단계의 미커밋 상태를 읽어 결제가 실패하는 문제도 드러났습니다.</p>
       <dl class="work-case-facts">
-        <div><dt>원인 추적</dt><dd>여러 발송 조건에서 날짜 변환 결과를 비교하고, 당일 등록이 이미 지난 발송 시각으로 처리되는 경로를 확인했습니다.</dd></div>
-        <div><dt>판단·수정</dt><dd>발송일 계산을 한국 시간 기준으로 통일하고 등록 시각에 따라 당일·다음 날 발송을 구분했습니다. 날짜 변환과 예약 발송 시각 계산을 수정했습니다.</dd></div>
-        <div><dt>담당 범위</dt><dd>오류 재현, 날짜 변환·스케줄 계산 수정, 회귀 테스트와 별도 검증 환경의 수동 확인.</dd></div>
-        <div><dt>검증 범위</dt><dd>시간대 경계와 등록 시각을 포함한 재현 시나리오를 확인 항목으로 정리했습니다. 작업 기록상 수정은 완료됐으나 실제 발송 로그와 운영 관찰 결과는 별도로 확보하지 않았습니다.</dd></div>
+        <div><dt>원인 추적</dt><dd>주문 저장·컬렉션 갱신의 락 경합과, 결제 요청 상태를 바꾸는 트랜잭션의 커밋 시점을 함께 확인했습니다. 별도 트랜잭션 도입만으로 호출 전체의 정합성이 보장되지는 않았습니다.</dd></div>
+        <div><dt>판단·수정</dt><dd>주문 단위 분산락과 별도 결제 트랜잭션을 적용했습니다. 결제 요청 상태를 먼저 커밋하도록 호출 경계를 조정하고, 락 관련 오류만 제한적으로 재시도했습니다. 복구 시 이미 결제된 주문은 완료 상태를 확인해 반환했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>구매 API의 분산락 적용과 트랜잭션 범위 조정에 참여했습니다.</dd></div>
+        <div><dt>검증 근거</dt><dd>동시 요청·락 예외·재시도·완료 상태 복구를 다루는 테스트 정의와 후속 테스트 수정 기록이 있습니다. 초기 QA의 미커밋 상태 문제도 기록과 수정 코드에서 확인했습니다.</dd></div>
+        <div><dt>확인 한계</dt><dd>초기 검증 문서에는 예상 테스트 결과와 QA 재검증 권고가 남아 있습니다. 최종 실행 결과와 운영 재발률은 확인되지 않았고, 이벤트 리스너의 별도 트랜잭션 분리는 이 변경에서 확정하지 않았습니다.</dd></div>
       </dl>
-      <p class="work-case-link">날짜 변환과 발송 조건을 함께 확인해야 한다는 사례입니다. 뒤의 개인 프로젝트 결과도 테스트 입력과 관찰된 동작을 함께 적었습니다.</p>
+      <p class="work-case-link"><a href="#stockrush">StockRush</a>는 개인 프로젝트에서 구현한 주문 상태·실패 복구의 보조 자료입니다. 회사 결제 시스템의 실행 증거와 구분합니다.</p>
     </article>
-    <article class="work-case" id="work-db-tests">
-      <h3>DB 테스트가 운영 환경을 따라가게 만들기</h3>
-      <p>이벤트 처리 모듈의 JPA 테스트가 수동 설정과 중복된 컨테이너 환경에 의존해, 다른 모듈과 같은 기준으로 회귀를 확인하기 어려웠습니다.</p>
+    <article class="work-case" id="work-batch">
+      <h3>여러 서버에서 같은 배치가 실행되는 문제</h3>
+      <p>Spring 스케줄러가 서버마다 실행되면서 동일 배치가 두 번 처리됐습니다. 업무 기록에는 수정 전 API 서버를 한 대로 제한한 임시 대응이 남아 있습니다.</p>
       <dl class="work-case-facts">
-        <div><dt>원인 추적</dt><dd>기존 API 모듈의 테스트 기준과 비교하고, 고객별 DB 연결 설정의 충돌과 데이터 접근 코드의 탐색 범위를 확인했습니다.</dd></div>
-        <div><dt>판단·수정</dt><dd>Testcontainers MySQL 기반 공통 테스트 환경에 운영 DB와 같은 테이블 구조를 적용했습니다. 고객별 DB 연결 설정과 데이터 접근 코드의 탐색 범위를 정리하고, 수동 설정·중복 컨테이너를 제거했습니다.</dd></div>
-        <div><dt>담당 범위</dt><dd>공통 테스트 환경과 테스트용 데이터 이관, DB 조회 테스트 재구성과 시간대 변환 테스트 유지.</dd></div>
-        <div><dt>검증 범위</dt><dd>DB 기본 동작, 관련 서비스와 API의 기존 기능 유지 여부가 확인 항목입니다. 작업 기록에서 환경 일원화를 확인했으며, 테스트 출력과 전후 비교 자료는 별도로 확보하지 않았습니다.</dd></div>
+        <div><dt>원인 추적</dt><dd>개별 인스턴스의 스케줄 실행을 전체 서비스의 한 번 실행으로 취급한 것이 원인이었습니다. 각 스케줄러의 실행 지점과 공유 락 설정을 확인했습니다.</dd></div>
+        <div><dt>판단·수정</dt><dd>ShedLock과 Redis 기반 락 공급자를 적용했습니다. 배치별 이름으로 락을 획득한 서버가 작업을 실행하도록 구성하고 최소·최대 유지 시간을 설정했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>배치 중복 실행에 대응해 스케줄러에 공유 Redis 기반 분산락을 적용했습니다.</dd></div>
+        <div><dt>검증 근거</dt><dd>Redis 락 공급자 설정과 여러 스케줄러의 락 적용 변경을 확인했습니다. 기본 유지 시간과 개별 배치 설정을 구분했습니다.</dd></div>
+        <div><dt>확인 한계</dt><dd>다중 서버의 독립 실행 로그와 전후 중복 횟수는 확보하지 않았습니다. 락 만료를 넘긴 작업과 장애 복구까지 정확히 한 번 처리한다고 보장하지 않습니다.</dd></div>
       </dl>
-      <p class="work-case-link">개인 프로젝트의 <a href="#member-event-consistency">동시 요청 검증</a>에서도 DB의 최종 상태를 관찰 대상으로 삼았습니다. 실무의 운영 성과와 개인 프로젝트 테스트 결과는 각각의 범위로 설명합니다.</p>
+      <p class="work-case-link">다음 만료 이벤트 사례도 분산락을 쓰지만, 스케줄러 락과 이벤트 처리 락은 적용 지점과 실패 정책이 다릅니다.</p>
+    </article>
+    <article class="work-case" id="work-identity">
+      <h3>같은 사용자라도 서로 다른 행으로 처리하기</h3>
+      <p>같은 사용자에게 여러 그룹 데이터가 있는데 사용자 ID만으로 구분해, 선택한 삭제 항목 일부가 누락됐습니다. 조회 제외 조건과 페이지 합계도 실제 행 수와 어긋났습니다.</p>
+      <dl class="work-case-facts">
+        <div><dt>원인 추적</dt><dd>사용자 ID만 비교하는 컬렉션 동등성이 다른 그룹을 같은 항목으로 취급했습니다. DB 조회 후의 필터링과 근사 합계가 페이지 경계에서 또 다른 불일치를 만들었습니다.</dd></div>
+        <div><dt>판단·수정</dt><dd>사용자 ID와 그룹 유형을 조합한 식별자를 조회·삭제·동등성에 적용했습니다. 제외 조건을 QueryDSL WHERE 절로 옮겨 조회와 집계 기준을 맞췄습니다. 많은 제외 항목은 POST 본문으로 전달하고 기존 단일 유형 조회는 유지했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>복합 필터 모델, 서버 조회·삭제와 동등성 수정, 페이지 경계·다중 그룹 테스트.</dd></div>
+        <div><dt>검증 근거</dt><dd>같은 사용자·다른 그룹의 Set 보존과 동시 삭제, 일부 그룹 제외, 페이지 경계를 다루는 테스트 및 저장된 검증 기록을 확인했습니다.</dd></div>
+        <div><dt>확인 한계</dt><dd>저장된 테스트 결과를 이번 재실행 결과로 표현하지 않습니다. 중복 요청 제한의 추가 통합 시나리오와 운영 성능 수치는 미확인입니다.</dd></div>
+      </dl>
+      <p class="work-case-link"><a href="#member-event-consistency">Member Event Consistency</a>에서는 개인 프로젝트의 조건부 갱신·동시 요청 결과를 별도로 확인할 수 있습니다.</p>
+    </article>
+    <article class="work-case" id="work-expiry">
+      <h3>Redis 만료 이벤트를 여러 서버가 처리하는 문제</h3>
+      <p>여러 애플리케이션이 같은 Redis 만료 이벤트를 받아 동일한 후속 작업을 실행했습니다. 스케줄러 중복과 달리 이벤트 수신 뒤의 처리 지점에서 제어가 필요했습니다.</p>
+      <dl class="work-case-facts">
+        <div><dt>원인 추적</dt><dd>이벤트 발행이 한 번이어도 구독 인스턴스마다 콜백이 실행됐습니다. 만료 키별 처리 경로를 공통 락 실행기로 감싸는 변경을 확인했습니다.</dd></div>
+        <div><dt>판단·수정</dt><dd>이벤트 키에 대한 Redisson 락을 얻은 뒤 작업을 실행하도록 적용했습니다. 미획득 시 스킵 또는 예외를 구분하고, 인터럽트 상태 복원과 자신이 보유한 락의 해제를 처리했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>만료 이벤트 리스너에 공통 분산락 실행기를 적용하는 작업을 담당했습니다.</dd></div>
+        <div><dt>검증 근거</dt><dd>공통 실행기와 여러 만료 이벤트 리스너의 호출 경로, 락 키·스킵·예외를 다루는 테스트 정의를 확인했습니다.</dd></div>
+        <div><dt>확인 한계</dt><dd>종료 중이거나 Redis 클라이언트를 사용할 수 없으면 락 없이 실행하는 경로가 있습니다. 기본 락 유효 시간과 장애 시 중복 가능성을 고려해야 하며, 이벤트 누락 복구나 exactly-once 보장을 주장하지 않습니다.</dd></div>
+      </dl>
+      <p class="work-case-link">실무에서 확인한 실패 정책을 설명한 사례입니다. 이후 개인 프로젝트는 별도의 정합성·재처리 실험 범위로 읽어주세요.</p>
     </article>
   </section>
   <section class="page complete-sheet" id="portfolio-results" data-page="02">

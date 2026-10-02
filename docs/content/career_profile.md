@@ -1,6 +1,6 @@
 # 손찬양 경력 근거 프로필
 
-기존 이력서·웹 콘텐츠와 공개 프로젝트 코드에서 확인한 정보를 정리한 작업용 문서입니다. 2026-10-01 사용자 설명에 따라 이엠캐스트의 서비스 도메인을 B2B 리테일 교육 플랫폼으로 확정했습니다. 그 외 정보는 기존 기록을 기준으로 합니다. 최종 확인일: 2026-10-01.
+기존 이력서·웹 콘텐츠와 공개 프로젝트 코드에서 확인한 정보를 정리한 작업용 문서입니다. B2B 리테일 교육 플랫폼의 업무 기록과 사용자가 제공한 회사 소스 사본을 대조해 실무 사례를 보강했습니다. 원문 코드와 내부 링크는 공개하지 않습니다. 최종 확인일: 2026-10-02.
 
 ## 1. 기본 정보
 
@@ -51,13 +51,13 @@ Java·Spring Boot 백엔드 개발자. API 개발·운영, 데이터 정합성, 
 
 ## 8. 기술
 
-- 실무: Java, Spring Boot, Spring Data JPA, QueryDSL, SQL, MySQL, MongoDB, Python, Django, FastAPI, AWS, Docker, Git, JUnit, Testcontainers, REST Docs.
+- 실무: Java, Spring Boot, Spring Data JPA, QueryDSL, SQL, MySQL, MongoDB, Redis, ShedLock, Redisson, RabbitMQ, Python, Django, FastAPI, AWS, Docker, Git, JUnit, Testcontainers, REST Docs.
 - 개인 프로젝트: PostgreSQL, Redis, Kafka, RabbitMQ, pgvector, Spring WebFlux, Keycloak, Debezium 등. 기술별 구현·검증 범위는 프로젝트 설명과 연결 코드 기준.
 - 실제 모델 호출, 장기 장애·부하·고가용성 검증은 코드가 있다고 완료 경험으로 쓰지 않는다.
 
 ## 9. 업무 영역
 
-B2B 리테일 교육 플랫폼 API와 공공·실시간 데이터 처리. 커머스·RAG·LLM 정책·CDC·추천은 개인 프로젝트 영역.
+B2B 리테일 교육 플랫폼 API와 주문·결제, 공공·실시간 데이터 처리. 별도 커머스 Saga·RAG·LLM 정책·CDC·추천은 개인 프로젝트 영역.
 
 ## 10. 협업과 리더십
 
@@ -70,6 +70,8 @@ StockRush, Member Event Consistency, Enterprise Policy RAG, AI Gateway, CDC Data
 ## 17. 이력서에 사용할 근거
 
 실무는 API 설계·개발, 버전 전환, 운영 오류 분석·수정·회귀 검증, 데이터 파이프라인과 배포 참여를 중심으로 쓴다. 개인 프로젝트에서는 중복 이벤트, 종료 상태 변경 차단, 5회 발행 실패 처리, 동시 보상 8건 중 1건 반영, 잔액 100에서 60씩 두 번 차감 시 잔액 40, 수량 3개 쿠폰에 요청 8건 중 3건 발급, 문서 5건 중 허용 3건 검색 등 테스트 조건을 함께 제시한다.
+
+대표 실무는 저장 시점 상태 재검증, 구매 API의 락 경합·커밋 경계, ShedLock·Redis 기반 배치 실행 제어, 복합 식별자 기반 조회·삭제·페이지 집계의 네 사례로 정리한다. 포트폴리오에는 Redisson 기반 Redis 만료 이벤트 제어를 추가한다. 시간대와 테스트 환경 일원화는 보조 근거로 보존한다. 상세 주장 경계는 [실무 사례 검토](work-case-review.md)에 기록했다.
 
 ## 18. 미확인 항목과 주장 한계
 
