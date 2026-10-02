@@ -27,7 +27,7 @@ import { careerCasePages } from '../../data/career-description';
               <header><h3>{experience.company}</h3><p>{experience.period} · {experience.role}</p></header>
               <p class="context">{experience.context}</p>
               <ul>{experience.responsibilities.map(item => <li><strong>{item.title}</strong><p>{item.description}</p></li>)}</ul>
-              <p class="stack"><strong>사용 기술</strong> {experience.stack.join(' · ')}</p>
+
             </article>
           ))}
         </section>
@@ -58,7 +58,7 @@ import { careerCasePages } from '../../data/career-description';
   @page { size: A4; margin: 0; }
   * { box-sizing: border-box; }
   html, body { margin: 0; background: #edf1f5; color: #243449; font-family: Pretendard, "Malgun Gothic", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif; }
-  body { font-size: 10.5pt; line-height: 1.55; }
+  body { font-size: 11pt; line-height: 1.55; }
   a { color: #315d88; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
   a:focus-visible { outline: 2px solid #315d88; outline-offset: 4px; }
   ::selection { background: #dce7f3; color: #243449; }
@@ -85,7 +85,7 @@ import { careerCasePages } from '../../data/career-description';
   .job li { margin-top: 1.5mm; }
   .job li p { color: #4b5b70; font-size: 9.5pt; }
   .job li strong { font-size: 10pt; }
-  .stack { margin-top: 2mm; font-size: 8pt; color: #4b5b70; }
+
   .page-header { padding-bottom: 3mm; border-bottom: 0.3mm solid #a7b4c4; }
   .page-header p { margin-top: 1mm; font-size: 9pt; color: #4b5b70; }
   .work-case { margin-top: 5mm; padding-bottom: 4mm; border-bottom: 0.25mm solid #dce3eb; }
@@ -101,7 +101,7 @@ import { careerCasePages } from '../../data/career-description';
     .sheet { width: 100%; height: auto; padding: 24px 20px; margin-bottom: 16px; }
     h1 { font-size: 30px; } h1 span { display: block; font-size: 22px; }
     h2 { font-size: 24px; } h3 { font-size: 21px; } h4 { font-size: 16px; }
-    .job li p, .job li strong, .context, .stack, .summary p { font-size: 16px; }
+    .job li p, .job li strong, .context, .summary p { font-size: 16px; }
     .job header p, .page-header p, .detail-link, .supporting-link { font-size: 14px; }
     .contact-row { gap: 8px 16px; font-size: 14px; }
     .work-case { margin-top: 24px; padding-bottom: 24px; }

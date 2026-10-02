@@ -32,5 +32,9 @@ const details = [
   },
 ] as const;
 
-export const careerCases = resumeWorkCases.map((item, index) => ({ ...item, ...details[index] }));
+export const careerCases = resumeWorkCases.map(item => {
+  const detail = details.find(candidate => candidate.anchor === item.anchor);
+  if (!detail) throw new Error(`Missing career detail: ${item.anchor}`);
+  return { ...item, ...detail };
+});
 export const careerCasePages = [careerCases.slice(0, 2), careerCases.slice(2, 4)];

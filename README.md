@@ -31,7 +31,7 @@ Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트
 
 공개 배포에서는 `PUBLIC_RELEASE=true`, `PUBLIC_SITE_URL`을 설정합니다. PDF 다운로드는 같은 배포에 포함된 `/downloads/resume.pdf`를 사용합니다. 사이트 URL은 경로, query, fragment, 인증 정보가 없는 공개 HTTPS origin이어야 합니다. 공개 모드가 아니면 페이지와 `robots.txt`를 검색 제외 상태로 유지합니다.
 
-통합 HTML은 프로젝트 Markdown과 별도로 관리하므로 문구 변경 시 두 파일을 함께 확인합니다. `generate:portfolio`의 기본 입력은 저장소의 통합 HTML이며 목차·화면 스타일을 다시 적용합니다. 외부 원본을 가져올 때만 `PORTFOLIO_HTML_SOURCE`를 지정합니다. 이력서 PDF는 `/resume/print/`에서 다시 생성하고, 두 공개 자산의 SHA-256도 `public-assets.json`에 반영합니다.
+통합 HTML은 프로젝트 Markdown과 별도로 관리하므로 문구 변경 시 두 파일을 함께 확인합니다. `generate:portfolio`의 기본 입력은 저장소의 통합 HTML이며 목차·화면 스타일을 다시 적용합니다. 외부 원본을 가져올 때만 `PORTFOLIO_HTML_SOURCE`를 지정합니다. 이력서 PDF는 `/resume/print/`에서 다시 생성하고, 공개 자산의 SHA-256도 `public-assets.json`에 반영합니다. 회사 실무 경력기술서는 같은 경력·사례 원본을 공유하며 `src/data/career-description.ts`에서 원인·판단·검증 근거를 확장합니다. `pnpm generate:career`는 `/resume/career/`에서 3쪽 PDF를 생성해 `public/downloads/career-description.pdf`에 저장합니다. [경력기술서 검토](docs/content/career-description-review.md)에 근거와 출력 범위를 기록합니다.
 
 ## 테마
 

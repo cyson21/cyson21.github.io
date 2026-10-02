@@ -17,7 +17,8 @@ PDF 내용이 바뀐 경우에만 수행한다.
 
 1. 인쇄 소스 편집을 정리한 뒤 `pnpm build:raw` 한 번으로 출력한다. 내부 검증 서버를 실행한다.
 2. `pnpm generate:resume`으로 PDF를 한 번 생성한다. 생성기는 HTTP 상태, 인쇄 시트 2개, 글꼴 준비를 확인하고 원자적으로 교체한다.
-3. `pdfinfo`로 A4 2페이지를 확인하고, 바뀐 페이지만 `pdftoppm`으로 렌더해 잘림·겹침을 확인한다.
+   경력기술서는 `pnpm generate:career`로 `/resume/career/`의 3개 시트를 `public/downloads/career-description.pdf`에 출력한다. 서버 주소를 바꿀 때는 `CAREER_SOURCE_URL`을 쓴다. 기존 이력서 출력 대상과 환경변수는 유지한다.
+3. `pdfinfo`로 이력서 A4 2페이지 또는 경력기술서 A4 3페이지를 확인하고, 바뀐 페이지만 `pdftoppm`으로 렌더해 잘림·겹침을 확인한다.
 4. `src/data/public-assets.json`의 PDF SHA-256과 승인일을 갱신한다.
 5. 그 사이 인쇄 소스가 바뀌지 않았다면 재빌드하지 않고 PDF만 dist에 동기화한다.
 
