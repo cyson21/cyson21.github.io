@@ -1,4 +1,4 @@
-const siteUpdatedAt = '2026-10-02';
+const siteUpdatedAt = '2026-10-03';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
