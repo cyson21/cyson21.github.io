@@ -1,12 +1,18 @@
 # 손찬양 | 백엔드 개발자 웹 포트폴리오
 
-Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트 처리와 데이터 흐름 문제를 해결한 프로젝트를 정리했습니다.
+Java·Spring 기반 API 개발·운영과 데이터 처리, 운영 안정화 경험을 정리했습니다. 회사 실무의 담당 범위와 기여를 먼저 소개하고, 개인 프로젝트의 공개 구현은 별도로 제공합니다.
 
 실무에서는 4인 개발팀에서 20개 이상의 기업 고객 서비스를 개발·운영했으며, 아래 공개 저장소의 대표 프로젝트는 개인 프로젝트로 설계·구현·검증한 범위입니다.
 
-[웹 포트폴리오](https://cyson21.github.io/) · [백엔드 문제 해결 사례](https://cyson21.github.io/portfolio/) · [개인 프로젝트](https://cyson21.github.io/projects/) · [이력서 PDF](https://cyson21.github.io/downloads/resume.pdf)
+[웹사이트](https://cyson21.github.io/) · [실무 경력](https://cyson21.github.io/experience/) · [개인 프로젝트](https://cyson21.github.io/projects/)
 
-## 대표 프로젝트
+| 제출 자료 | 내용 | 다운로드 |
+|---|---|---|
+| 이력서 · 2쪽 | 회사별 담당 업무와 핵심 기여 요약 | [PDF](https://cyson21.github.io/downloads/resume.pdf) |
+| 경력기술서 · 3쪽 | 회사 실무의 서비스 맥락, 역할과 주요 기여 | [PDF](https://cyson21.github.io/downloads/career-description.pdf) |
+| 포트폴리오 | 실무 문제 해결 상세와 별도 개인 프로젝트의 코드·테스트 근거 | [HTML](https://cyson21.github.io/portfolio/index.html) |
+
+## 개인 프로젝트 · 공개 구현
 
 | 프로젝트 | 주요 내용 |
 |---|---|
@@ -35,7 +41,7 @@ Java와 Spring을 중심으로 상태 정합성, 부분 실패 복구, 이벤트
 
 ## 테마
 
-공개 포트폴리오 기본 테마는 B `Signal Grid`입니다. B와 C는 한 쌍으로 유지합니다. 시각 변경 시 `public/themes/b.css`와 `public/themes/c.css`를 함께 고칩니다.
+공개 포트폴리오 기본 테마는 B `Quiet Slate`입니다. B와 C는 한 쌍으로 유지합니다. 시각 변경 시 `public/themes/b.css`와 `public/themes/c.css`를 함께 고칩니다.
 
 ## 개발과 검증
 
