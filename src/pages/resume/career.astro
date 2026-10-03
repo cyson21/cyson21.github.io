@@ -58,55 +58,77 @@ import { careerCasePages } from '../../data/career-description';
   @page { size: A4; margin: 0; }
   * { box-sizing: border-box; }
   html, body { margin: 0; background: #edf1f5; color: #243449; font-family: Pretendard, "Malgun Gothic", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif; }
-  body { font-size: 11pt; line-height: 1.55; }
-  a { color: #315d88; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+  body { font-size: 10.5pt; line-height: 1.55; }
+  a { color: #315d88; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; overflow-wrap: anywhere; }
+  a:hover { color: #243449; text-decoration-thickness: 2px; }
   a:focus-visible { outline: 2px solid #315d88; outline-offset: 4px; }
   ::selection { background: #dce7f3; color: #243449; }
   h1, h2, h3, h4, p { margin: 0; word-break: keep-all; overflow-wrap: break-word; }
-  h1 { font-size: 26pt; line-height: 1.3; }
-  h1 span { font-size: 17pt; font-weight: 500; }
-  h2 { font-size: 15pt; line-height: 1.4; }
-  h3 { font-size: 12.5pt; line-height: 1.45; }
-  h4 { font-size: 10.5pt; line-height: 1.55; }
-  .document-actions { max-width: 210mm; margin: 20px auto 0; display: flex; flex-wrap: wrap; gap: 20px; padding: 0 16px; }
-  main { display: grid; justify-content: center; gap: 10mm; padding-block: 6mm 10mm; }
-  .sheet { position: relative; width: 210mm; height: 297mm; padding: 13mm 15mm 22mm; background: #fff; break-after: page; }
+  h1, h2, h3 { text-wrap: balance; }
+  h1 { font-size: 28pt; line-height: 1.2; letter-spacing: -0.02em; }
+  h1 span { font-size: 16pt; font-weight: 500; letter-spacing: 0; margin-left: 2mm; }
+  h2 { font-size: 14pt; line-height: 1.4; }
+  h3 { font-size: 13pt; line-height: 1.4; }
+  h4 { font-size: 9.5pt; line-height: 1.8; font-weight: 600; color: #4b5b70; }
+  .document-actions { max-width: 210mm; margin: 16px auto 0; display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 0 16px; }
+  .document-actions a { display: inline-flex; align-items: center; min-height: 44px; }
+  main { display: grid; justify-content: center; gap: 10mm; padding-block: 4mm 10mm; }
+  .sheet { position: relative; width: 210mm; height: 297mm; padding: 14mm 15mm 22mm; background: #fff; break-after: page; }
   .sheet:last-child { break-after: auto; }
-  .masthead p { margin-top: 2mm; color: #4b5b70; }
-  .contact-row { display: flex; flex-wrap: wrap; gap: 6mm; margin-top: 3mm; padding-block: 2mm; border-block: 0.25mm solid #a7b4c4; font-size: 8.5pt; }
+  .masthead p { margin-top: 2mm; color: #4b5b70; font-size: 10pt; }
+  .contact-row { display: flex; flex-wrap: wrap; gap: 6mm; margin-top: 3mm; padding-bottom: 3mm; border-bottom: 0.25mm solid #a7b4c4; font-size: 8.5pt; }
   .contact-row a { color: #4b5b70; }
   .summary { margin-top: 5mm; }
-  .summary p { margin-top: 1.5mm; }
-  .experience-list { margin-top: 5mm; }
-  .job { margin-top: 3mm; border-top: 0.3mm solid #a7b4c4; padding-top: 2.5mm; }
-  .job header p { margin-top: 0.5mm; color: #4b5b70; font-size: 9pt; }
+  .summary p { margin-top: 2mm; }
+  .experience-list { margin-top: 6mm; }
+  .job { margin-top: 3mm; border-top: 0.25mm solid #dce3eb; padding-top: 3mm; }
+  .job header { display: flex; align-items: baseline; justify-content: space-between; gap: 4mm; }
+  .job header p { color: #4b5b70; font-size: 8.5pt; }
   .context { margin-top: 2mm; }
-  .job ul { margin: 2mm 0 0; padding-left: 4mm; }
-  .job li { margin-top: 1.5mm; }
-  .job li p { color: #4b5b70; font-size: 9.5pt; }
+  .job ul { list-style: none; margin: 2mm 0 0; padding: 0; }
+  .job li { margin-top: 2mm; }
+  .job li p { margin-top: 0.5mm; color: #4b5b70; font-size: 9.5pt; line-height: 1.55; }
   .job li strong { font-size: 10pt; }
-
-  .page-header { padding-bottom: 3mm; border-bottom: 0.3mm solid #a7b4c4; }
-  .page-header p { margin-top: 1mm; font-size: 9pt; color: #4b5b70; }
-  .work-case { margin-top: 5mm; padding-bottom: 4mm; border-bottom: 0.25mm solid #dce3eb; }
-  .work-case section { margin-top: 2mm; }
-  .work-case h4 { display: inline; margin-right: 2mm; }
-  .work-case section p { display: inline; color: #4b5b70; }
-  .detail-link { display: inline-block; margin-top: 2mm; font-size: 8.5pt; }
+  .page-header { padding-bottom: 4mm; border-bottom: 0.25mm solid #a7b4c4; }
+  .page-header h2 { font-size: 20pt; line-height: 1.25; letter-spacing: -0.02em; }
+  .page-header p { margin-top: 2mm; font-size: 9pt; color: #4b5b70; }
+  .work-case { margin-top: 6mm; padding-bottom: 5mm; border-bottom: 0.25mm solid #dce3eb; }
+  .work-case h3 { font-size: 14pt; }
+  .work-case section { display: grid; grid-template-columns: 18mm minmax(0, 1fr); gap: 3mm; margin-top: 2.5mm; }
+  .work-case section p { font-size: 11pt; line-height: 1.6; }
+  .detail-link { display: inline-block; margin: 3mm 0 0 21mm; font-size: 8.5pt; }
   .supporting-link { margin-top: 4mm; font-size: 8.5pt; color: #4b5b70; }
-  footer { position: absolute; bottom: 12mm; left: 15mm; right: 15mm; display: flex; justify-content: space-between; border-top: 0.25mm solid #a7b4c4; padding-top: 2mm; font-size: 8pt; color: #4b5b70; font-variant-numeric: tabular-nums; }
+  footer { position: absolute; bottom: 12mm; left: 15mm; right: 15mm; display: flex; justify-content: space-between; border-top: 0.25mm solid #dce3eb; padding-top: 2mm; font-size: 8pt; color: #4b5b70; font-variant-numeric: tabular-nums; }
   @media screen and (max-width: 839px) {
     body { font-size: 16px; line-height: 1.7; }
     main { display: block; padding: 16px; }
-    .sheet { width: 100%; height: auto; padding: 24px 20px; margin-bottom: 16px; }
-    h1 { font-size: 30px; } h1 span { display: block; font-size: 22px; }
-    h2 { font-size: 24px; } h3 { font-size: 21px; } h4 { font-size: 16px; }
-    .job li p, .job li strong, .context, .summary p { font-size: 16px; }
+    .sheet { width: 100%; height: auto; padding: 28px 24px; margin-bottom: 16px; }
+    h1 { font-size: 32px; } h1 span { display: block; margin: 6px 0 0; font-size: 20px; }
+    h2 { font-size: 23px; } h3 { font-size: 21px; } h4 { font-size: 14px; }
+    .masthead p, .job li p, .job li strong, .context, .summary p { font-size: 16px; }
+    .job header { display: block; }
+    .job header p { margin-top: 6px; }
     .job header p, .page-header p, .detail-link, .supporting-link { font-size: 14px; }
     .contact-row { gap: 8px 16px; font-size: 14px; }
-    .work-case { margin-top: 24px; padding-bottom: 24px; }
-    .work-case section { margin-top: 12px; }
-    footer { position: static; margin-top: 24px; font-size: 12px; }
+    .summary, .experience-list { margin-top: 28px; }
+    .job { margin-top: 20px; padding-top: 20px; }
+    .job li { margin-top: 16px; }
+    .job li p { margin-top: 4px; line-height: 1.7; }
+    .page-header { padding-bottom: 20px; }
+    .page-header h2 { font-size: 28px; }
+    .work-case { margin-top: 28px; padding-bottom: 28px; }
+    .work-case h3 { font-size: 22px; }
+    .work-case section { grid-template-columns: 64px minmax(0, 1fr); gap: 16px; margin-top: 16px; }
+    .work-case section p { font-size: 16px; line-height: 1.7; }
+    .detail-link { margin: 16px 0 0 80px; min-height: 44px; display: inline-flex; align-items: center; }
+    footer { position: static; margin-top: 28px; font-size: 12px; }
+  }
+  @media screen and (max-width: 480px) {
+    main { padding: 12px; }
+    .sheet { padding: 24px 20px; }
+    .work-case section { display: block; }
+    .work-case h4 { margin-bottom: 4px; }
+    .detail-link { margin-left: 0; }
   }
   @media print { html, body { background: #fff; } main { display: block; padding: 0; } .document-actions { display: none; } }
 </style>
