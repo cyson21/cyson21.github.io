@@ -41,10 +41,10 @@ import { careerCasePages } from '../../data/career-description';
               <h3>{item.title}</h3>
               <section><h4>문제</h4><p>{item.problem}</p></section>
               <section><h4>원인 확인</h4><p>{item.cause}</p></section>
-              <section><h4>해결 선택과 이유</h4><p>{item.decision}</p></section>
-              <section><h4>변경한 동작</h4><p>{item.change}</p></section>
+              <section><h4>판단</h4><p>{item.decision}</p></section>
+              <section><h4>수정</h4><p>{item.change}</p></section>
               <section><h4>검증 근거</h4><p>{item.evidence}</p></section>
-              <a class="detail-link" href={`${profile.portfolio}portfolio/#${item.anchor}`}>웹 포트폴리오에서 상세 보기</a>
+              <a class="detail-link" href={`${profile.portfolio}portfolio/#${item.anchor}`}>관련 실무 사례 · 웹 포트폴리오</a>
             </article>
           ))}
           {pageIndex === 1 && <p class="supporting-link">개인 프로젝트의 코드·테스트 근거는 <a href={`${profile.portfolio}projects/`}>cyson21.github.io/projects/</a>에서 확인할 수 있습니다.</p>}

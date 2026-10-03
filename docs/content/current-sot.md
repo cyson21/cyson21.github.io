@@ -20,7 +20,7 @@
 
 ## 경력기술서 추가 · 배포 대기
 
-회사 실무 경력기술서는 site.ts의 경력·제목·문제·변경을 공유하고 career-description.ts에서 원인·판단·검증 근거를 확장한다. 개인 프로젝트는 보조 링크로만 둔다. [근거와 출력 검토](career-description-review.md)에 주장 범위와 생성 결과를 기록했다. A4 3쪽, 149,354 bytes이며 SHA-256은 `D143E07AC48DBFFACFECB0AA108871107DC3F4BA8DA2D3046146B3B21EF391CD`다.
+회사 실무 경력기술서는 site.ts의 경력·제목·문제·변경을 공유하고 career-description.ts에서 원인·판단·검증 근거를 확장한다. 개인 프로젝트는 보조 링크로만 둔다. [근거와 출력 검토](career-description-review.md)에 주장 범위와 생성 결과를 기록했다. A4 3쪽, 151,929 bytes이며 SHA-256은 `960C28A8C0F0E8B23F07F61633F6B923C29CC27D4B8A82099F55F5E9CCB7B1D5`다.
 
 현재 경력기술서는 PR 산출물이며 공개 배포·외부 플랫폼 반영은 대기 상태다. 아래 배포 대조 기록에 새 파일이 배포됐다고 추가하지 않는다.
 
