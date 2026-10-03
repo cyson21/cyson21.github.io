@@ -16,6 +16,7 @@
     "preview": "astro preview",
     "generate:portfolio": "node scripts/sync-public-portfolio.mjs",
     "generate:resume": "node scripts/generate-public-resume.mjs",
+    "generate:career": "node scripts/generate-public-resume.mjs --document=career",
     "test:privacy": "node scripts/check-public-safety.mjs dist",
     "test:links": "node scripts/check-links.mjs dist",
     "test:external-links": "node scripts/check-external-links.mjs --mode=full",
