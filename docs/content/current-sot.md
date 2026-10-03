@@ -1,46 +1,35 @@
 # 이력서·경력기술서·포트폴리오 콘텐츠 SoT
 
-최종 검토: 2026-10-03. 회사 실무를 먼저 소개하고 개인 프로젝트를 구현·검증의 보조 근거로 연결한다. 경력 사실과 수치는 근거가 확인된 범위에서만 작성한다.
+최종 개편: 2026-10-04. 상태: **로컬 생성·검증 완료 / PR 준비 / 미배포**. 기존 공개 URL과 외부 채용 사이트는 개편 전 상태이며 아래 로컬 파일과 같다고 전제하지 않는다.
 
-## 편집 기준
+## 편집 기준과 문서 역할
 
-| 내용 | 원본 | 사용하는 화면·산출물 |
+- 공통 경력 사실·회사별 프로젝트·핵심 기여: `src/data/site.ts`. 웹 경력과 이력서 PDF는 짧은 문안을 공유한다.
+- 경력기술서의 업무 맥락·역할·근거: `src/data/career-description.ts`. 공통 사실을 참조하되 문서에 맞는 깊이로 설명한다.
+- 실무 상세와 개인 프로젝트의 공개 구현: `public/portfolio/index.html`. 같은 사실 변경 시 수동 대조가 필요하다.
+- 근거와 주장 경계: `docs/content/career_profile.md`, `docs/content/batch-messaging-review.md`.
+- 현재 PDF 출력은 `/resume/print/`의 2쪽과 `/resume/career/`의 3쪽이다. 개인 프로젝트는 이력서·경력기술서의 상세 본문에 넣지 않는다.
+
+같은 사례의 재등장은 허용하지만 네 사례의 전체 문단을 모든 문서에 반복하지 않는다. 이력서는 회사별 핵심 기여, 경력기술서는 프로젝트·담당 범위와 주요 기여, 포트폴리오는 판단·흐름·구현·확인 근거를 제공한다.
+
+## 개편 내용
+
+이력서는 최근 회사와 이전 회사에 각 1쪽을 배분했다. 경력기술서는 플랫폼 개발·전환과 운영 / 운영 안정화 / 화이트스캔 프로젝트의 3쪽으로 재구성했다. 이전 회사의 프로젝트·기간·역할은 저장된 경력 기록을 대조해 복원했으며 수치와 새로운 성과를 추가하지 않았다.
+
+포트폴리오는 상태 재검증 → 배치 제어·모니터링 → Member Event Consistency의 별도 개인 구현을 먼저 안내한다. 실무 5개와 개인 프로젝트 6개의 상세·URL·앵커를 유지한다. 개인 프로젝트의 반복 요약을 제거하고 검증 범위를 각 상세에 모았다. `portfolio-results`는 프로젝트 목록이며 이전 `portfolio-capabilities`, `portfolio-scope` 링크는 같은 목록의 앵커로 남긴다.
+
+## 로컬 산출물
+
+| 파일 | SHA-256 | 크기 |
 |---|---|---|
-| 소개·경력·기술·대표 실무 사례 | [site.ts](../../src/data/site.ts) | 홈, 경력·이력서, 인쇄 이력서 |
-| 실무 상세와 개인 프로젝트 근거 | [portfolio/index.html](../../public/portfolio/index.html) | 웹 포트폴리오 |
-| 주장 범위와 근거 | [career_profile.md](career_profile.md), [batch-messaging-review.md](batch-messaging-review.md) | 작성·검수 기준 |
-| PDF 출력 | [print.astro](../../src/pages/resume/print.astro) | [resume.pdf](../../public/downloads/resume.pdf) |
-| 경력기술서 확장 설명 | [career-description.ts](../../src/data/career-description.ts) | 같은 4개 사례의 원인·판단·검증 근거 |
-| 경력기술서 출력 | [career.astro](../../src/pages/resume/career.astro) | [career-description.pdf](../../public/downloads/career-description.pdf), 3쪽 |
-| 공개 파일 승인 해시 | [public-assets.json](../../src/data/public-assets.json) | HTML·PDF 공개 안전성 검사 |
+| `public/portfolio/index.html` | `c13fa43c0f5a38d46195c09f6a9fb6607accf0ee41ebc36dca9d035eda0ed7a9` | 186843 bytes |
+| `public/downloads/career-description.pdf` | `ef352e28fc1f58d6fbee64ecdbea4c15f441c6698ce70b8d7e1b7069f4011d7d` | 148375 bytes |
+| `public/downloads/resume.pdf` | `ee72f40df8b4234b5cb9a4cdad747ddd62527bd37bc6a35d9cc911718fff781e` | 479502 bytes |
 
-이력서에는 상태 재검증, 구매 API 락 경합·트랜잭션 경계, 배치 분산락·모니터링, 복합 식별자 정합성의 대표 4개를 싣는다. 포트폴리오는 같은 4개와 RabbitMQ 비동기 요청·결과 분리의 상세 5개를 싣는다. 이 차이는 문서 역할에 따른 의도된 구성이다. Redis 만료 이벤트는 보조 근거로 보존한다.
+정적 빌드 1회 후 두 PDF를 생성하고 dist에 복사했다. 공개 안전성·내부 링크 검사 통과, PDF 2쪽·3쪽 및 다섯 페이지 시각 검토, PDF 텍스트·링크 추출을 확인했다. 포트폴리오 320·1440px에서 가로 넘침 0과 목차 대상 존재를 확인했다. 목차 생성기 관련 단위 검사 9건이 통과했다. 타입·전체 단위·접근성·반응형·브라우저 회귀는 PR CI에 맡긴다.
 
-내용이 바뀌면 공통 원본과 상세 설명의 사실을 먼저 맞춘다. PDF 내용에 영향을 주는 변경만 인쇄 템플릿에서 재생성하고 공개 자산 해시를 함께 갱신한다. PDF를 직접 편집하거나 과거 생성기 입력에서 최신 제출본을 재생성하지 않는다.
+디자인 탐지 검사 1회를 수행했다. 기존 인쇄·통합 HTML의 색상·크기와 과거 스타일 선언에 advisory/warning이 남아 있으며, 디자인 검사 무경고 통과로 표현하지 않는다. 변경 화면과 PDF의 직접 확인을 별도로 수행했다.
 
-## 현재 경력기술서 · 배포 확인
+## 배포·외부 사이트 상태
 
-회사 실무 경력기술서는 site.ts의 경력·제목·문제·변경을 공유하고 career-description.ts에서 원인·판단·검증 근거를 확장한다. 개인 프로젝트는 보조 링크로만 둔다. [근거와 출력 검토](career-description-review.md)에 주장 범위와 생성 결과를 기록했다. A4 3쪽, 159,762 bytes이며 SHA-256은 `0FDAA6B4BDE729F862B7F14993D3D3C86E2D7ECF79FB79B08B4538DE11D002B3`다.
-
-현재 경력기술서는 공개 PR #60 병합 후 배포된 디자인 개선본이다. 공개 다운로드의 HTTP 200·로컬 해시·크기 일치를 확인했다. 외부 채용 플랫폼 등록본은 확인하거나 갱신하지 않았다.
-
-## 배포 대조 기록
-
-2026-10-03 새 HTTP 응답을 확인했다. 배포 기준 커밋은 `ec49bc2e87c346247e5ec9257ae7646b8d1cb670`, GitHub Pages run `37125130250`은 성공했다.
-
-- 웹 이력서 대표 4개의 제목·문제·수정·검증 16개 필드는 원본·PDF와 일치한다.
-- 배포 포트폴리오 HTML은 로컬 원본과 바이트가 일치한다.
-- 배포 PDF는 로컬 파일과 SHA-256이 일치하며 2쪽, 511,762 bytes이다.
-- PDF SHA-256: `99F3AD1A1F795E307BDD74B674481227B8DA1753A8DA94ACAE3A299B78074967`.
-
-이력서 PDF·경력기술서 PDF·포트폴리오 HTML 모두 새 HTTP 200 응답과 로컬 해시 일치를 확인했다. 경력기술서는 3쪽, 159,762 bytes이며 위 현행 SHA-256과 같다. 포트폴리오 HTML SHA-256은 `2EE2313502B6553E01DBFDAB5DEEA5F459FFE4854EA19029DF23E896FA7557EF`다. 이 문서의 후속 상태 정리는 콘텐츠나 공개 자산을 바꾸지 않는다.
-
-외부 채용 플랫폼 등록본과 별도 GitHub release 첨부 PDF는 이번에 확인하거나 갱신하지 않았다. 공개 웹 다운로드와 동일하다고 전제하지 않는다. 회사 소스·내부 URL·고객 정보·연락처 포함 플랫폼 스냅샷은 이 저장소에 복사하지 않는다.
-
-## 후속 디자인 산출물
-
-기존 경력기술서는 2026-10-03 PR #59 병합 후 Pages run 37101449104에서 배포됐다. 배포 PDF는 151,929 bytes, SHA-256 `960C28A8C0F0E8B23F07F61633F6B923C29CC27D4B8A82099F55F5E9CCB7B1D5`와 일치했으며 HTTP 200이었다. 위 현행 출력 해시는 내용이 같은 impeccable 디자인 개선본이다. 새 디자인은 공개 PR #60 병합 후 Pages run 37125130250에서 배포됐으며 HTTP 200과 위 현행 해시 일치를 확인했다. 외부 채용 플랫폼은 갱신하지 않았다.
-
-## 자동 공유와 독립 편집의 경계
-
-웹 이력서·이력서 PDF·경력기술서는 site.ts의 공통 사실을 직접 공유한다. 경력기술서 확장 설명은 career-description.ts, 포트폴리오 상세는 public/portfolio/index.html의 독립 편집 원본이다. 세 문서의 모든 문장이 자동 동기화되는 구조는 아니다. 공통 사실 수정 시에는 상세 HTML과 경력기술서 확장 설명도 수동 대조한다. PDF는 영향받은 문서만 재생성하고 승인 해시를 갱신한다.
+병합·배포 및 채용 사이트 직접 수정은 이번 범위에서 수행하지 않았다. PDF·HTML의 현재 공개 배포 상태는 직전 2026-10-03 기록이다. 외부 플랫폼은 새 입력문안 준비만 완료했으며 갱신 대기다. 배포 후 실제 HTTP 응답·다운로드 해시를 확인하기 전에는 배포 완료로 바꾸지 않는다.

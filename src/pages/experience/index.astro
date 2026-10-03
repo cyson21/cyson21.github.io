@@ -7,7 +7,6 @@ import {
   experiences,
   profile,
   professionalSummary,
-  resumeWorkCases,
   resumeIntro,
   skillGroups,
 } from '../../data/site';
@@ -28,8 +27,8 @@ if (!currentExperience) {
     <div class="container experience-layout">
       <section class="resume-overview" aria-labelledby="overview-title">
         <div>
-          <p class="eyebrow">프로필 요약</p>
-          <h2 id="overview-title">API 개발부터 운영 오류 수정까지 담당한 백엔드 개발자</h2>
+
+          <h2 id="overview-title">API 개발·운영과 데이터 처리 경험</h2>
           <p class="summary-intro">{resumeIntro}</p>
           <p class="summary-closing">{professionalSummary}</p>
         </div>
@@ -61,7 +60,7 @@ if (!currentExperience) {
             </header>
 
             <section class="responsibilities">
-              <p class="responsibilities-title" role="heading" aria-level="3">담당 업무</p>
+              <p class="responsibilities-title" role="heading" aria-level="3">주요 기여</p>
               <ul>
                 {experience.responsibilities.map((responsibility) => (
                   <li>
@@ -71,20 +70,6 @@ if (!currentExperience) {
                 ))}
               </ul>
             </section>
-
-            {experience === currentExperience && (
-              <section class="work-case-list" aria-labelledby="work-cases-title">
-                <h3 id="work-cases-title">대표 실무 문제 해결</h3>
-                {resumeWorkCases.map((item) => (
-                  <article>
-                    <h4>{item.title}</h4>
-                    <p><strong>문제</strong> {item.problem}</p>
-                    <p><strong>수정</strong> {item.change}</p>
-                    <p><strong>검증 항목</strong> {item.verification}</p>
-                  </article>
-                ))}
-              </section>
-            )}
 
             <div class="experience-stack">
               <span>기술 스택</span>

@@ -1,56 +1,47 @@
 ---
-import { experiences, profile, professionalSummary, resumeIntro } from '../../data/site';
-import { careerCasePages } from '../../data/career-description';
+import { experiences, profile, previousCompanyProjects } from '../../data/site';
+import { careerBusinessWorks, careerPrimaryCases, careerAdditionalCases } from '../../data/career-description';
+const current = experiences[0];
+const previous = experiences[1];
 ---
 <!doctype html>
 <html lang="ko-KR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex,nofollow" />
-    <title>손찬양 경력기술서</title>
-  </head>
+  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex,nofollow" /><title>손찬양 경력기술서</title></head>
   <body>
-    <nav class="document-actions" aria-label="문서 메뉴">
-      <a href="/experience/">경력·이력서</a>
-      <a href="/downloads/career-description.pdf" download>경력기술서 PDF 다운로드</a>
-    </nav>
+    <nav class="document-actions" aria-label="문서 메뉴"><a href="/experience/">경력·이력서</a><a href="/downloads/career-description.pdf" download>경력기술서 PDF 다운로드</a></nav>
     <main>
       <section class="sheet" aria-label="경력기술서 1페이지">
         <header class="masthead"><h1>{profile.name} <span>경력기술서</span></h1><p>{profile.role}</p></header>
         <div class="contact-row"><a href={profile.github}>github.com/cyson21</a><a href={`${profile.portfolio}portfolio/`}>cyson21.github.io/portfolio/</a></div>
-        <section class="summary"><h2>API 개발·운영과 데이터 정합성</h2><p>{resumeIntro}</p><p>{professionalSummary}</p></section>
-        <section class="experience-list" aria-labelledby="career-heading">
-          <h2 id="career-heading">회사별 담당 업무</h2>
-          {experiences.map(experience => (
-            <article class="job">
-              <header><h3>{experience.company}</h3><p>{experience.period} · {experience.role}</p></header>
-              <p class="context">{experience.context}</p>
-              <ul>{experience.responsibilities.map(item => <li><strong>{item.title}</strong><p>{item.description}</p></li>)}</ul>
-
-            </article>
-          ))}
+        <section class="summary"><h2>{current.company}</h2><p class="context">{current.period} · {current.role}</p><p>{current.context}</p><p>API 개발과 플랫폼 전환, 데이터 접근 계층 개선 및 배포·운영을 담당했습니다. 운영 중 발생한 오류는 상태와 데이터 흐름을 확인해 수정했습니다.</p></section>
+        <section class="experience-list"><h2>플랫폼 개발·전환과 운영</h2>
+          {careerBusinessWorks.map(item => <article class="job"><h3>{item.title}</h3><p class="context">{item.detail}</p></article>)}
         </section>
-        <footer><span>손찬양 · 회사 실무 경력기술서</span><span>1 / 3</span></footer>
+        <p class="supporting-link">주요 기술 · Java, Spring Boot, JPA, QueryDSL, MySQL, AWS, Docker</p>
+        <footer><span>손찬양 · 플랫폼 개발·운영</span><span>1 / 3</span></footer>
       </section>
-      {careerCasePages.map((items, pageIndex) => (
-        <section class="sheet" aria-label={`경력기술서 ${pageIndex + 2}페이지`}>
-          <header class="page-header"><h2>대표 실무 문제 해결</h2><p>이엠캐스트 · B2B 리테일 교육 플랫폼</p></header>
-          {items.map(item => (
-            <article class="work-case">
-              <h3>{item.title}</h3>
-              <section><h4>문제</h4><p>{item.problem}</p></section>
-              <section><h4>원인 확인</h4><p>{item.cause}</p></section>
-              <section><h4>판단</h4><p>{item.decision}</p></section>
-              <section><h4>수정</h4><p>{item.change}</p></section>
-              <section><h4>검증 근거</h4><p>{item.evidence}</p></section>
-              <a class="detail-link" href={`${profile.portfolio}portfolio/#${item.anchor}`}>관련 실무 사례 · 웹 포트폴리오</a>
-            </article>
-          ))}
-          {pageIndex === 1 && <p class="supporting-link">개인 프로젝트의 코드·테스트 근거는 <a href={`${profile.portfolio}projects/`}>cyson21.github.io/projects/</a>에서 확인할 수 있습니다.</p>}
-          <footer><span>손찬양 · 회사 실무 경력기술서</span><span>{pageIndex + 2} / 3</span></footer>
-        </section>
-      ))}
+      <section class="sheet" aria-label="경력기술서 2페이지">
+        <header class="page-header"><h2>운영 안정화 기여</h2><p>{current.company} · {current.period} · {current.role}</p></header>
+        {careerPrimaryCases.map(item => (
+          <article class="work-case">
+            <h3>{item.title}</h3>
+            <section><h4>상황</h4><p>{item.problem}</p></section>
+            <section><h4>직접 수행</h4><p>{item.change}</p></section>
+            <section><h4>확인 근거</h4><p>{item.evidence}</p></section>
+            <a class="detail-link" href={`${profile.portfolio}portfolio/#${item.anchor}`}>상세 흐름과 판단 · 웹 포트폴리오</a>
+          </article>
+        ))}
+        <section class="additional-work"><h3>추가 정합성 개선</h3><ul>{careerAdditionalCases.map(item => <li><strong>{item.title}</strong><p>{item.change}</p></li>)}</ul></section>
+        <footer><span>손찬양 · 운영 안정화 기여</span><span>2 / 3</span></footer>
+      </section>
+      <section class="sheet" aria-label="경력기술서 3페이지">
+        <header class="page-header"><h2>공공·실시간 데이터 서비스</h2><p>{previous.company} · {previous.period} · {previous.role}</p></header>
+        <p class="context">{previous.context}</p>
+        <section class="previous-projects">{previousCompanyProjects.map(project => (
+          <article class="job"><header><h3>{project.title}</h3><p>{project.period}</p></header><p class="context">{project.context}</p><p class="project-role">담당 · {project.role}</p><p class="contribution">{project.contribution}</p><p class="project-result">{project.outcome}</p></article>
+        ))}</section>
+        <footer><span>손찬양 · 프로젝트별 담당 범위와 기여</span><span>3 / 3</span></footer>
+      </section>
     </main>
   </body>
 </html>
@@ -92,10 +83,10 @@ import { careerCasePages } from '../../data/career-description';
   .page-header { padding-bottom: 4mm; border-bottom: 0.25mm solid #a7b4c4; }
   .page-header h2 { font-size: 20pt; line-height: 1.25; letter-spacing: -0.02em; }
   .page-header p { margin-top: 2mm; font-size: 9pt; color: #4b5b70; }
-  .work-case { margin-top: 6mm; padding-bottom: 5mm; border-bottom: 0.25mm solid #dce3eb; }
-  .work-case h3 { font-size: 14pt; }
+  .work-case { margin-top: 4mm; padding-bottom: 3mm; border-bottom: 0.25mm solid #dce3eb; }
+  .work-case h3 { font-size: 12pt; }
   .work-case section { display: grid; grid-template-columns: 18mm minmax(0, 1fr); gap: 3mm; margin-top: 2.5mm; }
-  .work-case section p { font-size: 11pt; line-height: 1.6; }
+  .work-case section p { font-size: 9.5pt; line-height: 1.55; }
   .detail-link { display: inline-block; margin: 3mm 0 0 21mm; font-size: 8.5pt; }
   .supporting-link { margin-top: 4mm; font-size: 8.5pt; color: #4b5b70; }
   footer { position: absolute; bottom: 12mm; left: 15mm; right: 15mm; display: flex; justify-content: space-between; border-top: 0.25mm solid #dce3eb; padding-top: 2mm; font-size: 8pt; color: #4b5b70; font-variant-numeric: tabular-nums; }
@@ -129,6 +120,22 @@ import { careerCasePages } from '../../data/career-description';
     .work-case section { display: block; }
     .work-case h4 { margin-bottom: 4px; }
     .detail-link { margin-left: 0; }
+  }
+  .experience-list .job { margin-top: 5mm; padding-top: 4mm; }
+  .experience-list .context { font-size: 10.5pt; line-height: 1.65; }
+  .additional-work { margin-top: 4mm; }
+  .additional-work h3 { font-size: 11pt; }
+  .additional-work ul { margin: 2mm 0 0; padding-left: 4mm; }
+  .additional-work li { margin-top: 2mm; font-size: 9pt; line-height: 1.55; }
+  .additional-work p { color: #4b5b70; }
+  .previous-projects .job { margin-top: 4mm; padding-top: 3mm; }
+  .previous-projects h3 { font-size: 11pt; }
+  .previous-projects .context, .project-role, .contribution, .project-result { margin-top: 1.5mm; font-size: 9.5pt; line-height: 1.55; }
+  .project-role { color: #4b5b70; font-size: 8.5pt; }
+  .project-result { color: #315d88; }
+  @media screen and (max-width: 839px) {
+    .experience-list .context, .previous-projects .context, .project-role, .contribution, .project-result, .additional-work li { font-size: 16px; }
+    .previous-projects h3, .additional-work h3 { font-size: 20px; }
   }
   @media print { html, body { background: #fff; } main { display: block; padding: 0; } .document-actions { display: none; } }
 </style>

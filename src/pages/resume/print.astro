@@ -1,73 +1,38 @@
 ---
-import { experiences, profile, professionalSummary, resumeIntro, resumeWorkCases, skillGroups } from '../../data/site';
+import { experiences, profile, professionalSummary, resumeIntro, skillGroups } from '../../data/site';
 ---
 <!doctype html>
 <html lang="ko-KR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex,nofollow" />
-    <title>손찬양 이력서</title>
-  </head>
+  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex,nofollow" /><title>손찬양 이력서</title></head>
   <body>
     <main>
-      <section class="sheet sheet--first" aria-label="이력서 1페이지">
-        <header class="masthead">
-          <div><h1>{profile.name}</h1><p class="role-line">{profile.role}</p></div>
-          <img src="/media/profile.png" alt="손찬양 프로필 사진" width="100" height="100" />
-        </header>
-        <div class="contact-row">
-          <a href={profile.github}>GitHub · github.com/cyson21</a>
-          <a href={`${profile.portfolio}portfolio/`}>포트폴리오 · cyson21.github.io/portfolio/</a>
-        </div>
-        <section class="summary block">
-          <strong>{resumeIntro}</strong>
-          <p>{professionalSummary}</p>
-        </section>
-        <section class="core-skills block" aria-labelledby="core-skills-title">
-          <h2 id="core-skills-title">실무 기술</h2>
-          <p>{skillGroups.flatMap(group => group.items).join(' · ')}</p>
-        </section>
-        <section class="experience block">
-          <h2>경력</h2>
-          {experiences.map((experience) => (
+      {experiences.map((experience, index) => (
+        <section class={`sheet ${index === 0 ? 'sheet--first' : ''}`} aria-label={`이력서 ${index + 1}페이지`}>
+          {index === 0 ? (
+            <>
+              <header class="masthead"><div><h1>{profile.name}</h1><p class="role-line">{profile.role}</p></div><img src="/media/profile.png" alt="손찬양 프로필 사진" width="100" height="100" /></header>
+              <div class="contact-row"><a href={profile.github}>GitHub · github.com/cyson21</a><a href={`${profile.portfolio}portfolio/`}>포트폴리오 · cyson21.github.io/portfolio/</a></div>
+              <section class="summary block"><strong>{resumeIntro}</strong><p>{professionalSummary}</p></section>
+              <section class="core-skills block"><h2>핵심 실무 기술</h2><p>{skillGroups.flatMap(group => group.items).join(' · ')}</p></section>
+            </>
+          ) : <header class="page-header"><strong>{profile.name}</strong><span>{profile.role}</span></header>}
+          <section class="experience block">
+            <h2>{index === 0 ? '최근 경력 · 주요 기여' : '이전 경력 · 프로젝트별 기여'}</h2>
             <article class="job">
-              <header>
-                <div><h3>{experience.company}</h3><p>{experience.role}</p></div>
-                <time>{experience.period}</time>
-              </header>
+              <header><div><h3>{experience.company}</h3><p>{experience.role}</p></div><time>{experience.period}</time></header>
               <p class="context">{experience.context}</p>
-              <ul class="highlight-list">
-                {experience.responsibilities.map((item) => (
-                  <li><strong>{item.title}</strong><p>{item.description}</p></li>
-                ))}
-              </ul>
+              <ul class="highlight-list">{experience.responsibilities.map(item => <li><strong>{item.title}</strong><p>{item.description}</p></li>)}</ul>
             </article>
-          ))}
-        </section>
-        <footer><span>손찬양 · 이력서</span><span>01 / 02</span></footer>
-      </section>
-      <section class="sheet" aria-label="이력서 2페이지">
-        <header class="page-header"><strong>{profile.name}</strong><span>{profile.role}</span></header>
-        <section class="work-case-list block">
-          <h2>대표 실무 문제 해결</h2>
-          <p class="section-context">이엠캐스트 · B2B 리테일 교육 플랫폼 개발·운영</p>
-          {resumeWorkCases.map((item) => (
-            <article>
-              <h3>{item.title}</h3>
-              <p><strong>문제</strong> {item.problem}</p>
-              <p><strong>수정</strong> {item.change}</p>
-              <p><strong>검증 항목</strong> {item.verification}</p>
-            </article>
-          ))}
-        </section>
-        <div class="lower-grid block">
-          <section class="education">
-            <h2>학력</h2><strong>서울과학기술대학교</strong><p>영어영문학 학사 · 2018 졸업</p>
           </section>
-        </div>
-        <footer><a href={`${profile.portfolio}portfolio/`}>문제 해결 사례 · cyson21.github.io/portfolio/</a><span>02 / 02</span></footer>
-      </section>
+          {index === 1 && (
+            <>
+              <section class="education block"><h2>학력</h2><strong>서울과학기술대학교</strong><p>영어영문학 학사 · 2018 졸업</p></section>
+              <section class="document-links block"><h2>상세 자료</h2><p><a href={`${profile.portfolio}resume/career/`}>경력기술서 · 회사별 담당 범위와 기여</a></p><p><a href={`${profile.portfolio}portfolio/`}>포트폴리오 · 실무 사례와 개인 프로젝트의 공개 구현</a></p></section>
+            </>
+          )}
+          <footer><span>손찬양 · 이력서</span><span>{index + 1} / 2</span></footer>
+        </section>
+      ))}
     </main>
   </body>
 </html>
@@ -100,9 +65,9 @@ import { experiences, profile, professionalSummary, resumeIntro, resumeWorkCases
   .job time { flex-shrink: 0; }
   .context { margin-top: 1.5mm; color: #4d5968; }
   .highlight-list { margin: 2mm 0 0; padding-left: 4mm; }
-  .highlight-list li { padding-left: 0.5mm; margin-top: 1.5mm; }
-  .highlight-list strong { font-size: 9pt; }
-  .highlight-list p { color: #4d5968; font-size: 9pt; }
+  .highlight-list li { padding-left: 0.5mm; margin-top: 4mm; }
+  .highlight-list strong { font-size: 10pt; }
+  .highlight-list p { margin-top: 1mm; color: #4d5968; font-size: 10pt; line-height: 1.6; }
   .page-header { display: flex; justify-content: space-between; padding-bottom: 3mm; border-bottom: 0.3mm solid #596779; }
   .page-header strong { font-size: 12pt; }
   .page-header span, .section-context { color: #4d5968; font-size: 8.5pt; }
@@ -113,6 +78,7 @@ import { experiences, profile, professionalSummary, resumeIntro, resumeWorkCases
   .skills { border-top: 0.3mm solid #596779; }
   .skills > div { display: grid; grid-template-columns: 32mm 1fr; gap: 4mm; padding-block: 1.6mm; border-bottom: 0.25mm solid #c7cdd6; }
   .skills p { color: #4d5968; }
+  .document-links p { margin-top: 2mm; color: #4d5968; }
   .education p { margin-top: 1mm; color: #4d5968; }
   footer { position: absolute; bottom: 13mm; left: 15mm; right: 15mm; display: flex; justify-content: space-between; border-top: 0.25mm solid #c7cdd6; padding-top: 2mm; color: #4d5968; font-size: 7.5pt; }
   @media screen and (max-width: 839px) {
