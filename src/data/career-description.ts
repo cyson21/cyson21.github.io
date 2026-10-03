@@ -39,9 +39,11 @@ export const careerCases = resumeWorkCases.map(item => {
 });
 export const careerPrimaryCases = ['work-batch', 'work-purchase'].map(anchor => careerCases.find(item => item.anchor === anchor)!);
 export const careerAdditionalCases = ['work-policy', 'work-identity'].map(anchor => careerCases.find(item => item.anchor === anchor)!);
+const currentExperience = experiences[0];
+if (!currentExperience) throw new Error('경력기술서에는 현재 회사 경력이 필요합니다.');
 export const careerBusinessWorks = [
-  { ...experiences[0].responsibilities[0], detail: '기업 고객의 요구사항을 API와 조회·저장 동작으로 구현했습니다. 관리자 기능 개편에서 기존 데이터와 처리 흐름을 확인하고 JPA·QueryDSL·MySQL 기반 데이터 접근을 수정했습니다.' },
-  { ...experiences[0].responsibilities[1], detail: '기존 버전의 API·DB와 기능 영향 범위를 점검하면서 전환 작업에 참여했습니다. 레거시 코드와 데이터 접근 구조를 정리하고 기존 기능의 통합·회귀 경로를 확인했습니다.' },
+  { ...currentExperience.responsibilities[0], detail: '기업 고객의 요구사항을 API와 조회·저장 동작으로 구현했습니다. 관리자 기능 개편에서 기존 데이터와 처리 흐름을 확인하고 JPA·QueryDSL·MySQL 기반 데이터 접근을 수정했습니다.' },
+  { ...currentExperience.responsibilities[1], detail: '기존 버전의 API·DB와 기능 영향 범위를 점검하면서 전환 작업에 참여했습니다. 레거시 코드와 데이터 접근 구조를 정리하고 기존 기능의 통합·회귀 경로를 확인했습니다.' },
   { title: '데이터 정합성·운영 오류 대응', description: '운영 장애와 데이터 오류를 재현하고 원인을 추적했습니다.', detail: '서버 로그와 DB 기록을 중심으로 상태·조회·저장 경로를 확인하고 API·DB 로직을 수정했습니다. 저장 시점 검증, 식별 기준 통일, 락과 트랜잭션 경계 조정 등 문제에 맞는 변경을 적용했습니다.' },
-  { ...experiences[0].responsibilities[5], detail: 'EC2·RDS·Lambda·CloudWatch·WAF 기반 운영과 Docker 배포·전환 이슈 대응에 참여했습니다. CI/CD 파이프라인 안정화와 코드리뷰 기반 배포 품질 관리에 참여하며 배포 전 주요 기능을 확인했습니다.' },
+  { ...currentExperience.responsibilities[5], detail: 'EC2·RDS·Lambda·CloudWatch·WAF 기반 운영과 Docker 배포·전환 이슈 대응에 참여했습니다. CI/CD 파이프라인 안정화와 코드리뷰 기반 배포 품질 관리에 참여하며 배포 전 주요 기능을 확인했습니다.' },
 ];

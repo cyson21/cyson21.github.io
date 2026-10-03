@@ -3,6 +3,7 @@ import { experiences, profile, previousCompanyProjects } from '../../data/site';
 import { careerBusinessWorks, careerPrimaryCases, careerAdditionalCases } from '../../data/career-description';
 const current = experiences[0];
 const previous = experiences[1];
+if (!current || !previous) throw new Error('경력기술서에는 현재·이전 회사 경력이 필요합니다.');
 ---
 <!doctype html>
 <html lang="ko-KR">
