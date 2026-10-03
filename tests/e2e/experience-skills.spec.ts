@@ -17,14 +17,14 @@ test('experience page presents professional skills without promoting personal pr
 
   await expect(professionalSkills.locator(':scope > div')).toHaveText([
     'Java·SpringJavaSpring BootSpring Data JPAQueryDSL',
-    'DB·데이터SQLMySQLMongoDB',
+    'DB·데이터SQLMySQLPostgreSQLMongoDB',
     '분산락·메시징RedisShedLockRedissonRabbitMQ',
     'Python·웹PythonDjangoFastAPI',
     'AWS·인프라AWSDocker',
     '형상관리·검증GitJUnitTestcontainersREST Docs',
   ]);
   await expect(projectSkills).toHaveCount(0);
-  await expect(page.locator('.work-case-list article')).toHaveCount(4);
+  await expect(page.locator('.work-case-list article')).toHaveCount(0);
   await expect(professionalSkills).not.toContainText('Kafka');
   await expect(professionalSkills).toContainText('RabbitMQ');
 });

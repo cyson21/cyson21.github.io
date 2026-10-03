@@ -201,3 +201,7 @@ Not canonized as a general rule: B headings currently use slight negative tracki
 The integrated screen uses a continuous1100px reading container, linear project summaries and anchor navigation. At900px and below identity and evidence stack into one column. Metadata moves above each case study, and body evidence uses16–17px text with1.65 line height. Code remains expanded at13px. Original print page geometry stays independent. See `.impeccable/briefs/portfolio.md` for scope and verification.
 
 Integrated document sections now share the project card treatment: white surface, 1px slate boundary, 6px radius, 32px desktop / 20px 16px mobile padding. Introduction, results, capabilities, project details and validation scope use this same outer container; interior rows retain single dividers. Narrow summary fact labels use 32px plus 8px gap to preserve readable body width.
+
+## Document structure revision · 2026-10-04
+
+The existing Quiet Slate identity is retained. Portfolio introduction follows one vertical reading path. The personal project index contains six short linked entries; repeated results, capabilities and scope summaries are consolidated into each project detail. The two-page resume dedicates one page to each employer. The three-page career description presents current platform work, operational contributions and previous-company projects. Print geometry and the independent screen styles remain separate.

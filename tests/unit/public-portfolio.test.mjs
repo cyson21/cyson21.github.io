@@ -134,3 +134,16 @@ test('integrated reading layout keeps one main landmark across regeneration', as
     assert.match(html, /<div class="case-main"><h2>Evidence<\/h2><\/div>/);
   }
 });
+
+test('reading navigation only links to retained sections and preserves their anchors', async () => {
+  const { applyReadingLayout } = await import('../../scripts/portfolio-reading-layout.mjs');
+  const source = '<body><section class="page cover" id="portfolio-intro" data-page="01">Intro</section><section class="page work-cases" id="work-cases">Work</section><section class="page complete-sheet" id="portfolio-results" data-page="02">Index</section><section class="page case-page" id="member-event-consistency" data-page="05">Code</section></body>';
+  for (const html of [applyReadingLayout(source), applyReadingLayout(applyReadingLayout(source))]) {
+    const nav = html.match(/<nav[^>]*>[\s\S]*?<\/nav>/)[0];
+    assert.doesNotMatch(nav, /portfolio-capabilities|portfolio-scope|#stockrush/);
+    assert.match(nav, /href="#member-event-consistency"/);
+    for (const [, anchor] of nav.matchAll(/href="#([^"]+)"/g)) {
+      assert.ok(html.includes(`id="${anchor}"`), `missing navigation target: ${anchor}`);
+    }
+  }
+});
