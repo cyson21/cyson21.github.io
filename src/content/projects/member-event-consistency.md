@@ -5,7 +5,7 @@ publicationState: public
 name: Member Event Consistency
 domain: Backend
 eyebrow: 동시 요청 제어
-summary: 회원 보상·포인트·쿠폰의 동시 요청을 처리하는 백엔드입니다. PostgreSQL 제약·잠금·조건부 갱신을 최종 보호 장치로 두고, Redis 잠금과 RabbitMQ 처리 경로에서 정합성을 비교했습니다.
+summary: 회원 보상·포인트·쿠폰의 동시 요청을 처리하는 백엔드입니다. PostgreSQL 제약·잠금·조건부 갱신으로 중복 지급과 초과 발급·차감을 막고, Redis 락과 RabbitMQ 처리 방식의 동시 요청 결과를 비교했습니다.
 cardEvidence:
   implementation: 중복 보상은 유니크 제약으로, 포인트는 조건부 UPDATE로, 쿠폰은 행 잠금과 남은 수량 조건으로 막습니다.
   result: PostgreSQL Testcontainers 테스트에서 보상 요청 8건 중 1건만 반영됐고, 잔액 100에서 60씩 두 번 차감하면 1건만 성공했습니다.
@@ -21,7 +21,7 @@ stack:
 problem: 제어 없이 처리하면 첫 로그인 보상이 두 번 나가고, 쿠폰이 준비한 수량보다 많이 발급되고, 포인트가 마이너스가 됩니다. 반대로 회원 ID 하나로 전부 잠그면 한 사람에게 요청이 몰릴 때 다 같이 느려집니다.
 responsibilities:
   - 첫 로그인 보상, 선착순 쿠폰 발급, 포인트 차감 API를 만들었습니다.
-  - DB 보호 조건을 공통으로 유지한 채 Redis 잠금과 RabbitMQ 처리 경로를 구성하고 결과를 비교했습니다.
+  - DB 제약·갱신 조건을 공통으로 유지한 채 Redis 잠금과 RabbitMQ 처리 경로를 구성하고 결과를 비교했습니다.
   - 방식별 결과를 나란히 볼 수 있는 조회 화면을 붙였습니다.
 flow:
   normal:
@@ -61,9 +61,9 @@ decisions:
   - title: 마지막 방어선은 DB
     choice: 유니크, CHECK 제약과 조건부 UPDATE, 행 잠금으로 DB가 잘못된 값을 받지 않게 합니다.
     alternative: Redis 분산 락만 믿기
-    reason: Redis 락은 만료되거나 Redis가 죽으면 풀립니다. 그때도 DB가 막아 주면 데이터는 안전합니다.
+    reason: Redis 락 만료나 장애로 동시 요청이 들어와도 DB 제약과 갱신 조건으로 중복·초과 처리를 막도록 했습니다.
   - title: 잠금은 필요한 곳에만
-    choice: 보상은 회원별, 쿠폰은 캠페인별 Redis 잠금을 사용하고 DB 보호 조건은 유지합니다.
+    choice: 보상은 회원별, 쿠폰은 캠페인별 Redis 잠금을 사용하고 DB 제약·갱신 조건은 유지합니다.
     alternative: 회원 ID 하나로 모든 작업을 줄 세우기
     reason: 포인트 차감과 쿠폰 발급은 서로 상관이 없는데 같은 락을 기다릴 이유가 없습니다.
   - title: 몰리는 캠페인은 큐로
