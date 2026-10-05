@@ -28,8 +28,8 @@ if (!current || !previous) throw new Error('경력기술서에는 현재·이전
             <h3>{item.title}</h3>
             <section><h4>상황</h4><p>{item.problem}</p></section>
             <section><h4>직접 수행</h4><p>{item.change}</p></section>
-            <section><h4>확인 근거</h4><p>{item.evidence}</p></section>
-            <a class="detail-link" href={`${profile.portfolio}portfolio/#${item.anchor}`}>상세 흐름과 판단 · 웹 포트폴리오</a>
+            <section><h4>확인 내용</h4><p>{item.evidence}</p></section>
+            <a class="detail-link" href={`${profile.portfolio}portfolio/#${item.anchor}`}>수정 내용과 테스트 · 웹 포트폴리오</a>
           </article>
         ))}
         <section class="additional-work"><h3>추가 정합성 개선</h3><ul>{careerAdditionalCases.map(item => <li><strong>{item.title}</strong><p>{item.change}</p></li>)}</ul></section>
@@ -39,7 +39,7 @@ if (!current || !previous) throw new Error('경력기술서에는 현재·이전
         <header class="page-header"><h2>공공·실시간 데이터 서비스</h2><p>{previous.company} · {previous.period} · {previous.role}</p></header>
         <p class="context">{previous.context}</p>
         <section class="previous-projects">{previousCompanyProjects.map(project => (
-          <article class="job"><header><h3>{project.title}</h3><p>{project.period}</p></header><p class="context">{project.context}</p><p class="project-role">담당 · {project.role}</p><p class="contribution">{project.contribution}</p><p class="project-result">{project.outcome}</p></article>
+          <article class="job"><header><h3>{project.title}</h3><p>{project.period}</p></header><p class="context">{project.context}</p><p class="project-role">담당 · {project.role}</p><p class="contribution">{project.contribution}</p></article>
         ))}</section>
         <footer><span>손찬양 · 프로젝트별 담당 범위와 기여</span><span>3 / 3</span></footer>
       </section>

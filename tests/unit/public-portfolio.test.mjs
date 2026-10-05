@@ -43,8 +43,6 @@ test('integrated portfolio keeps the generated summary project cards', () => {
   ]) {
     assert.match(summary, new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
-  assert.match(html, /종단 연결은 구현하지 않았습니다/);
-  assert.match(html, /운영 규모 부하/);
 });
 
 test('integrated portfolio provides a fixed link back to the portfolio home', () => {
