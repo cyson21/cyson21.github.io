@@ -1,4 +1,4 @@
-const siteUpdatedAt = '2026-10-06';
+const siteUpdatedAt = '2026-10-14';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -53,7 +53,7 @@ const experienceRecords = [
       { title: '저장 시점의 상태 재검증', description: '화면을 연 뒤 관련 작업이 시작된 경우 저장 직전 서버에서 상태를 다시 조회해 변경을 차단했습니다. 후속 데이터 갱신에도 같은 상태 조회를 사용했습니다.' },
       { title: '배치 중복 제어·실패 및 누락 모니터링', description: 'ShedLock·Redis 분산락을 적용했습니다. 별도 개선으로 고객사·배치별 상태·처리 건수·실행 시간을 집계하고 예정 시각 1시간 뒤 Slack으로 실패·누락을 알렸습니다.' },
       { title: '구매 API 락 경합·트랜잭션 개선', description: '주문 단위 분산락을 적용하고 결제 처리를 별도 트랜잭션으로 분리했습니다. 결제 요청 상태를 먼저 커밋하고, 락 오류만 제한적으로 재시도하도록 수정했습니다. 재처리 시 결제 완료 여부를 확인했습니다.' },
-      { title: 'AWS 인프라·CI/CD·배포 운영', description: 'EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환에 참여했습니다. CI/CD 파이프라인 안정화와 코드리뷰 기반 배포 품질 관리에 참여했습니다.' },
+      { title: 'AWS 인프라·CI/CD·배포 운영', description: 'EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환에 참여했습니다. CI/CD 개선 작업과 코드리뷰에도 참여했습니다.' },
     ],
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'Redis', 'ShedLock', 'Redisson', 'RabbitMQ', 'AWS EC2', 'AWS RDS', 'AWS S3', 'AWS Lambda', 'CloudWatch', 'AWS WAF', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
   },
@@ -106,11 +106,11 @@ export const resumeHighlights = [
   '운영 장애·데이터 오류 재현, 원인 분석과 API·DB 로직 수정',
   'JPA·QueryDSL 데이터 접근 계층 개선과 통합·회귀 테스트',
   'B2B 교육 플랫폼 버전 전환의 영향 범위 점검과 레거시 코드 정리',
-  'AWS 인프라 운영과 CI/CD 파이프라인 안정화, Docker 기반 배포',
+  'AWS 인프라 운영·CI/CD 개선 참여와 Docker 배포',
 ] as const;
 
 export const resumeClosing =
-  '서버 로그와 DB 기록으로 운영 오류의 원인을 찾고 API·DB 로직을 수정했습니다. 저장 시점 검증, 구매 API의 락 경합, 배치 중복 실행 사례를 소개합니다.';
+  '서버 로그와 DB 기록으로 원인을 찾아 저장 시점의 상태 불일치, 구매 API의 락 경합, 배치 중복 실행 문제를 수정했습니다.';
 
 export const resumeSummary = [resumeIntro, resumeClosing] as const;
 

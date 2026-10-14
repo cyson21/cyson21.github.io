@@ -5,7 +5,7 @@ publicationState: public
 name: CDC Data Platform
 domain: Data
 eyebrow: CDC 이벤트 처리 프로토타입
-summary: DB 변경 수집, 이벤트 처리 이력과 실패 재처리를 구현한 CDC 프로토타입입니다. 원천 메타데이터로 중복을 식별하며, 수집·관리 API·로컬 적재는 각각 검증한 독립 구성요소입니다.
+summary: CDC 이벤트 중복 저장을 막고 실패 원인과 재처리 이력을 기록하는 프로토타입입니다. 원천 메타데이터로 중복을 식별하며, 수집·관리 API·로컬 적재는 각각 검증한 독립 구성요소입니다.
 period: "2026.06"
 role: 개인 프로젝트 · CDC 관리 API·중복 처리·재처리 흐름 구현
 stack:
@@ -144,6 +144,6 @@ visual:
 seo:
   title: CDC Data Platform · 중복 없는 변경 이벤트 적재
   description: DB 변경의 원본 위치를 남겨 중복 반영을 막고, 적재 실패를 추적해서 다시 돌릴 수 있게 만든 CDC 프로토타입입니다.
-updatedAt: 2026-10-01
+updatedAt: 2026-10-14
 ---
 같은 DB 변경이 두 번 와도 한 번만 반영되고, 실패하면 어디서부터 다시 돌릴지 알 수 있게 만든 CDC 프로토타입입니다.

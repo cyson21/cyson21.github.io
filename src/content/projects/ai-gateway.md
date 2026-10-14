@@ -5,7 +5,7 @@ publicationState: public
 name: AI Gateway
 domain: AI
 eyebrow: LLM API 게이트웨이
-summary: LLM 호출의 인증·할당량·캐시·라우팅·장애 대응을 공통 파이프라인으로 구현한 게이트웨이입니다. 테스트 모델로 정책 순서와 캐시 재사용, 재시도 한도 초과 시 호출 중단을 검증했습니다.
+summary: 여러 애플리케이션에서 공통으로 사용할 수 있도록 구현한 OpenAI 호환 LLM 게이트웨이입니다. 테스트 모델로 정책 순서와 캐시 재사용, 재시도 한도 초과 시 호출 중단을 검증했습니다.
 period: "2026.06"
 role: 개인 프로젝트 · Java·WebFlux API와 정책 파이프라인 구현
 stack:
@@ -60,7 +60,7 @@ signals:
     sourceUrl: https://github.com/cyson21/ai-gateway/blob/main/backend/src/test/java/com/example/gateway/resilience/FallbackChainTest.java
 decisions:
   - title: OpenAI 호환 API 하나로
-    choice: 모든 서비스가 OpenAI 호환 /v1/chat/completions로 호출합니다.
+    choice: 클라이언트가 OpenAI 호환 /v1/chat/completions로 호출할 수 있도록 구현했습니다.
     alternative: 서비스마다 전용 API를 두거나 모델 SDK를 직접 붙이기
     reason: 이미 OpenAI SDK를 쓰는 코드는 주소만 바꾸면 되고, 정책은 게이트웨이에서 한 번에 적용됩니다.
   - title: 정책 순서는 코드로
@@ -139,8 +139,8 @@ visual:
 seo:
   title: AI Gateway · 여러 서비스의 LLM 호출을 한곳에서
   description: 조직별 사용량과 캐시를 나누고, 모델 장애가 호출 폭증으로 번지지 않게 재시도를 제한한 Java WebFlux 게이트웨이입니다.
-updatedAt: 2026-10-01
+updatedAt: 2026-10-14
 ---
 테스트와 기본 실행은 Java 21, Spring WebFlux, 메모리 저장소, 가짜 모델로 돌아갑니다. Redis, PostgreSQL, pgvector, 실제 모델 연동은 설정을 켜면 동작하도록 따로 분리해 두었습니다.
 
-서비스마다 따로 만들던 LLM 호출 정책을 게이트웨이 하나로 모은 프로젝트입니다.
+문서 검색·상담 챗봇·요약 기능의 공통 호출 경로를 가정한 개인 프로젝트입니다. 인증·예산 검사, 캐시, 모델 선택과 장애 시 대체 모델 호출을 한 요청 흐름으로 구현했으며, 실제 서비스 운영 사례는 아닙니다.
