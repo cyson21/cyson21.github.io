@@ -4158,8 +4158,8 @@ tr:nth-child(even) td { background: #f8fafc; }
 
   <section class="page cover" id="portfolio-intro" data-page="01">
     <h1>손찬양 · 백엔드 문제 해결 사례</h1>
-    <p class="lead">기업용 플랫폼의 운영 문제를 상태와 데이터 흐름에서 추적하고 서버 로직을 개선했습니다.</p>
-    <p class="compact-note">회사에서 해결한 문제를 먼저 소개합니다. 개인 프로젝트는 아래에서 코드와 테스트를 함께 볼 수 있습니다.</p>
+    <p class="lead">기업용 교육 플랫폼에서 저장 오류, 구매 요청의 데드락, 배치 중복 실행 문제를 수정했습니다.</p>
+    <p class="compact-note">실무 문제 해결 사례와 별도 개인 프로젝트의 구현·테스트를 정리했습니다.</p>
     <div class="cover-list"><section class="cover-group">
       <article class="cover-row"><div><h2><a href="#work-policy">저장 직전에 바뀐 상태를 다시 검증하기</a></h2><p>실무 · 화면 진입과 저장 사이의 상태 전이를 서버에서 확인</p></div></article>
       <article class="cover-row"><div><h2><a href="#work-batch">배치 중복 제어와 실패·누락 모니터링</a></h2><p>실무 · 실행 주체 제어와 고객사·배치별 예정 목록 대조</p></div></article>
@@ -4191,14 +4191,14 @@ tr:nth-child(even) td { background: #f8fafc; }
         <div><dt>담당 범위</dt><dd>구매 API의 분산락 적용과 트랜잭션 범위 조정에 참여했습니다.</dd></div>
         <div><dt>문제·원인</dt><dd>주문 저장·컬렉션 갱신의 락 경합과, 결제 요청 상태를 바꾸는 트랜잭션의 커밋 시점을 함께 확인했습니다. 별도 트랜잭션 도입만으로 호출 전체의 정합성이 보장되지는 않았습니다.</dd></div>
         <div><dt>판단·수정</dt><dd>주문 단위 분산락과 별도 결제 트랜잭션을 적용했습니다. 결제 요청 상태를 먼저 커밋하도록 호출 경계를 조정하고, 락 관련 오류만 제한적으로 재시도했습니다. 복구 시 이미 결제된 주문은 완료 상태를 확인해 반환했습니다.</dd></div>
-        <div><dt>테스트·확인 내용</dt><dd>동시 요청·락 재시도·결제 완료 주문의 재처리 테스트가 있습니다. 초기 QA에서 결제 요청 상태를 읽지 못하는 문제가 드러나 커밋 순서를 수정했습니다.</dd></div>
-        <div><dt>테스트 범위</dt><dd>최종 테스트 실행 결과와 운영 데드락 재발률은 현재 자료에서 확인되지 않았습니다.</dd></div>
+        <div><dt>테스트·확인 내용</dt><dd>초기 QA에서 결제 요청 상태를 읽지 못하는 문제가 드러나 커밋 순서를 수정했습니다. 관련 테스트는 동시 요청·락 재시도·결제 완료 주문의 재처리를 다룹니다.</dd></div>
+        <div><dt>테스트 범위</dt><dd>최종 테스트 실행 결과와 운영 데드락 재발률은 확인하지 못했습니다.</dd></div>
       </dl>
       <p class="work-case-link"><a href="#stockrush">StockRush</a>는 개인 프로젝트에서 구현한 주문 상태·실패 복구의 보조 자료입니다. 회사 결제 시스템의 실행 증거와 구분합니다.</p>
     </article>
     <article class="work-case" id="work-batch">
       <h3>여러 서버에서 같은 배치가 실행되는 문제</h3>
-      <p>Spring 스케줄러가 서버마다 실행되면서 동일 배치가 두 번 처리됐습니다. 업무 기록에는 수정 전 API 서버를 한 대로 제한한 임시 대응이 남아 있습니다.</p>
+      <p>Spring 스케줄러가 서버마다 실행되면서 동일 배치가 두 번 처리됐습니다. 수정 전에는 API 서버를 한 대로 제한해 임시 대응했습니다.</p>
       <figure class="batch-flow" aria-labelledby="batch-flow-title">
         <figcaption id="batch-flow-title">배치 실행 제어와 예정 목록 기반 모니터링</figcaption>
         <ol class="batch-flow-steps"><li>서버별 스케줄 실행</li><li>ShedLock·Redis 락 획득</li><li>배치 실행·발행 기록</li><li>처리 결과·상태 기록</li></ol>
@@ -4231,10 +4231,10 @@ tr:nth-child(even) td { background: #f8fafc; }
       <p>대량 발송이 동기 RPC의 응답 제한을 넘으면서 실제 수신과 관리자 화면의 실패 이력이 어긋났습니다. 발송 요청 접수와 최종 결과를 구분해야 했습니다.</p>
       <dl class="work-case-facts">
         <div><dt>담당 범위</dt><dd>메시징 타임아웃 대응에서 동기 응답 대기를 없애고 요청 접수와 결과 처리를 분리하는 작업에 참여했습니다.</dd></div>
-        <div><dt>문제·원인</dt><dd>기존 발송 호출은 RPC 응답을 기다리고 응답이 없으면 실패로 처리했습니다. 업무 기록의 대량 발송 지연과 당시 5초 응답 제한을 대조했습니다.</dd></div>
+        <div><dt>문제·원인</dt><dd>기존 발송 호출은 RPC 응답을 5초간 기다리고, 그 안에 응답이 없으면 실패로 기록했습니다. 대량 발송이 이 시간을 넘으면 실제 수신과 실패 이력이 어긋났습니다.</dd></div>
         <div><dt>판단·수정</dt><dd>발송 요청을 RabbitMQ 큐에 비동기로 보내고 대량 요청은 HTTP 202로 접수 응답을 반환하도록 바꿨습니다. 별도 결과 큐 리스너가 최종 이력 갱신 큐로 전달하며, 처리 예외는 제한 재시도 후 DLQ로 분리합니다.</dd></div>
         <div><dt>테스트·확인 내용</dt><dd>변경 코드와 업무 완료 기록에서 RPC 호출 제거, 비동기 발행, HTTP 202 응답, 결과 리스너와 재시도·DLQ 설정을 확인했습니다.</dd></div>
-        <div><dt>테스트 범위</dt><dd>HTTP 202는 요청 접수 응답입니다. 채널별 최종 발송·DB 저장, 중복 처리 방지와 DLQ 재처리의 실행 결과는 현재 자료에서 확인되지 않았습니다.</dd></div>
+        <div><dt>테스트 범위</dt><dd>HTTP 202는 요청 접수만 뜻합니다. 채널별 최종 발송·DB 저장, 중복 처리 방지와 DLQ 재처리의 실행 결과는 확인하지 못했습니다.</dd></div>
       </dl>
       <p class="work-case-link"><a href="#member-event-consistency">Member Event Consistency</a>의 재처리·DLQ는 별도 개인 프로젝트 구현 근거입니다.</p>
     </article>
@@ -4418,7 +4418,7 @@ outboxEventRepository.save(result.outboxEvent());</pre>
       <p class="rail-domain">동시 요청 / 중복 지급·초과 발급 방지 / Redis·RabbitMQ 비교</p>
       <div class="rail-block">
         <span class="rail-label">담당 범위</span>
-        <p class="rail-text rail-text-compact" title="2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드"><span aria-hidden="true">2026.05–06 · 개인 · 백엔드/인프라</span><span class="visually-hidden">2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드</span></p>
+        <p class="rail-text rail-text-compact" title="2026.05–06 · 개인 프로젝트 · Spring Boot 백엔드, 인프라 비교 테스트, 검증 대시보드"><span aria-hidden="true">2026.05–06 · 개인 · 백엔드/인프라</span><span class="visually-hidden">2026.05–06 · 개인 프로젝트 · Spring Boot 백엔드, 인프라 비교 테스트, 검증 대시보드</span></p>
       </div>
       <div class="rail-block">
         <span class="rail-label">주요 기술</span>
@@ -4669,7 +4669,7 @@ for update</pre>
         </div>
         <div>
           <strong>비인가 문서 노출과 근거 없는 답변 생성</strong>
-          <p>기업 내부 정책 RAG는 검색 품질만으로 부족합니다. 사용자가 볼 수 없는 문서가 검색 후보에 섞이지 않아야 하고, 답변에는 근거가 남아야 하며, 근거가 부족한 경우 거절 응답을 반환해야 합니다.</p>
+          <p>접근 권한이 없는 문서가 검색 결과에 포함되면 모델 입력과 답변 출처에도 노출될 수 있습니다. 검색 전에 권한을 확인하고, 허용된 문서에서 근거를 찾지 못하면 답변을 거절하도록 구현했습니다.</p>
         </div>
       </section>
       <section class="case-decision-band">
@@ -4741,7 +4741,7 @@ if access_reason is None:
     <div class="case-main">
       <div class="case-hero">
         <h2 class="case-headline">요청 예산을 확인하고 외부 모델 오류를 처리하는 LLM 게이트웨이</h2>
-        <p>서비스마다 흩어진 LLM 인증·예산·캐시·라우팅·복구 정책을 OpenAI 호환 WebFlux 게이트웨이의 한 요청 처리 순서로 통합했습니다.<br><br>사내 문서 검색, 상담 챗봇, 요약 기능처럼 여러 애플리케이션에서 LLM을 호출하는 사용 시나리오를 가정할 수 있으며, 이는 실제 운영 사례가 아닙니다.<br><br>요청 흐름: Auth → Quota → Guardrail → Cache → Router → Dispatch → Fallback → Guardrail → Record</p>
+        <p>여러 애플리케이션에서 공통으로 사용할 수 있도록 OpenAI 호환 LLM 게이트웨이를 구현했습니다. 인증·예산 검사부터 캐시, 모델 선택, 장애 시 대체 모델 호출까지 WebFlux의 요청 처리 흐름으로 구성했습니다.<br><br>문서 검색·상담 챗봇·요약 기능을 호출 시나리오로 가정한 개인 프로젝트입니다. 실제 서비스 운영 사례는 아닙니다.<br><br>요청 흐름: Auth → Quota → Guardrail → Cache → Router → Dispatch → Fallback → Guardrail → Record</p>
       </div>
 
       <section class="case-visual" style="--case-accent: #1c5d99;">
@@ -4979,8 +4979,8 @@ if (quota != QuotaOutcome.ALLOWED) {
           <h3 class="case-subheading">해결한 문제</h3>
         </div>
         <div>
-          <strong>중복 CDC, 복구 이력 손실과 자동 연결되지 않은 구간의 종단 전달</strong>
-          <p>CDC 이벤트는 커넥터 재시작과 재전달로 중복될 수 있고 적재 실패 뒤 복구 이력이 사라질 수 있습니다. 수집·제어·적재 구간이 자동 연결되지 않아 종단 전달과 재처리를 보장할 수 없는 범위도 명시했습니다.</p>
+          <strong>CDC 이벤트 중복 저장과 재처리 이력 관리</strong>
+          <p>커넥터 재시작이나 재전달로 같은 DB 변경이 여러 번 들어올 수 있습니다. 원천 LSN·오프셋으로 중복을 식별하고, 적재 실패 원인과 재처리 상태를 기록하도록 구현했습니다.</p>
         </div>
       </section>
       <section class="case-decision-band">
@@ -5053,7 +5053,7 @@ boolean created = canonicalEventPublisher.recordCanonicalEvent(event, sourceOffs
     <div class="case-main">
       <div class="case-hero">
         <h2 class="case-headline">실패 이벤트를 별도 처리하고 추천 배치 결과를 기록하는 백엔드</h2>
-        <p>중복·실패 행동 이벤트가 사용자 프로필을 오염시키지 않도록 멱등 처리와 DLQ를 적용하고, 추천 점수와 스냅샷 최신성을 함께 기록했습니다.</p>
+        <p>같은 행동 이벤트가 사용자 선호에 여러 번 반영되지 않도록 멱등 처리를 적용했습니다. 실패 이벤트는 DLQ로 분리하고, 추천 점수와 스냅샷의 생성 시각·반영 이벤트 수를 기록했습니다.</p>
       </div>
 
       <section class="case-visual" style="--case-accent: #1c5d99;">
@@ -5123,8 +5123,8 @@ boolean created = canonicalEventPublisher.recordCanonicalEvent(event, sourceOffs
             <span class="case-proof-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 15v-3M12 15V9M16 15v-5M4 9h16"/></svg></span>
             <div>
               <b>배치 스냅샷</b>
-              <strong>2개 이상 · 미반영 0개</strong>
-              <p>활성 사용자 최신성 확인</p>
+              <strong>고정 입력 · 2개 이상 생성</strong>
+              <p>프로필 대비 반영 이벤트 수 부족 0개</p>
             </div>
           </article>
 </div>
@@ -5135,7 +5135,7 @@ boolean created = canonicalEventPublisher.recordCanonicalEvent(event, sourceOffs
           <h3 class="case-subheading">해결한 문제</h3>
         </div>
         <div>
-          <strong>중복·실패 이벤트가 프로필과 추천 스냅샷을 오염함</strong>
+          <strong>중복·실패 이벤트로 사용자 선호 데이터가 달라지는 문제</strong>
           <p>패션 커머스 추천은 브랜드, 카테고리, 태그, 사이즈, 가격대와 재고 같은 상품 정보에 사용자 행동 이벤트를 함께 반영해야 합니다. 중복 이벤트나 처리 실패가 프로필을 오염시키지 않도록 이벤트 처리, 배치 스냅샷과 관리자 리포트를 분리했습니다.</p>
         </div>
       </section>
@@ -5178,7 +5178,7 @@ if isinstance(selected_size, str) and selected_size in product.sizes:
           <div class="case-section-heading">
             <h3 class="case-subheading">테스트 결과</h3>
           </div>
-          <ul class="list green"><li>EventProcessor 테스트가 동일 idempotency key를 한 번만 반영하고 3회 실패 뒤 DLQ로 격리합니다.</li><li>추천 테스트가 고정 상품 6개로 브랜드·사이즈·가격·재고 조건을 추천 순위에 반영하는지 확인합니다.</li><li>배치 스냅샷 2개 이상에서 반영 이벤트 수가 부족한 스냅샷은 0개였습니다.</li></ul>
+          <ul class="list green"><li>EventProcessor 테스트가 동일 idempotency key를 한 번만 반영하고 3회 실패 뒤 DLQ로 격리합니다.</li><li>추천 테스트가 고정 상품 6개로 브랜드·사이즈·가격·재고 조건을 추천 순위에 반영하는지 확인합니다.</li><li>고정된 데모 데이터로 배치를 실행해 스냅샷이 2개 이상 생성됐습니다. 각 사용자 프로필의 이벤트 수와 비교했을 때 반영 이벤트 수가 적은 스냅샷은 없었습니다.</li></ul>
         </section>
       </div>
       <section class="case-closeout"><div><span>테스트 환경·제한</span><p>단일 프로세스의 메모리 저장소를 사용했습니다. HTTP 이벤트 워커, 외부 브로커, Outbox와 자동 배치 스케줄러는 구현하지 않았습니다. PostgreSQL·SQS·EventBridge·S3 연동, AWS 배포와 실제 ML·A/B 성과는 테스트 범위에 포함하지 않았습니다.</p></div></section>

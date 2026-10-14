@@ -70,14 +70,12 @@ test('integrated portfolio renders one unwrapped technology token per rail row w
 
 test('Member Event rail uses a compact visual scope and exposes the full text to assistive technology', () => {
   const html = readIntegratedPortfolio();
-  const fullScope = '2026.05-2026.06 / 개인 프로젝트 / Spring Boot 백엔드, 인프라 비교, 검증 대시보드';
-  const compactScope = '2026.05–06 · 개인 · 백엔드/인프라';
-
-  assert.ok(
-    html.includes(
-      `<p class="rail-text rail-text-compact" title="${fullScope}"><span aria-hidden="true">${compactScope}</span><span class="visually-hidden">${fullScope}</span></p>`,
-    ),
-  );
+  const scope = html.match(/<p class="rail-text rail-text-compact" title="([^"]+)"><span aria-hidden="true">([^<]+)<\/span><span class="visually-hidden">([^<]+)<\/span><\/p>/);
+  assert.ok(scope, 'scope must retain separate visual and assistive text');
+  assert.equal(scope[1], scope[3], 'tooltip and assistive text must describe the same scope');
+  assert.match(scope[3], /개인 프로젝트/);
+  assert.match(scope[3], /Spring Boot/);
+  assert.ok(scope[2].length < scope[3].length, 'visual scope must stay compact');
   assert.doesNotMatch(html, /<p[^>]*aria-label=/);
   assert.match(firstCssRule(html, '.visually-hidden'), /clip:\s*rect\(0,\s*0,\s*0,\s*0\);/);
 });
