@@ -39,28 +39,28 @@
     "output": "public/portfolio/index.html",
     "sourceProject": "portfolio-web",
     "sourcePath": "public/portfolio/index.html",
-    "sha256": "b76163bda15a34a4095b0301f68ca9ec490827cc8b7f560f57e3e03dbbd03606",
+    "sha256": "9470f38b247aefdcdff132627706a2ef3eabb6fff0dec759995e1cede3b18b51",
     "owner": "Son Chanyang",
     "usage": "Public backend problem-solving case studies",
-    "approvedAt": "2026-10-14"
+    "approvedAt": "2026-10-30"
   },
   {
     "output": "public/downloads/career-description.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/career/",
-    "sha256": "e8f87f85b0edcad7f7c8ad6de91b19954399c5595d0e2a0f2097eba8357dc0f1",
+    "sha256": "6d9928006a81e68c2ebf9bfa7d76f644cdaebc4b24809af9d87f332303f08a0c",
     "owner": "Son Chanyang",
     "usage": "Public company-work career description, three pages",
-    "approvedAt": "2026-10-14"
+    "approvedAt": "2026-10-30"
   },
   {
     "output": "public/downloads/resume.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/print/",
-    "sha256": "d6ddaf2034e4a4a660caf0026228507e7ed1f8df4bf49b112060707005691219",
+    "sha256": "0654ffc0f04181b28c5ad7a4e64439901d9a7659bf23cd60345fde02e2234b84",
     "owner": "Son Chanyang",
     "usage": "Public two-page resume download",
-    "approvedAt": "2026-10-14"
+    "approvedAt": "2026-10-30"
   },
   {
     "output": "public/icons/favicon.svg",

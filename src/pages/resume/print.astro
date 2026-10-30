@@ -11,9 +11,9 @@ import { experiences, profile, professionalSummary, resumeIntro, skillGroups } f
           {index === 0 ? (
             <>
               <header class="masthead"><div><h1>{profile.name}</h1><p class="role-line">{profile.role}</p></div><img src="/media/profile.png" alt="손찬양 프로필 사진" width="100" height="100" /></header>
-              <div class="contact-row"><a href={profile.github}>GitHub · github.com/cyson21</a><a href={`${profile.portfolio}portfolio/`}>포트폴리오 · cyson21.github.io/portfolio/</a></div>
+              <div class="contact-row"><a href={`mailto:${profile.email}`}>{profile.email}</a><a href={profile.github}>GitHub · github.com/cyson21</a><a href={`${profile.portfolio}portfolio/`}>포트폴리오 · cyson21.github.io/portfolio/</a></div>
               <section class="summary block"><strong>{resumeIntro}</strong><p>{professionalSummary}</p></section>
-              <section class="core-skills block"><h2>핵심 실무 기술</h2><p>{skillGroups.flatMap(group => group.items).join(' · ')}</p></section>
+              <section class="core-skills block"><h2>핵심 실무 기술</h2><p>{skillGroups.map(group => <span><strong>{group.label}</strong> · {group.items.join(' · ')}</span>)}</p></section>
             </>
           ) : <header class="page-header"><strong>{profile.name}</strong><span>{profile.role}</span></header>}
           <section class="experience block">
@@ -53,11 +53,13 @@ import { experiences, profile, professionalSummary, resumeIntro, skillGroups } f
   .masthead { display: flex; align-items: center; justify-content: space-between; }
   .masthead img { width: 23mm; height: 23mm; object-fit: cover; border: 0.25mm solid #c7cdd6; border-radius: 50%; }
   .role-line { margin-top: 2mm; font-weight: 700; color: #315579; }
-  .contact-row { display: flex; flex-wrap: wrap; gap: 5mm; margin-top: 3mm; padding-block: 2mm; border-block: 0.25mm solid #c7cdd6; font-size: 8pt; }
+  .contact-row { display: flex; flex-wrap: wrap; gap: 5mm; margin-top: 3mm; padding-block: 2mm; border-block: 0.25mm solid #c7cdd6; font-size: 8.5pt; }
   .summary strong { font-size: 10pt; }
   .summary p { margin-top: 1.5mm; color: #4d5968; }
   .core-skills h2 { font-size: 10pt; margin-bottom: 1.5mm; }
-  .core-skills p { color: #4d5968; font-size: 9pt; }
+  .core-skills p { color: #4d5968; font-size: 9.5pt; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5mm 3mm; }
+  .core-skills p span { display: block; }
+  .core-skills p strong { color: #202b3b; font-weight: 600; }
   .job { border-top: 0.3mm solid #596779; padding-top: 2mm; }
   .job + .job { margin-top: 5mm; }
   .job header { display: flex; justify-content: space-between; gap: 6mm; }
@@ -65,7 +67,7 @@ import { experiences, profile, professionalSummary, resumeIntro, skillGroups } f
   .job time { flex-shrink: 0; }
   .context { margin-top: 1.5mm; color: #4d5968; }
   .highlight-list { margin: 2mm 0 0; padding-left: 4mm; }
-  .highlight-list li { padding-left: 0.5mm; margin-top: 4mm; }
+  .highlight-list li { padding-left: 0.5mm; margin-top: 3mm; }
   .highlight-list strong { font-size: 10pt; }
   .highlight-list p { margin-top: 1mm; color: #4d5968; font-size: 10pt; line-height: 1.6; }
   .page-header { display: flex; justify-content: space-between; padding-bottom: 3mm; border-bottom: 0.3mm solid #596779; }
