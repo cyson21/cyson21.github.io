@@ -1,4 +1,4 @@
-const siteUpdatedAt = '2026-10-14';
+const siteUpdatedAt = '2026-10-30';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -60,13 +60,13 @@ const experienceRecords = [
   {
     start: '2021-07', end: '2024-03',
     company: '주식회사 화이트스캔', role: '백엔드·데이터 개발자 · 연구원',
-    context: '공공·실시간 데이터 기반 서비스에서 데이터 수집·가공, 백엔드 API와 배포·운영을 담당했습니다.',
+    context: '공공·실시간 데이터 서비스의 수집·가공, API와 배포·운영을 담당했습니다. 개발과 함께 프로젝트 일정 관리, 고객사 요구사항 확인과 소통을 주도했습니다.',
     responsibilities: previousCompanyProjects.map(({ title, description }) => ({ title, description })),
     stack: ['Java', 'Spring Boot', 'Python', 'Pandas', 'FastAPI', 'Django', 'SQL', 'PostgreSQL', 'MySQL', 'MongoDB', 'Docker'],
   },
 ] as const;
 
-export const professionalSummary = '기업용 플랫폼과 공공·실시간 데이터 서비스의 API를 개발했습니다. 운영 중 발생한 데이터 오류를 수정하고 배치 실행·모니터링과 배포 업무를 담당했습니다.';
+export const professionalSummary = '기업용 플랫폼과 공공·실시간 데이터 서비스의 API를 개발·운영했습니다. 데이터 정합성 오류, 배치 중복 실행, 구매 API의 락 경합을 분석하고 서버 로직과 처리 흐름을 개선했습니다.';
 export const resumeWorkCases = [
   {
     anchor: 'work-policy',
