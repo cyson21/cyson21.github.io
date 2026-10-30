@@ -47,5 +47,5 @@ test('print resume exposes exactly two ready sheets and stays noindex', async ({
   await expect(page.locator('main > .sheet').first()).toHaveAttribute('aria-label', '이력서 1페이지');
   await expect(page.locator('main > .sheet').last()).toHaveAttribute('aria-label', '이력서 2페이지');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
-  await expect(page.getByRole('link', { name: 'cyson21@gmail.com' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'cyson21@gmail.com', exact: true })).toHaveAttribute('href', 'mailto:cyson21@gmail.com');
 });
