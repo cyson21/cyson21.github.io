@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { resumeIntro } from '../../src/data/site';
 
 import { isAuditRouteSelected } from './fixtures/canonical';
 
@@ -131,7 +132,7 @@ test('detail pages expose an explicit route back to the portfolio home', async (
 test('experience page unifies the résumé summary and career evidence', async ({ page }) => {
   await page.goto('/experience/');
   await expect(page.getByRole('heading', { name: '경력·이력서' })).toBeVisible();
-  await expect(page.locator('.resume-overview .summary-intro')).toHaveText('2021년부터 백엔드 개발·운영을 담당해 왔으며, Java·Spring Boot를 주력으로 사용합니다.');
+  await expect(page.locator('.resume-overview .summary-intro')).toHaveText(resumeIntro);
   await expect(page.locator('.resume-overview .summary-highlights li')).toHaveCount(0);
   await expect(page.getByRole('heading', { name: '주요 기여' })).toHaveCount(2);
   const currentExperience = page.locator('.experience-entry').first();
@@ -149,19 +150,20 @@ test('experience page unifies the résumé summary and career evidence', async (
   await expect(page.getByRole('heading', { name: '학력' })).toBeVisible();
 });
 
-test('print résumé keeps professional experience and cases above each footer', async ({ page }) => {
+test('print résumé keeps company experience within two printable pages', async ({ page }) => {
   await page.goto('/resume/print/');
   await page.emulateMedia({ media: 'print' });
-
-  await expect(page.locator('.sheet')).toHaveCount(2);
-
-  await expect(page.locator('.sheet').first().locator('.job')).toHaveCount(1);
-  await expect(page.locator('.sheet').nth(1).locator('.highlight-list li')).toHaveCount(4);
+  const sheets = page.locator('main > .sheet');
+  await expect(sheets).toHaveCount(2);
+  await expect(sheets.first().getByRole('heading', { name: '이엠캐스트(주)' })).toBeVisible();
+  await expect(sheets.first().locator('.bullets li')).toHaveCount(6);
+  await expect(sheets.nth(1).getByRole('heading', { name: '주식회사 화이트스캔' })).toBeVisible();
+  await expect(sheets.nth(1).locator('.project')).toHaveCount(4);
   await expect(page.locator('main')).not.toContainText(/대표 개인 프로젝트|StockRush|Member Event Consistency|Enterprise Policy RAG/);
-  for (const sheet of await page.locator('.sheet').all()) {
-    const contentBottom = await sheet.locator('footer').evaluate((element) => element.previousElementSibling!.getBoundingClientRect().bottom);
-    const footerTop = await sheet.locator('footer').evaluate((element) => element.getBoundingClientRect().top);
-    expect(contentBottom).toBeLessThanOrEqual(footerTop);
+  // A4 at 96 CSS px/in minus the template's 13 mm top and bottom margins.
+  for (const sheet of await sheets.all()) {
+    const height = await sheet.evaluate(element => element.getBoundingClientRect().height);
+    expect(height).toBeLessThanOrEqual((297 - 26) * 96 / 25.4);
   }
 });
 

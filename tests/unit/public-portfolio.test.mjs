@@ -76,7 +76,7 @@ test('Member Event rail uses a compact visual scope and exposes the full text to
   assert.match(scope[3], /개인 프로젝트/);
   assert.match(scope[3], /Spring Boot/);
   assert.ok(scope[2].length < scope[3].length, 'visual scope must stay compact');
-  assert.doesNotMatch(html, /<p[^>]*aria-label=/);
+  assert.doesNotMatch(html, /<p\s[^>]*aria-label=/);
   assert.match(firstCssRule(html, '.visually-hidden'), /clip:\s*rect\(0,\s*0,\s*0,\s*0\);/);
 });
 test('project publication flags keep the three representative projects and detail-only projects', () => {

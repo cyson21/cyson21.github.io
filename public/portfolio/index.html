@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>손찬양 · 백엔드 문제 해결 사례</title>
+  <title>손찬양 · 백엔드 포트폴리오</title>
   <style>
 :root {
   --ink: #17202a;
@@ -4149,6 +4149,40 @@ tr:nth-child(even) td { background: #f8fafc; }
 .batch-flow-steps li { flex: 1 1 180px; padding-right: 12px; }
 .batch-flow p { font-size: 14px; color: #4b5b70; }
 
+@media screen {
+ html { scroll-behavior:smooth; }
+ .cover h1 { word-break:keep-all; overflow-wrap:normal; letter-spacing:-.02em; }
+ .cover .lead { max-width:62ch; line-height:1.6; }
+ .portfolio-intro-detail { max-width:72ch; color:#4b5b70; font-size:16px; line-height:1.75; margin:18px 0 30px; word-break:keep-all; }
+ .portfolio-overview { display:grid; grid-template-columns:1fr 1fr; gap:36px; border-top:1px solid #c9d4e0; padding-top:25px; }
+ .portfolio-overview section { min-width:0; }
+ .portfolio-overview h2 { font-size:21px; margin:0 0 12px; }
+ .portfolio-overview p { color:#405267; font-size:15px; line-height:1.7; margin:0 0 10px; word-break:keep-all; }
+ .portfolio-overview a { display:inline-block; margin-top:8px; font-weight:650; text-underline-offset:4px; }
+ .portfolio-contact { border-top:1px solid #dce3eb; margin:30px 0 0; padding-top:18px; font-size:14px; line-height:1.8; }
+ .portfolio-contact span { padding:0 5px; }
+ .work-cases > .compact-note { font-size:14px; line-height:1.65; }
+ .work-case h3 { word-break:keep-all; }
+ a:focus-visible { outline:3px solid #315d88; outline-offset:3px; }
+ @media(max-width:700px) { .portfolio-overview { grid-template-columns:1fr; gap:24px; } .portfolio-intro-detail { font-size:15px; } .portfolio-contact span { padding:0 2px; } }
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* 구성도에서 처리 순서로 오해될 수 있는 연결을 제거합니다. */
+#ai-gateway .case-architecture.flow .case-arch-node::after { display:none !important; content:none !important; }
+#ai-gateway .case-architecture.flow .case-arch-node em { display:none; }
+@media screen and (max-width:959px) { #ai-gateway .case-architecture.flow .case-arch-node { grid-template-columns:32px minmax(0,1fr); } #ai-gateway .case-architecture.flow .case-arch-icon { grid-column:1; } #ai-gateway .case-architecture.flow .case-arch-node strong { grid-column:2; } }
+@media screen {
+ .case-study-page .case-code-snippet { white-space:pre; overflow-x:auto; overflow-wrap:normal; word-break:normal; max-width:100%; }
+ .case-code-description b { margin-right:.4em; }
+ .code-scroll-hint { color:#d0dae6; font-size:12px; margin:8px 0 0; line-height:1.5; }
+ .case-code-snippet:focus-visible { outline:3px solid #b6d4f2; outline-offset:3px; }
+}
+/* CDC 구성 요소는 종단 간 연결이 아닌 각각 검증한 범위입니다. */
+#cdc-data-platform .case-architecture.flow .case-arch-node::after { display:none !important; content:none !important; }
+#cdc-data-platform .case-architecture.flow .case-arch-node em { display:none; }
+@media screen and (max-width:959px) { #cdc-data-platform .case-architecture.flow .case-architecture-flow, #ai-gateway .case-architecture.flow .case-architecture-flow { gap:12px; } #cdc-data-platform .case-architecture.flow .case-arch-node { grid-template-columns:32px minmax(0,1fr); } #cdc-data-platform .case-architecture.flow .case-arch-icon { grid-column:1; } #cdc-data-platform .case-architecture.flow .case-arch-node strong { grid-column:2; } }
+
 </style>
 </head>
 <body>
@@ -4157,24 +4191,21 @@ tr:nth-child(even) td { background: #f8fafc; }
 <a class="portfolio-home-link" href="https://cyson21.github.io/">← 홈으로</a>
 
   <section class="page cover" id="portfolio-intro" data-page="01">
-    <h1>손찬양 · 백엔드 문제 해결 사례</h1>
-    <p class="lead">기업용 교육 플랫폼에서 저장 오류, 구매 요청의 데드락, 배치 중복 실행 문제를 수정했습니다.</p>
-    <p class="compact-note">실무 문제 해결 사례와 별도 개인 프로젝트의 구현·테스트를 정리했습니다.</p>
-    <div class="cover-list"><section class="cover-group">
-      <article class="cover-row"><div><h2><a href="#work-batch">배치 중복 제어와 실패·누락 모니터링</a></h2><p>문제 · 서버마다 같은 배치 실행<br>수행 · ShedLock·Redis 락 적용, 예정 목록과 실행 기록 대조<br>확인 · 로그·DB로 실행 상태 확인, 고객사별 실패·누락 Slack 요약</p></div></article>
-      <article class="cover-row"><div><h2><a href="#work-messaging">발송 접수와 최종 결과를 분리하기</a></h2><p>문제 · RPC 응답 지연으로 실제 발송과 실패 이력 불일치<br>수행 · RabbitMQ 비동기 요청·결과 처리 분리에 참여<br>확인 · 코드·업무 완료 기록에서 HTTP 202·결과 리스너·DLQ 설정 확인</p></div></article>
-      <article class="cover-row"><div><h2><a href="#work-policy">저장 직전에 바뀐 상태를 다시 검증하기</a></h2><p>문제 · 화면 진입 뒤 상태가 바뀌면 이전 기준으로 저장<br>수행 · 서버 재조회·변경 차단·후속 갱신 기준 통일<br>확인 · 정상 변경·상태 전이·필수 입력 누락 단위 테스트</p></div></article>
-    </section></div>
-    <p class="compact-note">다른 실무 사례 · <a href="#work-purchase">구매 트랜잭션</a> · <a href="#work-identity">복합 식별자</a></p>
-    <p class="compact-note">개인 프로젝트 · <a href="#member-event-consistency">동시성·Redis·RabbitMQ 비교</a> · <a href="#stockrush">주문 상태·이벤트 실패 복구</a></p>
-    <p class="compact-note"><a href="/experience/">경력·이력서</a> · <a href="/downloads/career-description.pdf">경력기술서 PDF</a> · <a href="#portfolio-results">전체 개인 프로젝트</a></p>
+    <h1>손찬양 · 백엔드 포트폴리오</h1>
+    <p class="lead">기업용 교육 플랫폼과 공공·실시간 데이터 서비스에서 API와 데이터 처리 기능을 개발하고 운영했습니다.</p>
+    <p class="portfolio-intro-detail">Java·Spring Boot를 중심으로 플랫폼 기능 개발과 버전 전환, 운영 문제 분석을 수행했습니다. 이 문서에는 실무에서 맡은 업무와 기술 사례, 별도 개인 프로젝트의 구현·검증 내용을 담았습니다.</p>
+    <div class="portfolio-overview">
+      <section><h2>실무 경험</h2><p><strong>이엠캐스트</strong> · B2B 리테일 교육 플랫폼의 백엔드 개발·운영</p><p>API와 관리자 기능을 개발하고 플랫폼 버전 전환, 데이터 정합성 개선, 배치·메시징 처리, 인프라·배포 운영을 수행했습니다.</p><p><strong>화이트스캔</strong> · 공공·실시간 데이터 수집·가공, API 개발과 배포·운영</p><a href="#work-cases">실무 사례 살펴보기 →</a></section>
+      <section><h2>개인 프로젝트</h2><p>주문 상태와 실패 복구, 동시성 제어, 검색과 이벤트 처리 등을 다룬 공개 프로젝트입니다. 각 프로젝트의 코드와 테스트 범위를 함께 정리했습니다.</p><a href="#portfolio-results">프로젝트 살펴보기 →</a></section>
+    </div>
+    <p class="portfolio-contact"><a href="/experience/">경력·이력서</a> <span aria-hidden="true">·</span> <a href="/downloads/career-description.pdf">경력기술서 PDF</a> <span aria-hidden="true">·</span> <a href="https://github.com/cyson21">GitHub</a></p>
   </section>
   <section class="page work-cases" id="work-cases" aria-labelledby="work-cases-title">
     <h2 id="work-cases-title">실무에서 해결한 문제</h2><p class="compact-note">근거 안내 · 실무 사례는 당시 코드·테스트 정의·저장된 실행 기록을 기준으로 작성했습니다. 회사 테스트를 현재 환경에서 다시 실행한 결과는 아닙니다. 운영 개선 수치와 실행 결과가 없는 항목은 각 사례에 표시했습니다.</p>
     <p>이엠캐스트 · B2B 리테일 교육 플랫폼 · 백엔드 개발·운영</p>
-    <p>B2B 리테일 교육 플랫폼의 백엔드 개발·운영 중 발생한 문제와 수정 내용을 정리했습니다. 회사 코드와 고객 정보는 공개하지 않습니다.</p>
+    <p>REST API와 관리자 기능을 개발하고 플랫폼 버전 전환, 배치·메시징 처리, 운영 오류 대응을 수행했습니다. 아래에서는 그중 문제의 원인과 수정 과정, 확인 범위를 설명합니다. 회사 코드와 고객 정보는 공개하지 않습니다.</p>
     <article class="work-case" id="work-policy">
-      <h3>저장 직전에 바뀐 상태를 다시 검증하기</h3>
+      <h3>데이터 변경 시 상태 불일치 방지</h3>
       <p>설정 화면을 연 뒤 관련 작업이 시작되면, 이전 상태를 기준으로 저장하면서 기존 데이터와 변경된 처리 기준이 달라질 수 있었습니다.</p>
       <dl class="work-case-facts">
         <div><dt>담당 범위</dt><dd>서버 재검증·변경 차단·후속 갱신 조건 수정과 회귀 테스트.</dd></div>
@@ -4186,10 +4217,10 @@ tr:nth-child(even) td { background: #f8fafc; }
       <p class="work-case-link">별도 개인 프로젝트 · <a href="#member-event-consistency">Member Event Consistency</a>의 상태 보호 구현과 테스트.</p>
     </article>
     <article class="work-case" id="work-purchase">
-      <h3>구매 API의 락 경합과 커밋 경계 조정</h3>
-      <p>동시 구매 요청에서 주문 저장 중 DB 데드락이 발생했습니다. 결제 처리를 별도 트랜잭션으로 옮긴 뒤에는 앞 단계의 미커밋 상태를 읽어 결제가 실패하는 문제도 드러났습니다.</p>
+      <h3>동시 요청의 락 경합과 트랜잭션 경계 조정</h3>
+      <p>동시 요청으로 주문을 저장하는 과정에서 DB 데드락이 발생했습니다. 결제 처리를 별도 트랜잭션으로 옮긴 뒤에는 앞 단계에서 아직 커밋하지 않은 요청 상태를 조회하지 못해 결제가 실패하는 문제도 드러났습니다.</p>
       <dl class="work-case-facts">
-        <div><dt>담당 범위</dt><dd>구매 API의 분산락 적용과 트랜잭션 범위 조정에 참여했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>주문 처리의 분산락 적용과 트랜잭션 범위 조정에 참여했습니다.</dd></div>
         <div><dt>문제·원인</dt><dd>주문 저장·컬렉션 갱신의 락 경합과, 결제 요청 상태를 바꾸는 트랜잭션의 커밋 시점을 함께 확인했습니다. 별도 트랜잭션 도입만으로 호출 전체의 정합성이 보장되지는 않았습니다.</dd></div>
         <div><dt>판단·수정</dt><dd>주문 단위 분산락과 별도 결제 트랜잭션을 적용했습니다. 결제 요청 상태를 먼저 커밋하도록 호출 경계를 조정하고, 락 관련 오류만 제한적으로 재시도했습니다. 복구 시 이미 결제된 주문은 완료 상태를 확인해 반환했습니다.</dd></div>
         <div><dt>테스트·확인 내용</dt><dd>초기 QA에서 결제 요청 상태를 읽지 못하는 문제가 드러나 커밋 순서를 수정했습니다. 관련 테스트는 동시 요청·락 재시도·결제 완료 주문의 재처리를 다룹니다.</dd></div>
@@ -4198,7 +4229,7 @@ tr:nth-child(even) td { background: #f8fafc; }
       <p class="work-case-link"><a href="#stockrush">StockRush</a>는 개인 프로젝트에서 구현한 주문 상태·실패 복구의 보조 자료입니다. 회사 결제 시스템의 실행 증거와 구분합니다.</p>
     </article>
     <article class="work-case" id="work-batch">
-      <h3>여러 서버에서 같은 배치가 실행되는 문제</h3>
+      <h3>배치 중복 실행 제어와 모니터링</h3>
       <p>Spring 스케줄러가 서버마다 실행되면서 동일 배치가 두 번 처리됐습니다. 수정 전에는 API 서버를 한 대로 제한해 임시 대응했습니다.</p>
       <figure class="batch-flow" aria-labelledby="batch-flow-title">
         <figcaption id="batch-flow-title">배치 실행 제어와 예정 목록 기반 모니터링</figcaption>
@@ -4216,7 +4247,7 @@ tr:nth-child(even) td { background: #f8fafc; }
       <p class="work-case-link">요청 발행 누락과 발행 후 결과 미수신을 구분했습니다. Slack 요약에는 정상 처리 결과도 포함했습니다.</p>
     </article>
     <article class="work-case" id="work-identity">
-      <h3>같은 사용자라도 서로 다른 행으로 처리하기</h3>
+      <h3>복합 식별자와 조회·집계 기준 개선</h3>
       <p>같은 사용자에게 여러 그룹 데이터가 있는데 사용자 ID만으로 구분해, 선택한 삭제 항목 일부가 누락됐습니다. 조회 제외 조건과 페이지 합계도 실제 행 수와 어긋났습니다.</p>
       <dl class="work-case-facts">
         <div><dt>담당 범위</dt><dd>복합 필터 모델, 서버 조회·삭제와 동등성 수정, 페이지 경계·다중 그룹 테스트.</dd></div>
@@ -4228,7 +4259,7 @@ tr:nth-child(even) td { background: #f8fafc; }
       <p class="work-case-link"><a href="#member-event-consistency">Member Event Consistency</a>에서는 개인 프로젝트의 조건부 갱신·동시 요청 결과를 별도로 확인할 수 있습니다.</p>
     </article>
     <article class="work-case" id="work-messaging">
-      <h3>발송은 됐는데 실패로 기록되는 문제</h3>
+      <h3>메시지 발송 요청과 결과 처리 분리</h3>
       <p>대량 발송이 동기 RPC의 응답 제한을 넘으면서 실제 수신과 관리자 화면의 실패 이력이 어긋났습니다. 발송 요청 접수와 최종 결과를 구분해야 했습니다.</p>
       <dl class="work-case-facts">
         <div><dt>담당 범위</dt><dd>메시징 타임아웃 대응에서 동기 응답 대기를 없애고 요청 접수와 결과 처리를 분리하는 작업에 참여했습니다.</dd></div>
@@ -4242,7 +4273,7 @@ tr:nth-child(even) td { background: #f8fafc; }
   </section>
   <section class="page complete-sheet" id="portfolio-results" data-page="02">
     <h2>개인 프로젝트 · 공개 구현</h2>
-    <p>직접 설계·구현한 프로젝트입니다. 상세에서 기술 선택, 코드와 테스트 조건을 확인할 수 있습니다.</p>
+    <p>직접 설계·구현한 프로젝트입니다. 각 사례의 결과는 명시된 테스트 조건에서 확인한 내용이며, 상세에서 코드와 검증 범위를 살펴볼 수 있습니다.</p>
     <span id="portfolio-capabilities"></span><span id="portfolio-scope"></span>
     <div class="summary-project-grid">
       <article class="summary-project-card"><h3><a href="#stockrush">StockRush</a></h3><p>주문 상태 전이와 Transactional Outbox, 실패 복구</p></article>
@@ -4387,7 +4418,7 @@ tr:nth-child(even) td { background: #f8fafc; }
             <code class="case-code-symbol">PersistentCreateOrderService.create</code>
             <span class="case-code-path"><b>파일</b>services/order-service/src/main/java/com/stockrush/order/application/PersistentCreateOrderService.java</span>
           </div>
-          <pre class="case-code-snippet">boolean saved = orderRepository.saveIfAbsent(result.order(), command.idempotencyKey());
+          <p class="code-scroll-hint">긴 코드는 좌우로 스크롤해 볼 수 있습니다.</p><pre class="case-code-snippet" tabindex="0" aria-label="코드 예시, 좌우로 스크롤할 수 있습니다">boolean saved = orderRepository.saveIfAbsent(result.order(), command.idempotencyKey());
 if (!saved) {
     return CreateOrderResult.replayed(replayOrder(command.idempotencyKey(), command.memberId()));
 }
@@ -4414,7 +4445,7 @@ outboxEventRepository.save(result.outboxEvent());</pre>
   <section class="page case-page case-study-page" id="member-event-consistency" data-page="05" style="--case-accent: #1c5d99;">
 
     <aside class="case-rail">
-      <div class="rail-index">프로젝트 03</div>
+      <div class="rail-index">프로젝트 02</div>
       <p class="case-project-name compact">Member Event Consistency</p>
       <p class="rail-domain">동시 요청 / 중복 지급·초과 발급 방지 / Redis·RabbitMQ 비교</p>
       <div class="rail-block">
@@ -4430,7 +4461,7 @@ outboxEventRepository.save(result.outboxEvent());</pre>
 
     <div class="case-main">
       <div class="case-hero">
-        <h2 class="case-headline">보상 중복 지급·쿠폰 초과 발급·포인트 중복 차감을 막는 백엔드</h2>
+        <h2 class="case-headline">보상 중복 지급·쿠폰 초과 발급·잔액 초과 차감을 막는 백엔드</h2>
         <p>첫 로그인 보상 중복 지급, 쿠폰 초과 발급과 포인트 음수 잔액을 PostgreSQL 제약·잠금·조건부 갱신으로 막았습니다. Redis 락과 RabbitMQ 단일 소비자 처리 방식은 동시 요청 테스트로 비교했습니다.</p>
       </div>
 
@@ -4544,7 +4575,7 @@ outboxEventRepository.save(result.outboxEvent());</pre>
             <code class="case-code-symbol">SqlCouponCampaignRepository.issueWithCapacityGuard</code>
             <span class="case-code-path"><b>파일</b>backend/src/main/java/com/example/consistency/coupon/SqlCouponCampaignRepository.java</span>
           </div>
-          <pre class="case-code-snippet">where id = ?
+          <p class="code-scroll-hint">긴 코드는 좌우로 스크롤해 볼 수 있습니다.</p><pre class="case-code-snippet" tabindex="0" aria-label="코드 예시, 좌우로 스크롤할 수 있습니다">where id = ?
   and status = &#x27;ACTIVE&#x27;
   and issued_count &lt; capacity
 for update</pre>
@@ -4570,7 +4601,7 @@ for update</pre>
   <section class="page case-page case-study-page" id="enterprise-policy-rag" data-page="06" style="--case-accent: #1c5d99;">
 
     <aside class="case-rail">
-      <div class="rail-index">프로젝트 02</div>
+      <div class="rail-index">프로젝트 03</div>
       <p class="case-project-name compact">Enterprise Policy RAG</p>
       <p class="rail-domain">AI 백엔드 / RAG / 권한 검색 / 운영 기록</p>
       <div class="rail-block">
@@ -4700,7 +4731,7 @@ for update</pre>
             <code class="case-code-symbol">RetrievalService.retrieve</code>
             <span class="case-code-path"><b>파일</b>app/retrieval.py</span>
           </div>
-          <pre class="case-code-snippet">access_reason = _access_reason(chunk, query)
+          <p class="code-scroll-hint">긴 코드는 좌우로 스크롤해 볼 수 있습니다.</p><pre class="case-code-snippet" tabindex="0" aria-label="코드 예시, 좌우로 스크롤할 수 있습니다">access_reason = _access_reason(chunk, query)
 if access_reason is None:
     continue</pre>
           <p class="case-code-description"><b>처리 조건</b>저장소 필터 뒤에도 워크스페이스·소유자·부서 가시성을 다시 판정해 비인가 결과를 제거합니다.</p>
@@ -4748,8 +4779,8 @@ if access_reason is None:
       <section class="case-visual" style="--case-accent: #1c5d99;">
         <div class="case-architecture flow">
           <div class="case-architecture-head">
-            <span>시스템 흐름</span>
-            <b>처리 순서와 오류 대응</b>
+            <span>구성 요소</span>
+            <b>요청 처리 순서는 위 설명 참고</b>
           </div>
           <div class="case-architecture-flow">
           <div class="case-arch-node">
@@ -4855,7 +4886,7 @@ if access_reason is None:
             <code class="case-code-symbol">GatewayPipeline.execute</code>
             <span class="case-code-path"><b>파일</b>backend/src/main/java/com/example/gateway/api/GatewayPipeline.java</span>
           </div>
-          <pre class="case-code-snippet">QuotaOutcome quota = quotaGuard.evaluate(request, estimatedTokens);
+          <p class="code-scroll-hint">긴 코드는 좌우로 스크롤해 볼 수 있습니다.</p><pre class="case-code-snippet" tabindex="0" aria-label="코드 예시, 좌우로 스크롤할 수 있습니다">QuotaOutcome quota = quotaGuard.evaluate(request, estimatedTokens);
 if (quota != QuotaOutcome.ALLOWED) {
     return rejected(request, mode, quota, elapsed(start));
 }</pre>
@@ -4872,7 +4903,7 @@ if (quota != QuotaOutcome.ALLOWED) {
         </section>
       </div>
       <section class="case-closeout"><div><span>테스트 환경·제한</span><p>고정 응답 모델과 메모리 저장소로 테스트했습니다. 실제 OpenAI·Anthropic 호출, 운영 Redis·PostgreSQL, 클라우드 배포와 부하 테스트는 포함하지 않았습니다.</p></div></section>
-      <div class="case-source-links"><a href="https://github.com/cyson21/ai-gateway">코드 저장소</a><span> · </span><a href="https://github.com/cyson21/ai-gateway/blob/main/web/scripts/verify-static-demo.mjs">설계·검증 문서</a></div>
+      <div class="case-source-links"><a href="https://github.com/cyson21/ai-gateway">코드 저장소</a><span> · </span><a href="https://github.com/cyson21/ai-gateway/blob/main/web/scripts/verify-static-demo.mjs">정적 데모 검증 스크립트</a></div>
     </div>
     <div class="footer-note">손찬양 · AI Gateway</div>
   </section>
@@ -4904,8 +4935,8 @@ if (quota != QuotaOutcome.ALLOWED) {
       <section class="case-visual" style="--case-accent: #1c5d99;">
         <div class="case-architecture flow">
           <div class="case-architecture-head">
-            <span>시스템 흐름</span>
-            <b>처리 순서와 오류 대응</b>
+            <span>구성 요소</span>
+            <b>각 구성요소를 별도로 검증 · 자동 연결은 미구현</b>
           </div>
           <div class="case-architecture-flow">
           <div class="case-arch-node">
@@ -4981,7 +5012,7 @@ if (quota != QuotaOutcome.ALLOWED) {
         </div>
         <div>
           <strong>CDC 이벤트 중복 저장과 재처리 이력 관리</strong>
-          <p>커넥터 재시작이나 재전달로 같은 DB 변경이 여러 번 들어올 수 있습니다. 원천 LSN·오프셋으로 중복을 식별하고, 적재 실패 원인과 재처리 상태를 기록하도록 구현했습니다.</p>
+          <p>커넥터 재시작이나 재전달로 같은 DB 변경이 여러 번 들어올 수 있습니다. 원천 메타데이터로 이벤트 ID를 만들어 중복을 식별하고 오프셋은 별도로 보존했습니다. 적재 실패 원인과 재처리 상태도 기록하도록 구현했습니다.</p>
         </div>
       </section>
       <section class="case-decision-band">
@@ -5011,7 +5042,7 @@ if (quota != QuotaOutcome.ALLOWED) {
             <code class="case-code-symbol">CanonicalIngestService.ingestRawEnvelope</code>
             <span class="case-code-path"><b>파일</b>backend/src/main/java/com/example/cdcplatform/event/CanonicalIngestService.java</span>
           </div>
-          <pre class="case-code-snippet">DebeziumEnvelope envelope = DebeziumEnvelope.parse(rawEnvelopeJson);
+          <p class="code-scroll-hint">긴 코드는 좌우로 스크롤해 볼 수 있습니다.</p><pre class="case-code-snippet" tabindex="0" aria-label="코드 예시, 좌우로 스크롤할 수 있습니다">DebeziumEnvelope envelope = DebeziumEnvelope.parse(rawEnvelopeJson);
 CanonicalCdcEvent event = CanonicalCdcEvent.fromEnvelope(envelope);
 String sourceOffsetJson = sourceOffsetJson(envelope);
 boolean created = canonicalEventPublisher.recordCanonicalEvent(event, sourceOffsetJson);</pre>
@@ -5167,7 +5198,7 @@ boolean created = canonicalEventPublisher.recordCanonicalEvent(event, sourceOffs
             <code class="case-code-symbol">apply_event_to_profile</code>
             <span class="case-code-path"><b>파일</b>src/fashion_personalization/recommendation.py</span>
           </div>
-          <pre class="case-code-snippet">selected_size = event.payload.get(&quot;size&quot;)
+          <p class="code-scroll-hint">긴 코드는 좌우로 스크롤해 볼 수 있습니다.</p><pre class="case-code-snippet" tabindex="0" aria-label="코드 예시, 좌우로 스크롤할 수 있습니다">selected_size = event.payload.get(&quot;size&quot;)
 if isinstance(selected_size, str) and selected_size in product.sizes:
     _add_weight(profile.size_preferences, selected_size, max(weight, 0.1))</pre>
           <p class="case-code-description"><b>처리 조건</b>선택한 값이 실제 상품 옵션에 있을 때만 사이즈 선호에 반영해 잘못된 프로필 신호를 막습니다.</p>
