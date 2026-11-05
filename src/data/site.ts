@@ -1,4 +1,4 @@
-const siteUpdatedAt = '2026-10-30';
+const siteUpdatedAt = '2026-11-05';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -48,12 +48,12 @@ const experienceRecords = [
     company: '이엠캐스트(주)', role: '백엔드 개발자 · 주임',
     context: '4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 B2B 리테일 교육 플랫폼의 백엔드 개발·운영을 담당했습니다.',
     responsibilities: [
-      { title: 'API·데이터 접근 계층 개발', description: 'Java·Spring Boot로 REST API를 개발하고 JPA·QueryDSL·MySQL 기반 조회·저장 로직과 관리자 기능을 수정했습니다.' },
-      { title: '플랫폼 버전 전환·회귀 검증', description: '플랫폼 2.0에서 3.0으로 전환할 때 API·DB 변경이 기존 기능에 미치는 영향을 점검했습니다. 레거시 코드와 데이터 접근 로직을 정리하고 통합·회귀 테스트를 수행했습니다.' },
-      { title: '저장 시점의 상태 재검증', description: '화면을 연 뒤 관련 작업이 시작된 경우 저장 직전 서버에서 상태를 다시 조회해 변경을 차단했습니다. 후속 데이터 갱신에도 같은 상태 조회를 사용했습니다.' },
-      { title: '배치 중복 제어·실패 및 누락 모니터링', description: 'ShedLock·Redis 분산락을 적용했습니다. 별도 개선으로 고객사·배치별 상태·처리 건수·실행 시간을 집계하고 예정 시각 1시간 뒤 Slack으로 실패·누락을 알렸습니다.' },
-      { title: '구매 API 락 경합·트랜잭션 개선', description: '주문 단위 분산락을 적용하고 결제 처리를 별도 트랜잭션으로 분리했습니다. 결제 요청 상태를 먼저 커밋하고, 락 오류만 제한적으로 재시도하도록 수정했습니다. 재처리 시 결제 완료 여부를 확인했습니다.' },
-      { title: 'AWS 인프라·CI/CD·배포 운영', description: 'EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환에 참여했습니다. CI/CD 개선 작업과 코드리뷰에도 참여했습니다.' },
+      { title: '플랫폼 기능 개발', description: 'Java·Spring Boot로 REST API를 개발하고 JPA·QueryDSL·MySQL 기반 조회·저장 로직과 관리자 기능을 개선했습니다.' },
+      { title: '버전 전환과 검증', description: '플랫폼 2.0에서 3.0으로 전환하며 API·DB 변경의 영향 범위를 점검하고 레거시 코드와 데이터 접근 로직을 정리했습니다. 통합·회귀 테스트도 수행했습니다.' },
+      { title: '운영 오류와 데이터 정합성', description: '서버 로그와 DB 기록을 바탕으로 오류를 분석했습니다. 저장 전 상태를 다시 확인하고 복합 식별자와 조회·집계 조건을 수정했으며 락 경합에 대응해 분산락과 트랜잭션 경계를 조정했습니다.' },
+      { title: '배치 운영', description: 'ShedLock·Redis 분산락으로 서버별 배치 중복 실행을 제어했습니다. 별도 개선으로 고객사·배치별 처리 상태를 집계하고 실패와 실행 누락을 Slack으로 알렸습니다.' },
+      { title: '메시징 처리', description: '발송 요청의 응답 지연으로 실제 결과와 실패 이력이 어긋나는 문제에 대응해 RabbitMQ 기반 비동기 요청·결과 처리 분리에 참여했습니다.' },
+      { title: '인프라·협업', description: 'EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환, CI/CD 개선 및 코드리뷰에 참여했습니다.' },
     ],
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'Redis', 'ShedLock', 'Redisson', 'RabbitMQ', 'AWS EC2', 'AWS RDS', 'AWS S3', 'AWS Lambda', 'CloudWatch', 'AWS WAF', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
   },
@@ -66,7 +66,7 @@ const experienceRecords = [
   },
 ] as const;
 
-export const professionalSummary = '기업용 플랫폼과 공공·실시간 데이터 서비스의 API를 개발·운영했습니다. 데이터 정합성 오류, 배치 중복 실행, 구매 API의 락 경합을 분석하고 서버 로직과 처리 흐름을 개선했습니다.';
+export const professionalSummary = 'Java·Spring Boot 기반 API와 데이터 처리 로직을 개발하고 운영 중 발생한 오류를 분석해 서비스 동작과 데이터 정합성을 개선했습니다.';
 export const resumeWorkCases = [
   {
     anchor: 'work-policy',
@@ -77,16 +77,16 @@ export const resumeWorkCases = [
   },
   {
     anchor: 'work-purchase',
-    title: '구매 API의 락 경합과 트랜잭션 경계 조정',
-    problem: '동시 구매 요청에서 주문 저장 중 DB 데드락이 발생했습니다. 결제 처리를 별도 트랜잭션으로 옮기자 앞 단계의 미커밋 상태를 읽는 문제도 드러났습니다.',
-    change: '주문 단위 분산락과 별도 트랜잭션, 락 오류의 제한적 재시도를 적용했습니다. 결제 요청 상태를 먼저 커밋하도록 호출 경계를 조정하고, 재처리 시 결제 완료 상태를 확인했습니다.',
+    title: '동시 요청의 락 경합과 트랜잭션 경계 조정',
+    problem: '동시 요청으로 주문을 저장하는 과정에서 DB 데드락이 발생했고, 결제 트랜잭션 분리 후에는 앞 단계에서 아직 커밋하지 않은 요청 상태를 조회하지 못하는 문제도 드러났습니다.',
+    change: '주문 단위 분산락과 별도 결제 트랜잭션을 적용하고 결제 요청 상태를 먼저 커밋하도록 호출 경계를 조정했습니다. 락 오류만 제한적으로 재시도하고 재처리 시 결제 완료 여부를 확인했습니다.',
     verification: '동시 요청·락 예외·결제 완료 재처리 테스트 정의. 저장된 초기 QA 기록의 추가 검증 항목은 별도로 관리.',
   },
   {
     anchor: 'work-batch',
     title: '배치 중복 실행 제어와 실패·실행 누락 모니터링',
-    problem: '서버마다 스케줄러가 실행돼 같은 배치가 중복 처리됐습니다. 고객사별로 예정된 배치의 실패와 실행 누락도 구분해야 했습니다.',
-    change: 'ShedLock·Redis 분산락을 적용했습니다. 별도 개선으로 고객사·배치별 상태를 집계하고, 예정 시각 1시간 후 실패·발행 누락·결과 미수신을 구분해 Slack으로 알리도록 구현했습니다.',
+    problem: '서버마다 스케줄러가 실행돼 배치가 중복 처리됐고, 예정된 배치의 실패와 실행 누락을 구분해야 했습니다.',
+    change: 'ShedLock·Redis 분산락을 적용했습니다. 별도 개선으로 고객사·배치별 상태를 집계하고 예정 시각 1시간 뒤 실패·발행 누락·결과 미수신을 Slack으로 알렸습니다.',
     verification: '서버 로그·DB 기록으로 실행 결과 확인. 스케줄러·상태 집계 코드와 관련 테스트 정의 대조. 운영 개선 수치는 미확인.',
   },
   {
@@ -98,7 +98,7 @@ export const resumeWorkCases = [
   },
 ];
 
-export const resumeIntro = '2021년부터 백엔드 개발·운영을 담당해 왔으며, Java·Spring Boot를 주력으로 사용합니다.';
+export const resumeIntro = '2021년부터 기업용 교육 플랫폼과 공공·실시간 데이터 서비스의 백엔드를 개발하고 운영했습니다.';
 
 export const resumeHighlights = [
   'B2B 리테일 교육 플랫폼의 REST API 설계·개발과 관리자 기능 개편',
@@ -110,7 +110,7 @@ export const resumeHighlights = [
 ] as const;
 
 export const resumeClosing =
-  '서버 로그와 DB 기록으로 원인을 찾아 저장 시점의 상태 불일치, 구매 API의 락 경합, 배치 중복 실행 문제를 수정했습니다.';
+  '서버 로그와 DB 기록으로 원인을 찾아 데이터 정합성 오류, 동시 요청의 락 경합, 배치 중복 실행 문제를 수정했습니다.';
 
 export const resumeSummary = [resumeIntro, resumeClosing] as const;
 

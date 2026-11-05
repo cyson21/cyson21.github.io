@@ -381,3 +381,37 @@
 .batch-flow-steps { display: flex; flex-wrap: wrap; gap: 12px 28px; padding-left: 24px; margin-block: 16px; }
 .batch-flow-steps li { flex: 1 1 180px; padding-right: 12px; }
 .batch-flow p { font-size: 14px; color: #4b5b70; }
+
+@media screen {
+ html { scroll-behavior:smooth; }
+ .cover h1 { word-break:keep-all; overflow-wrap:normal; letter-spacing:-.02em; }
+ .cover .lead { max-width:62ch; line-height:1.6; }
+ .portfolio-intro-detail { max-width:72ch; color:#4b5b70; font-size:16px; line-height:1.75; margin:18px 0 30px; word-break:keep-all; }
+ .portfolio-overview { display:grid; grid-template-columns:1fr 1fr; gap:36px; border-top:1px solid #c9d4e0; padding-top:25px; }
+ .portfolio-overview section { min-width:0; }
+ .portfolio-overview h2 { font-size:21px; margin:0 0 12px; }
+ .portfolio-overview p { color:#405267; font-size:15px; line-height:1.7; margin:0 0 10px; word-break:keep-all; }
+ .portfolio-overview a { display:inline-block; margin-top:8px; font-weight:650; text-underline-offset:4px; }
+ .portfolio-contact { border-top:1px solid #dce3eb; margin:30px 0 0; padding-top:18px; font-size:14px; line-height:1.8; }
+ .portfolio-contact span { padding:0 5px; }
+ .work-cases > .compact-note { font-size:14px; line-height:1.65; }
+ .work-case h3 { word-break:keep-all; }
+ a:focus-visible { outline:3px solid #315d88; outline-offset:3px; }
+ @media(max-width:700px) { .portfolio-overview { grid-template-columns:1fr; gap:24px; } .portfolio-intro-detail { font-size:15px; } .portfolio-contact span { padding:0 2px; } }
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* 구성도에서 처리 순서로 오해될 수 있는 연결을 제거합니다. */
+#ai-gateway .case-architecture.flow .case-arch-node::after { display:none !important; content:none !important; }
+#ai-gateway .case-architecture.flow .case-arch-node em { display:none; }
+@media screen and (max-width:959px) { #ai-gateway .case-architecture.flow .case-arch-node { grid-template-columns:32px minmax(0,1fr); } #ai-gateway .case-architecture.flow .case-arch-icon { grid-column:1; } #ai-gateway .case-architecture.flow .case-arch-node strong { grid-column:2; } }
+@media screen {
+ .case-study-page .case-code-snippet { white-space:pre; overflow-x:auto; overflow-wrap:normal; word-break:normal; max-width:100%; }
+ .case-code-description b { margin-right:.4em; }
+ .code-scroll-hint { color:#d0dae6; font-size:12px; margin:8px 0 0; line-height:1.5; }
+ .case-code-snippet:focus-visible { outline:3px solid #b6d4f2; outline-offset:3px; }
+}
+/* CDC 구성 요소는 종단 간 연결이 아닌 각각 검증한 범위입니다. */
+#cdc-data-platform .case-architecture.flow .case-arch-node::after { display:none !important; content:none !important; }
+#cdc-data-platform .case-architecture.flow .case-arch-node em { display:none; }
+@media screen and (max-width:959px) { #cdc-data-platform .case-architecture.flow .case-architecture-flow, #ai-gateway .case-architecture.flow .case-architecture-flow { gap:12px; } #cdc-data-platform .case-architecture.flow .case-arch-node { grid-template-columns:32px minmax(0,1fr); } #cdc-data-platform .case-architecture.flow .case-arch-icon { grid-column:1; } #cdc-data-platform .case-architecture.flow .case-arch-node strong { grid-column:2; } }
