@@ -1,38 +1,45 @@
 import { expect, test } from '@playwright/test';
-for (const width of [320, 390, 768, 1440]) {
-  test(`integrated evidence stays readable at ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 844 });
+for (const width of [390, 768, 994, 1440]) {
+  test(`professional and personal evidence have separate destinations at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
     await page.goto('/portfolio/');
-    const metrics = await page.evaluate(() => ({
-      overflow: document.documentElement.scrollWidth - innerWidth,
-      rows: Array.from(document.querySelectorAll<HTMLElement>('.summary-project-card')).map(card => ({
-        width: card.getBoundingClientRect().width,
-        facts: Array.from(card.querySelectorAll<HTMLElement>('p')).map(e => ({
-          width: e.getBoundingClientRect().width,
-          clipped: e.scrollWidth > e.clientWidth + 1 || e.scrollHeight > e.clientHeight + 1,
-        })),
-      })),
-    }));
-    expect(metrics.overflow).toBeLessThanOrEqual(1);
-    expect(metrics.rows).toHaveLength(6);
-    for (const row of metrics.rows) {
-      expect(row.width).toBeGreaterThan(250);
-      expect(row.facts).toHaveLength(1);
-      for (const fact of row.facts) {
-        expect(fact.width).toBeGreaterThan(200);
-        expect(fact.clipped).toBe(false);
-      }
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('실무 사례');
+    await page.getByRole('link', { name: /실무 사례 목록/ }).click();
+    await page.locator('#work-batch > a').click();
+    await expect(page).toHaveURL(/cases\.html#work-batch$/);
+    await expect(page.locator('.work-case')).toHaveCount(5);
+    await expect(page.locator('.case-study-page')).toHaveCount(0);
+    await page.goto('/portfolio/#stockrush');
+    await expect(page).toHaveURL(/\/projects\/stockrush\/$/);
+    await expect(page.locator('#evidence .evidence')).toHaveCount(3);
+    await expect(page.locator('#evidence pre').first()).toBeVisible();
+    await page.goto('/portfolio/cases.html#member-event-consistency');
+    await expect(page).toHaveURL(/\/projects\/member-event-consistency\/$/);
+  });
+}
+
+test('intermediate-width work overview keeps readable content-sized sections', async ({ page }) => {
+  await page.setViewportSize({ width: 994, height: 1079 });
+  await page.goto('/portfolio/');
+  await page.evaluate(() => document.fonts.ready);
+  const fontSizes = await page.locator('.work-flow-grid li').evaluateAll(elements => elements.map(e => parseFloat(getComputedStyle(e).fontSize)));
+  expect(fontSizes.every(size => size >= 16)).toBeTruthy();
+  const before = await page.locator('#work').evaluate(e => e.getBoundingClientRect().height);
+  await page.setViewportSize({ width: 994, height: 800 });
+  expect(Math.abs(await page.locator('#work').evaluate(e => e.getBoundingClientRect().height) - before)).toBeLessThan(2);
+});
+
+for (const width of [390, 922]) {
+  test(`batch detail presents four ordered steps per flow at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 921 });
+    await page.goto('/portfolio/cases.html#work-batch');
+    const lists = page.locator('#work-batch .batch-flow-steps');
+    await expect(lists).toHaveCount(2);
+    for (const list of await lists.all()) {
+      await expect(list.locator('li')).toHaveCount(4);
+      const rects = await list.locator('li').evaluateAll(items => items.map(item => ({ x: item.getBoundingClientRect().x, y: item.getBoundingClientRect().y, bottom: item.getBoundingClientRect().bottom })));
+      expect(Math.max(...rects.map(r => r.x)) - Math.min(...rects.map(r => r.x))).toBeLessThan(2);
+      for (let i = 1; i < rects.length; i++) expect(rects[i].y).toBeGreaterThanOrEqual(rects[i-1].bottom - 1);
     }
-    await page.getByRole('navigation', { name: '포트폴리오 목차' }).getByRole('link', { name: '실무 사례' }).click();
-    await expect(page).toHaveURL(/#work-cases$/);
-    await expect(page.locator('#work-cases .work-case')).toHaveCount(5);
-    await expect(page.locator('#work-policy h3')).toBeVisible();
-    await page.locator('#work-policy').getByRole('link', { name: 'Member Event Consistency', exact: true }).click();
-    await expect(page).toHaveURL(/#member-event-consistency$/);
-    await page.getByRole('navigation', { name: '포트폴리오 목차' }).getByRole('link', { name: '개인 프로젝트' }).click();
-    await expect(page).toHaveURL(/#portfolio-results$/);
-    await page.locator('#portfolio-results .summary-project-card').getByRole('link', { name: 'StockRush', exact: true }).click();
-    await expect(page).toHaveURL(/#stockrush$/);
-    await expect(page.locator('#stockrush .case-code-snippet')).toBeVisible();
   });
 }

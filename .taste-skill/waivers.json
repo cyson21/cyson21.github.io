@@ -1,0 +1,7 @@
+[
+  {
+    "check": "hero-lines",
+    "target": "section.hero h1",
+    "reason": "The final Korean heading has two deliberate lines and fits at 1440px and 390px. This finding substitutes a 44-character stress heading; the actual fixed heading is not user-generated."
+  }
+]

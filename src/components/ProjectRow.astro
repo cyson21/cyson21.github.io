@@ -20,8 +20,8 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
       <div class="project-title-line">
         <div>
           {headingLevel === 2
-            ? <h2><a href={`/projects/${project.id}/`}>{data.name}</a></h2>
-            : <h3><a href={`/projects/${project.id}/`}>{data.name}</a></h3>}
+            ? <h2>{data.name}</h2>
+            : <h3>{data.name}</h3>}
         </div>
         <div class="project-status">
           <span class="domain">{domainLabels[data.domain]}</span>
@@ -49,8 +49,8 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
       </div>
       {compact && (
         <div class="project-links project-links--compact">
-          <a href={`/projects/${project.id}/`} aria-label={`${data.name} 프로젝트 상세 보기`}>자세히 보기 <ArrowRight size={16} aria-hidden="true" /></a>
-          {data.links.github && <a href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}>GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
+          <a href={`/projects/${project.id}/`} aria-label={`${data.name} 프로젝트 상세 보기`}>{data.name} 상세 <ArrowRight size={16} aria-hidden="true" /></a>
+          {data.links.github && <a href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}>GitHub 저장소 <ArrowUpRight size={15} aria-hidden="true" /></a>}
         </div>
       )}
     </div>
@@ -60,8 +60,8 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
     <strong>{primarySignal.expression}</strong>
     <span>{primarySignal.result}</span>
     <div class="project-links">
-      <a href={`/projects/${project.id}/`} aria-label={`${data.name} 프로젝트 상세 보기`}>자세히 보기 <ArrowRight size={16} aria-hidden="true" /></a>
-      {data.links.github && <a href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}>GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
+      <a href={`/projects/${project.id}/`} aria-label={`${data.name} 프로젝트 상세 보기`}>{data.name} 상세 <ArrowRight size={16} aria-hidden="true" /></a>
+      {data.links.github && <a href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}>GitHub 저장소 <ArrowUpRight size={15} aria-hidden="true" /></a>}
     </div>
   </div>}
 </article>

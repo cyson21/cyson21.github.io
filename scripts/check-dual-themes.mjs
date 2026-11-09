@@ -2,11 +2,12 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const root = new URL('../', import.meta.url);
-const [layout, bCss, cCss, footer, verificationSignal, projectPage, projectsIndex] = await Promise.all([
+const [layout, bCss, cCss, footer, sharedChromeCss, verificationSignal, projectPage, projectsIndex] = await Promise.all([
   readFile(new URL('src/layouts/BaseLayout.astro', root), 'utf8'),
   readFile(new URL('public/themes/b.css', root), 'utf8'),
   readFile(new URL('public/themes/c.css', root), 'utf8'),
   readFile(new URL('src/components/Footer.astro', root), 'utf8'),
+  readFile(new URL('public/portfolio/assets/site-chrome.css', root), 'utf8'),
   readFile(new URL('src/components/VerificationSignal.astro', root), 'utf8'),
   readFile(new URL('src/pages/projects/[slug].astro', root), 'utf8'),
   readFile(new URL('src/pages/projects/index.astro', root), 'utf8'),
@@ -62,18 +63,10 @@ assert.match(cCss, /--project-meta-copy:\s*#5d5861/i);
 assert.match(cCss, /--warning-result-copy:\s*#6b5939/i);
 assert.match(cCss, /--pagination-label-copy:\s*#5d5861/i);
 
-assert.match(footer, /var\(--footer-muted-copy,\s*var\(--ink-soft\)\)/);
-assert.match(
-  footer,
-  /\.site-footer \.button--secondary\s*\{[\s\S]*?color:\s*var\(--ink\);[\s\S]*?\}/,
-  'Footer secondary button must keep readable ink on its light surface',
-);
-assert.match(
-  footer,
-  /\.site-footer \.button--text\s*\{[\s\S]*?color:\s*var\(--footer-link-copy,\s*var\(--ink\)\);[\s\S]*?\}/,
-  'Footer text link must use the theme-specific footer link color',
-);
-assert.match(footer, /var\(--footer-faint-copy,\s*var\(--ink-faint\)\)/);
+assert.match(footer, /renderFooter\(\)/, 'Native footer must use the shared renderer');
+assert.match(sharedChromeCss, /var\(--footer-muted-copy,/, 'Shared footer must retain muted theme color');
+assert.match(sharedChromeCss, /var\(--footer-link-copy,/, 'Shared footer links must retain theme color');
+assert.match(sharedChromeCss, /var\(--footer-faint-copy,/, 'Shared copyright must retain theme color');
 assert.match(verificationSignal, /var\(--warning-result-copy,\s*var\(--amber\)\)/);
 assert.match(projectPage, /var\(--project-meta-copy,\s*var\(--ink-faint\)\)/);
 assert.match(projectPage, /var\(--pagination-label-copy,\s*var\(--ink-faint\)\)/);

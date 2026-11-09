@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { resumeIntro } from '../../src/data/site';
 
 import { isAuditRouteSelected } from './fixtures/canonical';
 
@@ -103,7 +102,7 @@ test('Korean interface labels use the text font rather than the code font', asyn
   };
 
   await page.goto('/projects/');
-  await expectTextFonts(['.wordmark-role', '.domain', '#filter-status']);
+  await expectTextFonts(['.site-chrome-brand span', '.domain', '#filter-status']);
 
   await page.goto('/projects/stockrush/');
   await expectTextFonts([
@@ -117,22 +116,18 @@ test('Korean interface labels use the text font rather than the code font', asyn
   ]);
 });
 
-test('detail pages expose an explicit route back to the portfolio home', async ({ page, isMobile }) => {
+test('detail pages expose an explicit route back to the portfolio home', async ({ page }) => {
   for (const route of ['/projects/stockrush/', '/experience/']) {
     await page.goto(route);
-    if (isMobile) {
-      await page.getByRole('button', { name: '탐색 메뉴 열기' }).click();
-      await expect(page.getByRole('navigation', { name: '모바일 탐색' }).getByRole('link', { name: '홈' })).toHaveAttribute('href', '/');
-    } else {
-      await expect(page.getByRole('navigation', { name: '주요 탐색' }).getByRole('link', { name: '홈' })).toHaveAttribute('href', '/');
-    }
+    await expect(page.locator('.site-chrome-brand')).toHaveAttribute('href', '/');
+    await expect(page.locator('.site-chrome-footer').getByRole('link', {name: '홈', exact: true})).toHaveAttribute('href', '/');
   }
 });
 
 test('experience page unifies the résumé summary and career evidence', async ({ page }) => {
   await page.goto('/experience/');
   await expect(page.getByRole('heading', { name: '경력·이력서' })).toBeVisible();
-  await expect(page.locator('.resume-overview .summary-intro')).toHaveText(resumeIntro);
+  await expect(page.locator('.resume-overview').getByRole('link', {name: '이력서 PDF 다운로드', exact: true})).toHaveAttribute('href', '/downloads/resume.pdf');
   await expect(page.locator('.resume-overview .summary-highlights li')).toHaveCount(0);
   await expect(page.getByRole('heading', { name: '주요 기여' })).toHaveCount(2);
   const currentExperience = page.locator('.experience-entry').first();
@@ -185,14 +180,13 @@ test('home navigation prioritizes career and labels personal projects', async ({
   await expect(page.locator('[aria-labelledby="experience-title"]')).toHaveCount(0);
   await expect(page.locator('#featured-projects')).toHaveCount(0);
   if (isMobile) {
-    await page.getByRole('button', { name: '탐색 메뉴 열기' }).click();
+    await page.getByRole('button', { name: '주 메뉴 열기' }).click();
   }
-  const navigation = page.getByRole('navigation', { name: isMobile ? '모바일 탐색' : '주요 탐색' });
+  const navigation = page.getByRole('navigation', { name: isMobile ? '주 메뉴' : '주 메뉴' });
   const links = navigation.getByRole('link');
-  await expect(links.nth(0)).toHaveText('홈');
-  await expect(links.nth(1)).toHaveText('경력·이력서');
-  await expect(links.nth(2)).toHaveText('개인 프로젝트');
-  await expect(links.nth(1)).toHaveAttribute('href', '/experience/');
+  await expect(links).toHaveText(['경력·이력서', '실무 사례', '개인 프로젝트']);
+  await expect(links.nth(0)).toHaveAttribute('href', '/experience/');
+  await expect(links.nth(1)).toHaveAttribute('href', '/portfolio/');
   await expect(links.nth(2)).toHaveAttribute('href', '/projects/');
 });
 
@@ -212,11 +206,11 @@ test('navigation, document flow, and code evidence remain readable without JavaS
   const page = await context.newPage();
   await page.goto('/projects/stockrush/');
 
-  await expect(page.getByRole('navigation', { name: '모바일 탐색' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: '주 메뉴' })).toBeVisible();
   await expect(page.locator('.project-toc a')).toHaveText([
-    '프로젝트 개요',
-    '기술 선택',
-    '주요 구현',
+    '해결한 문제와 담당 역할',
+    '기술 선택과 이유',
+    '주요 구현과 관련 테스트',
     '테스트 결과',
     '프로젝트 범위',
   ]);

@@ -123,7 +123,7 @@ verification:
     method: Redis, RabbitMQ, PostgreSQL을 띄우고 수량 3개짜리 캠페인에 8건을 요청합니다.
     result: 3건 발급, 5건 거절
 limitations:
-  - Testcontainers의 제한된 요청 수로 정합성을 확인했습니다. 운영 수준의 처리량·지연과 브로커 장기 장애는 검증하지 않았습니다.
+  - Testcontainers의 제한된 요청 수로 정합성을 확인했습니다. RabbitMQ 비교는 Spring 인스턴스 1개·소비자 1개 조건입니다. 운영 수준의 처리량·지연과 브로커 장기 장애는 검증하지 않았습니다.
   - Redis의 다중 프로세스 잠금 경쟁·만료·장애 복구와 RabbitMQ 다중 인스턴스 순서 보장은 검증하지 않았습니다.
   - 방식별 성능 우위나 DB 부하 감소 효과는 측정하지 않았습니다.
 next:

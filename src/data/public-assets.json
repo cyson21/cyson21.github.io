@@ -39,7 +39,7 @@
     "output": "public/portfolio/index.html",
     "sourceProject": "portfolio-web",
     "sourcePath": "public/portfolio/index.html",
-    "sha256": "a8da57d8e4dd0e0a5344c3369e6b6c5b812e28ccbfa10f49c172cd1203083b8d",
+    "sha256": "885c684081fa2bf00f57cf8b7b074026eae7166c1376a03d08fc5787d11fd29e",
     "owner": "Son Chanyang",
     "usage": "Public backend problem-solving case studies",
     "approvedAt": "2026-11-05"
@@ -88,5 +88,212 @@
     "owner": "Son Chanyang",
     "usage": "Companion C Soft Organic visual theme",
     "approvedAt": "2026-08-10"
+  },
+  {
+    "output": "public/portfolio/cases.html",
+    "sourceProject": "cyson21.github.io",
+    "sourcePath": "src/portfolio/overview.html",
+    "sha256": "3daff585de2e78bbf5c40a006259c385489476b33e43557e977b8e57c199923b",
+    "owner": "Son Chanyang",
+    "usage": "User-authorized portfolio overview, preserved evidence, and source diagram captures",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/media/ai-gateway.png",
+    "sourceProject": "cyson21.github.io",
+    "sourcePath": "public/portfolio/cases.html",
+    "sha256": "72da7eba2ce8c03bdacb5132ad8cac4d8caccded886c81117f0b553d721b07a8",
+    "owner": "Son Chanyang",
+    "usage": "User-authorized portfolio overview, preserved evidence, and source diagram captures",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/media/cdc-data-platform.png",
+    "sourceProject": "cyson21.github.io",
+    "sourcePath": "public/portfolio/cases.html",
+    "sha256": "32fbd5adbdeb91b19d50b9b6a452ede441f32b34deb75ae35d23041ef99c7628",
+    "owner": "Son Chanyang",
+    "usage": "User-authorized portfolio overview, preserved evidence, and source diagram captures",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/media/stockrush.png",
+    "sourceProject": "cyson21.github.io",
+    "sourcePath": "public/portfolio/cases.html",
+    "sha256": "caf65dc061543795ea6c6adb190ae14801f71e50c091ba5ceff0017aaaff82b7",
+    "owner": "Son Chanyang",
+    "usage": "User-authorized portfolio overview, preserved evidence, and source diagram captures",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/media/enterprise-policy-rag.png",
+    "sourceProject": "cyson21.github.io",
+    "sourcePath": "public/portfolio/cases.html",
+    "sha256": "6e329bc98954969e751bdb7575af1a66a07119edb97bb2a6acd4deaf1f875481",
+    "owner": "Son Chanyang",
+    "usage": "User-authorized portfolio overview, preserved evidence, and source diagram captures",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/media/member-event-consistency.png",
+    "sourceProject": "cyson21.github.io",
+    "sourcePath": "public/portfolio/cases.html",
+    "sha256": "d2e9bac72f93f6c95c3763f45b661062785a9ac2213275f02ff38a3d68fa672d",
+    "owner": "Son Chanyang",
+    "usage": "User-authorized portfolio overview, preserved evidence, and source diagram captures",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/media/fashion-personalization-platform.png",
+    "sourceProject": "cyson21.github.io",
+    "sourcePath": "public/portfolio/cases.html",
+    "sha256": "700b480d08ab6ef46f6cb4117bebe364e24f28bac8eab0894e054c3a69003696",
+    "owner": "Son Chanyang",
+    "usage": "User-authorized portfolio overview, preserved evidence, and source diagram captures",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/media/work-batch.png",
+    "sourceProject": "cyson21.github.io",
+    "sourcePath": "public/portfolio/cases.html",
+    "sha256": "ba90990a9b8ffc603b41577e3d8f148871d3812cd771324a57cd3be08b097de9",
+    "owner": "Son Chanyang",
+    "usage": "User-authorized portfolio overview, preserved evidence, and source diagram captures",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/LICENSE.txt",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/LICENSE",
+    "sha256": "4575a543ab88dad12ccea7d97e563d0bce5b448b06072e65d3264497dad326df",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/system.css",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/system.css",
+    "sha256": "2facb5c5537a3bd44514eacc98715b04f6f19ca9ace11a92d35903941511e71c",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/system.js",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/system.js",
+    "sha256": "a5d8117e85199d422166b3a9ffc639b498be03cc160641057f5be8bb96931fe1",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/ui/ui.js",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/ui/ui.js",
+    "sha256": "a32175d929ce941e69ccccc2819f90967d06c578eeab082a320c6a99c2a4f5c5",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/ui/cards.css",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/ui/cards.css",
+    "sha256": "2ed4b9d5c9b6b80c6d579683f36208d44515d63f93c780aa32703276f5c38bea",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/moments/moments.js",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/moments/moments.js",
+    "sha256": "5c38a832b7e7b4e561c4336c75628e36915dab6f1b64ffa7af50b6b1f49766da",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/moments/lib.js",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/moments/lib.js",
+    "sha256": "22c172166ded3c0ea70925e9a04c37baac291ca6fa9b5a0e4c487a52acf69220",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/layout/layout.js",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/layout/layout.js",
+    "sha256": "46c9d12b66d78b9840b0739750c1509dbc200b70d3cdf8994d34c7e5c1d94399",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/layout/layout.css",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/layout/layout.css",
+    "sha256": "8ae1ad2d798118433554f067d8e012bbce5646c868d154a1087284c5d32f2ac3",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/motion/motion.js",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/motion/motion.js",
+    "sha256": "e4453f1ac91d81002c5a75dccc1263285267999a8bb2453278ab63232e7062cc",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/motion/motion.css",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/motion/motion.css",
+    "sha256": "948bfb7192c908934206ef5776ac28bdd8c3499483d7347cbb24e7b6fb5c6810",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/moments/word-highlight/moment.js",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/moments/word-highlight/moment.js",
+    "sha256": "7501d627e3b8eb63d2df7d8ce745320c9ebabba84864321989181fc43c3ac2cd",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/moments/word-highlight/moment.css",
+    "sourceProject": "design-taste-frontend 2.5.1",
+    "sourcePath": "assets/moments/word-highlight/moment.css",
+    "sha256": "e63f54891ad7fee586ed312d79d0d319346fd42d14f28e95cff15d8a65f2638c",
+    "owner": "Upstream authors; see public/portfolio/assets/LICENSE.txt",
+    "usage": "Unmodified Taste UI layout, navigation, motion and moment runtime",
+    "approvedAt": "2026-11-09"
+  },
+  {
+    "output": "public/portfolio/assets/site-chrome.css",
+    "sourceProject": "portfolio-web",
+    "sourcePath": "public/portfolio/assets/site-chrome.css",
+    "sha256": "2813979875405a543e17765e350ef7929549f1ef20548b227b635880e2f7d5eb",
+    "owner": "Son Chanyang",
+    "usage": "Shared website navigation and footer",
+    "approvedAt": "2026-11-10"
+  },
+  {
+    "output": "public/portfolio/assets/site-chrome.js",
+    "sourceProject": "portfolio-web",
+    "sourcePath": "public/portfolio/assets/site-chrome.js",
+    "sha256": "217be2ff7833fc07ff598adad50e8275bb4fccd5ec4e249d18992c05bd600293",
+    "owner": "Son Chanyang",
+    "usage": "Shared website navigation and footer",
+    "approvedAt": "2026-11-10"
   }
 ]
