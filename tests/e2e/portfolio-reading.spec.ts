@@ -39,7 +39,7 @@ for (const width of [390, 922]) {
       await expect(list.locator('li')).toHaveCount(4);
       const rects = await list.locator('li').evaluateAll(items => items.map(item => ({ x: item.getBoundingClientRect().x, y: item.getBoundingClientRect().y, bottom: item.getBoundingClientRect().bottom })));
       expect(Math.max(...rects.map(r => r.x)) - Math.min(...rects.map(r => r.x))).toBeLessThan(2);
-      for (let i = 1; i < rects.length; i++) expect(rects[i].y).toBeGreaterThanOrEqual(rects[i-1].bottom - 1);
+      for (let i = 1; i < rects.length; i++) expect(rects[i]!.y).toBeGreaterThanOrEqual(rects[i-1]!.bottom - 1);
     }
   });
 }
