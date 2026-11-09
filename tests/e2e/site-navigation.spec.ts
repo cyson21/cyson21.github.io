@@ -20,3 +20,17 @@ for (const width of [390, 994]) {
     }
   });
 }
+
+// Updating the active TOC entry must never pull the document away from its target.
+test('mobile project contents keep the selected section in view', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 921 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const slug of ['stockrush', 'member-event-consistency', 'enterprise-policy-rag', 'ai-gateway', 'cdc-data-platform', 'fashion-personalization-platform']) {
+    await page.goto(`/projects/${slug}/`);
+    for (const id of ['overview', 'decisions', 'evidence', 'verification', 'scope']) {
+      await page.locator(`.project-toc a[href="#${id}"]`).click();
+      await expect(page).toHaveURL(new RegExp(`#${id}$`));
+      await expect(page.locator(`#${id} > h2`)).toBeInViewport();
+    }
+  }
+});

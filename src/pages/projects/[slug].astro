@@ -184,12 +184,11 @@ const toc = [
     return section ? [section] : [];
   });
 
-  const setCurrent = (id: string, scrollLink = false) => {
+  const setCurrent = (id: string) => {
     sectionLinks.forEach((link) => {
       const active = link.hash === `#${id}`;
       if (active) {
         link.setAttribute('aria-current', 'location');
-        if (scrollLink) link.scrollIntoView({ block: 'nearest', inline: 'center' });
       } else link.removeAttribute('aria-current');
     });
   };
@@ -199,7 +198,7 @@ const toc = [
     if (!id) return;
     const target = document.getElementById(id);
     if (!target) return;
-    setCurrent(id, true);
+    setCurrent(id);
     window.requestAnimationFrame(() => target.focus({ preventScroll: true }));
   };
 
@@ -210,7 +209,7 @@ const toc = [
     const visible = entries
       .filter((entry) => entry.isIntersecting)
       .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-    if (visible?.target.id) setCurrent(visible.target.id, true);
+    if (visible?.target.id) setCurrent(visible.target.id);
   }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, 0.1] });
   sections.forEach((section) => observer.observe(section));
 </script>
