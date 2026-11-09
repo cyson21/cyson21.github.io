@@ -39,7 +39,7 @@
     "output": "public/portfolio/index.html",
     "sourceProject": "portfolio-web",
     "sourcePath": "public/portfolio/index.html",
-    "sha256": "885c684081fa2bf00f57cf8b7b074026eae7166c1376a03d08fc5787d11fd29e",
+    "sha256": "6b210ba515e1cc124d946765a1a8f52aa4715bc80d42e78fd09a3b998399c157",
     "owner": "Son Chanyang",
     "usage": "Public backend problem-solving case studies",
     "approvedAt": "2026-11-05"
@@ -93,7 +93,7 @@
     "output": "public/portfolio/cases.html",
     "sourceProject": "cyson21.github.io",
     "sourcePath": "src/portfolio/overview.html",
-    "sha256": "3daff585de2e78bbf5c40a006259c385489476b33e43557e977b8e57c199923b",
+    "sha256": "57305d0e44b3cf530cd6541738c3dfc448082da5f3461ca5c3568fcac507205e",
     "owner": "Son Chanyang",
     "usage": "User-authorized portfolio overview, preserved evidence, and source diagram captures",
     "approvedAt": "2026-11-09"
@@ -282,7 +282,7 @@
     "output": "public/portfolio/assets/site-chrome.css",
     "sourceProject": "portfolio-web",
     "sourcePath": "public/portfolio/assets/site-chrome.css",
-    "sha256": "2813979875405a543e17765e350ef7929549f1ef20548b227b635880e2f7d5eb",
+    "sha256": "3954608af2e1671096368c142cb5297f3d7c3c9d872fbb56084b3e6f52835b8d",
     "owner": "Son Chanyang",
     "usage": "Shared website navigation and footer",
     "approvedAt": "2026-11-10"

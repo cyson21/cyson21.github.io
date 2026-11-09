@@ -3,10 +3,10 @@
 .site-chrome-header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #dce3eb}
 .site-chrome-bar{max-width:1180px;margin:auto;min-height:72px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:24px}
 .site-chrome-header a,.site-chrome-footer a{color:#315d88;text-decoration:none;font-size:16px;min-height:44px;display:inline-flex;align-items:center;gap:8px;overflow-wrap:anywhere}
-.site-chrome-brand{color:#243449!important;font-weight:750;font-size:20px!important;white-space:nowrap}
+.site-chrome-brand{color:#243449!important;font-weight:750;font-size:18px!important;white-space:nowrap}
 .site-chrome-brand span{font-weight:400;font-size:15px;color:#617086;border-left:1px solid #dce3eb;padding-left:12px;margin-left:4px}
 .site-chrome-menu{display:flex;align-items:center;gap:28px}
-.site-chrome-menu a{font-weight:650;color:#4b5b70;position:relative}
+.site-chrome-menu a{line-height:1.35;font-weight:650;color:#4b5b70;position:relative}
 .site-chrome-menu a[aria-current="page"]{color:#243449;text-decoration:underline;text-underline-offset:12px;text-decoration-thickness:2px}
 .site-chrome-header a:hover,.site-chrome-footer a:hover{text-decoration:underline;text-underline-offset:5px}
 .site-chrome-header :focus-visible,.site-chrome-footer :focus-visible{outline:3px solid #315d88;outline-offset:3px}
@@ -15,7 +15,7 @@
 .site-chrome-footer{margin-top:48px;border-top:1px solid #dce3eb;background:#f7f8fa;padding:32px 24px 24px}
 .site-chrome-footer-grid{max-width:1180px;margin:auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px}
 .site-chrome-footer section{padding:0!important;margin:0!important;min-height:0!important;background:none!important;border:0!important;box-shadow:none!important}
-.site-chrome-footer h2{font:650 17px/1.5 "Pretendard Variable",Pretendard,"Noto Sans KR",system-ui,sans-serif;margin:0 0 12px!important;color:#243449;letter-spacing:0}
+.site-chrome-footer h2{font:650 16px/1.5 "Pretendard Variable",Pretendard,"Noto Sans KR",system-ui,sans-serif;margin:0 0 12px!important;color:#243449;letter-spacing:0}
 .site-chrome-footer nav,.site-chrome-footer section{display:flex;flex-direction:column;align-items:flex-start}
 .site-chrome-copyright{max-width:1180px;margin:24px auto 0!important;border-top:1px solid #dce3eb;padding-top:16px;color:#617086;font-size:14px}
 @media(max-width:740px){.site-chrome-bar{flex-wrap:wrap;gap:0;min-height:64px;padding:0 20px}.site-chrome-brand{min-height:64px!important}.site-chrome-brand span{display:none}.site-chrome-menu{width:100%;flex-direction:column;align-items:stretch;gap:0;padding:0 0 12px}.site-chrome-menu[hidden]{display:none}.site-chrome-menu a{min-height:48px}.site-chrome-menu a[aria-current="page"]{text-underline-offset:5px}.site-chrome-footer-grid{grid-template-columns:1fr;gap:24px}.site-chrome-footer{padding:24px 20px}.site-chrome-toggle:not([hidden]){display:block}}

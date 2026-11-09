@@ -19,11 +19,13 @@ export function renderFooter() {
   return `<footer class="site-chrome-footer" id="contact"><div class="site-chrome-footer-grid"><section><h2>페이지</h2><nav aria-label="하단 페이지"><a href="/">홈</a>${pageLinks.map(({label,href}) => `<a href="${href}">${label}</a>`).join('')}</nav></section><section><h2>제출 자료</h2><a href="/downloads/resume.pdf" download="손찬양_이력서.pdf">이력서 PDF 다운로드</a><a href="/downloads/career-description.pdf" download="손찬양_경력기술서.pdf">경력기술서 PDF 다운로드</a></section><section><h2>연락·외부 링크</h2><a href="mailto:cyson21@gmail.com">이메일 보내기</a><a href="https://github.com/cyson21" target="_blank" rel="noreferrer" aria-label="GitHub 프로필 · 새 창">GitHub 프로필 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a></section></div><p class="site-chrome-copyright">© 손찬양</p></footer>`;
 }
 export function applySiteChrome(html, path) {
+  const skip = html.match(/<a class="portfolio-skip-link"[^>]*>[\s\S]*?<\/a>/)?.[0] ?? '';
+  html = html.replace(/<a class="portfolio-skip-link"[^>]*>[\s\S]*?<\/a>/g, '');
   html = html.replace(/<header class="(?:site-chrome-header|nav)"[\s\S]*?<\/header>/g, '');
   html = html.replace(/<footer class="(?:site-chrome-footer|footer closing)"[\s\S]*?<\/footer>/g, '');
   html = html.replace(/<link rel="stylesheet" href="(?:assets\/|\/portfolio\/assets\/)site-chrome.css"\s*\/?>/g, '');
   html = html.replace(/<script[^>]*src="(?:assets\/|\/portfolio\/assets\/)site-chrome.js"[^>]*><\/script>/g, '');
   html = html.replace('</head>', '<link rel="stylesheet" href="assets/site-chrome.css"></head>');
-  html = html.replace('<body>', `<body>${renderHeader(path)}`);
+  html = html.replace('<body>', `<body>${renderHeader(path).replace('<header class="site-chrome-header">', '<header class="site-chrome-header">' + skip)}`);
   return html.replace('</body>', `${renderFooter()}<script type="module" src="assets/site-chrome.js"></script></body>`);
 }
