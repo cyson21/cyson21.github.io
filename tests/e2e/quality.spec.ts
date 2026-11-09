@@ -64,11 +64,11 @@ for (const route of selectAuditRoutes([...publicAuditRoutes, { id: 'integrated-p
 test('mobile menu opens, traps no content, and closes after navigation', async ({ page, isMobile }) => {
   test.skip(!isMobile, 'mobile project only');
   await page.goto('/');
-  const menu = page.locator('.menu-button');
+  const menu = page.locator('.site-chrome-toggle');
   await menu.click();
   await expect(menu).toHaveAttribute('aria-expanded', 'true');
-  await expect(menu).toHaveAccessibleName('탐색 메뉴 닫기');
-  await page.getByRole('navigation', { name: '모바일 탐색' }).getByRole('link', { name: '개인 프로젝트' }).click();
+  await expect(menu).toHaveAccessibleName('주 메뉴 닫기');
+  await page.getByRole('navigation', { name: '주 메뉴' }).getByRole('link', { name: '개인 프로젝트' }).click();
   await expect(page).toHaveURL(/\/projects\/$/);
 });
 

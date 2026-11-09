@@ -1,40 +1,12 @@
 import { expect, test } from '@playwright/test';
-
-const mobileViewports = [
-  { width: 320, height: 800 },
-  { width: 390, height: 844 },
-] as const;
-
-for (const viewport of mobileViewports) {
-  test(`integrated portfolio serializes dense case-study flows at ${viewport.width}px`, async ({ page }) => {
-    await page.setViewportSize(viewport);
-    const response = await page.goto('/portfolio/', { waitUntil: 'networkidle' });
-    expect(response?.ok()).toBeTruthy();
-
-    const viewportMetrics = await page.evaluate(() => {
-      const root = document.documentElement;
-      const metrics = (selector: string) => Array.from(document.querySelectorAll<HTMLElement>(selector)).map((flow) => {
-        const items = Array.from(flow.children).filter((child): child is HTMLElement => child instanceof HTMLElement);
-        return {
-          count: items.length,
-          rows: new Set(items.map((item) => Math.round(item.getBoundingClientRect().top))).size,
-          minWidth: Math.min(...items.map((item) => item.getBoundingClientRect().width)),
-        };
-      });
-
-      return {
-        clientWidth: root.clientWidth,
-        scrollWidth: root.scrollWidth,
-        architecture: metrics('.case-study-page .case-architecture-flow'),
-        stackColumns: Array.from(document.querySelectorAll<HTMLElement>('.case-study-page .case-rail .stack-grid'))
-          .map((grid) => getComputedStyle(grid).gridTemplateColumns.split(' ').filter(Boolean).length),
-      };
-    });
-
-    expect(viewportMetrics.scrollWidth).toBeLessThanOrEqual(viewportMetrics.clientWidth + 1);
-    expect(viewportMetrics.architecture.length).toBeGreaterThan(0);
-    expect(viewportMetrics.stackColumns.length).toBeGreaterThan(0);
-    expect(viewportMetrics.architecture.every(({ count, rows, minWidth }) => rows === count && minWidth >= 200)).toBeTruthy();
-    expect(viewportMetrics.stackColumns.every((columns) => columns === 1)).toBeTruthy();
+for (const width of [320, 390]) {
+  test(`mobile navigation exposes one personal-project index at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/projects/');
+    await expect(page.locator('[data-project-domain]')).toHaveCount(6);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    await page.locator('a[href="/projects/fashion-personalization-platform/"]').first().click();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Fashion Personalization Platform');
+    await expect(page.locator('#evidence .evidence')).toHaveCount(3);
   });
 }

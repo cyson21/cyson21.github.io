@@ -38,9 +38,9 @@ const layerLabel: Record<string, string> = {
 };
 const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as const;
 const toc = [
-  ['overview', '프로젝트 개요'],
-  ['decisions', '기술 선택'],
-  ['evidence', '주요 구현'],
+  ['overview', '해결한 문제와 담당 역할'],
+  ['decisions', '기술 선택과 이유'],
+  ['evidence', '주요 구현과 관련 테스트'],
   ['verification', '테스트 결과'],
   ['scope', '프로젝트 범위'],
 ];
@@ -57,13 +57,13 @@ const toc = [
   <header class="project-hero">
     <div class="container project-hero-grid">
       <div class="project-heading">
-        <a class="back-link" href="/projects/"><ArrowLeft size={17} aria-hidden="true" /> 프로젝트 목록</a>
+        <a class="back-link" href="/projects/"><ArrowLeft size={17} aria-hidden="true" /> 개인 프로젝트</a>
         <h1>{data.name}</h1>
         <p class="project-lede">{data.summary}</p>
         <p class="project-meta-compact">{data.role} · {data.period} · {domainLabels[data.domain]}</p>
         <div class="button-row project-actions">
-          {data.links.github && <a class="button" href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}><CodeXml size={17} aria-hidden="true" /> GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>}
-          {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer" aria-label={`${data.name} 데모 새 창에서 열기`}>데모 <ArrowUpRight size={17} aria-hidden="true" /></a>}
+          {data.links.github && <a class="button" href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}><CodeXml size={17} aria-hidden="true" /> GitHub 저장소 <ArrowUpRight size={15} aria-hidden="true" /></a>}
+          {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer" aria-label={`${data.name} 데모 새 창에서 열기`}>데모 열기 <ArrowUpRight size={17} aria-hidden="true" /></a>}
           {data.publicationState === 'case-study-only' && <span class="scope-badge"><CircleAlert size={16} aria-hidden="true" /> 문서만 공개</span>}
         </div>
       </div>
@@ -159,7 +159,7 @@ const toc = [
         <section class="project-resources" aria-label="프로젝트 외부 자료">
           <p>관련 자료</p>
           <div>
-            {data.links.adr && <a href={data.links.adr} target="_blank" rel="noreferrer" aria-label={`${data.name} ADR 새 창에서 열기`}>ADR <ArrowUpRight size={15} aria-hidden="true" /></a>}
+            {data.links.adr && <a href={data.links.adr} target="_blank" rel="noreferrer" aria-label={`${data.name} ADR 새 창에서 열기`}>설계 결정 기록 <ArrowUpRight size={15} aria-hidden="true" /></a>}
             {data.links.design && <a href={data.links.design} target="_blank" rel="noreferrer" aria-label={`${data.name} 설계 문서 새 창에서 열기`}>설계 문서 <ArrowUpRight size={15} aria-hidden="true" /></a>}
             {data.links.testReport && <a href={data.links.testReport} target="_blank" rel="noreferrer" aria-label={`${data.name} 테스트 소스 새 창에서 열기`}>테스트 소스 <ArrowUpRight size={15} aria-hidden="true" /></a>}
           </div>
@@ -169,9 +169,10 @@ const toc = [
   </div>
 
   <nav class="project-pagination" aria-label="프로젝트 이전 다음">
+    <div class="container"><a class="back-link" href="/projects/">개인 프로젝트</a></div>
     <div class="container pagination-grid">
       {previous ? <a href={`/projects/${previous.id}/`}><span><ArrowLeft size={16} aria-hidden="true" /> 이전 프로젝트</span><strong>{previous.data.name}</strong></a> : <span></span>}
-      {next ? <a class="next" href={`/projects/${next.id}/`}><span>다음 프로젝트 <ArrowRight size={16} aria-hidden="true" /></span><strong>{next.data.name}</strong></a> : <a class="next" href="/projects/"><span>목록으로</span><strong>전체 프로젝트</strong></a>}
+      {next ? <a class="next" href={`/projects/${next.id}/`}><span>다음 프로젝트 <ArrowRight size={16} aria-hidden="true" /></span><strong>{next.data.name}</strong></a> : <span></span>}
     </div>
   </nav>
 </BaseLayout>

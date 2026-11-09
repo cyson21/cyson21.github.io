@@ -31,8 +31,8 @@ test('home omits the temporary career and project sections while keeping detail 
 
   await expect(page.locator('[aria-labelledby="experience-title"]')).toHaveCount(0);
   await expect(page.locator('#featured-projects')).toHaveCount(0);
-  await expect(page.getByRole('navigation', { name: '주요 탐색' }).getByRole('link', { name: '개인 프로젝트' })).toHaveAttribute('href', '/projects/');
-  await expect(page.getByRole('navigation', { name: '주요 탐색' }).getByRole('link', { name: '경력·이력서' })).toHaveAttribute('href', '/experience/');
+  await expect(page.getByRole('navigation', { name: '주 메뉴' }).getByRole('link', { name: '개인 프로젝트' })).toHaveAttribute('href', '/projects/');
+  await expect(page.getByRole('navigation', { name: '주 메뉴' }).getByRole('link', { name: '경력·이력서' })).toHaveAttribute('href', '/experience/');
 });
 
 test('home keeps supporting copy readable without the temporary sections', async ({ page }) => {
@@ -56,12 +56,14 @@ test('home does not reserve empty main-space after the hero', async ({ page }) =
   expect(heights.main - heights.hero).toBeLessThanOrEqual(2);
 });
 
-test('home footer fills the remaining viewport after the hero', async ({ page }) => {
+test('home footer follows the hero with a bounded section gap', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/');
 
-  const footerBottom = await page.locator('.site-footer').evaluate((element) => element.getBoundingClientRect().bottom);
-  expect(footerBottom).toBeGreaterThanOrEqual(999);
+  const footerTop = await page.locator('.site-chrome-footer').evaluate(element => element.getBoundingClientRect().top);
+  const mainBottom = await page.locator('main').evaluate(element => element.getBoundingClientRect().bottom);
+  expect(footerTop - mainBottom).toBeGreaterThanOrEqual(0);
+  expect(footerTop - mainBottom).toBeLessThanOrEqual(48);
 });
 
 test('footer avoids repeating the profile identity and aligns contact content to the left', async ({ page }) => {
@@ -69,7 +71,7 @@ test('footer avoids repeating the profile identity and aligns contact content to
   await page.goto('/');
 
   await expect(page.locator('.footer-identity')).toHaveCount(0);
-  const footerLeft = await page.locator('.site-footer .container').last().evaluate((element) => element.getBoundingClientRect().left);
-  const contactLeft = await page.locator('.footer-contact').evaluate((element) => element.getBoundingClientRect().left);
-  expect(contactLeft).toBe(footerLeft);
+  const footerLeft = await page.locator('.site-chrome-footer-grid').evaluate(element => element.getBoundingClientRect().left);
+  const firstGroupLeft = await page.locator('.site-chrome-footer-grid section').first().evaluate(element => element.getBoundingClientRect().left);
+  expect(firstGroupLeft).toBe(footerLeft);
 });

@@ -4,81 +4,33 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 
 const root = join(import.meta.dirname, '..', '..');
-const integratedPortfolioPath = join(root, 'public', 'portfolio', 'index.html');
+const integratedPortfolioPath = join(root, 'public', 'portfolio', 'cases.html');
 const projectsDirectory = join(root, 'src', 'content', 'projects');
 
 function readIntegratedPortfolio() {
   return readFileSync(integratedPortfolioPath, 'utf8');
 }
 
-function summaryGridBody(html) {
-  const openingTag = '<div class="summary-project-grid">';
-  const start = html.indexOf(openingTag);
-  const end = html.indexOf('<div class="quote">', start + openingTag.length);
-  assert.notEqual(start, -1, 'integrated portfolio must contain its summary grid');
-  assert.notEqual(end, -1, 'integrated portfolio must contain its summary note');
-  return html.slice(start + openingTag.length, end);
-}
-
-function firstCssRule(html, selector) {
-  const start = html.indexOf(`${selector} {`);
-  assert.notEqual(start, -1, `integrated portfolio must style ${selector}`);
-  const end = html.indexOf('}', start);
-  assert.notEqual(end, -1, `integrated portfolio must close the ${selector} rule`);
-  return html.slice(start, end + 1);
-}
-test('integrated portfolio keeps the generated summary project cards', () => {
+test('work portfolio retains the five professional cases without duplicating personal project details', () => {
   const html = readIntegratedPortfolio();
-  const summary = summaryGridBody(html);
-  const cards = summary.match(/<article class="summary-project-card"/g) ?? [];
-
-  assert.equal(cards.length, 6, 'the generated integrated portfolio must expose all six project cards');
-  for (const label of [
-    'StockRush',
-    'Enterprise Policy RAG',
-    'Member Event Consistency',
-    'AI Gateway',
-    'CDC Data Platform',
-    'Fashion Personalization Platform',
-  ]) {
-    assert.match(summary, new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  assert.equal((html.match(/<article class="work-case"/g) ?? []).length, 5);
+  assert.doesNotMatch(html, /<section class="page case-page/);
+  assert.doesNotMatch(html, /class="case-code-snippet"/);
+  for (const slug of ['stockrush', 'member-event-consistency', 'enterprise-policy-rag', 'ai-gateway', 'cdc-data-platform', 'fashion-personalization-platform']) {
+    const source = readFileSync(join(projectsDirectory, `${slug}.md`), 'utf8');
+    assert.equal((source.match(/^  - symbol:/gm) ?? []).length, 3, `${slug} keeps its three canonical code evidence entries`);
   }
+  const articles = html.match(/<article class="work-case"[\s\S]*?<\/article>/g) ?? [];
+  for (const article of articles) assert.doesNotMatch(article, /href="\/projects\//);
 });
 
-test('integrated portfolio provides a fixed link back to the portfolio home', () => {
-  const html = readIntegratedPortfolio();
-
-  assert.match(html, /<a class="portfolio-home-link" href="https:\/\/cyson21\.github\.io\/">← 홈으로<\/a>/);
-  assert.match(firstCssRule(html, '.portfolio-home-link'), /position:\s*fixed;/);
+test('overview legacy links route to one canonical personal project page', () => {
+  const html = readFileSync(join(root, 'public', 'portfolio', 'index.html'), 'utf8');
+  assert.doesNotMatch(html, /class="project-card"/);
+  for (const slug of ['stockrush', 'member-event-consistency', 'enterprise-policy-rag', 'ai-gateway', 'cdc-data-platform', 'fashion-personalization-platform']) assert.ok(html.includes(`/projects/${slug}/`));
+  assert.match(html, /href="\/projects\/"/);
 });
 
-test('integrated portfolio renders one unwrapped technology token per rail row without rail overflow', () => {
-  const html = readIntegratedPortfolio();
-  const stackGrid = firstCssRule(html, '.stack-grid');
-  const stackToken = firstCssRule(html, '.stack-token');
-  const stackTokenLabel = firstCssRule(html, '.stack-token span');
-
-  assert.match(stackGrid, /grid-template-columns:\s*minmax\(0,\s*1fr\);/);
-  assert.match(stackToken, /grid-template-columns:\s*18px minmax\(0,\s*1fr\);/);
-  assert.match(stackToken, /min-width:\s*0;/);
-  assert.match(stackTokenLabel, /white-space:\s*nowrap;/);
-  assert.match(stackTokenLabel, /min-width:\s*0;/);
-  assert.match(stackTokenLabel, /overflow:\s*hidden;/);
-  assert.match(stackTokenLabel, /text-overflow:\s*ellipsis;/);
-  assert.ok(html.includes('<span title="Optional: PostgreSQL/pgvector">Optional: PostgreSQL/pgvector</span>'));
-});
-
-test('Member Event rail uses a compact visual scope and exposes the full text to assistive technology', () => {
-  const html = readIntegratedPortfolio();
-  const scope = html.match(/<p class="rail-text rail-text-compact" title="([^"]+)"><span aria-hidden="true">([^<]+)<\/span><span class="visually-hidden">([^<]+)<\/span><\/p>/);
-  assert.ok(scope, 'scope must retain separate visual and assistive text');
-  assert.equal(scope[1], scope[3], 'tooltip and assistive text must describe the same scope');
-  assert.match(scope[3], /개인 프로젝트/);
-  assert.match(scope[3], /Spring Boot/);
-  assert.ok(scope[2].length < scope[3].length, 'visual scope must stay compact');
-  assert.doesNotMatch(html, /<p\s[^>]*aria-label=/);
-  assert.match(firstCssRule(html, '.visually-hidden'), /clip:\s*rect\(0,\s*0,\s*0,\s*0\);/);
-});
 test('project publication flags keep the three representative projects and detail-only projects', () => {
   const readFeatured = (slug) => {
     const source = readFileSync(join(projectsDirectory, `${slug}.md`), 'utf8');
@@ -98,6 +50,7 @@ test('project publication flags keep the three representative projects and detai
 test('manifest-approved text assets use LF line endings', () => {
   for (const relativePath of [
     'public/portfolio/index.html',
+    'public/portfolio/cases.html',
     'public/icons/favicon.svg',
   ]) {
     const contents = readFileSync(join(root, relativePath), 'utf8');
@@ -111,7 +64,7 @@ test('reading layout retains work-case navigation when regenerated', async () =>
   const once = applyReadingLayout(source);
   const twice = applyReadingLayout(once);
   for (const html of [once, twice]) {
-    assert.match(html, /href="#work-cases"/);
+    assert.match(html, /href="\/portfolio\/"/);
     assert.match(html, /id="work-policy"/);
     assert.match(html, /id="portfolio-results"/);
     assert.equal((html.match(/<nav /g) ?? []).length, 1);
@@ -133,11 +86,12 @@ test('integrated reading layout keeps one main landmark across regeneration', as
 
 test('reading navigation only links to retained sections and preserves their anchors', async () => {
   const { applyReadingLayout } = await import('../../scripts/portfolio-reading-layout.mjs');
-  const source = '<body><section class="page cover" id="portfolio-intro" data-page="01">Intro</section><section class="page work-cases" id="work-cases">Work</section><section class="page complete-sheet" id="portfolio-results" data-page="02">Index</section><section class="page case-page" id="member-event-consistency" data-page="05">Code</section></body>';
+  const source = '<body><section class="page cover" id="portfolio-intro" data-page="01">Intro</section><section class="page work-cases" id="work-cases">Work</section><section class="page complete-sheet" id="portfolio-results" data-page="02">Index</section><section class="page case-page" id="member-event-consistency" data-page="05">Code</section><section id="portfolio-scope">Scope</section></body>';
   for (const html of [applyReadingLayout(source), applyReadingLayout(applyReadingLayout(source))]) {
     const nav = html.match(/<nav[^>]*>[\s\S]*?<\/nav>/)[0];
-    assert.doesNotMatch(nav, /portfolio-capabilities|portfolio-scope|#stockrush/);
-    assert.match(nav, /href="#member-event-consistency"/);
+    assert.doesNotMatch(nav, /portfolio-capabilities|#stockrush|#member-event-consistency/);
+    assert.doesNotMatch(nav, /href="#portfolio-scope"/);
+    assert.match(nav, /href="\/projects\/"/);
     for (const [, anchor] of nav.matchAll(/href="#([^"]+)"/g)) {
       assert.ok(html.includes(`id="${anchor}"`), `missing navigation target: ${anchor}`);
     }

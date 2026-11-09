@@ -17,7 +17,7 @@ test('custom 404 renders useful content and remains noindex', async ({ page }) =
   expect(response?.status()).toBe(404);
   await expect(page.locator('h1')).toContainText('요청한 페이지를 찾을 수 없습니다');
   const main = page.locator('main');
-  await expect(main.getByRole('link', { name: '프로젝트' })).toHaveAttribute('href', '/projects/');
+  await expect(main.getByRole('link', { name: '개인 프로젝트' })).toHaveAttribute('href', '/projects/');
   await expect(main.getByRole('link', { name: '경력·이력서' })).toHaveAttribute('href', '/experience/');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
   await expect(page.getByRole('link', { name: 'cyson21@gmail.com' })).toHaveCount(0);
@@ -25,7 +25,7 @@ test('custom 404 renders useful content and remains noindex', async ({ page }) =
 
 test('unified experience page links to a valid two-page PDF', async ({ page, request }) => {
   await page.goto('/experience/');
-  await expect(page.getByRole('link', { name: /PDF 다운로드/ })).toHaveAttribute('href', '/downloads/resume.pdf');
+  await expect(page.locator('.resume-overview').getByRole('link', { name: '이력서 PDF 다운로드', exact: true })).toHaveAttribute('href', '/downloads/resume.pdf');
 
   const response = await request.get('/downloads/resume.pdf');
   expect(response.ok()).toBeTruthy();

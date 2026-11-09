@@ -1,13 +1,11 @@
 ---
-import { ArrowRight, Download } from '@lucide/astro';
+import { Download } from '@lucide/astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
 import {
   careerPeriod,
   experiences,
   profile,
-  professionalSummary,
-  resumeIntro,
   skillGroups,
 } from '../../data/site';
 
@@ -21,21 +19,19 @@ if (!currentExperience) {
   title="경력·이력서"
   description="손찬양의 Java·Spring Boot 백엔드 실무 경력과 이력서입니다. 회사별 담당 업무와 실제 운영 문제 해결 사례를 정리했습니다."
 >
-  <PageIntro title="경력·이력서" description={currentExperience.context} />
+  <PageIntro title="경력·이력서" description="회사별 재직 기간·담당 업무·실무 기술과 제출용 PDF를 정리했습니다." />
 
   <section class="section experience-section">
     <div class="container experience-layout">
       <section class="resume-overview" aria-labelledby="overview-title">
         <div>
 
-          <h2 id="overview-title">API 개발·운영과 데이터 처리 경험</h2>
-          <p class="summary-intro">{resumeIntro}</p>
-          <p class="summary-closing">{professionalSummary}</p>
+          <h2 id="overview-title">제출용 이력서·경력기술서</h2>
+          <p class="summary-closing">PDF에서 경력 요약과 프로젝트별 담당 범위를 확인할 수 있습니다. 문제의 원인과 수정 과정은 실무 사례에서 설명합니다.</p>
         </div>
         <div class="overview-actions">
-          <a class="button" href={profile.resumePath} download="손찬양_이력서.pdf"><Download size={17} aria-hidden="true" /> PDF 다운로드</a>
-          <a class="button button--secondary" href={profile.careerDescriptionPath} download="손찬양_경력기술서.pdf"><Download size={17} aria-hidden="true" /> 경력기술서 PDF</a>
-          <a class="button button--secondary" href="/portfolio/"><ArrowRight size={17} aria-hidden="true" /> 문제 해결 사례</a>
+          <a class="button" href={profile.resumePath} download="손찬양_이력서.pdf"><Download size={17} aria-hidden="true" /> 이력서 PDF 다운로드</a>
+          <a class="button button--secondary" href={profile.careerDescriptionPath} download="손찬양_경력기술서.pdf"><Download size={17} aria-hidden="true" /> 경력기술서 PDF 다운로드</a>
         </div>
       </section>
 
@@ -71,10 +67,6 @@ if (!currentExperience) {
               </ul>
             </section>
 
-            <div class="experience-stack">
-              <span>기술 스택</span>
-              <ul class="tag-list">{experience.stack.map((item) => <li class="tag">{item}</li>)}</ul>
-            </div>
           </article>
         ))}
       </div>

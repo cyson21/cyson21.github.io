@@ -6,22 +6,23 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { dirname, resolve } from 'node:path';
+import { applySiteChrome } from '../src/lib/site-navigation.mjs';
 import { applyReadingLayout } from './portfolio-reading-layout.mjs';
 
 const source = resolve(
   process.env.PORTFOLIO_HTML_SOURCE?.trim()
-    || resolve(import.meta.dirname, '../public/portfolio/index.html'),
+    || resolve(import.meta.dirname, '../public/portfolio/cases.html'),
 );
-const output = resolve(import.meta.dirname, '../public/portfolio/index.html');
+const output = resolve(import.meta.dirname, '../public/portfolio/cases.html');
 const temporaryOutput = resolve(dirname(output), `.portfolio-${process.pid}-${Date.now()}.tmp.html`);
 
 const screenStyle = readFileSync(resolve(import.meta.dirname, '../src/styles/portfolio-screen.css'), 'utf8').replace(/\r\n?/g, '\n');
-const html = applyReadingLayout(readFileSync(source, 'utf8').replace(/\r\n?/g, '\n'))
+const html = applySiteChrome(applyReadingLayout(readFileSync(source, 'utf8').replace(/\r\n?/g, '\n'))
   .replace(/\/\* Quiet Slate screen refinement:[\s\S]*?(?=<\/style>)/, '')
-  .replace('</style>', `${screenStyle}\n</style>`);
+  .replace('</style>', `${screenStyle}\n</style>`), '/portfolio/');
 if (
   !html.trimStart().toLowerCase().startsWith('<!doctype html>')
-  || !html.includes('<html lang="ko-KR">')
+  || !html.includes('<html lang="ko-KR"')
   || !html.includes('<body>')
   || !html.includes('손찬양')
 ) {
@@ -36,3 +37,5 @@ try {
 } finally {
   rmSync(temporaryOutput, { force: true });
 }
+
+writeFileSync(resolve(import.meta.dirname, '../public/portfolio/index.html'), applySiteChrome(readFileSync(resolve(import.meta.dirname, '../src/portfolio/overview.html'), 'utf8'), '/portfolio/'));
