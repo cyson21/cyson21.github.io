@@ -43,7 +43,7 @@ const currentExperience = experiences[0];
 if (!currentExperience) throw new Error('경력기술서에는 현재 회사 경력이 필요합니다.');
 export const careerBusinessWorks = [
   { ...currentExperience.responsibilities[0], detail: '기업 고객의 요구사항에 맞춰 REST API를 개발했습니다. 관리자 기능 개편에서는 기존 데이터와 처리 순서를 확인하고 JPA·QueryDSL·MySQL 조회·저장 로직을 수정했습니다.' },
-  { ...currentExperience.responsibilities[1], detail: '플랫폼 2.0에서 3.0으로 전환하면서 변경된 API·DB가 기존 기능에 미치는 영향을 점검했습니다. 레거시 코드와 데이터 접근 로직을 정리하고 관련 API·DB 테스트 코드를 보완했습니다.' },
+  { ...currentExperience.responsibilities[1], detail: '플랫폼 2.0에서 3.0으로 전환하면서 변경된 API·DB가 기존 기능에 미치는 영향을 점검했습니다. 레거시 코드와 데이터 접근 로직을 정리하고 변경 기능의 통합·회귀 테스트를 보완했습니다.' },
   { title: '데이터 정합성·운영 오류 대응', description: '운영 장애와 데이터 오류를 재현하고 원인을 추적했습니다.', detail: '서버 로그와 DB 기록으로 오류가 발생한 조회·저장 로직을 찾아 수정했습니다. 저장 직전 상태 확인, 복합 식별자 적용, 분산락과 트랜잭션 분리 등을 담당했습니다.' },
   { ...currentExperience.responsibilities[5], detail: 'EC2·RDS·Lambda·CloudWatch·WAF 기반 운영과 Docker 배포·전환 이슈 대응에 참여했습니다. CI/CD 개선 작업과 코드리뷰에 참여하고, 배포 전 주요 기능을 확인했습니다.' },
 ];
@@ -51,23 +51,23 @@ export const careerBusinessWorks = [
 // Document-specific elaboration of the same work; shared identity and cases remain in site.ts.
 export const careerOverview = [
   { title: '플랫폼 기능 개발', text: '기업 고객의 요구사항에 맞춰 Java·Spring Boot REST API를 개발했습니다. 관리자 기능 개편에서는 기존 데이터와 처리 순서를 확인하고 JPA·QueryDSL·MySQL 조회·저장 로직을 수정했습니다.' },
-  { title: '플랫폼 버전 전환과 검증', text: '플랫폼 2.0에서 3.0으로 전환하면서 API·DB 변경이 기존 기능에 미치는 영향을 점검했습니다. 레거시 코드와 데이터 접근 로직을 정리하고 관련 API·DB 테스트 코드를 보완했습니다.' },
+  { title: '플랫폼 버전 전환', text: '플랫폼 2.0에서 3.0으로 전환하면서 API·DB 변경이 기존 기능에 미치는 영향을 점검했습니다. 레거시 코드와 데이터 접근 로직을 정리하고 변경 기능의 통합·회귀 테스트를 보완했습니다.' },
   { title: '데이터 정합성과 운영 오류 대응', text: '서버 로그와 DB 기록으로 오류를 분석하고 조회·저장 로직을 수정했습니다. 상태 재확인과 복합 식별자 적용, 분산락과 트랜잭션 경계 조정 등으로 확인된 문제에 대응했습니다.' },
-  { title: '배치와 메시징 처리', text: 'ShedLock·Redis 분산락을 적용해 서버별 배치 중복 실행을 제어했습니다. 별도 개선으로 고객사·배치별 성공·실패·누락을 집계해 Slack 요약을 구성했습니다. RabbitMQ 발송 요청·결과 처리 분리에도 참여했습니다. 최종 발송과 중복 처리, DLQ 재처리의 실행 결과는 확인하지 못했습니다.' },
+  { title: '배치와 메시징 처리', text: 'ShedLock·Redis 분산락을 적용해 서버별 배치 중복 실행을 제어했습니다. 별도 개선으로 고객사·배치별 성공·실패·누락을 집계해 Slack 요약을 구성했습니다. RabbitMQ 발송 요청·결과 처리 분리에도 참여했습니다.' },
   { title: '인프라·배포와 협업', text: 'EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환 이슈 대응에 참여했습니다. CI/CD 개선 작업과 코드리뷰에 참여하고 배포 전 주요 기능을 확인했습니다.' },
 ] as const;
 
-// Concise print wording for the previously reviewed career description.
-const printEvidence: Record<string, string> = {
-  'work-batch': '당시 로그·DB 기록으로 실행을 확인한 경험을 근거로 설명합니다. 테스트는 고정 입력의 상태 집계와 스케줄·알림 구성 검사입니다. 다중 서버 동시 실행·Slack 실전송 결과와 전후 중복 횟수는 확인하지 못했습니다.',
-  'work-purchase': '초기 QA의 상태 조회 문제에 맞춰 커밋 순서를 수정했습니다. 테스트는 저장소 대역의 락 예외·재시도·완료 주문 재처리를 검사합니다. 실제 DB 경합·분산락 경쟁과 수정 후 최종 QA 결과, 운영 재발률은 확인하지 못했습니다.',
+// The print document focuses on responsibilities and implementation.
+const printContributions: Record<string, string> = {
+  'work-batch': '분산락 적용 이후 별도 개선으로 모니터링을 구현했습니다. 고객사·배치별 처리 건수와 실행 시간을 기록하고, 누락 유형을 구분해 Slack 요약에서 확인할 수 있도록 했습니다.',
+  'work-purchase': 'QA에서 결제 요청 상태를 읽지 못하는 원인을 추적했습니다. 앞 단계의 커밋 뒤에 결제가 실행되도록 호출 순서를 조정하고, 결제 완료 상태를 확인해 재처리를 보완했습니다.',
 };
 export const careerPrintCases = careerPrimaryCases.map(item => ({
   ...item,
   title: item.anchor === 'work-batch' ? '배치 중복 실행 제어와 모니터링' : '동시 요청의 락 경합과 트랜잭션 경계',
-  evidence: printEvidence[item.anchor],
+  contribution: printContributions[item.anchor],
 }));
 export const careerPrintAdditional = {
+  problem: '설정 변경이 이전 상태를 기준으로 저장되거나, 같은 사용자의 여러 그룹이 하나로 취급돼 삭제 대상과 페이지 집계가 어긋났습니다.',
   change: '저장 직전 현재 상태를 다시 조회해 변경 허용 여부와 후속 갱신 기준을 맞췄습니다. 또한 사용자 ID와 그룹 유형을 복합 식별자로 적용하고 제외 조건과 페이지 집계를 맞췄습니다.',
-  evidence: '상태 재검증·복합 동등성·선택 삭제의 단위 테스트와 당시 결과 기록이 있습니다. 페이지 응답 검사는 서비스 대역을 사용하며 실제 DB 삭제·집계의 통합 실행 결과와 구분합니다. 상태 조회·저장 사이의 경합을 원자적으로 차단하지는 않습니다.',
 } as const;

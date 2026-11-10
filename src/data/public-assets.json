@@ -48,7 +48,7 @@
     "output": "public/downloads/career-description.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/career/",
-    "sha256": "44f1c766d7abce30d0efcb06e7288a9f26e11dcec2e7edfd2c09b6b944852c11",
+    "sha256": "feb1807033ea6b5f176306b7f2b6db0dca9f9102952de8b17e87da1a5270fac2",
     "owner": "Son Chanyang",
     "usage": "Public company-work career description, three pages",
     "approvedAt": "2026-11-10"
@@ -57,7 +57,7 @@
     "output": "public/downloads/resume.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/print/",
-    "sha256": "9986fef73f13808ade0135d73e3964b5cf9930b515ae413c7c799d23060d8f2c",
+    "sha256": "c94d3fb204fa84e57371c89d51bea8e54837615c76115c62654be56f59ff5965",
     "owner": "Son Chanyang",
     "usage": "Public two-page resume download",
     "approvedAt": "2026-11-10"
