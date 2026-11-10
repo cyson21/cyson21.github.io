@@ -18,7 +18,7 @@ if (!current || !previous) throw new Error('두 회사의 경력이 필요합니
 <section class="sheet" aria-label="경력기술서 2페이지"><header class="page-title"><h2>운영 안정화와 데이터 정합성</h2><p>{current.company} · {current.period} · {current.role}</p></header>
 {careerPrintCases.map(item => <article class="case"><h3>{item.title}</h3><dl class="facts"><dt>상황</dt><dd>{item.problem}</dd><dt>수행</dt><dd>{item.change}</dd><dt>확인</dt><dd>{item.evidence}</dd></dl></article>)}
 <article class="case"><h3>데이터 변경과 조회 기준 개선</h3><dl class="facts"><dt>수행</dt><dd>{careerPrintAdditional.change}</dd><dt>확인</dt><dd>{careerPrintAdditional.evidence}</dd></dl></article>
-<p class="scope-note">사례는 당시 코드·테스트 정의와 저장된 기록을 기준으로 작성했습니다. 현재 환경에서 회사 테스트를 다시 실행한 결과는 아닙니다.</p><footer class="footer"><span>손찬양 · 운영 안정화 기여</span><span>2 / 3</span></footer></section>
+<p class="scope-note">테스트 정의와 당시 결과 기록을 구분해 작성했습니다. 이번 회사 테스트 재실행이나 운영 로그 원본의 재검증 결과는 아닙니다.</p><footer class="footer"><span>손찬양 · 운영 안정화 기여</span><span>2 / 3</span></footer></section>
 <section class="sheet" aria-label="경력기술서 3페이지"><header class="page-title"><h2>공공·실시간 데이터 서비스</h2><p>{previous.company} · {previous.period} · {previous.role}</p></header><p class="context">{previous.context}</p>
 {previousCompanyProjects.map(project => <article class="project"><div class="top"><h3>{project.title}</h3><time>{project.period}</time></div><p class="roleline">{project.role}</p><p>{project.contribution}</p></article>)}
 <footer class="footer"><span>손찬양 · 프로젝트별 담당 범위와 기여</span><span>3 / 3</span></footer></section>

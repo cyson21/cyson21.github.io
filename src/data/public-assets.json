@@ -48,19 +48,19 @@
     "output": "public/downloads/career-description.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/career/",
-    "sha256": "384e44ac09a1b034ff3632141c2000f0afd08c81eac95c4543add90f076ca1c9",
+    "sha256": "44f1c766d7abce30d0efcb06e7288a9f26e11dcec2e7edfd2c09b6b944852c11",
     "owner": "Son Chanyang",
     "usage": "Public company-work career description, three pages",
-    "approvedAt": "2026-11-05"
+    "approvedAt": "2026-11-10"
   },
   {
     "output": "public/downloads/resume.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/print/",
-    "sha256": "e58f6127a26d2ab3511cb56d0ae5f395ad29b21406c8374c87dc15f4ec198308",
+    "sha256": "9986fef73f13808ade0135d73e3964b5cf9930b515ae413c7c799d23060d8f2c",
     "owner": "Son Chanyang",
     "usage": "Public two-page resume download",
-    "approvedAt": "2026-11-05"
+    "approvedAt": "2026-11-10"
   },
   {
     "output": "public/icons/favicon.svg",
