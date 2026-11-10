@@ -72,6 +72,9 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
 <style>
   .signal {
     display: grid;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+    overflow-wrap: anywhere;
     min-height: 184px;
     align-content: start;
     gap: 9px;
@@ -132,6 +135,7 @@ const sourceTestSegments = sourceTest.match(/[^_]+_?/g) ?? [];
   }
 
   .signal-result {
+    overflow-wrap: anywhere;
     color: var(--green);
     font-size: var(--text-dense);
     font-weight: 800;

@@ -43,3 +43,23 @@ test('project results stay with the verification methods instead of positional c
     await expect(page.locator('#verification .verification-table tbody tr')).toHaveCount(slug === 'enterprise-policy-rag' ? 4 : 3);
   }
 });
+
+for (const width of [390, 994]) {
+  test(`reviewed evidence sources and execution scope stay readable at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({width, height: 921});
+    for (const slug of ['stockrush', 'member-event-consistency', 'enterprise-policy-rag', 'ai-gateway', 'cdc-data-platform', 'fashion-personalization-platform']) {
+      await page.goto(`/projects/${slug}/`);
+      await expect(page.locator('.evidence-review a')).toHaveCount(2);
+      await page.getByText('테스트 방법·결과 보기', {exact: true}).click();
+      const sources = await page.locator('.verification-sources a').evaluateAll(links => links.map(link => link.getAttribute('href')));
+      expect(sources.length).toBeGreaterThanOrEqual(3);
+      for (const source of sources) expect(source).toMatch(new RegExp(`/cyson21/${slug}/blob/[a-f0-9]{40}/`));
+      if (slug === 'cdc-data-platform') {
+        await expect(page.locator('.evidence-status').filter({hasText: '실행 결과 미확인'})).toHaveCount(1);
+        await expect(page.locator('.generated-diagram--independent ul li')).toHaveCount(3);
+        expect(await page.locator('.generated-diagram--independent li').first().evaluate(element => getComputedStyle(element, '::after').display)).toBe('none');
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), slug).toBeFalsy();
+    }
+  });
+}

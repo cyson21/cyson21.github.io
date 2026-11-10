@@ -6,7 +6,7 @@ name: Fashion Personalization Platform
 domain: Backend
 eyebrow: 이벤트 기반 추천 파이프라인
 summary: 사용자 행동 이벤트를 반영해 상품 점수와 추천 이유를 생성하는 Python 백엔드입니다. 메모리 저장소에서 멱등 처리·실패 상태·재처리와 사용자별 추천 배치를 구현했습니다.
-period: "2026.07"
+period: '2026.07'
 role: 개인 프로젝트 · Python 도메인 로직·이벤트 처리·추천 배치 구현
 stack:
   - Python 3.11
@@ -26,7 +26,7 @@ flow:
     - 사용자 행동 이벤트
     - 사용자 취향 데이터
     - 추천 순위
-    - 미리 만든 추천 결과
+    - 추천 스냅샷(수동 배치 호출)
   failure:
     - 같은 이벤트가 두 번
     - 처리 3번 실패
@@ -37,23 +37,26 @@ flow:
     - 생성 시각과 반영 건수로 최신인지 확인
 signals:
   - label: 중복 처리 방지
-    expression: 같은 이벤트 2번
-    result: 취향 데이터에는 1번만 반영
+    expression: 같은 멱등 키로 서비스 호출 2회
+    result: 같은 이벤트 ID, 처리 건수 1회 증가
     tone: success
     source: test_event_processing.py::test_event_ingestion_is_idempotent
-    sourceUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/tests/test_event_processing.py
+    sourceUrl: >-
+      https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_event_processing.py
   - label: 실패 이벤트 분리
     expression: 처리 3번 실패
-    result: DLQ로 빠지고 나머지 이벤트는 계속 처리
+    result: 3회 처리 시도 후 DEAD_LETTER 1건, FAILED 0건
     tone: danger
     source: test_event_processing.py::test_unknown_product_moves_to_dead_letter_after_retry_budget
-    sourceUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/tests/test_event_processing.py
+    sourceUrl: >-
+      https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_event_processing.py
   - label: 추천 근거
-    expression: 브랜드, 사이즈, 가격, 재고
-    result: 점수와 추천 이유가 같이 나옴
+    expression: 고정 데모의 사용자 선호 브랜드
+    result: 상위 상품과 brand 추천 이유 확인
     tone: warning
     source: test_recommendation_engine.py::test_personal_ranking_prioritizes_user_preferences
-    sourceUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/tests/test_recommendation_engine.py
+    sourceUrl: >-
+      https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_recommendation_engine.py
 decisions:
   - title: 핵심 로직은 프레임워크 없이
     choice: 추천과 이벤트 처리 로직은 FastAPI 없이도 돌아갑니다.
@@ -79,33 +82,40 @@ protectionRules:
 codeEvidence:
   - symbol: apply_event_to_profile
     displayPath: src/fashion_personalization/recommendation.py
-    sourceUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/src/fashion_personalization/recommendation.py
+    sourceUrl: >-
+      https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/src/fashion_personalization/recommendation.py
     excerpt: |
       selected_size = event.payload.get("size")
       if isinstance(selected_size, str) and selected_size in product.sizes:
           _add_weight(
               profile.size_preferences, selected_size, max(weight, 0.1)
           )
-    proves: 실제로 있는 사이즈 옵션을 골랐을 때만 사이즈 취향에 반영해서, 잘못된 값이 섞이지 않게 합니다.
+    proves: 구현은 상품에 존재하는 사이즈만 취향 가중치에 반영합니다. 연결 테스트는 유효한 M 선택의 상위 추천과 sizes:M 이유를 확인하며, 잘못된 사이즈 입력 거절을 직접 검사하지는 않습니다.
     testName: test_size_preference_contributes_to_ranking
     testPath: tests/test_recommendation_engine.py
-    testUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/tests/test_recommendation_engine.py
+    testUrl: >-
+      https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_recommendation_engine.py
   - symbol: rank_products
     displayPath: src/fashion_personalization/recommendation.py
-    sourceUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/src/fashion_personalization/recommendation.py
+    sourceUrl: >-
+      https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/src/fashion_personalization/recommendation.py
     excerpt: |
       score, reasons = _score_product(profile, product)
       recommendations.append(
           Recommendation(product_id=product.product_id, score=round(score, 4), reasons=tuple(reasons))
       )
       return sorted(recommendations, key=lambda item: (-item.score, item.product_id))[:limit]
-    proves: 점수와 추천 이유를 같이 저장하고, 같은 점수는 상품 ID로 정렬합니다. 테스트는 사용자 취향이 상위 결과와 이유에 반영되는지 확인합니다.
+    proves: >-
+      구현은 점수·이유를 만들고 동점이면 상품 ID로 정렬합니다. 연결 테스트는 고정 데모의 상위 상품·브랜드 이유를 확인합니다. 동점 정렬은 코드 확인 범위이며 해당 테스트의 assertion은
+      아닙니다.
     testName: test_personal_ranking_prioritizes_user_preferences
     testPath: tests/test_recommendation_engine.py
-    testUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/tests/test_recommendation_engine.py
+    testUrl: >-
+      https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_recommendation_engine.py
   - symbol: RecommendationBatchWorkflow.refresh_snapshots
     displayPath: src/fashion_personalization/batch.py
-    sourceUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/src/fashion_personalization/batch.py
+    sourceUrl: >-
+      https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/src/fashion_personalization/batch.py
     excerpt: |
       snapshot = RecommendationSnapshot(
           generated_at=utc_now(),
@@ -115,17 +125,45 @@ codeEvidence:
     proves: 추천 결과에 생성 시각과 반영 이벤트 수를 남겨서 얼마나 최신인지 알 수 있게 합니다.
     testName: test_batch_refresh_writes_materialized_snapshots
     testPath: tests/test_batch_workflow.py
-    testUrl: https://github.com/cyson21/fashion-personalization-platform/blob/main/tests/test_batch_workflow.py
+    testUrl: >-
+      https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_batch_workflow.py
 verification:
   - layer: unit
-    method: 같은 멱등 키 이벤트와 세 번 실패하는 이벤트를 넣습니다.
-    result: 중복은 한 번만 반영되고, 실패한 이벤트는 DLQ로 빠집니다.
+    method: 같은 멱등 키로 두 번 호출하고, 별도 테스트에서 없는 상품의 이벤트를 최초 1회와 재시도 2회 처리합니다.
+    result: 이벤트 ID 재사용·처리 건수 1회 증가, 3회 시도 후 DEAD_LETTER를 확인했습니다. 실패 중 다른 이벤트의 지속 처리를 이 테스트가 직접 검사하지는 않습니다.
+    sources:
+      - label: test_event_ingestion_is_idempotent
+        url: >-
+          https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_event_processing.py#L8
+      - label: test_unknown_product_moves_to_dead_letter_after_retry_budget
+        url: >-
+          https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_event_processing.py#L67
+    evidenceStatus: local-rerun
   - layer: unit
-    method: 선호 브랜드, 사이즈, 가격, 재고 조건을 바꿔 가며 추천 순위를 확인합니다.
-    result: 취향이 점수와 이유에 반영되고, 품절 상품은 빠지고, 이벤트 순서가 달라도 가격 취향은 같게 나옵니다.
+    method: 고정 입력으로 선호 브랜드·사이즈·가격 이벤트 순서·재고 조건의 단위 테스트를 각각 실행합니다.
+    result: 상위 상품과 추천 이유, 선택한 입력 순서에서의 가격 취향 일치, 품절 제외를 확인했습니다. 추천 품질·모든 이벤트 순서의 일반적 보장은 아닙니다.
+    sources:
+      - label: test_personal_ranking_prioritizes_user_preferences
+        url: >-
+          https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_recommendation_engine.py#L5
+      - label: test_size_preference_contributes_to_ranking
+        url: >-
+          https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_recommendation_engine.py#L37
+      - label: test_target_price_is_weighted_and_order_independent
+        url: >-
+          https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_recommendation_engine.py#L79
+      - label: test_stock_availability_and_low_stock_are_reflected
+        url: >-
+          https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_recommendation_engine.py#L121
+    evidenceStatus: local-rerun
   - layer: integration
-    method: 활성 사용자 대상으로 배치를 돌리고 최신 여부를 조회합니다.
-    result: 고정된 데모 데이터로 스냅샷을 2개 이상 생성합니다. 각 사용자 프로필의 이벤트 수와 비교해 반영 이벤트 수가 적은 스냅샷이 없는지 확인합니다.
+    method: 외부 서비스 없이 데모 서비스 메서드로 수동 배치를 호출하고 저장된 스냅샷을 조회합니다.
+    result: 고정 데모에서 스냅샷 2개 이상과 기준 시각·반영 이벤트 수, stale_snapshot_users=0을 확인했습니다. 자동 스케줄러·HTTP 이벤트 워커의 결과는 아닙니다.
+    sources:
+      - label: test_batch_refresh_writes_materialized_snapshots
+        url: >-
+          https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_batch_workflow.py#L5
+    evidenceStatus: local-rerun
 limitations:
   - 저장소는 단일 프로세스의 메모리 구현입니다. 외부 브로커·Outbox·분산 저장소와 AWS 배포는 구현·검증하지 않았습니다.
   - POST /events는 이벤트를 대기 상태로 저장합니다. HTTP 이벤트 워커와 자동 배치 스케줄러는 없으며 서비스 메서드로 처리합니다.
@@ -134,14 +172,23 @@ next:
   - PostgreSQL 어댑터를 붙이고 통합 테스트를 추가하려고 합니다.
 links:
   github: https://github.com/cyson21/fashion-personalization-platform
-  adr: https://github.com/cyson21/fashion-personalization-platform/tree/main/docs/adr
-  design: https://github.com/cyson21/fashion-personalization-platform/blob/main/docs/architecture.md
+  adr: >-
+    https://github.com/cyson21/fashion-personalization-platform/tree/d08843005c864ab10dab6616b883e76d54de16f0/docs/adr
+  design: >-
+    https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/docs/architecture.md
 visual:
   kind: diagram
   alt: 행동 이벤트가 중복 확인과 재시도를 거쳐 취향 데이터, 추천 순위, 저장된 추천 결과로 이어지는 구성도
 seo:
   title: Fashion Personalization · 행동 이벤트 기반 추천
   description: 중복되거나 실패한 행동 이벤트를 걸러 내고, 상품 조건과 사용자 취향으로 이유가 붙은 추천을 만드는 Python 백엔드입니다.
-updatedAt: 2026-10-14
+updatedAt: '2026-11-10'
+evidenceReview:
+  commit: d08843005c864ab10dab6616b883e76d54de16f0
+  sourceUrl: https://github.com/cyson21/fashion-personalization-platform/tree/d08843005c864ab10dab6616b883e76d54de16f0
+  checkedAt: '2026-11-10'
+  ciUrl: https://github.com/cyson21/fashion-personalization-platform/actions/runs/37869920344
+  ciRunDate: '2026-10-09'
+  scope: 이번에 pytest 45개를 재실행했습니다. 단일 프로세스·메모리 저장소·고정 데모 데이터 범위입니다.
 ---
 클릭 이벤트가 중복되거나 실패해도 추천이 엇나가지 않게 만든 규칙 기반 추천 백엔드입니다.

@@ -345,3 +345,16 @@ for (const viewport of boundaryViewports) {
     }
   });
 }
+
+test('verification result identifiers wrap with wider fallback fonts', async ({ page }) => {
+  for (const width of [640, 960]) {
+    await page.setViewportSize({ width, height: 900 });
+    await gotoAuditRoute(page, { path: '/projects/ai-gateway/' });
+    await page.addStyleTag({ content: '.signal-result { font-family: monospace !important; }' });
+    const sizes = await page.locator('.signal-result').evaluateAll(elements => elements.map(element => ({
+      width: element.clientWidth, scroll: element.scrollWidth,
+    })));
+    for (const size of sizes) expect(size.scroll).toBeLessThanOrEqual(size.width + 1);
+    await expectNoHorizontalDocumentOverflow(page);
+  }
+});
