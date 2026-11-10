@@ -7,6 +7,7 @@ interface Props {
     kind: 'image' | 'diagram';
     src?: string | undefined;
     alt: string;
+    connected?: boolean;
   };
   flow: string[];
 }
@@ -15,7 +16,8 @@ const { name, visual, flow } = Astro.props;
 const visualId = `project-visual-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'detail'}`;
 const titleId = `${visualId}-title`;
 const descriptionId = `${visualId}-description`;
-const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join(' → ')} 순서로 이어집니다.`;
+const longDescription = visual.connected === false ? `${visual.alt}. 각 영역은 독립 구성요소이며 자동 전달로 연결되어 있지 않습니다.` : `${visual.alt}. 주요 흐름은 ${flow.join(' → ')} 순서로 이어집니다.`;
+const FlowList = visual.connected === false ? 'ul' : 'ol';
 ---
 
 <figure class:list={['project-visual', `project-visual--${visual.kind}`]}>
@@ -35,16 +37,16 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join(' → ')} �
     </div>
   ) : (
     <div class="diagram-viewport" role="region" aria-label={`${name} 구성도. 가로로 스크롤할 수 있습니다.`} tabindex="0">
-      <div class="generated-diagram" aria-labelledby={titleId} aria-describedby={descriptionId}>
-        <div class="diagram-title"><span id={titleId}>{name}</span><small>처리 흐름</small></div>
-        <ol role="list">
+      <div class:list={['generated-diagram', {'generated-diagram--independent': visual.connected === false}]} aria-labelledby={titleId} aria-describedby={descriptionId}>
+        <div class="diagram-title"><span id={titleId}>{name}</span><small>{visual.connected === false ? '독립 구성요소 · 자동 전달 미연결' : '처리 흐름'}</small></div>
+        <FlowList role="list">
           {flow.map((step, index) => (
             <li role="listitem">
-              <span>{String(index + 1).padStart(2, '0')}</span>
+              <span>{visual.connected === false ? String.fromCharCode(65 + index) : String(index + 1).padStart(2, '0')}</span>
               <strong>{step}</strong>
             </li>
           ))}
-        </ol>
+        </FlowList>
       </div>
     </div>
   )}
@@ -57,6 +59,10 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join(' → ')} �
 </figure>
 
 <style>
+  .generated-diagram--independent li::after{display:none!important}
+  .generated-diagram--independent .diagram-title{flex-wrap:wrap;gap:8px}
+  .generated-diagram--independent .diagram-title small{max-width:100%;overflow-wrap:anywhere}
+
   .project-visual {
     margin: 0;
   }
@@ -134,7 +140,7 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join(' → ')} �
     font-size: var(--text-label);
   }
 
-  .generated-diagram ol {
+  .generated-diagram :is(ol, ul) {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 14px;
@@ -229,7 +235,7 @@ const longDescription = `${visual.alt}. 주요 흐름은 ${flow.join(' → ')} �
       padding: 16px;
     }
 
-    .generated-diagram ol {
+    .generated-diagram :is(ol, ul) {
       grid-template-columns: 1fr;
       margin-top: 30px;
     }

@@ -17,6 +17,7 @@ const visualSchema = z.discriminatedUnion('kind', [
   }),
   z.object({
     kind: z.literal('diagram'),
+    connected: z.boolean().optional(),
     alt: z.string().min(1),
     src: z.never().optional(),
   }),
@@ -77,11 +78,21 @@ const projectCollection = defineCollection({
     ).min(2),
     protectionRules: z.array(z.string()).min(2),
     codeEvidence: z.array(codeEvidenceSchema).min(3),
+    evidenceReview: z.object({
+      commit: z.string().regex(/^[a-f0-9]{40}$/),
+      sourceUrl: httpsUrlSchema,
+      checkedAt: z.string(),
+      ciUrl: httpsUrlSchema,
+      ciRunDate: z.string(),
+      scope: z.string(),
+    }),
     verification: z.array(
       z.object({
         layer: z.enum(['unit', 'integration', 'container-smoke', 'static-demo', 'live-demo', 'cloud']),
         method: z.string(),
         result: z.string(),
+        evidenceStatus: z.enum(['ci-record', 'local-rerun', 'test-definition']),
+        sources: z.array(z.object({ label: z.string().min(1), url: httpsUrlSchema })).min(1),
       }),
     ).min(1),
     limitations: z.array(z.string()).min(1),

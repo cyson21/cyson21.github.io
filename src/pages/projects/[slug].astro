@@ -36,6 +36,7 @@ const layerLabel: Record<string, string> = {
   'live-demo': '공개 데모',
   cloud: '클라우드 환경',
 };
+const evidenceLabels = { 'ci-record': '기준 버전 CI 실행 확인', 'local-rerun': '이번 점검에서 재실행', 'test-definition': '검사 스크립트 정의 · 실행 결과 미확인' } as const;
 const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as const;
 const toc = [
   ['overview', '해결한 문제와 담당 역할'],
@@ -120,6 +121,10 @@ const toc = [
 
       <section id="verification" class="project-section project-section--wide" tabindex="-1">
         <h2>테스트 결과</h2>
+        <div class="evidence-review">
+          <p>근거 대조: <time>{data.evidenceReview.checkedAt}</time> · <a href={data.evidenceReview.sourceUrl} target="_blank" rel="noreferrer" aria-label="소스 기준 버전 새 창에서 열기">소스 기준 버전 <ArrowUpRight size={14} aria-hidden="true" /></a> · <a href={data.evidenceReview.ciUrl} target="_blank" rel="noreferrer" aria-label="CI 실행 기록 새 창에서 열기">CI 실행 기록 ({data.evidenceReview.ciRunDate}) <ArrowUpRight size={14} aria-hidden="true" /></a></p>
+          <p>{data.evidenceReview.scope}</p>
+        </div>
         <div class="signal-detail-grid">
           {data.signals.map((signal) => <VerificationSignal {...signal} />)}
         </div>
@@ -133,8 +138,8 @@ const toc = [
             <tbody>
               {data.verification.map((item) => (
                 <tr>
-                  <th scope="row" class="level" data-label="구분">{layerLabel[item.layer]}</th>
-                  <td data-label="테스트 방법">{item.method}</td>
+                  <th scope="row" class="level" data-label="구분">{layerLabel[item.layer]}<span class="evidence-status">{evidenceLabels[item.evidenceStatus]}</span></th>
+                  <td data-label="테스트 방법">{item.method}<ul class="verification-sources" aria-label="이 결과의 근거">{item.sources.map(source => <li><a href={source.url} target="_blank" rel="noreferrer" aria-label={`${source.label} 근거 새 창에서 열기`}>{source.label} <ArrowUpRight size={14} aria-hidden="true" /></a></li>)}</ul></td>
                   <td data-label="결과">{item.result}</td>
                 </tr>
               ))}
@@ -215,6 +220,15 @@ const toc = [
 </script>
 
 <style>
+  @media(max-width:639px){.verification-sources,.evidence-status{grid-column:2;min-width:0}}
+  .verification-table td{overflow-wrap:anywhere}
+  .evidence-review{margin-bottom:24px;color:var(--ink-soft);font-size:16px;line-height:1.6}
+  .evidence-review p+p{margin-top:8px}
+  .evidence-review a{color:var(--blue);text-underline-offset:4px}
+  .evidence-status{display:block;margin-top:8px;font-size:14px;font-weight:400;line-height:1.5;color:var(--ink-soft)}
+  .verification-sources{list-style:none;margin:12px 0 0;padding:0;font-size:14px;line-height:1.6}
+  .verification-sources a{display:inline-block;max-width:100%;overflow-wrap:anywhere;word-break:break-word;color:var(--blue);text-underline-offset:3px}
+
   .visually-hidden {
     position: absolute;
     width: 1px;

@@ -5,10 +5,12 @@ publicationState: public
 name: Enterprise Policy RAG
 domain: AI
 eyebrow: 권한 기반 RAG
-summary: 사내 규정 문서의 권한 기반 검색·답변 흐름을 구현한 RAG 개인 프로젝트입니다. 검색 후보에 권한 조건을 적용하고, 허용된 근거가 없으면 답변 생성을 중단합니다.
+summary: >-
+  사내 규정 문서의 권한 필터와 답변 거절 흐름을 구현한 RAG 개인 프로젝트입니다. 메모리·가짜 모델 테스트와 별도 PostgreSQL 어댑터 테스트로 확인했으며 실제 모델 답변 품질을 검증한 사례는
+  아닙니다.
 cardEvidence:
   implementation: 벡터 검색을 하기 전에 워크스페이스, 작성자, 공개 범위, 부서 조건으로 먼저 걸러 냅니다.
-  result: 문서 5건 중 볼 수 있는 3건만 나오고, 검색 결과가 없으면 모델을 부르지 않고 바로 거절합니다.
+  result: 메모리·가짜 임베딩 테스트에서 문서 5건 중 허용된 3건을 반환하고, 근거 없는 API 요청이 insufficient_evidence로 거절되는지 확인했습니다.
 period: 2026.05–2026.06
 role: 개인 프로젝트 · FastAPI 백엔드·React 관리 화면 구현
 stack:
@@ -44,19 +46,22 @@ signals:
     result: 볼 수 있는 3건만 반환
     tone: success
     source: test_retrieval_permissions.py::test_retrieval_allows_public_owner_and_department_documents_only
-    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_retrieval_permissions.py
+    sourceUrl: >-
+      https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_retrieval_permissions.py
   - label: 답변 거절
     expression: 관련 문서 없음
     result: 답변하지 않고 거절
     tone: warning
     source: test_answer_api.py::test_answer_api_refuses_when_no_evidence_is_available
-    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_answer_api.py
+    sourceUrl: >-
+      https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_answer_api.py
   - label: 출처 범위
     expression: 접근 권한 없는 부서 문서
     result: 응답 출처 목록에 포함되지 않음
     tone: danger
     source: test_answer_api.py::test_answer_api_keeps_retrieval_permission_filter_for_citations
-    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_answer_api.py
+    sourceUrl: >-
+      https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_answer_api.py
 decisions:
   - title: 권한 확인은 검색 전에
     choice: 볼 수 있는 문서만 검색 후보에 올립니다.
@@ -71,13 +76,14 @@ decisions:
     alternative: OpenAI API와 pgvector를 서비스 코드에서 바로 호출
     reason: 테스트는 가짜 모델로 빠르게 돌리고, 실제 모델 연동은 따로 확인하고 싶었습니다.
 protectionRules:
-  - 다른 워크스페이스나 권한 밖 문서는 검색 결과와 출처에 나오지 않습니다.
+  - 워크스페이스·소유자·부서 권한 조건으로 검색 후보와 출처를 제한합니다.
   - 근거가 하나도 없으면 답변을 만들지 않습니다.
   - 기본 실행은 메모리 저장소와 가짜 모델을 쓰고, OpenAI 연동은 켜야 동작합니다.
 codeEvidence:
   - symbol: RetrievalService.retrieve
     displayPath: app/retrieval.py
-    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/app/retrieval.py
+    sourceUrl: >-
+      https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/app/retrieval.py
     excerpt: |
       access_reason = _access_reason(chunk, query)
       if access_reason is None:
@@ -85,10 +91,11 @@ codeEvidence:
     proves: 저장소에서 한 번 거른 뒤에도 워크스페이스, 작성자, 부서 권한을 다시 확인합니다.
     testName: test_retrieval_allows_public_owner_and_department_documents_only
     testPath: tests/test_retrieval_permissions.py
-    testUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_retrieval_permissions.py
+    testUrl: >-
+      https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_retrieval_permissions.py
   - symbol: AnswerService.answer
     displayPath: app/answer.py
-    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/app/answer.py
+    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/app/answer.py
     excerpt: |
       if not citations:
           return AnswerResponse(
@@ -100,10 +107,12 @@ codeEvidence:
     proves: 인용할 문서가 없으면 답변과 출처를 비우고 insufficient_evidence를 돌려줍니다.
     testName: test_answer_api_refuses_when_no_evidence_is_available
     testPath: tests/test_answer_api.py
-    testUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_answer_api.py
+    testUrl: >-
+      https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_answer_api.py
   - symbol: PostgresPolicyRepository.search_candidate_chunks
     displayPath: app/repository.py
-    sourceUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/app/repository.py
+    sourceUrl: >-
+      https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/app/repository.py
     excerpt: |
       WHERE c.workspace_id = %s
         AND d.indexing_status = 'ready'
@@ -116,20 +125,41 @@ codeEvidence:
     proves: 벡터 유사도로 정렬하기 전에 SQL WHERE 절에서 권한 조건부터 적용합니다.
     testName: test_postgres_repository_retrieval_filters_mixed_access_control_rows
     testPath: tests/test_postgres_repository_integration.py
-    testUrl: https://github.com/cyson21/enterprise-policy-rag/blob/main/tests/test_postgres_repository_integration.py
+    testUrl: >-
+      https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_postgres_repository_integration.py
 verification:
   - layer: unit
-    method: 권한이 서로 다른 문서 5건으로 검색을 실행합니다.
+    method: 메모리 저장소·가짜 임베딩과 공개·소유자·부서 권한이 다른 문서 5건을 사용합니다.
     result: 볼 수 있는 3건만 나옵니다.
+    sources:
+      - label: test_retrieval_allows_public_owner_and_department_documents_only
+        url: >-
+          https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_retrieval_permissions.py#L46
+    evidenceStatus: local-rerun
   - layer: integration
-    method: 관련 문서가 없는 질문을 답변 API에 보냅니다.
+    method: 메모리 저장소·가짜 모델을 사용한 답변 API에 검색 근거가 없는 질문을 보냅니다.
     result: insufficient_evidence로 거절합니다.
+    sources:
+      - label: test_answer_api_refuses_when_no_evidence_is_available
+        url: >-
+          https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_answer_api.py#L63
+    evidenceStatus: local-rerun
   - layer: integration
     method: 선택 실행 PostgreSQL 테스트에서 권한이 다른 문서와 색인 대기 문서를 등록합니다.
-    result: SQL 후보 조회와 검색 결과에서 허용된 문서만 반환하도록 검증합니다.
+    result: 기준 버전의 PostgreSQL CI에서 허용된 문서만 후보·검색 결과에 남는지 확인했습니다. 관리형 DB나 운영 OIDC·실제 OpenAI 검증은 아닙니다.
+    sources:
+      - label: test_postgres_repository_retrieval_filters_mixed_access_control_rows
+        url: >-
+          https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_postgres_repository_integration.py#L62
+    evidenceStatus: ci-record
   - layer: static-demo
     method: 관리 화면을 정적 빌드로 띄워 봅니다.
     result: 고정 데이터로 검색 결과·출처·질문 이력을 보여 줍니다. 실제 백엔드 검색 결과는 아닙니다.
+    sources:
+      - label: 정적 web build·smoke workflow
+        url: >-
+          https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/.github/workflows/ci.yml
+    evidenceStatus: ci-record
 limitations:
   - 기본 실행은 메모리 저장소와 가짜 모델입니다. 실제 사내 인증·운영 OIDC·관리형 PostgreSQL·pgvector 연동, 실제 OpenAI 호출과 배포 결과는 검증하지 않았습니다.
   - 화면의 토큰 수와 비용은 글자 수로 어림잡은 값이라 실제 청구액과 다릅니다.
@@ -140,16 +170,23 @@ next:
 links:
   github: https://github.com/cyson21/enterprise-policy-rag
   demo: https://enterprise-policy-rag.vercel.app
-  adr: https://github.com/cyson21/enterprise-policy-rag/tree/main/docs/adr
-  testReport: https://github.com/cyson21/enterprise-policy-rag/tree/main/tests
+  adr: https://github.com/cyson21/enterprise-policy-rag/tree/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/docs/adr
+  testReport: https://github.com/cyson21/enterprise-policy-rag/tree/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests
 visual:
   kind: image
   src: /media/rag-operations.jpg
-  alt: 권한별 검색 결과, 답변 출처, 질문 이력을 보여 주는 관리 화면
+  alt: 고정 데모 데이터로 권한별 검색 결과·출처·질문 이력을 보여 주는 정적 관리 화면
 seo:
-  title: Enterprise Policy RAG · 권한을 지키는 사내 문서 검색
-  description: 볼 권한이 없는 문서는 검색 단계에서 빼고, 근거가 없으면 답하지 않는 사내 규정 RAG 프로젝트입니다.
-updatedAt: 2026-10-01
+  title: Enterprise Policy RAG · 권한 필터를 적용한 규정 검색
+  description: 메모리·가짜 모델과 PostgreSQL 어댑터 테스트로 권한 필터·근거 없는 질문의 거절을 확인한 RAG 프로젝트입니다.
+updatedAt: '2026-11-10'
+evidenceReview:
+  commit: d5f71c1501d3b9582d2e801eb5c656daf2c21fb4
+  sourceUrl: https://github.com/cyson21/enterprise-policy-rag/tree/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4
+  checkedAt: '2026-11-10'
+  ciUrl: https://github.com/cyson21/enterprise-policy-rag/actions/runs/37869909842
+  ciRunDate: '2026-10-09'
+  scope: 이번에 메모리·가짜 모델 테스트 121개를 재실행했습니다. PostgreSQL 테스트 3개는 기준 버전 CI의 실행 기록으로 확인했습니다.
 ---
 테스트와 기본 실행은 메모리 저장소와 가짜 모델로 돌아갑니다. PostgreSQL, pgvector, OpenAI 연동은 설정을 켜면 동작하도록 따로 분리해 두었습니다.
 
