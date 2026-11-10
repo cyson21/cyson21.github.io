@@ -27,7 +27,7 @@ if (!currentExperience) {
         <div>
 
           <h2 id="overview-title">제출용 이력서·경력기술서</h2>
-          <p class="summary-closing">PDF에서 경력 요약과 프로젝트별 담당 범위를 확인할 수 있습니다. 문제의 원인과 수정 과정은 실무 사례에서 설명합니다.</p>
+          <p class="summary-closing">회사별 경력과 담당 업무를 제출용 PDF로 내려받을 수 있습니다.</p>
         </div>
         <div class="overview-actions">
           <a class="button" href={profile.resumePath} download="손찬양_이력서.pdf"><Download size={17} aria-hidden="true" /> 이력서 PDF 다운로드</a>
@@ -66,7 +66,7 @@ if (!currentExperience) {
                 ))}
               </ul>
             </section>
-
+            {experience === currentExperience && <div class="experience-case-next"><p>이 회사에서 맡은 문제의 원인과 수정 과정은 실무 사례에서 확인할 수 있습니다.</p><a class="button button--secondary" href="/portfolio/">실무 사례</a></div>}
           </article>
         ))}
       </div>
@@ -97,6 +97,9 @@ if (!currentExperience) {
 </BaseLayout>
 
 <style>
+  .experience-case-next{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);display:flex;align-items:center;flex-wrap:wrap;gap:16px}
+  .experience-case-next p{margin:0;color:var(--ink-soft);font-size:var(--text-dense)}
+
   .work-case-list { padding: 24px clamp(22px, 3vw, 34px); border-bottom: 1px solid var(--line-strong); }
   .work-case-list article { max-width: 820px; padding-block: 20px; }
   .work-case-list article + article { border-top: 1px solid var(--line); }

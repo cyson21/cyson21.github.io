@@ -34,3 +34,12 @@ test('mobile project contents keep the selected section in view', async ({ page 
     }
   }
 });
+
+test('project results stay with the verification methods instead of positional code pairing', async ({ page }) => {
+  for (const slug of ['stockrush', 'member-event-consistency', 'enterprise-policy-rag', 'ai-gateway', 'cdc-data-platform', 'fashion-personalization-platform']) {
+    await page.goto(`/projects/${slug}/`);
+    await expect(page.locator('#evidence .evidence')).toHaveCount(3);
+    await expect(page.locator('#evidence .test-result')).toHaveCount(0);
+    await expect(page.locator('#verification .verification-table tbody tr')).toHaveCount(slug === 'enterprise-policy-rag' ? 4 : 3);
+  }
+});
