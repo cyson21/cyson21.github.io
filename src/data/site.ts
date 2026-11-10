@@ -1,4 +1,4 @@
-const siteUpdatedAt = '2026-11-05';
+const siteUpdatedAt = '2026-11-10';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -36,7 +36,7 @@ export const previousCompanyProjects = [
     title: '인파 이동 시뮬레이터',
     period: '2023.03 – 2024.03',
     role: '백엔드 API, 시뮬레이션 로직, 데이터 분석',
-    description: 'j-Crowd Simulator 기반 시뮬레이터에 참여했습니다. 배경·캘리브레이션 데이터, 길찾기와 이동 모델, 군집·경로·도로 조건별 로직을 구현했습니다.',
+    description: 'j-Crowd Simulator 기반 시뮬레이터에 참여했습니다. 배경·캘리브레이션 데이터와 길찾기·군집·경로·도로 조건별 로직을 구현하고 이동 모델을 조정했습니다.',
     context: '이동 패턴과 도로 조건에 따른 인파 시나리오를 시뮬레이션하는 프로젝트입니다.',
     contribution: '배경·캘리브레이션 데이터를 구성하고 이동 패턴을 분석했습니다. 다익스트라 기반 길찾기, Social Force Model 튜닝, 군집·경로 생성과 도로 차단 등 시나리오별 로직 및 백엔드 API를 구현했습니다.',
   },
@@ -49,10 +49,10 @@ const experienceRecords = [
     context: '4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 B2B 리테일 교육 플랫폼의 백엔드 개발·운영을 담당했습니다.',
     responsibilities: [
       { title: '플랫폼 기능 개발', description: 'Java·Spring Boot로 REST API를 개발하고 JPA·QueryDSL·MySQL 기반 조회·저장 로직과 관리자 기능을 개선했습니다.' },
-      { title: '버전 전환과 검증', description: '플랫폼 2.0에서 3.0으로 전환하며 API·DB 변경의 영향 범위를 점검하고 레거시 코드와 데이터 접근 로직을 정리했습니다. 통합·회귀 테스트도 수행했습니다.' },
+      { title: '버전 전환과 검증', description: '플랫폼 2.0에서 3.0으로 전환하며 API·DB 변경의 영향 범위를 점검하고 레거시 코드와 데이터 접근 로직을 정리했습니다. 관련 API·DB 테스트 코드를 보완했습니다.' },
       { title: '운영 오류와 데이터 정합성', description: '서버 로그와 DB 기록을 바탕으로 오류를 분석했습니다. 저장 전 상태를 다시 확인하고 복합 식별자와 조회·집계 조건을 수정했으며 락 경합에 대응해 분산락과 트랜잭션 경계를 조정했습니다.' },
-      { title: '배치 운영', description: 'ShedLock·Redis 분산락으로 서버별 배치 중복 실행을 제어했습니다. 별도 개선으로 고객사·배치별 처리 상태를 집계하고 실패와 실행 누락을 Slack으로 알렸습니다.' },
-      { title: '메시징 처리', description: '발송 요청의 응답 지연으로 실제 결과와 실패 이력이 어긋나는 문제에 대응해 RabbitMQ 기반 비동기 요청·결과 처리 분리에 참여했습니다.' },
+      { title: '배치 운영', description: 'ShedLock·Redis 분산락으로 서버별 배치 중복 실행을 제어했습니다. 별도 개선으로 고객사·배치별 성공·실패·실행 누락을 집계해 Slack 요약을 구성했습니다.' },
+      { title: '메시징 처리', description: '발송 요청의 응답 대기와 결과 기록을 분리하는 RabbitMQ 기반 비동기 요청·결과 처리 변경에 참여했습니다.' },
       { title: '인프라·협업', description: 'EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환, CI/CD 개선 및 코드리뷰에 참여했습니다.' },
     ],
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'Redis', 'ShedLock', 'Redisson', 'RabbitMQ', 'AWS EC2', 'AWS RDS', 'AWS S3', 'AWS Lambda', 'CloudWatch', 'AWS WAF', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
@@ -94,7 +94,7 @@ export const resumeWorkCases = [
     title: '복합 식별자 누락으로 발생한 삭제·페이지 집계 오류 수정',
     problem: '같은 사용자의 여러 그룹 데이터를 사용자 ID만으로 구분해 삭제 대상이 누락되고, 조회 제외 조건과 페이지 집계도 실제 행 수와 어긋났습니다.',
     change: '사용자 ID와 그룹 유형의 복합 식별자를 조회·삭제·컬렉션 동등성에 적용했습니다. 제외 조건을 DB 쿼리로 옮기고 페이지 집계를 맞췄습니다.',
-    verification: '같은 사용자·다른 그룹의 동시 삭제, 일부 그룹 제외와 페이지 경계를 다루는 테스트 및 저장된 검증 기록.',
+    verification: '복합 동등성·선택 삭제의 단위 테스트, 서비스 대역을 사용하는 페이지 응답 검사와 당시 검증 기록. 실제 DB 집계 실행 결과와 구분.',
   },
 ];
 
