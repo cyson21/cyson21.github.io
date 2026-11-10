@@ -2,7 +2,7 @@
 
 공개 설명을 아래 커밋의 코드·테스트 및 해당 CI 원본 로그와 대조했다. Python은 별도 가상환경(Python 3.13)에서 Fashion 45개, RAG 비-PostgreSQL 121개를 재실행했다. RAG PostgreSQL 3개와 Java 프로젝트는 해당 버전 CI 기록을 사용했으며 이번 로컬 환경에서 전체 인프라를 다시 구동한 결과로 표현하지 않는다.
 
-코드 발췌 18개·검증 행 19개·연결 소스 참조 80개를 점검했다. 자료 링크는 검토한 커밋에 고정하고, 각 결과 행에 명시적인 근거와 확인 방식을 넣었다. 파일/함수 존재 검사는 의미적 보장의 자동 증명이 아니므로 아래 수동 대조 범위를 함께 기록한다.
+코드 발췌 18개·검증 행 19개·연결 소스 참조 81개를 점검했다. 자료 링크는 검토한 커밋에 고정하고, 각 결과 행에 명시적인 근거와 확인 방식을 넣었다. 파일/함수 존재 검사는 의미적 보장의 자동 증명이 아니므로 아래 수동 대조 범위를 함께 기록한다.
 
 ## AI Gateway
 
@@ -19,14 +19,14 @@
 ## CDC Data Platform
 
 - [검토 소스](https://github.com/cyson21/cdc-data-platform/tree/4523561b8ddac7ccd01f493952bd3e08018374ce) · [CI 기록](https://github.com/cyson21/cdc-data-platform/actions/runs/37869868595)
-- DB 상태 변경과 DTO 반환을 Kafka 재발행·sink 복구로 표현하지 않음. 실제 변경 캡처는 스크립트 정의만 확인. fixture 출력은 실환경 실행 증거에서 제외. 독립 구성요소 도식의 연결 화살표 제거.
-- CI의 PostgreSQL 저장소·서비스 테스트를 확인했습니다. 실제 변경 캡처는 스크립트 정의만 확인했으며 fixture 출력으로 실캡처 성공을 주장하지 않습니다.
+- DB 상태 변경과 DTO 반환을 Kafka 재발행·sink 복구로 표현하지 않음. 별도 PostgreSQL·EmbeddedKafka 테스트의 재시도 발행·수신은 인정. 실제 변경 캡처는 스크립트 정의만 확인. fixture 출력은 실환경 실행 증거에서 제외. 독립 구성요소 도식의 연결 화살표 제거.
+- CI의 PostgreSQL 저장소·서비스 테스트와 EmbeddedKafka 재시도 발행·수신 테스트를 확인했습니다. 실제 Debezium 변경 캡처는 스크립트 정의만 확인했으며 fixture 출력으로 실캡처 성공을 주장하지 않습니다.
 
 | 확인 조건·방법 | 결과 | 근거 |
 |---|---|---|
 | PostgreSQL Testcontainers에서 같은 원천 이벤트를 처리 이력 저장소에 두 번 등록합니다. | 첫 등록은 성공하고 두 번째는 거절되며 DB 행은 1건입니다. | [CdcEventLedgerRepositoryTest.insertIfAbsentReturnsFalseForDuplicateSourceEvent](https://github.com/cyson21/cdc-data-platform/blob/4523561b8ddac7ccd01f493952bd3e08018374ce/backend/src/test/java/com/example/cdcplatform/ledger/CdcEventLedgerRepositoryTest.java#L42) |
 | cdc-smoke applicant-change-capture는 PostgreSQL 변경과 Kafka raw 이벤트의 종류·LSN·오프셋을 점검하도록 작성된 실행 스크립트입니다. | 이번 대조에서는 실제 Debezium·Kafka 변경 캡처의 실행 증거를 확인하지 못했습니다. CI의 fixture 대역 테스트 출력은 실제 캡처 성공으로 세지 않았습니다. | [applicant_change_capture 실행 스크립트](https://github.com/cyson21/cdc-data-platform/blob/4523561b8ddac7ccd01f493952bd3e08018374ce/tools/runner/cdc-smoke) |
-| PostgreSQL 테스트가 처리 이력·DLQ 행을 직접 준비하고 requestReplay, scheduleRetry, publishReady를 호출합니다. | 원천 메타데이터, 재시도 반환 목록 1건과 DB 상태를 확인했습니다. 실제 sink 장애, Kafka 재발행이나 적재 복구를 수행한 결과는 아닙니다. | [SinkFailureReplayFlowTest.sinkFailureReplayFlowKeepsSourceMetadataIdempotency](https://github.com/cyson21/cdc-data-platform/blob/4523561b8ddac7ccd01f493952bd3e08018374ce/backend/src/test/java/com/example/cdcplatform/resilience/SinkFailureReplayFlowTest.java#L65) |
+| DB 재처리 테스트는 처리 이력·DLQ 행을 직접 준비합니다. 별도 KafkaRetryEventPublisher 테스트는 PostgreSQL과 EmbeddedKafka로 재시도 이벤트를 발행·수신합니다. | DB 테스트는 원천 메타데이터·반환 목록 1건·상태를 확인했습니다. 별도 Kafka 테스트는 브로커의 키·payload·오프셋과 DB PUBLISHED·시도 횟수 1을 확인했습니다. 실제 sink 장애부터 재적재까지 복구한 결과는 아닙니다. | [SinkFailureReplayFlowTest.sinkFailureReplayFlowKeepsSourceMetadataIdempotency](https://github.com/cyson21/cdc-data-platform/blob/4523561b8ddac7ccd01f493952bd3e08018374ce/backend/src/test/java/com/example/cdcplatform/resilience/SinkFailureReplayFlowTest.java#L65)<br>[KafkaRetryEventPublisherTest.publishesReadyRetryEventToKafkaBeforeMarkingPublished](https://github.com/cyson21/cdc-data-platform/blob/4523561b8ddac7ccd01f493952bd3e08018374ce/backend/src/test/java/com/example/cdcplatform/resilience/KafkaRetryEventPublisherTest.java#L96) |
 
 ## Enterprise Policy RAG
 
