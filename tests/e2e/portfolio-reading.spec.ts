@@ -4,7 +4,6 @@ for (const width of [390, 768, 994, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/portfolio/');
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('실무 사례');
-    await page.getByRole('link', { name: /실무 사례 목록/ }).click();
     await page.locator('#work-batch > a').click();
     await expect(page).toHaveURL(/cases\.html#work-batch$/);
     await expect(page.locator('.work-case')).toHaveCount(5);
@@ -22,7 +21,8 @@ test('intermediate-width work overview keeps readable content-sized sections', a
   await page.setViewportSize({ width: 994, height: 1079 });
   await page.goto('/portfolio/');
   await page.evaluate(() => document.fonts.ready);
-  const fontSizes = await page.locator('.work-flow-grid li').evaluateAll(elements => elements.map(e => parseFloat(getComputedStyle(e).fontSize)));
+  const fontSizes = await page.locator('.work-list small').evaluateAll(elements => elements.map(e => parseFloat(getComputedStyle(e).fontSize)));
+  expect(fontSizes).toHaveLength(5);
   expect(fontSizes.every(size => size >= 16)).toBeTruthy();
   const before = await page.locator('#work').evaluate(e => e.getBoundingClientRect().height);
   await page.setViewportSize({ width: 994, height: 800 });
