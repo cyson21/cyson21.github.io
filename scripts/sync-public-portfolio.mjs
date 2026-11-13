@@ -8,6 +8,7 @@ import {
 import { dirname, resolve } from 'node:path';
 import { applySiteChrome } from '../src/lib/site-navigation.mjs';
 import { applyReadingLayout } from './portfolio-reading-layout.mjs';
+import { applyProfessionalNarratives, renderProfessionalOverview } from './professional-case-content.mjs';
 
 const source = resolve(
   process.env.PORTFOLIO_HTML_SOURCE?.trim()
@@ -17,7 +18,7 @@ const output = resolve(import.meta.dirname, '../public/portfolio/cases.html');
 const temporaryOutput = resolve(dirname(output), `.portfolio-${process.pid}-${Date.now()}.tmp.html`);
 
 const screenStyle = readFileSync(resolve(import.meta.dirname, '../src/styles/portfolio-screen.css'), 'utf8').replace(/\r\n?/g, '\n');
-const html = applySiteChrome(applyReadingLayout(readFileSync(source, 'utf8').replace(/\r\n?/g, '\n'))
+const html = applySiteChrome(applyReadingLayout(applyProfessionalNarratives(readFileSync(source, 'utf8').replace(/\r\n?/g, '\n')))
   .replace(/\/\* Quiet Slate screen refinement:[\s\S]*?(?=<\/style>)/, '')
   .replace('</style>', `${screenStyle}\n</style>`), '/portfolio/');
 if (
@@ -38,4 +39,4 @@ try {
   rmSync(temporaryOutput, { force: true });
 }
 
-writeFileSync(resolve(import.meta.dirname, '../public/portfolio/index.html'), applySiteChrome(readFileSync(resolve(import.meta.dirname, '../src/portfolio/overview.html'), 'utf8'), '/portfolio/'));
+writeFileSync(resolve(import.meta.dirname, '../public/portfolio/index.html'), applySiteChrome(renderProfessionalOverview(readFileSync(resolve(import.meta.dirname, '../src/portfolio/overview.html'), 'utf8')), '/portfolio/'));

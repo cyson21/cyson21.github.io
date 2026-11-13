@@ -1,3 +1,5 @@
+2026-11-13 웹·지원 문서 통일: [웹 포트폴리오 대조·정리](../reviews/web-document-alignment-2026-11-13.md)를 최신 웹 편집 기준으로 사용한다. 네 핵심 실무 사례의 웹·경력기술서 원문은 src/data/professional-case-narratives.json에서 공유하며, 웹 목록·상세는 generate:portfolio로 갱신한다.
+
 2026-11-13 채용담당자 관점 후속 검토: [중복·표현·여백 정리](../reviews/recruiter-document-review-2026-11-13.md)를 최신 문안·서식 기준으로 사용한다. 이력서는 경력 요약, 경력기술서는 담당 범위와 문제·해결 과정·변화를 제공한다. 각각 2쪽을 유지한다.
 
 2026-11-13 문서 통일: [이력서·경력기술서 역할 분리와 공통 서식](../reviews/matching-career-documents-2026-11-13.md)을 최신 기준으로 사용한다. 두 PDF는 각각 2쪽이다. 이력서는 개인 프로젝트를 제외한 회사 경력 요약, 경력기술서는 네 가지 실무 사례의 문제·판단·수행·기여를 담는다. 공통 출력 서식은 src/styles/career-documents.css에서 관리한다.

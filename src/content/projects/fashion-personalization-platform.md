@@ -189,6 +189,6 @@ evidenceReview:
   checkedAt: '2026-11-10'
   ciUrl: https://github.com/cyson21/fashion-personalization-platform/actions/runs/37869920344
   ciRunDate: '2026-10-09'
-  scope: 이번에 pytest 45개를 재실행했습니다. 단일 프로세스·메모리 저장소·고정 데모 데이터 범위입니다.
+  scope: 근거 점검 당시 pytest 45개를 재실행했습니다. 단일 프로세스·메모리 저장소·고정 데모 데이터 범위입니다.
 ---
 클릭 이벤트가 중복되거나 실패해도 추천이 엇나가지 않게 만든 규칙 기반 추천 백엔드입니다.

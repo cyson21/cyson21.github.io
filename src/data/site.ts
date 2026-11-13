@@ -1,4 +1,4 @@
-const siteUpdatedAt = '2026-11-10';
+const siteUpdatedAt = '2026-11-13';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -20,7 +20,7 @@ export const previousCompanyProjects = [
     title: '인파관리 시스템 백엔드·알림 서비스',
     period: '2023.06 – 2024.01',
     role: '백엔드 API, 데이터 수집·가공, 알림 서비스, DB 설계, 배포·운영',
-    description: '이동통신 데이터의 수집·가공과 조회 REST API, 상황별 알림 서비스를 구현했습니다. DB 스키마 설계와 Docker 배포·운영을 담당했습니다.',
+    description: '이동통신 데이터 수집·가공, 조회 REST API와 상황별 알림을 구현했습니다. DB 설계와 배포·운영을 담당하고 프로젝트 일정 관리와 고객사 소통을 주도했습니다.',
     context: '행정안전부 인파관리지원시스템에서 밀집 정보를 분석·가공하고 화면과 알림에 제공하는 백엔드 개발에 참여했습니다.',
     contribution: '수집·가공 데이터의 REST API와 실시간 데이터 처리 스크립트를 작성했습니다. 특이 상황 대응용 카카오톡·문자·메신저 알림 서비스를 구현하고 DB 스키마 설계 및 Docker 배포·운영을 담당했습니다.',
   },
@@ -36,7 +36,7 @@ export const previousCompanyProjects = [
     title: '인파 이동 시뮬레이터',
     period: '2023.03 – 2024.03',
     role: '백엔드 API, 시뮬레이션 로직, 데이터 분석',
-    description: 'j-Crowd Simulator 기반 시뮬레이터에 참여했습니다. 배경·캘리브레이션 데이터와 길찾기·군집·경로·도로 조건별 로직을 구현하고 이동 모델을 조정했습니다.',
+    description: 'j-Crowd Simulator 기반 백엔드와 배경·캘리브레이션 데이터를 구성했습니다. 다익스트라 길찾기·군집·경로·도로 차단 로직을 구현하고 Social Force Model을 조정했습니다.',
     context: '이동 패턴과 도로 조건에 따른 인파 시나리오를 시뮬레이션하는 프로젝트입니다.',
     contribution: '배경·캘리브레이션 데이터를 구성하고 이동 패턴을 분석했습니다. 다익스트라 기반 길찾기, Social Force Model 튜닝, 군집·경로 생성과 도로 차단 등 시나리오별 로직 및 백엔드 API를 구현했습니다.',
   },
@@ -49,10 +49,10 @@ const experienceRecords = [
     context: '4인 개발팀에서 20개 이상의 기업 고객 서비스를 제공하는 B2B 리테일 교육 플랫폼의 백엔드 개발·운영을 담당했습니다.',
     responsibilities: [
       { title: '플랫폼 기능 개발', description: 'Java·Spring Boot로 REST API를 개발하고 JPA·QueryDSL·MySQL 기반 조회·저장 로직과 관리자 기능을 개선했습니다.' },
-      { title: '버전 전환과 검증', description: '플랫폼 2.0에서 3.0으로 전환하며 API·DB 변경의 영향 범위를 점검하고 레거시 코드와 데이터 접근 로직을 정리하고 변경 기능의 통합·회귀 테스트를 보완했습니다.' },
-      { title: '운영 오류와 데이터 정합성', description: '서버 로그와 DB 기록을 바탕으로 오류를 분석했습니다. 저장 전 상태를 다시 확인하고 복합 식별자와 조회·집계 조건을 수정했으며 락 경합에 대응해 분산락과 트랜잭션 경계를 조정했습니다.' },
-      { title: '배치 운영', description: 'ShedLock·Redis 분산락으로 서버별 배치 중복 실행을 제어했습니다. 별도 개선으로 고객사·배치별 성공·실패·실행 누락을 집계해 Slack 요약을 구성했습니다.' },
-      { title: '메시징 처리', description: '발송 요청의 응답 대기와 결과 기록을 분리하는 RabbitMQ 기반 비동기 요청·결과 처리 변경에 참여했습니다.' },
+      { title: '플랫폼 2.0 → 3.0 전환', description: '플랫폼 2.0에서 3.0으로 전환하며 API·DB 변경의 영향을 점검했습니다. 레거시 코드와 데이터 접근 로직을 정리하고 변경 기능의 통합·회귀 테스트를 보완했습니다.' },
+      { title: '운영 오류와 데이터 정합성', description: '저장 전 상태 재조회, 사용자·그룹 조합의 식별 기준 통일과 조회 필터 수정으로 데이터 오류에 대응했습니다. 주문·결제에서는 분산락과 커밋 순서를 조정했습니다.' },
+      { title: '배치 운영', description: 'ShedLock·Redis 분산락으로 중복 실행을 제어했습니다. 별도 모니터링에서는 예정 목록과 실행 기록을 대조해 고객사·배치별 실패와 실행 누락을 Slack으로 알렸습니다.' },
+      { title: '메시징 처리', description: '발송 요청 접수와 후속 결과 기록을 분리하는 RabbitMQ 기반 비동기 처리 변경에 참여했습니다.' },
       { title: '인프라·협업', description: 'EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환, CI/CD 개선 및 코드리뷰에 참여했습니다.' },
     ],
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'Redis', 'ShedLock', 'Redisson', 'RabbitMQ', 'AWS EC2', 'AWS RDS', 'AWS S3', 'AWS Lambda', 'CloudWatch', 'AWS WAF', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
@@ -60,8 +60,11 @@ const experienceRecords = [
   {
     start: '2021-07', end: '2024-03',
     company: '주식회사 화이트스캔', role: '백엔드·데이터 개발자 · 연구원',
-    context: '공공·실시간 데이터 서비스의 수집·가공, API와 배포·운영을 담당했습니다. 개발과 함께 프로젝트 일정 관리, 고객사 요구사항 확인과 소통을 주도했습니다.',
-    responsibilities: previousCompanyProjects.map(({ title, description }) => ({ title, description })),
+    context: '공공·실시간 데이터 서비스의 수집·가공부터 API 개발, 배포·운영까지 담당했습니다.',
+    responsibilities: ['인파관리 시스템 백엔드·알림 서비스', '인파 이동 시뮬레이터', '서울시 실시간 도시데이터·Open API', '지자체 공공데이터·REST API'].map(title => {
+      const project = previousCompanyProjects.find(item => item.title === title)!;
+      return { title: project.title, description: project.description };
+    }),
     stack: ['Java', 'Spring Boot', 'Python', 'Pandas', 'FastAPI', 'Django', 'SQL', 'PostgreSQL', 'MySQL', 'MongoDB', 'Docker'],
   },
 ] as const;
