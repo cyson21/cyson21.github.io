@@ -20,7 +20,7 @@ const sourceUrl = career
   ? process.env.CAREER_SOURCE_URL?.trim() || 'http://127.0.0.1:4321/resume/career/'
   : process.env.RESUME_SOURCE_URL?.trim() || 'http://127.0.0.1:4321/resume/print/';
 const readyMarker = process.env.RESUME_READY_SELECTOR?.trim() || 'main > .sheet';
-const expectedPages = career ? 3 : 2;
+const expectedPages = 2;
 
 mkdirSync(dirname(output), { recursive: true });
 

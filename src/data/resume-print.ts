@@ -1,7 +1,7 @@
 import { previousCompanyProjects } from './site';
 
 // Print-specific selection of the established career facts in site.ts.
-// Keep company experience and public personal projects in separate sections.
+// The resume covers professional experience; personal projects remain on the website.
 export const resumePrint = {
   introduction: '2021년부터 기업용 교육 플랫폼과 공공·실시간 데이터 서비스의 백엔드를 개발·운영했습니다. Java·Spring Boot API 개발과 데이터 처리, 운영 오류의 원인 분석·수정을 담당했습니다.',
   coreSkills: [
@@ -54,7 +54,10 @@ export const resumePrint = {
     },
     {
       title: '인파 이동 시뮬레이터',
-      bullets: ['j-Crowd Simulator 기반 백엔드 API에 참여했습니다. 배경·캘리브레이션 데이터, 길찾기·군집·경로·도로 조건별 로직을 구현하고 이동 모델을 조정했습니다.'],
+      bullets: [
+        'j-Crowd Simulator 기반 시뮬레이터에 참여하고 배경·캘리브레이션 데이터를 구성했습니다.',
+        '다익스트라 기반 길찾기와 군집·경로 생성, 도로 차단 등 시나리오별 백엔드 로직을 구현하고 Social Force Model을 조정했습니다.',
+      ],
     },
     {
       title: '서울시 실시간 도시데이터·Open API',
@@ -66,7 +69,10 @@ export const resumePrint = {
     },
     {
       title: '지자체 공공데이터·REST API',
-      bullets: ['원주시·용인특례시 프로젝트에서 데이터 수집·Pandas 가공, PostgreSQL·MySQL 구축과 Spring REST API 개발, Docker 배포를 수행했습니다.'],
+      bullets: [
+        '원주시·용인특례시 프로젝트의 데이터 수집 에이전트와 Pandas 가공, PostgreSQL·MySQL 구축을 수행했습니다.',
+        'Spring·JPA·MyBatis 기반 REST API 개발과 Docker 배포를 담당했습니다.',
+      ],
     },
   ].map(project => {
     const source = previousCompanyProjects.find(item => item.title === project.title);
@@ -74,14 +80,4 @@ export const resumePrint = {
     return { ...project, period: source.period };
   }),
   otherSkills: 'Python · Pandas · PostgreSQL · MongoDB · Django · FastAPI · Git · REST Docs',
-  personalProjects: [
-    {
-      name: 'StockRush', path: '/projects/stockrush/', technology: 'Spring Boot · PostgreSQL · Kafka',
-      description: '주문·재고·결제의 Saga, Transactional Outbox와 중복 이벤트·발행 실패 재처리 흐름을 구현했습니다.',
-    },
-    {
-      name: 'Enterprise Policy RAG', path: '/projects/enterprise-policy-rag/', technology: 'Python · FastAPI · PostgreSQL · pgvector',
-      description: '문서 등록·분할, 권한별 검색과 출처 구성, 근거가 없을 때 답변을 거절하는 API를 구현했습니다.',
-    },
-  ],
 } as const;

@@ -1,0 +1,103 @@
+    *{box-sizing:border-box}
+    html{background:#edf0f3;color:#202326;font-family:Pretendard,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+    body{margin:0;font-size:15px;line-height:1.55}
+    main{max-width:900px;margin:28px auto}
+    .sheet{background:#fff;margin:0 0 24px;padding:44px 52px;display:flex;flex-direction:column;min-width:0}
+    h1,h2,h3,h4,p,dl,dd{margin:0}
+    a{color:#215780;text-underline-offset:3px;text-decoration-thickness:1px}
+    a:focus-visible{outline:2px solid #215780;outline-offset:3px}
+    h1{font-size:34px;line-height:1.2;letter-spacing:-.03em;font-weight:750}
+    .role{margin-top:7px;font-size:17px;font-weight:600}
+    .contact{display:flex;flex-wrap:wrap;gap:5px 18px;margin-top:12px;font-size:13px}
+    .introduction{margin-top:23px;max-width:75ch;line-height:1.65}
+    .skills{margin-top:17px;display:grid;grid-template-columns:76px minmax(0,1fr);gap:0 16px;font-size:13px;line-height:1.7}
+    .skills dt{font-weight:700}.skills dd{color:#464c52}
+    .section{margin-top:24px}
+    .section-title{font-size:18px;font-weight:700;padding-bottom:8px;border-bottom:1px solid #30353a;margin-bottom:14px}
+    .company-heading,.project-heading{display:flex;justify-content:space-between;gap:16px;align-items:baseline}
+    .company-heading h3{font-size:19px;font-weight:700}
+    .period{flex-shrink:0;color:#626a72;font-size:12px;font-variant-numeric:tabular-nums}
+    .job-role{margin-top:3px;font-size:13px;color:#535b63}
+    .company-context{margin-top:8px;color:#464c52;font-size:14px}
+    .project{margin-top:17px;break-inside:avoid}
+    .project h4{font-size:15px;font-weight:700;line-height:1.5}
+    .project ul{margin:5px 0 0;padding-left:17px}
+    .project li{padding-left:2px;margin-bottom:4px}
+    .project li:last-child{margin-bottom:0}
+    .supporting{margin-top:15px;padding-top:10px;border-top:1px solid #e1e5e9;font-size:13px;color:#535b63}
+    .technology{font-size:12px;color:#626a72;margin-top:2px}
+    .continuation{margin-bottom:14px;color:#626a72;font-size:13px}
+    .previous .company-context{margin-bottom:4px}
+    .previous .project{margin-top:15px}
+    .other-skills{margin-top:12px;color:#535b63;font-size:12px}
+    .education{display:flex;gap:18px;align-items:baseline;font-size:13px;margin-top:20px}
+    .education h2{font-size:14px}
+    .document-links{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:12px;margin-top:14px}
+    .page-footer{display:flex;justify-content:space-between;border-top:1px solid #d6dce1;padding-top:8px;margin-top:24px;color:#6a727a;font-size:11px}
+    p,li,h3,h4{word-break:keep-all;overflow-wrap:anywhere}
+    @media screen and (max-width:640px){
+      main{margin:0}.sheet{padding:28px 22px;margin-bottom:12px}
+      .period{display:block;margin-top:3px}
+      .skills{grid-template-columns:1fr;gap:3px}
+      .education{display:block}.education p{margin-top:5px}
+    }
+    @media print{
+      @page{size:A4;margin:14mm 16mm}
+      html{background:#fff}body{font-size:11pt;line-height:1.55}
+      main{max-width:none;margin:0}
+      .sheet{padding:0;margin:0;min-height:268mm;break-after:page}
+      .sheet:last-child{break-after:auto}
+      h1{font-size:27pt}.role{font-size:11.5pt;margin-top:1.5mm}
+      .contact{font-size:9pt;margin-top:2.5mm;gap:1mm 5mm}
+      .introduction{font-size:11pt;line-height:1.55;margin-top:4.5mm;max-width:none}
+      .skills{font-size:10pt;line-height:1.65;margin-top:3mm;grid-template-columns:18mm minmax(0,1fr);gap:0 3mm}
+      .section{margin-top:4.5mm}.section-title{font-size:12.5pt;padding-bottom:1.6mm;margin-bottom:3mm}
+      .company-heading h3{font-size:13pt}.period{font-size:9pt}.job-role{font-size:9pt;margin-top:.7mm}
+      .company-context{font-size:9.8pt;margin-top:2mm;line-height:1.5}
+      .project,.previous .project{margin-top:3.4mm}
+      .project h4{font-size:11.2pt;line-height:1.45}
+      .project ul{margin-top:1.2mm;padding-left:4mm}.project li{margin-bottom:1mm;padding-left:.6mm}
+      .supporting{font-size:9pt;line-height:1.5;padding-top:2mm;margin-top:3mm}
+      .technology{font-size:8.8pt;margin-top:.5mm}
+      .continuation{font-size:9pt;margin-bottom:3mm}
+      .other-skills{font-size:8.8pt;margin-top:3mm}
+      .education{font-size:9.5pt;margin-top:4mm;gap:5mm}.education h2{font-size:10pt}
+      .document-links{font-size:9pt;margin-top:3mm;gap:1mm 5mm}
+      .page-footer{font-size:8pt;padding-top:1.5mm;margin-top:auto}
+      a{color:inherit;text-decoration:none}
+    }
+/* Career narrative uses the same paper, ink and type as the resume. */
+.document-heading{display:flex;justify-content:space-between;align-items:baseline;gap:20px}
+.document-kind{font-size:17px;color:#535b63;font-weight:600}
+.career-company{margin-top:23px;padding-bottom:12px;border-bottom:1px solid #30353a}
+.career-company .company-heading h2{font-size:19px}
+.career-company .company-heading h2,.chapter-title{line-height:1.4}
+.chapter-title{font-size:22px;padding-bottom:10px;border-bottom:1px solid #30353a}
+.chapter-meta{margin-top:8px;color:#535b63;font-size:13px}
+.narrative-case{margin-top:24px;break-inside:avoid}
+.narrative-case h3{font-size:18px;font-weight:700;line-height:1.4}
+.case-facts{display:grid;grid-template-columns:52px minmax(0,1fr);gap:9px 14px;margin-top:12px}
+.case-facts dt{font-size:13px;font-weight:700;color:#464c52}
+.case-facts dd{min-width:0;word-break:keep-all;overflow-wrap:anywhere}
+.case-facts ol{padding-left:20px;margin:0}
+.case-facts li{padding-left:3px;margin:0 0 5px}
+.case-facts li:last-child{margin-bottom:0}
+.career-document .document-links{margin-top:20px}
+@media screen and (max-width:640px){
+  .document-heading{gap:10px}.document-kind{font-size:14px;flex-shrink:0}
+  .case-facts{grid-template-columns:1fr;gap:4px}.case-facts dd{margin-bottom:9px}
+  .narrative-case h3{font-size:17px}
+}
+@media print{
+  .document-kind{font-size:12pt}
+  .career-company{margin-top:4mm;padding-bottom:2mm}
+  .career-company .company-heading h2{font-size:13pt}
+  .chapter-title{font-size:16pt;padding-bottom:2mm}
+  .chapter-meta{font-size:9pt;margin-top:2mm}
+  .narrative-case{margin-top:5mm}
+  .narrative-case h3{font-size:12pt;line-height:1.4}
+  .case-facts{grid-template-columns:12mm minmax(0,1fr);gap:2mm 3mm;margin-top:2.5mm;font-size:10.5pt;line-height:1.5}
+  .case-facts dt{font-size:9.5pt;line-height:1.65}
+  .case-facts ol{padding-left:4mm}.case-facts li{padding-left:.6mm;margin-bottom:1mm}
+  .career-document .document-links{font-size:9pt;margin-top:4mm}
+}
