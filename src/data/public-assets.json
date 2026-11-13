@@ -57,10 +57,10 @@
     "output": "public/downloads/resume.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/print/",
-    "sha256": "c94d3fb204fa84e57371c89d51bea8e54837615c76115c62654be56f59ff5965",
+    "sha256": "86113ffdacfa394e933fd2d3b275d1a835cf9067cce3bd3fcb7b27d12cc63063",
     "owner": "Son Chanyang",
-    "usage": "Public two-page resume download",
-    "approvedAt": "2026-11-10"
+    "usage": "Public two-page resume with core skills and professional cases on the first page",
+    "approvedAt": "2026-11-13"
   },
   {
     "output": "public/icons/favicon.svg",
