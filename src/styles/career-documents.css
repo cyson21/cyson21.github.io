@@ -43,7 +43,7 @@
     }
     @media print{
       @page{size:A4;margin:14mm 16mm}
-      html{background:#fff}body{font-size:11pt;line-height:1.55}
+      html{background:#fff}body{font-size:11.5pt;line-height:1.65}
       main{max-width:none;margin:0}
       .sheet{padding:0;margin:0;min-height:268mm;break-after:page}
       .sheet:last-child{break-after:auto}
@@ -54,14 +54,16 @@
       .section{margin-top:4.5mm}.section-title{font-size:12.5pt;padding-bottom:1.6mm;margin-bottom:3mm}
       .company-heading h3{font-size:13pt}.period{font-size:9pt}.job-role{font-size:9pt;margin-top:.7mm}
       .company-context{font-size:9.8pt;margin-top:2mm;line-height:1.5}
-      .project,.previous .project{margin-top:3.4mm}
+      .project{margin-top:4mm}
+      .previous .project{margin-top:9mm}
+      .previous{line-height:1.75}
       .project h4{font-size:11.2pt;line-height:1.45}
       .project ul{margin-top:1.2mm;padding-left:4mm}.project li{margin-bottom:1mm;padding-left:.6mm}
       .supporting{font-size:9pt;line-height:1.5;padding-top:2mm;margin-top:3mm}
       .technology{font-size:8.8pt;margin-top:.5mm}
       .continuation{font-size:9pt;margin-bottom:3mm}
-      .other-skills{font-size:8.8pt;margin-top:3mm}
-      .education{font-size:9.5pt;margin-top:4mm;gap:5mm}.education h2{font-size:10pt}
+      .other-skills{font-size:9.5pt;margin-top:5mm}
+      .education{font-size:10pt;margin-top:7mm;gap:5mm}.education h2{font-size:10pt}
       .document-links{font-size:9pt;margin-top:3mm;gap:1mm 5mm}
       .page-footer{font-size:8pt;padding-top:1.5mm;margin-top:auto}
       a{color:inherit;text-decoration:none}
@@ -94,10 +96,14 @@
   .career-company .company-heading h2{font-size:13pt}
   .chapter-title{font-size:16pt;padding-bottom:2mm}
   .chapter-meta{font-size:9pt;margin-top:2mm}
-  .narrative-case{margin-top:5mm}
+  .narrative-case{margin-top:7mm}
   .narrative-case h3{font-size:12pt;line-height:1.4}
-  .case-facts{grid-template-columns:12mm minmax(0,1fr);gap:2mm 3mm;margin-top:2.5mm;font-size:10.5pt;line-height:1.5}
-  .case-facts dt{font-size:9.5pt;line-height:1.65}
+  .case-facts{grid-template-columns:12mm minmax(0,1fr);gap:3mm 3mm;margin-top:3mm;font-size:11pt;line-height:1.65}
+  .case-facts dt{font-size:9pt;line-height:1.9}
   .case-facts ol{padding-left:4mm}.case-facts li{padding-left:.6mm;margin-bottom:1mm}
   .career-document .document-links{font-size:9pt;margin-top:4mm}
 }
+
+.case-responsibility{margin-top:6px;font-size:12px;color:#464c52}
+.case-responsibility strong{margin-right:8px}
+@media print{.case-responsibility{font-size:9pt;line-height:1.6;margin-top:2mm}}

@@ -48,7 +48,7 @@
     "output": "public/downloads/career-description.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/career/",
-    "sha256": "eeea76dcf6dadd0623f76610d63a39eacdf1dbda524113553dc35482f50cbe8d",
+    "sha256": "9bb702c87a5a86af3ce9b850181ca7d6fff9e12ab97f7cf9aafeb4eda1c14378",
     "owner": "Son Chanyang",
     "usage": "Public two-page career description focused on four professional problem-solving contributions",
     "approvedAt": "2026-11-13"
@@ -57,7 +57,7 @@
     "output": "public/downloads/resume.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/print/",
-    "sha256": "7948ba89b85d5bd1c15a847e97384402e629b2c318ebad1fa523968f964f79e0",
+    "sha256": "3fbee6cdf195c08111fabe3a0314bcb844a68d7d9c5de4ced9c0959c70e275c3",
     "owner": "Son Chanyang",
     "usage": "Public two-page resume with core skills and professional cases on the first page",
     "approvedAt": "2026-11-13"

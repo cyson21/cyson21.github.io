@@ -29,12 +29,11 @@ if (!current) throw new Error('경력기술서에는 현재 회사 경력이 필
       <div class="narratives">
         {sheet.cases.map(item => (
           <article class="narrative-case" data-career-case={item.anchor}>
-            <h3>{item.title}</h3><p class="technology">{item.technology}</p>
+            <h3>{item.title}</h3><p class="technology">{item.technology}</p><p class="case-responsibility"><strong>담당</strong> {item.responsibility}</p>
             <dl class="case-facts">
               <dt>문제</dt><dd>{item.context}</dd>
-              <dt>판단</dt><dd>{item.decision}</dd>
-              <dt>수행</dt><dd><ol>{item.steps.map(step => <li>{step}</li>)}</ol></dd>
-              <dt>기여</dt><dd>{item.contribution}</dd>
+              <dt>해결 과정</dt><dd><ol>{item.steps.map(step => <li>{step}</li>)}</ol></dd>
+              <dt>변화</dt><dd>{item.result}</dd>
             </dl>
           </article>
         ))}

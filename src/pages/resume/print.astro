@@ -14,7 +14,7 @@ if (!current || !previous) throw new Error('두 회사의 경력이 필요합니
   <title>손찬양 | 백엔드 개발자 이력서</title>
 
 </head>
-<body><main>
+<body class="resume-document"><main>
   <section class="sheet" aria-label="이력서 1페이지">
     <header>
       <h1>{profile.name}</h1><p class="role">{profile.role}</p>
@@ -37,10 +37,10 @@ if (!current || !previous) throw new Error('두 회사의 경력이 필요합니
     <footer class="page-footer"><span>손찬양 · 이력서</span><span>1 / 2</span></footer>
   </section>
   <section class="sheet" aria-label="이력서 2페이지">
-    <p class="continuation">경력 계속</p>
+    <p class="continuation">손찬양 · 이력서</p>
     <section class="previous" aria-label="이전 회사 경력">
       <div class="company-heading"><h3>{previous.company}</h3><time class="period">{previous.period}</time></div>
-      <p class="job-role">{previous.role}</p><p class="company-context">{previous.context}</p>
+      <p class="job-role">{previous.role}</p><p class="company-context">공공·실시간 데이터 서비스의 수집·가공부터 API 개발, 배포·운영까지 담당했습니다.</p>
       {resumePrint.previousProjects.map(project => (
         <article class="project">
           <div class="project-heading"><h4>{project.title}</h4><span class="period">{project.period}</span></div>

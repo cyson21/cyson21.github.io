@@ -72,7 +72,8 @@ test('career description separates four contributions across two sheets', async 
     expect(await sheets.nth(index).locator('[data-career-case]').evaluateAll(elements => elements.map(element => element.getAttribute('data-career-case')))).toEqual(anchors);
   }
   for (const item of await page.locator('[data-career-case]').all()) {
-    await expect(item.locator('dt')).toHaveText(['문제', '판단', '수행', '기여']);
+    await expect(item.locator('dt')).toHaveText(['문제', '해결 과정', '변화']);
     await expect(item.locator('ol > li')).toHaveCount(3);
+    await expect(item.locator('.case-responsibility')).toContainText('담당');
   }
 });
