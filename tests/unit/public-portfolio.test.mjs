@@ -97,3 +97,27 @@ test('reading navigation only links to retained sections and preserves their anc
     }
   }
 });
+
+test('web professional narratives retain the same contribution scope as career PDF data', () => {
+  const model = JSON.parse(readFileSync(join(root, 'src/data/professional-case-narratives.json'), 'utf8'));
+  const html = readIntegratedPortfolio();
+  const cases = [...model.sheets.flatMap(sheet => sheet.cases), model.messaging];
+  for (const item of cases) {
+    const article = html.match(new RegExp(`<article class="work-case" id="${item.anchor}">[\\s\\S]*?<\\/article>`))?.[0];
+    assert.ok(article, `missing ${item.anchor}`);
+    assert.ok(article.includes(item.title), `${item.anchor} title matches the canonical narrative`);
+    assert.ok(article.includes(item.responsibility), `${item.anchor} retains contribution scope`);
+    assert.ok(article.includes(item.result), `${item.anchor} retains the supported outcome`);
+    assert.doesNotMatch(article, /테스트 범위|테스트·확인 내용|확인하지 못했습니다/);
+  }
+});
+
+test('professional content regeneration preserves case order and both batch sequences', async () => {
+  const { applyProfessionalNarratives } = await import('../../scripts/professional-case-content.mjs');
+  const html = readIntegratedPortfolio();
+  const once = applyProfessionalNarratives(html);
+  assert.equal(applyProfessionalNarratives(once), once);
+  const anchors = [...once.matchAll(/<article class="work-case" id="([^"]+)">/g)].map(match => match[1]);
+  assert.deepEqual(anchors, ['work-batch', 'work-purchase', 'work-policy', 'work-identity', 'work-messaging']);
+  assert.equal((once.match(/class="batch-flow-steps"/g) ?? []).length, 2);
+});

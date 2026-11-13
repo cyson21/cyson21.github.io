@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="page-type" content="service">
   <meta name="site-kind" content="other">
-  <meta name="description" content="회사 업무에서 담당한 백엔드 문제의 원인, 수정과 확인 범위">
+  <meta name="description" content="회사 업무에서 담당한 백엔드 문제의 원인과 해결 과정">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>손찬양 · 실무 사례</title>
   <style>
@@ -4385,6 +4385,10 @@ body{padding-top:0!important}
 .work-detail-return{margin:32px 0;font-size:16px}
 .work-detail-return a{display:inline-flex;min-height:44px;align-items:center}
 
+/* Work narrative steps remain distinct from the batch flow diagram. */
+.work-case-facts dd ol{margin:0;padding-left:1.25em}
+.work-case-facts dd ol li+li{margin-top:12px}
+
 </style>
 <link rel="stylesheet" href="assets/site-chrome.css"></head>
 <body><header class="site-chrome-header"><a class="portfolio-skip-link" href="#portfolio-document">본문으로 건너뛰기</a><div class="site-chrome-bar"><a class="site-chrome-brand" href="/" aria-label="손찬양 · 홈">손찬양<span>백엔드 개발자</span></a><button class="site-chrome-toggle" type="button" aria-expanded="false" aria-controls="site-chrome-menu" aria-label="주 메뉴 열기" hidden>메뉴</button><nav id="site-chrome-menu" class="site-chrome-menu" aria-label="주 메뉴"><a href="/experience/">경력·이력서</a><a href="/portfolio/" aria-current="page">실무 사례</a><a href="/projects/">개인 프로젝트</a></nav></div></header>
@@ -4392,37 +4396,15 @@ body{padding-top:0!important}
 <main id="portfolio-document" tabindex="-1">
 <a class="portfolio-home-link" href="https://cyson21.github.io/">← 홈으로</a>
 
-  <section class="page cover" id="portfolio-intro"><h1>실무 사례 상세</h1><p class="lead">기업용 교육 플랫폼의 개발·운영 중 확인한 문제의 원인과 수정, 확인 범위를 정리했습니다.</p><p class="portfolio-contact"><a href="/portfolio/#work">실무 사례 목록</a></p></section>
+  <section class="page cover" id="portfolio-intro"><h1>실무 사례 상세</h1><p class="lead">기업용 교육 플랫폼에서 맡은 문제의 원인과 해결 과정입니다. 사례별 담당 범위와 처리 흐름의 변화를 정리했습니다.</p><p class="portfolio-contact"><a href="/portfolio/#work">실무 사례 목록</a></p></section>
   <section class="page work-cases" id="work-cases" aria-labelledby="work-cases-title">
-    <h2 id="work-cases-title">문제·수정·확인</h2><p class="compact-note" id="portfolio-scope">근거 안내 · 실무 사례는 당시 코드·테스트 정의·저장된 실행 기록을 기준으로 작성했습니다. 회사 테스트를 현재 환경에서 다시 실행한 결과는 아닙니다. 운영 개선 수치와 실행 결과가 없는 항목은 각 사례에 표시했습니다. 회사 코드와 고객 정보는 공개하지 않습니다.</p>
+    <h2 id="work-cases-title">담당 범위와 해결 과정</h2><p class="compact-note" id="portfolio-scope">회사 코드와 고객 정보를 제외하고 담당 업무와 처리 흐름을 설명합니다.</p>
     <p>이엠캐스트 · B2B 리테일 교육 플랫폼 · 백엔드 개발·운영</p>
 
-<nav class="work-case-index" aria-label="실무 사례 바로가기"><a href="#work-policy">저장 시점의 상태 재검증</a><a href="#work-purchase">락 경합과 트랜잭션 경계</a><a href="#work-batch">배치 중복 제어와 누락 감지</a><a href="#work-identity">복합 식별자와 페이지 집계</a><a href="#work-messaging">메시지 요청과 결과 처리</a></nav>
-    <article class="work-case" id="work-policy">
-      <h3>저장 시점의 상태 재검증</h3>
-      <p>설정 화면을 연 뒤 관련 작업이 시작되면, 이전 상태를 기준으로 저장하면서 기존 데이터와 변경된 처리 기준이 달라질 수 있었습니다.</p>
-      <dl class="work-case-facts">
-        <div><dt>담당 범위</dt><dd>서버 재검증·변경 차단·후속 갱신 조건 수정과 회귀 테스트.</dd></div>
-        <div><dt>문제·원인</dt><dd>화면 진입 시점에만 확인한 상태를 저장 단계가 그대로 사용했습니다. 변경 적용 전의 서버 조회와 후속 데이터 갱신 조건을 함께 확인했습니다.</dd></div>
-        <div><dt>판단·수정</dt><dd>저장 직전 현재 이력을 다시 조회하고, 화면 진입 후 작업이 시작됐다면 변경을 차단했습니다. 입력된 이전 상태가 없으면 요청을 거절하고 후속 데이터 갱신도 같은 조회 기준으로 통일했습니다.</dd></div>
-        <div><dt>테스트·확인 내용</dt><dd>상태가 유지된 경우, 저장 전 상태가 바뀐 경우, 기존 이력이 있는 경우, 필수 입력이 누락된 경우를 단위 테스트로 확인했습니다.</dd></div>
-        <div><dt>테스트 범위</dt><dd>저장 전 상태를 다시 확인하는 수정입니다. 상태 조회와 저장 사이의 동시 변경까지 DB에서 원자적으로 차단하는 방식은 아닙니다.</dd></div>
-      </dl>
-    </article>
-    <article class="work-case" id="work-purchase">
-      <h3>락 경합과 트랜잭션 경계</h3>
-      <p>동시 요청으로 주문을 저장하는 과정에서 DB 데드락이 발생했습니다. 결제 처리를 별도 트랜잭션으로 옮긴 뒤에는 앞 단계에서 아직 커밋하지 않은 요청 상태를 조회하지 못해 결제가 실패하는 문제도 드러났습니다.</p>
-      <dl class="work-case-facts">
-        <div><dt>담당 범위</dt><dd>주문 처리의 분산락 적용과 트랜잭션 범위 조정에 참여했습니다.</dd></div>
-        <div><dt>문제·원인</dt><dd>주문 저장·컬렉션 갱신의 락 경합과, 결제 요청 상태를 바꾸는 트랜잭션의 커밋 시점을 함께 확인했습니다. 별도 트랜잭션 도입만으로 호출 전체의 정합성이 보장되지는 않았습니다.</dd></div>
-        <div><dt>판단·수정</dt><dd>주문 단위 분산락과 별도 결제 트랜잭션을 적용했습니다. 결제 요청 상태를 먼저 커밋하도록 호출 경계를 조정하고, 락 관련 오류만 제한적으로 재시도했습니다. 복구 시 이미 결제된 주문은 완료 상태를 확인해 반환했습니다.</dd></div>
-        <div><dt>테스트·확인 내용</dt><dd>초기 QA에서 결제 요청 상태를 읽지 못하는 문제가 드러나 커밋 순서를 수정했습니다. 관련 테스트는 동시 요청·락 재시도·결제 완료 주문의 재처리를 다룹니다.</dd></div>
-        <div><dt>테스트 범위</dt><dd>최종 테스트 실행 결과와 운영 데드락 재발률은 확인하지 못했습니다.</dd></div>
-      </dl>
-    </article>
+<nav class="work-case-index" aria-label="실무 사례 바로가기"><a href="#work-batch">배치 중복 실행 제어와 누락 모니터링</a><a href="#work-purchase">주문·결제의 락 경합과 커밋 순서 조정</a><a href="#work-policy">저장 직전 상태 재검증과 후속 갱신 기준 통일</a><a href="#work-identity">복합 식별자로 조회·삭제·페이지 집계 기준 통일</a><a href="#work-messaging">메시지 요청 접수와 결과 처리 분리</a></nav>
     <article class="work-case" id="work-batch">
-      <h3>배치 중복 제어와 누락 감지</h3>
-      <p>Spring 스케줄러가 서버마다 실행되면서 동일 배치가 두 번 처리됐습니다. 수정 전에는 API 서버를 한 대로 제한해 임시 대응했습니다.</p>
+      <h3>배치 중복 실행 제어와 누락 모니터링</h3>
+      <p>여러 서버의 스케줄러가 같은 배치를 중복 실행했습니다. 실행된 작업의 기록만으로는 발행 자체가 빠진 배치와 발행 후 결과가 없는 배치를 구분하기 어려웠습니다.</p>
       <figure class="batch-flow" aria-labelledby="batch-flow-title">
         <figcaption id="batch-flow-title">배치 실행 제어와 예정 목록 기반 모니터링</figcaption>
         <div class="batch-flow-lanes">
@@ -4432,37 +4414,48 @@ body{padding-top:0!important}
         <p>분산락 도입과 모니터링은 별도 시기에 개선했습니다. 정상 결과도 요약에 포함합니다.</p>
       </figure>
       <dl class="work-case-facts">
-        <div><dt>담당 범위</dt><dd>분산락 적용과 배치 모니터링을 담당했습니다. 실행 상태·처리 건수·실행 시간을 기록하고 어떤 고객사의 어떤 작업에 문제가 있는지 식별하도록 했습니다.</dd></div>
-        <div><dt>문제·원인</dt><dd>각 서버의 스케줄러가 별도로 실행돼 같은 배치를 중복 처리했습니다. 서버 간 공유 락이 필요했습니다.</dd></div>
-        <div><dt>판단·수정</dt><dd>ShedLock과 Redis 기반 락 공급자를 적용했습니다. 배치별 락 이름과 유지 시간을 설정했습니다. 이후 별도 개선으로 고객사·배치별 성공·실패·락 미획득·발행 누락·처리 결과 없음을 집계하고, 예정 시각 1시간 뒤 Slack 요약을 보내도록 구현했습니다.</dd></div>
-        <div><dt>테스트·확인 내용</dt><dd>서버 로그와 DB 기록으로 배치 실행 결과를 확인했습니다. 모니터링 코드에는 예정된 발행 횟수와 실제 기록을 비교하는 로직, 시간대별 집계와 관련 테스트가 있습니다.</dd></div>
-        <div><dt>테스트 범위</dt><dd>락 유지 시간을 넘긴 작업과 장애 복구 중의 중복 실행까지 보장하지 않습니다. 전후 중복 횟수는 당시 로그 원본이 없어 수치로 제시하지 않습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>분산락 적용 · 실행 이력 수집 · 누락 집계와 Slack 요약 구현</dd></div>
+        <div><dt>해결 과정</dt><dd><ol><li>중복 실행을 제어하기 위해 배치별 락 이름과 유지 시간을 정하고 ShedLock·Redis 분산락을 적용했습니다.</li><li>별도 모니터링 개선에서는 실행 기록에 없는 작업도 찾을 수 있도록 예정된 고객사·배치 목록을 비교 기준으로 삼았습니다. 실행 상태·처리 건수·실행 시간을 기록하고 예정 목록과 대조했습니다.</li><li>예정 시각 1시간 뒤 성공·실패·락 미획득·발행 누락·결과 미수신을 구분해 Slack 요약으로 전달했습니다. 정상 결과도 함께 담아 해당 시간대의 전체 실행 현황을 볼 수 있도록 했습니다.</li></ol></dd></div>
+        <div><dt>변화</dt><dd>중복 실행 제어와 별개로, 실행 이력이 없는 작업도 확인 대상에 포함했습니다. 고객사·배치별로 후속 확인이 필요한 작업을 구분할 수 있도록 구성했습니다.</dd></div>
       </dl>
-      <p class="work-case-link">요청 발행 누락과 발행 후 결과 미수신을 구분했습니다. Slack 요약에는 정상 처리 결과도 포함했습니다.</p>
     </article>
-    <article class="work-case" id="work-identity">
-      <h3>복합 식별자와 페이지 집계</h3>
-      <p>같은 사용자에게 여러 그룹 데이터가 있는데 사용자 ID만으로 구분해, 선택한 삭제 항목 일부가 누락됐습니다. 조회 제외 조건과 페이지 합계도 실제 행 수와 어긋났습니다.</p>
+<article class="work-case" id="work-purchase">
+      <h3>주문·결제의 락 경합과 커밋 순서 조정</h3>
+      <p>동시 요청에서 주문 저장·갱신의 락 경합이 발생했습니다. 결제 트랜잭션을 분리한 뒤에는 앞 단계의 상태가 커밋되기 전에 결제가 실행돼, 필요한 요청 상태를 읽지 못하는 문제가 QA에서 드러났습니다.</p>
       <dl class="work-case-facts">
-        <div><dt>담당 범위</dt><dd>복합 필터 모델, 서버 조회·삭제와 동등성 수정, 페이지 경계·다중 그룹 테스트.</dd></div>
-        <div><dt>문제·원인</dt><dd>사용자 ID만 비교하는 컬렉션 동등성이 다른 그룹을 같은 항목으로 취급했습니다. DB 조회 후의 필터링과 근사 합계가 페이지 경계에서 또 다른 불일치를 만들었습니다.</dd></div>
-        <div><dt>판단·수정</dt><dd>사용자 ID와 그룹 유형을 조합한 식별자를 조회·삭제·동등성에 적용했습니다. 제외 조건을 QueryDSL WHERE 절로 옮겨 조회와 집계 기준을 맞췄습니다. 많은 제외 항목은 POST 본문으로 전달하고 기존 단일 유형 조회는 유지했습니다.</dd></div>
-        <div><dt>테스트·확인 내용</dt><dd>같은 사용자의 서로 다른 그룹이 Set에 남는지, 선택한 조합만 삭제되는지, 그룹 제외 조건과 페이지 총건수가 맞는지 테스트했습니다.</dd></div>
-        <div><dt>테스트 범위</dt><dd>중복 요청 제한의 추가 통합 테스트와 운영 성능 측정은 포함하지 않았습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>락 경합 대응 · QA 오류 원인 분석 · 트랜잭션 경계와 재처리 수정</dd></div>
+        <div><dt>해결 과정</dt><dd><ol><li>주문 단위로 분산락을 적용하고 결제 처리를 별도 트랜잭션으로 분리했습니다.</li><li>QA 오류를 상태 저장과 결제 호출 순서에서 추적했습니다. 결제 단계가 필요한 상태를 읽을 수 있도록 요청 상태를 먼저 커밋한 뒤 결제를 호출하도록 수정했습니다.</li><li>일반 오류까지 반복하지 않도록 락 관련 예외에만 재시도를 적용했습니다. 재처리 시 결제 완료 여부를 확인하고, 처리 실패는 별도로 기록했습니다.</li></ol></dd></div>
+        <div><dt>변화</dt><dd>결제에 필요한 요청 상태가 먼저 커밋되도록 처리 순서를 수정했습니다. 이미 완료된 주문을 재처리하지 않도록 결제 완료 여부를 확인하는 조건도 보완했습니다.</dd></div>
       </dl>
     </article>
-    <article class="work-case" id="work-messaging">
-      <h3>메시지 요청과 결과 처리</h3>
-      <p>대량 발송이 동기 RPC의 응답 제한을 넘으면서 실제 수신과 관리자 화면의 실패 이력이 어긋났습니다. 발송 요청 접수와 최종 결과를 구분해야 했습니다.</p>
+<article class="work-case" id="work-policy">
+      <h3>저장 직전 상태 재검증과 후속 갱신 기준 통일</h3>
+      <p>설정 화면을 연 뒤 관련 작업이 시작돼도 이전 상태를 기준으로 설정이 저장됐습니다. 설정 변경 허용 여부와 후속 데이터 갱신도 서로 다른 상태 기준을 사용했습니다.</p>
       <dl class="work-case-facts">
-        <div><dt>담당 범위</dt><dd>메시징 타임아웃 대응에서 동기 응답 대기를 없애고 요청 접수와 결과 처리를 분리하는 작업에 참여했습니다.</dd></div>
-        <div><dt>문제·원인</dt><dd>기존 발송 호출은 RPC 응답을 5초간 기다리고, 그 안에 응답이 없으면 실패로 기록했습니다. 대량 발송이 이 시간을 넘으면 실제 수신과 실패 이력이 어긋났습니다.</dd></div>
-        <div><dt>판단·수정</dt><dd>발송 요청을 RabbitMQ 큐에 비동기로 보내고 대량 요청은 HTTP 202로 접수 응답을 반환하도록 바꿨습니다. 별도 결과 큐 리스너가 최종 이력 갱신 큐로 전달하며, 처리 예외는 제한 재시도 후 DLQ로 분리합니다.</dd></div>
-        <div><dt>테스트·확인 내용</dt><dd>변경 코드와 업무 완료 기록에서 RPC 호출 제거, 비동기 발행, HTTP 202 응답, 결과 리스너와 재시도·DLQ 설정을 확인했습니다.</dd></div>
-        <div><dt>테스트 범위</dt><dd>HTTP 202는 요청 접수만 뜻합니다. 채널별 최종 발송·DB 저장, 중복 처리 방지와 DLQ 재처리의 실행 결과는 확인하지 못했습니다.</dd></div>
+        <div><dt>담당 범위</dt><dd>상태 변경 경로 분석 · 저장 전 검증과 후속 갱신 로직 수정</dd></div>
+        <div><dt>해결 과정</dt><dd><ol><li>화면에서 확인한 상태가 저장할 때도 유효하다고 볼 수 없어, 서버의 최종 저장 요청에서 변경 가능 여부를 판단하도록 정리했습니다.</li><li>화면 진입 시점의 상태 값이 요청에 있는지 검사하고, 변경 적용 전 현재 이력을 다시 조회했습니다. 진입 후 작업이 시작됐으면 변경을 차단하고, 기존 이력이 있는 경우와 없는 경우를 구분했습니다.</li><li>후속 데이터 갱신에도 같은 상태 조회 기준을 적용했습니다. 변경을 허용한 조건과 실제 갱신 조건이 어긋나지 않도록 관련 분기를 함께 수정했습니다.</li></ol></dd></div>
+        <div><dt>변화</dt><dd>화면 진입부터 저장까지의 상태 변화를 저장 판단에 반영했습니다. 변경 허용 여부와 후속 갱신을 같은 서버 조회 기준으로 처리하도록 맞췄습니다.</dd></div>
       </dl>
     </article>
-  </section>
+<article class="work-case" id="work-identity">
+      <h3>복합 식별자로 조회·삭제·페이지 집계 기준 통일</h3>
+      <p>한 사용자가 여러 그룹에 속할 수 있는데 사용자 ID만 비교해 서로 다른 행을 같은 대상으로 취급했습니다. 조회 후 필터링과 별도 합계 계산으로 페이지 목록과 총건수도 어긋났습니다.</p>
+      <dl class="work-case-facts">
+        <div><dt>담당 범위</dt><dd>삭제 대상 누락 원인 분석 · 식별자·컬렉션·조회 조건 수정</dd></div>
+        <div><dt>해결 과정</dt><dd><ol><li>사용자 ID와 그룹 유형의 조합을 식별 기준으로 정했습니다. 조회·삭제와 DTO 동등성에 같은 기준을 적용해 Set에서도 서로 다른 그룹의 행을 보존했습니다.</li><li>선택한 사용자·그룹 조합만 삭제하도록 대상을 구분했습니다. 식별 기준이 달라 삭제할 행이 누락되던 경로를 함께 수정했습니다.</li><li>조회가 끝난 뒤 제외하던 조건을 QueryDSL 쿼리로 옮겼습니다. 페이지 목록과 총건수를 계산할 때 동일한 필터 조건을 사용하도록 맞췄습니다.</li></ol></dd></div>
+        <div><dt>변화</dt><dd>같은 사용자의 서로 다른 그룹을 구분해 선택 삭제할 수 있도록 수정했습니다. 조회·삭제·컬렉션과 페이지 응답이 서로 다른 기준으로 대상을 판단하던 부분을 정리했습니다.</dd></div>
+      </dl>
+    </article>
+<article class="work-case" id="work-messaging">
+      <h3>메시지 요청 접수와 결과 처리 분리</h3>
+      <p>기존 발송 호출은 RPC 응답을 5초간 기다린 뒤 응답이 없으면 실패로 기록했습니다. 대량 발송이 이 시간을 넘으면 실제 수신 여부와 관리자 화면의 실패 이력이 어긋났습니다.</p>
+      <dl class="work-case-facts">
+        <div><dt>담당 범위</dt><dd>메시징 타임아웃 대응 · 비동기 요청·결과 처리 분리 작업 참여</dd></div>
+        <div><dt>해결 과정</dt><dd><ol><li>요청 접수와 발송 완료를 구분하기 위해 RabbitMQ 기반 비동기 요청·결과 처리 변경에 참여했습니다. 대량 요청은 HTTP 202로 접수 응답을 반환하도록 바꿨습니다.</li><li>별도 결과 큐 리스너가 처리 결과를 최종 이력 갱신 큐로 전달하도록 분리했습니다. 요청 응답을 기다리는 시간과 결과 기록 시점을 나눴습니다.</li><li>결과 처리 예외에는 제한 재시도와 DLQ 분리 설정을 적용했습니다. 요청 접수 응답은 최종 발송 성공과 구분했습니다.</li></ol></dd></div>
+        <div><dt>변화</dt><dd>동기 응답 시간 초과를 곧바로 발송 실패로 기록하던 흐름에서, 접수 응답과 후속 발송 결과를 나눠 처리하는 흐름으로 변경하는 데 참여했습니다.</dd></div>
+      </dl>
+    </article>
+</section>
 
 <p class="work-detail-return"><a href="/portfolio/#work">실무 사례 목록</a></p></main>
 <script>const legacyTargets={"stockrush": "/projects/stockrush/", "member-event-consistency": "/projects/member-event-consistency/", "enterprise-policy-rag": "/projects/enterprise-policy-rag/", "ai-gateway": "/projects/ai-gateway/", "cdc-data-platform": "/projects/cdc-data-platform/", "fashion-personalization-platform": "/projects/fashion-personalization-platform/", "portfolio-results": "/projects/", "portfolio-capabilities": "/projects/"};function restoreLegacyLink(){const target=legacyTargets[location.hash.slice(1)];if(target)location.replace(location.protocol==='file:'&&target.startsWith('/')?'https://cyson21.github.io'+target:target)}restoreLegacyLink();addEventListener('hashchange',restoreLegacyLink);</script>

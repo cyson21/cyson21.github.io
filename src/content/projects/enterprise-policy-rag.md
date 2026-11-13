@@ -6,8 +6,7 @@ name: Enterprise Policy RAG
 domain: AI
 eyebrow: 권한 기반 RAG
 summary: >-
-  사내 규정 문서의 권한 필터와 답변 거절 흐름을 구현한 RAG 개인 프로젝트입니다. 메모리·가짜 모델 테스트와 별도 PostgreSQL 어댑터 테스트로 확인했으며 실제 모델 답변 품질을 검증한 사례는
-  아닙니다.
+  규정 문서를 검색하기 전에 사용자 권한을 확인하고, 근거가 없으면 답변을 거절하는 RAG 개인 프로젝트입니다. FastAPI 백엔드와 React 관리 화면을 구현했습니다.
 cardEvidence:
   implementation: 벡터 검색을 하기 전에 워크스페이스, 작성자, 공개 범위, 부서 조건으로 먼저 걸러 냅니다.
   result: 메모리·가짜 임베딩 테스트에서 문서 5건 중 허용된 3건을 반환하고, 근거 없는 API 요청이 insufficient_evidence로 거절되는지 확인했습니다.
@@ -186,7 +185,7 @@ evidenceReview:
   checkedAt: '2026-11-10'
   ciUrl: https://github.com/cyson21/enterprise-policy-rag/actions/runs/37869909842
   ciRunDate: '2026-10-09'
-  scope: 이번에 메모리·가짜 모델 테스트 121개를 재실행했습니다. PostgreSQL 테스트 3개는 기준 버전 CI의 실행 기록으로 확인했습니다.
+  scope: 근거 점검 당시 메모리·가짜 모델 테스트 121개를 재실행했습니다. PostgreSQL 테스트 3개는 기준 버전 CI의 실행 기록으로 확인했습니다.
 ---
 테스트와 기본 실행은 메모리 저장소와 가짜 모델로 돌아갑니다. PostgreSQL, pgvector, OpenAI 연동은 설정을 켜면 동작하도록 따로 분리해 두었습니다.
 
