@@ -1,23 +1,140 @@
 ---
-import { experiences, previousCompanyProjects, profile, professionalSummary, resumeIntro, skillGroups } from '../../data/site';
+import { experiences, profile } from '../../data/site';
+import { resumePrint } from '../../data/resume-print';
 const [current, previous] = experiences;
 if (!current || !previous) throw new Error('두 회사의 경력이 필요합니다.');
-const printStack: readonly string[] = ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'Redis', 'ShedLock', 'Redisson', 'RabbitMQ', 'AWS EC2', 'Docker', 'JUnit', 'Testcontainers'];
 ---
 <!doctype html>
-<html lang="ko-KR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>손찬양 | 백엔드 개발자 이력서</title>
-<style is:global>
-*{box-sizing:border-box}html{background:#edf1f5;color:#243449;font-family:Pretendard,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}body{margin:0;line-height:1.58}main{max-width:940px;margin:32px auto}.sheet{background:#fff;padding:48px 60px;margin-bottom:20px;border-top:4px solid #315d88}h1,h2,h3,p{margin:0}h1{font-size:33px;line-height:1.2;letter-spacing:-.02em}.role{font-size:16px;font-weight:650;color:#315d88;margin-top:5px}.contact{display:flex;gap:7px 22px;flex-wrap:wrap;margin-top:14px;font-size:13px}a{color:#315d88;text-underline-offset:3px}a:focus-visible{outline:3px solid #315d88;outline-offset:3px}.intro{font-size:15px;margin:24px 0 0;line-height:1.7}.section{margin-top:26px}h2{font-size:18px;padding-bottom:7px;border-bottom:1px solid #b9c6d4;margin-bottom:14px}h3{font-size:17px}.jobhead{display:flex;justify-content:space-between;gap:14px;align-items:baseline}.jobhead time,.job-role{font-size:13px;color:#5b6b7d}.job-context{margin-top:9px;color:#405267;font-size:14px}.bullets{padding-left:19px;margin:13px 0 0;font-size:14px}.bullets li{padding-left:3px;margin:0 0 10px}.bullets strong{font-weight:700;color:#243e58}.stack{font-size:13px;color:#4b5b70;margin-top:12px}.stack strong{color:#243449}.project{padding:10px 0;border-bottom:1px solid #e2e8ef;font-size:14px}.project:last-child{border:0}.project h4{margin:0 0 2px;font-size:14px;color:#243e58}.project p{margin:0}.skills{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;font-size:13px}.skills strong{color:#315d88}.education,.links{font-size:14px}.links p{margin:5px 0}.foot{margin-top:26px;color:#6b7888;font-size:11px}
-@media(max-width:640px){main{margin:0}.sheet{padding:30px 22px;margin:0 0 12px}.jobhead{display:block}.skills{grid-template-columns:1fr}.intro{font-size:15px}h1{font-size:29px}}
-@media print{@page{size:A4;margin:13mm 15mm}html{background:white}main{max-width:none;margin:0}.sheet{border:0;padding:0;margin:0;break-after:page}.sheet:last-child{break-after:auto}h1{font-size:25pt}.role{font-size:11pt}.contact{font-size:9pt;margin-top:3mm}.intro{font-size:10.5pt;margin-top:5mm;line-height:1.6}.section{margin-top:5mm}h2{font-size:13pt;margin-bottom:2.5mm;padding-bottom:1.5mm}h3{font-size:11pt}.jobhead time,.job-role{font-size:9pt}.job-context,.bullets,.project,.education,.links{font-size:10.5pt}.job-context{margin-top:2mm}.bullets{margin-top:2mm;padding-left:4mm}.bullets li{margin-bottom:3mm}.stack,.skills{font-size:9pt}.stack{margin-top:2mm}.project{padding:2.5mm 0}.project h4{font-size:9.5pt}.foot{display:none}a{color:inherit;text-decoration:none}}
-</style></head><body><main>
-<section class="sheet" aria-label="이력서 1페이지"><header><h1>{profile.name}</h1><p class="role">{profile.role}</p><div class="contact"><a href={`mailto:${profile.email}`}>{profile.email}</a><a href={profile.github}>github.com/cyson21</a><a href={profile.portfolio}>포트폴리오 홈</a></div></header>
-<p class="intro">{resumeIntro} {professionalSummary}</p>
-<section class="section"><h2>경력</h2><div class="jobhead"><h3>{current.company}</h3><time>{current.period}</time></div><p class="job-role">{current.role}</p><p class="job-context">{current.context}</p>
-<ul class="bullets">{current.responsibilities.map(item => <li><strong>{item.title}</strong> · {item.description}</li>)}</ul><p class="stack"><strong>주요 기술</strong> · {current.stack.filter(item => printStack.includes(item)).map(item => item === 'AWS EC2' ? 'AWS' : item).join(', ')}</p></section></section>
-<section class="sheet" aria-label="이력서 2페이지"><section class="section" style="margin-top:0"><h2>이전 경력</h2><div class="jobhead"><h3>{previous.company}</h3><time>{previous.period}</time></div><p class="job-role">{previous.role}</p><p class="job-context">{previous.context}</p>
-{previousCompanyProjects.map(project => <article class="project"><h4>{project.title} <span class="job-role">{project.period}</span></h4><p>{project.description}</p></article>)}
-<p class="stack"><strong>주요 기술</strong> · Java, Spring Boot, Python, Pandas, PostgreSQL, MySQL, Docker</p></section>
-<section class="section"><h2>기술</h2><div class="skills">{skillGroups.map(group => <div><strong>{group.label}</strong> · {group.items.join(', ')}</div>)}</div></section>
-<section class="section education"><h2>학력</h2><p><strong>서울과학기술대학교</strong> · 영어영문학 학사 · 2018 졸업</p></section>
-<section class="section links"><h2>상세 자료</h2><p><a href={new URL(profile.careerDescriptionPath, profile.portfolio).href}>경력기술서 PDF</a> — 회사별 담당 범위와 프로젝트 상세</p><p><a href={profile.portfolio}>포트폴리오 홈</a> — 경력·실무 사례·개인 프로젝트</p></section></section></main></body></html>
+<html lang="ko-KR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>손찬양 | 백엔드 개발자 이력서</title>
+  <style is:global>
+    *{box-sizing:border-box}
+    html{background:#edf0f3;color:#202326;font-family:Pretendard,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+    body{margin:0;font-size:15px;line-height:1.55}
+    main{max-width:900px;margin:28px auto}
+    .sheet{background:#fff;margin:0 0 24px;padding:44px 52px;display:flex;flex-direction:column;min-width:0}
+    h1,h2,h3,h4,p,dl,dd{margin:0}
+    a{color:#215780;text-underline-offset:3px;text-decoration-thickness:1px}
+    a:focus-visible{outline:2px solid #215780;outline-offset:3px}
+    h1{font-size:34px;line-height:1.2;letter-spacing:-.03em;font-weight:750}
+    .role{margin-top:7px;font-size:17px;font-weight:600}
+    .contact{display:flex;flex-wrap:wrap;gap:5px 18px;margin-top:12px;font-size:13px}
+    .introduction{margin-top:23px;max-width:75ch;line-height:1.65}
+    .skills{margin-top:17px;display:grid;grid-template-columns:76px minmax(0,1fr);gap:0 16px;font-size:13px;line-height:1.7}
+    .skills dt{font-weight:700}.skills dd{color:#464c52}
+    .section{margin-top:24px}
+    .section-title{font-size:18px;font-weight:700;padding-bottom:8px;border-bottom:1px solid #30353a;margin-bottom:14px}
+    .company-heading,.project-heading{display:flex;justify-content:space-between;gap:16px;align-items:baseline}
+    .company-heading h3{font-size:19px;font-weight:700}
+    .period{flex-shrink:0;color:#626a72;font-size:12px;font-variant-numeric:tabular-nums}
+    .job-role{margin-top:3px;font-size:13px;color:#535b63}
+    .company-context{margin-top:8px;color:#464c52;font-size:14px}
+    .project{margin-top:17px;break-inside:avoid}
+    .project h4{font-size:15px;font-weight:700;line-height:1.5}
+    .project ul{margin:5px 0 0;padding-left:17px}
+    .project li{padding-left:2px;margin-bottom:4px}
+    .project li:last-child{margin-bottom:0}
+    .supporting{margin-top:15px;padding-top:10px;border-top:1px solid #e1e5e9;font-size:13px;color:#535b63}
+    .technology{font-size:12px;color:#626a72;margin-top:2px}
+    .continuation{margin-bottom:14px;color:#626a72;font-size:13px}
+    .previous .company-context{margin-bottom:4px}
+    .previous .project{margin-top:15px}
+    .other-skills{margin-top:12px;color:#535b63;font-size:12px}
+    .personal-list{display:grid;gap:12px}
+    .personal-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+    .personal-heading h3{font-size:14px;font-weight:700}
+    .personal-heading .technology{font-size:11px}
+    .personal p{font-size:13px;margin-top:3px}
+    .education{display:flex;gap:18px;align-items:baseline;font-size:13px;margin-top:20px}
+    .education h2{font-size:14px}
+    .document-links{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:12px;margin-top:14px}
+    .page-footer{display:flex;justify-content:space-between;border-top:1px solid #d6dce1;padding-top:8px;margin-top:24px;color:#6a727a;font-size:11px}
+    p,li,h3,h4{word-break:keep-all;overflow-wrap:anywhere}
+    @media screen and (max-width:640px){
+      main{margin:0}.sheet{padding:28px 22px;margin-bottom:12px}
+      .company-heading,.project-heading,.personal-heading{display:block}
+      .period{display:block;margin-top:3px}
+      .skills{grid-template-columns:1fr;gap:3px}
+      .education{display:block}.education p{margin-top:5px}
+    }
+    @media print{
+      @page{size:A4;margin:14mm 16mm}
+      html{background:#fff}body{font-size:11pt;line-height:1.55}
+      main{max-width:none;margin:0}
+      .sheet{padding:0;margin:0;min-height:268mm;break-after:page}
+      .sheet:last-child{break-after:auto}
+      h1{font-size:27pt}.role{font-size:11.5pt;margin-top:1.5mm}
+      .contact{font-size:9pt;margin-top:2.5mm;gap:1mm 5mm}
+      .introduction{font-size:11pt;line-height:1.55;margin-top:4.5mm;max-width:none}
+      .skills{font-size:10pt;line-height:1.65;margin-top:3mm;grid-template-columns:18mm minmax(0,1fr);gap:0 3mm}
+      .section{margin-top:4.5mm}.section-title{font-size:12.5pt;padding-bottom:1.6mm;margin-bottom:3mm}
+      .company-heading h3{font-size:13pt}.period{font-size:9pt}.job-role{font-size:9pt;margin-top:.7mm}
+      .company-context{font-size:9.8pt;margin-top:2mm;line-height:1.5}
+      .project,.previous .project{margin-top:3.4mm}
+      .project h4{font-size:11.2pt;line-height:1.45}
+      .project ul{margin-top:1.2mm;padding-left:4mm}.project li{margin-bottom:1mm;padding-left:.6mm}
+      .supporting{font-size:9pt;line-height:1.5;padding-top:2mm;margin-top:3mm}
+      .technology{font-size:8.8pt;margin-top:.5mm}
+      .continuation{font-size:9pt;margin-bottom:3mm}
+      .other-skills{font-size:8.8pt;margin-top:3mm}
+      .personal-list{gap:2.5mm}.personal-heading h3{font-size:10.2pt}.personal-heading .technology{font-size:8.2pt}
+      .personal p{font-size:9.5pt;line-height:1.5;margin-top:.7mm}
+      .education{font-size:9.5pt;margin-top:4mm;gap:5mm}.education h2{font-size:10pt}
+      .document-links{font-size:9pt;margin-top:3mm;gap:1mm 5mm}
+      .page-footer{font-size:8pt;padding-top:1.5mm;margin-top:auto}
+      a{color:inherit;text-decoration:none}
+    }
+  </style>
+</head>
+<body><main>
+  <section class="sheet" aria-label="이력서 1페이지">
+    <header>
+      <h1>{profile.name}</h1><p class="role">{profile.role}</p>
+      <div class="contact"><a href={`mailto:${profile.email}`}>{profile.email}</a><a href={profile.github}>github.com/cyson21</a><a href={profile.portfolio}>cyson21.github.io</a></div>
+    </header>
+    <p class="introduction">{resumePrint.introduction}</p>
+    <dl class="skills" aria-label="핵심 기술"><dt>핵심 기술</dt><dd>{resumePrint.coreSkills.map(line => <p>{line}</p>)}</dd></dl>
+    <section class="section" aria-labelledby="career-title">
+      <h2 id="career-title" class="section-title">경력</h2>
+      <div class="company-heading"><h3>{current.company}</h3><time class="period">{current.period}</time></div>
+      <p class="job-role">{current.role}</p><p class="company-context">{current.context}</p>
+      {resumePrint.currentProjects.map(project => (
+        <article class="project" data-work-case={'anchor' in project ? project.anchor : undefined}>
+          <h4>{project.title}</h4>
+          <ul>{project.bullets.map((bullet, index) => <li data-work-case={'relatedAnchor' in project && index === 1 ? project.relatedAnchor : undefined}>{bullet}</li>)}</ul>
+        </article>
+      ))}
+      <p class="supporting">{resumePrint.supportingWork}</p>
+    </section>
+    <footer class="page-footer"><span>손찬양 · 이력서</span><span>1 / 2</span></footer>
+  </section>
+  <section class="sheet" aria-label="이력서 2페이지">
+    <p class="continuation">경력 계속</p>
+    <section class="previous" aria-label="이전 회사 경력">
+      <div class="company-heading"><h3>{previous.company}</h3><time class="period">{previous.period}</time></div>
+      <p class="job-role">{previous.role}</p><p class="company-context">{previous.context}</p>
+      {resumePrint.previousProjects.map(project => (
+        <article class="project">
+          <div class="project-heading"><h4>{project.title}</h4><span class="period">{project.period}</span></div>
+          {'technology' in project && <p class="technology">{project.technology}</p>}
+          <ul>{project.bullets.map(bullet => <li>{bullet}</li>)}</ul>
+        </article>
+      ))}
+      <p class="other-skills">관련 기술 · {resumePrint.otherSkills}</p>
+    </section>
+    <section class="section" aria-labelledby="personal-title">
+      <h2 class="section-title" id="personal-title">개인 프로젝트</h2>
+      <div class="personal-list">{resumePrint.personalProjects.map(project => (
+        <article class="personal"><div class="personal-heading"><h3><a href={new URL(project.path, profile.portfolio).href}>{project.name}</a></h3><span class="technology">{project.technology}</span></div><p>{project.description}</p></article>
+      ))}</div>
+    </section>
+    <section class="education" aria-labelledby="education-title"><h2 id="education-title">학력</h2><p>서울과학기술대학교 · 영어영문학 학사 · 2018 졸업</p></section>
+    <div class="document-links"><a href={new URL(profile.careerDescriptionPath, profile.portfolio).href}>경력기술서 PDF</a><a href={profile.portfolio}>포트폴리오 · 실무 사례와 개인 프로젝트 상세</a></div>
+    <footer class="page-footer"><span>손찬양 · 이력서</span><span>2 / 2</span></footer>
+  </section>
+</main></body>
+</html>

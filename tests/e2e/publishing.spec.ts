@@ -49,3 +49,14 @@ test('print resume exposes exactly two ready sheets and stays noindex', async ({
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
   await expect(page.getByRole('link', { name: 'cyson21@gmail.com', exact: true })).toHaveAttribute('href', 'mailto:cyson21@gmail.com');
 });
+
+test('first resume sheet presents core skills and professional problem solving', async ({ page }) => {
+  await page.goto('/resume/print/');
+  const first = page.locator('main > .sheet').first();
+  await expect(first.locator('.skills')).toContainText('Java');
+  await expect(first.locator('.company-heading')).toContainText('이엠캐스트');
+  expect(await first.locator('[data-work-case]').evaluateAll(elements => elements.map(element => element.getAttribute('data-work-case'))))
+    .toEqual(['work-batch', 'work-policy', 'work-identity', 'work-purchase']);
+  await expect(first.locator('.personal')).toHaveCount(0);
+  await expect(page.locator('main > .sheet').last().locator('.personal')).toHaveCount(2);
+});
