@@ -7,7 +7,7 @@ const testRoutes: Record<string, string[]> = {
   'Korean interface labels use the text font rather than the code font': ['/projects/', '/projects/stockrush/'],
   'detail pages expose an explicit route back to the portfolio home': ['/projects/stockrush/', '/experience/'],
   'experience page unifies the résumé summary and career evidence': ['/experience/'],
-  'print résumé keeps professional history and personal projects distinct within two pages': ['/resume/print/'],
+  'print résumé focuses on professional history within two pages': ['/resume/print/'],
   'resume route redirects to the unified experience page': ['/experience/'],
   'home navigation prioritizes career and labels personal projects': ['/'],
   'projects page heading levels do not skip from h1 to h3': ['/projects/'],
@@ -145,7 +145,7 @@ test('experience page unifies the résumé summary and career evidence', async (
   await expect(page.getByRole('heading', { name: '학력' })).toBeVisible();
 });
 
-test('print résumé keeps professional history and personal projects distinct within two pages', async ({ page }) => {
+test('print résumé focuses on professional history within two pages', async ({ page }) => {
   await page.goto('/resume/print/');
   await page.emulateMedia({ media: 'print' });
   const sheets = page.locator('main > .sheet');
@@ -155,8 +155,8 @@ test('print résumé keeps professional history and personal projects distinct w
   await expect(sheets.first().locator('.personal')).toHaveCount(0);
   await expect(sheets.nth(1).getByRole('heading', { name: '주식회사 화이트스캔' })).toBeVisible();
   await expect(sheets.nth(1).locator('.project')).toHaveCount(4);
-  await expect(sheets.nth(1).getByRole('heading', { name: '개인 프로젝트', exact: true })).toBeVisible();
-  await expect(sheets.nth(1).locator('.personal')).toHaveCount(2);
+  await expect(page.getByRole('heading', { name: '개인 프로젝트', exact: true })).toHaveCount(0);
+  await expect(page.locator('.personal')).toHaveCount(0);
   // A4 at 96 CSS px/in minus the template's 14 mm top and bottom margins.
   for (const sheet of await sheets.all()) {
     const height = await sheet.evaluate(element => element.getBoundingClientRect().height);

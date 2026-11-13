@@ -1,25 +1,47 @@
 ---
-import { experiences, previousCompanyProjects, profile } from '../../data/site';
-import { careerOverview, careerPrintCases, careerPrintAdditional } from '../../data/career-description';
-const [current, previous] = experiences;
-if (!current || !previous) throw new Error('두 회사의 경력이 필요합니다.');
+import { experiences, profile } from '../../data/site';
+import { careerPrintSheets } from '../../data/career-description';
+import '../../styles/career-documents.css';
+const current = experiences[0];
+if (!current) throw new Error('경력기술서에는 현재 회사 경력이 필요합니다.');
 ---
 <!doctype html>
-<html lang="ko-KR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>손찬양 | 경력기술서</title><style is:global>
-*{box-sizing:border-box}html{background:#edf1f5;color:#243449;font-family:Pretendard,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}body{margin:0;line-height:1.65}main{max-width:940px;margin:32px auto}.sheet{background:#fff;margin-bottom:20px;padding:48px 60px;border-top:4px solid #315d88}h1,h2,h3,p,dl,dd{margin:0}h1{font-size:32px;line-height:1.2;letter-spacing:-.02em}h1 span{font-size:20px;font-weight:500;margin-left:8px}.role{margin-top:5px;font-size:15px;color:#315d88;font-weight:650}.contact{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:13px;font-size:13px}a{color:#315d88;text-underline-offset:3px}a:focus-visible{outline:3px solid #315d88;outline-offset:3px}.page-title{padding-bottom:12px;border-bottom:1px solid #b9c6d4}.page-title h2{font-size:23px}.page-title p,.meta{font-size:13px;color:#617086}.intro{margin-top:24px}.company{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.company h2{font-size:21px}.company time{color:#617086;font-size:13px}.job-role{font-size:13px;color:#617086;margin-top:2px}.context{font-size:14px;margin-top:10px;line-height:1.7}.section{margin-top:26px}.section>h2{font-size:18px;border-bottom:1px solid #b9c6d4;padding-bottom:7px;margin-bottom:12px}.record{padding:11px 0;border-bottom:1px solid #e0e7ef}.record:last-child{border:0}.record h3{font-size:15px;color:#243e58;margin-bottom:3px}.record p{font-size:14px}.scope-note{margin-top:18px;font-size:12px;color:#53657a;line-height:1.6}.case{padding:15px 0;border-bottom:1px solid #dce3eb;break-inside:avoid}.case h3{font-size:16px;margin-bottom:8px}.facts{display:grid;grid-template-columns:64px 1fr;gap:5px 14px;font-size:14px}.facts dt{color:#315d88;font-weight:700}.facts dd{min-width:0}.project{padding:13px 0;border-bottom:1px solid #dce3eb;break-inside:avoid}.project h3{font-size:15px}.project .top{display:flex;justify-content:space-between;gap:12px}.project time{font-size:13px;color:#617086}.project .roleline{font-size:13px;color:#53657a;margin:3px 0}.project p{font-size:14px}.footer{display:flex;justify-content:space-between;color:#748195;font-size:11px;border-top:1px solid #dce3eb;padding-top:8px;margin-top:24px}
-@media(max-width:640px){main{margin:0}.sheet{padding:30px 22px;margin:0 0 12px}.company,.project .top{display:block}.facts{grid-template-columns:1fr;gap:3px}.facts dd{margin-bottom:8px}h1{font-size:29px}h1 span{font-size:18px}.page-title h2{font-size:21px}}
-@media print{@page{size:A4;margin:13mm 15mm}html{background:#fff}main{max-width:none;margin:0}.sheet{padding:0;margin:0;border:0;min-height:270.5mm;display:flex;flex-direction:column;break-after:page}.sheet:last-child{break-after:auto}h1{font-size:24pt}h1 span{font-size:14pt}.role{font-size:10pt}.contact{font-size:9pt;margin-top:2mm}.intro{margin-top:4mm}.company h2{font-size:14pt}.company time,.job-role,.meta{font-size:9pt}.context{font-size:10pt;margin-top:2mm;line-height:1.5}.section{margin-top:4mm}.section>h2{font-size:12pt;margin-bottom:1mm;padding-bottom:1mm}.record{padding:2mm 0}.record h3{font-size:10.5pt;margin-bottom:.5mm}.record p{font-size:10pt;line-height:1.5}.page-title{padding-bottom:2mm}.page-title h2{font-size:16pt}.page-title p{font-size:9pt}.scope-note{font-size:8.8pt;margin-top:3mm}.case{padding:2.6mm 0}.case h3{font-size:10.7pt;margin-bottom:1mm}.facts{grid-template-columns:15mm 1fr;gap:1mm 3mm;font-size:9.5pt;line-height:1.5}.project{padding:2.5mm 0}.project h3{font-size:10.5pt}.project time,.project .roleline{font-size:9pt}.project p{font-size:9.8pt;line-height:1.52}.footer{font-size:8pt;margin-top:auto;padding-top:1.5mm}a{color:inherit;text-decoration:none}}
-</style></head><body><main>
-<section class="sheet" aria-label="경력기술서 1페이지"><header><h1>{profile.name} <span>경력기술서</span></h1><p class="role">{profile.role}</p><div class="contact"><a href={`mailto:${profile.email}`}>{profile.email}</a><a href={profile.github}>github.com/cyson21</a><a href={profile.portfolio}>포트폴리오 홈</a></div></header>
-<section class="intro"><div class="company"><h2>{current.company}</h2><time>{current.period}</time></div><p class="job-role">{current.role}</p><p class="context">{current.context}</p></section>
-<section class="section"><h2>주요 업무와 기여</h2>
-{careerOverview.map(item => <article class="record"><h3>{item.title}</h3><p>{item.text}</p></article>)}</section>
-<p class="scope-note">다음 페이지에는 운영 중 발생한 문제와 담당한 수정 내용을 정리했습니다.</p><footer class="footer"><span>손찬양 · 플랫폼 개발·운영</span><span>1 / 3</span></footer></section>
-<section class="sheet" aria-label="경력기술서 2페이지"><header class="page-title"><h2>운영 안정화와 데이터 정합성</h2><p>{current.company} · {current.period} · {current.role}</p></header>
-{careerPrintCases.map(item => <article class="case"><h3>{item.title}</h3><dl class="facts"><dt>상황</dt><dd>{item.problem}</dd><dt>수행</dt><dd>{item.change}</dd><dt>기여</dt><dd>{item.contribution}</dd></dl></article>)}
-<article class="case"><h3>데이터 변경과 조회 기준 개선</h3><dl class="facts"><dt>상황</dt><dd>{careerPrintAdditional.problem}</dd><dt>수행</dt><dd>{careerPrintAdditional.change}</dd></dl></article>
-<footer class="footer"><span>손찬양 · 운영 안정화 기여</span><span>2 / 3</span></footer></section>
-<section class="sheet" aria-label="경력기술서 3페이지"><header class="page-title"><h2>공공·실시간 데이터 서비스</h2><p>{previous.company} · {previous.period} · {previous.role}</p></header><p class="context">{previous.context}</p>
-{previousCompanyProjects.map(project => <article class="project"><div class="top"><h3>{project.title}</h3><time>{project.period}</time></div><p class="roleline">{project.role}</p><p>{project.contribution}</p></article>)}
-<footer class="footer"><span>손찬양 · 프로젝트별 담당 범위와 기여</span><span>3 / 3</span></footer></section>
-</main></body></html>
+<html lang="ko-KR">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex,nofollow" /><title>손찬양 | 경력기술서</title></head>
+<body class="career-document"><main>
+  {careerPrintSheets.map((sheet, index) => (
+    <section class="sheet" aria-label={`경력기술서 ${index + 1}페이지`}>
+      {index === 0 ? <>
+        <header>
+          <div class="document-heading"><h1>{profile.name}</h1><span class="document-kind">경력기술서</span></div>
+          <p class="role">{profile.role}</p>
+          <div class="contact"><a href={`mailto:${profile.email}`}>{profile.email}</a><a href={profile.github}>github.com/cyson21</a><a href={profile.portfolio}>cyson21.github.io</a></div>
+        </header>
+        <section class="career-company" aria-label="회사와 담당 범위">
+          <div class="company-heading"><h2>{current.company}</h2><time class="period">{current.period}</time></div>
+          <p class="job-role">{current.role} · B2B 리테일 교육 플랫폼</p>
+        </section>
+      </> : <header>
+        <p class="continuation">손찬양 · 경력기술서</p>
+        <h2 class="chapter-title">{sheet.topic}</h2>
+        <p class="chapter-meta">{current.company} · {current.period} · {current.role}</p>
+      </header>}
+      <div class="narratives">
+        {sheet.cases.map(item => (
+          <article class="narrative-case" data-career-case={item.anchor}>
+            <h3>{item.title}</h3><p class="technology">{item.technology}</p>
+            <dl class="case-facts">
+              <dt>문제</dt><dd>{item.context}</dd>
+              <dt>판단</dt><dd>{item.decision}</dd>
+              <dt>수행</dt><dd><ol>{item.steps.map(step => <li>{step}</li>)}</ol></dd>
+              <dt>기여</dt><dd>{item.contribution}</dd>
+            </dl>
+          </article>
+        ))}
+      </div>
+      {index === careerPrintSheets.length - 1 && <div class="document-links"><a href={new URL(profile.resumePath, profile.portfolio).href}>이력서 PDF</a><a href={new URL('/portfolio/cases.html', profile.portfolio).href}>실무 사례 웹 상세</a></div>}
+      <footer class="page-footer"><span>손찬양 · 경력기술서</span><span>{index + 1} / {careerPrintSheets.length}</span></footer>
+    </section>
+  ))}
+</main></body>
+</html>

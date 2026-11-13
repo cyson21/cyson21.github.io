@@ -1,4 +1,6 @@
-2026-11-13 이력서 개편: [원티드 구성 참고 개편](../reviews/wanted-style-resume-2026-11-13.md)을 최신 이력서 기준으로 사용한다. 회사·기간은 site.ts, 이력서 선별 문안은 resume-print.ts, 출력은 resume/print.astro에서 관리한다. 경력기술서의 사실·출력은 기존 기준을 유지한다.
+2026-11-13 문서 통일: [이력서·경력기술서 역할 분리와 공통 서식](../reviews/matching-career-documents-2026-11-13.md)을 최신 기준으로 사용한다. 두 PDF는 각각 2쪽이다. 이력서는 개인 프로젝트를 제외한 회사 경력 요약, 경력기술서는 네 가지 실무 사례의 문제·판단·수행·기여를 담는다. 공통 출력 서식은 src/styles/career-documents.css에서 관리한다.
+
+2026-11-13 이력서 개편: [원티드 구성 참고 개편](../reviews/wanted-style-resume-2026-11-13.md)을 최신 이력서 기준으로 사용한다. 회사·기간은 site.ts, 이력서 선별 문안은 resume-print.ts, 출력은 resume/print.astro에서 관리한다. 경력기술서의 후속 개편은 위 공통 서식 기록을 우선한다.
 
 2026-11-10 지원 문서 정리: [경력·기여 중심 문안](../reviews/career-contribution-copy-2026-11-10.md)을 최신 편집 기준으로 사용한다. 테스트 대역·실행 미확인 등 상세 검토 설명은 지원 PDF에서 제외하고 실제 담당·판단·수행을 중심으로 작성한다. 이전 근거 대조 기록은 편집 이력이다.
 
@@ -14,7 +16,7 @@
 - 경력기술서의 업무 맥락·역할·근거: `src/data/career-description.ts`. 공통 사실을 참조하되 문서에 맞는 깊이로 설명한다.
 - 실무 상세와 개인 프로젝트의 공개 구현: `public/portfolio/index.html`. 같은 사실 변경 시 수동 대조가 필요하다.
 - 근거와 주장 경계: `docs/content/career_profile.md`, `docs/content/batch-messaging-review.md`.
-- 현재 PDF 출력은 `/resume/print/`의 2쪽과 `/resume/career/`의 3쪽이다. 개인 프로젝트는 이력서·경력기술서의 상세 본문에 넣지 않는다.
+- 현재 PDF 출력은 `/resume/print/`의 2쪽과 `/resume/career/`의 2쪽이다. 개인 프로젝트는 이력서·경력기술서의 상세 본문에 넣지 않는다.
 
 같은 사례의 재등장은 허용하지만 네 사례의 전체 문단을 모든 문서에 반복하지 않는다. 이력서는 회사별 핵심 기여, 경력기술서는 프로젝트·담당 범위와 주요 기여, 포트폴리오는 판단·흐름·구현·확인 근거를 제공한다.
 

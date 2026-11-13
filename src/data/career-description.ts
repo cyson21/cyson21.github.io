@@ -1,4 +1,4 @@
-import { experiences, resumeWorkCases } from './site';
+import { resumeWorkCases } from './site';
 
 // Shared case facts are retained; each document selects its own depth.
 const details = [
@@ -37,37 +37,69 @@ export const careerCases = resumeWorkCases.map(item => {
   if (!detail) throw new Error(`Missing career detail: ${item.anchor}`);
   return { ...item, ...detail };
 });
-export const careerPrimaryCases = ['work-batch', 'work-purchase'].map(anchor => careerCases.find(item => item.anchor === anchor)!);
-export const careerAdditionalCases = ['work-policy', 'work-identity'].map(anchor => careerCases.find(item => item.anchor === anchor)!);
-const currentExperience = experiences[0];
-if (!currentExperience) throw new Error('경력기술서에는 현재 회사 경력이 필요합니다.');
-export const careerBusinessWorks = [
-  { ...currentExperience.responsibilities[0], detail: '기업 고객의 요구사항에 맞춰 REST API를 개발했습니다. 관리자 기능 개편에서는 기존 데이터와 처리 순서를 확인하고 JPA·QueryDSL·MySQL 조회·저장 로직을 수정했습니다.' },
-  { ...currentExperience.responsibilities[1], detail: '플랫폼 2.0에서 3.0으로 전환하면서 변경된 API·DB가 기존 기능에 미치는 영향을 점검했습니다. 레거시 코드와 데이터 접근 로직을 정리하고 변경 기능의 통합·회귀 테스트를 보완했습니다.' },
-  { title: '데이터 정합성·운영 오류 대응', description: '운영 장애와 데이터 오류를 재현하고 원인을 추적했습니다.', detail: '서버 로그와 DB 기록으로 오류가 발생한 조회·저장 로직을 찾아 수정했습니다. 저장 직전 상태 확인, 복합 식별자 적용, 분산락과 트랜잭션 분리 등을 담당했습니다.' },
-  { ...currentExperience.responsibilities[5], detail: 'EC2·RDS·Lambda·CloudWatch·WAF 기반 운영과 Docker 배포·전환 이슈 대응에 참여했습니다. CI/CD 개선 작업과 코드리뷰에 참여하고, 배포 전 주요 기능을 확인했습니다.' },
-];
 
-// Document-specific elaboration of the same work; shared identity and cases remain in site.ts.
-export const careerOverview = [
-  { title: '플랫폼 기능 개발', text: '기업 고객의 요구사항에 맞춰 Java·Spring Boot REST API를 개발했습니다. 관리자 기능 개편에서는 기존 데이터와 처리 순서를 확인하고 JPA·QueryDSL·MySQL 조회·저장 로직을 수정했습니다.' },
-  { title: '플랫폼 버전 전환', text: '플랫폼 2.0에서 3.0으로 전환하면서 API·DB 변경이 기존 기능에 미치는 영향을 점검했습니다. 레거시 코드와 데이터 접근 로직을 정리하고 변경 기능의 통합·회귀 테스트를 보완했습니다.' },
-  { title: '데이터 정합성과 운영 오류 대응', text: '서버 로그와 DB 기록으로 오류를 분석하고 조회·저장 로직을 수정했습니다. 상태 재확인과 복합 식별자 적용, 분산락과 트랜잭션 경계 조정 등으로 확인된 문제에 대응했습니다.' },
-  { title: '배치와 메시징 처리', text: 'ShedLock·Redis 분산락을 적용해 서버별 배치 중복 실행을 제어했습니다. 별도 개선으로 고객사·배치별 성공·실패·누락을 집계해 Slack 요약을 구성했습니다. RabbitMQ 발송 요청·결과 처리 분리에도 참여했습니다.' },
-  { title: '인프라·배포와 협업', text: 'EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환 이슈 대응에 참여했습니다. CI/CD 개선 작업과 코드리뷰에 참여하고 배포 전 주요 기능을 확인했습니다.' },
-] as const;
-
-// The print document focuses on responsibilities and implementation.
-const printContributions: Record<string, string> = {
-  'work-batch': '분산락 적용 이후 별도 개선으로 모니터링을 구현했습니다. 고객사·배치별 처리 건수와 실행 시간을 기록하고, 누락 유형을 구분해 Slack 요약에서 확인할 수 있도록 했습니다.',
-  'work-purchase': 'QA에서 결제 요청 상태를 읽지 못하는 원인을 추적했습니다. 앞 단계의 커밋 뒤에 결제가 실행되도록 호출 순서를 조정하고, 결제 완료 상태를 확인해 재처리를 보완했습니다.',
-};
-export const careerPrintCases = careerPrimaryCases.map(item => ({
-  ...item,
-  title: item.anchor === 'work-batch' ? '배치 중복 실행 제어와 모니터링' : '동시 요청의 락 경합과 트랜잭션 경계',
-  contribution: printContributions[item.anchor],
+// Print-only narrative: the resume carries the career overview; this document
+// explains the decisions and implementation behind four professional cases.
+export const careerPrintSheets = [
+  {
+    topic: '배치 실행 제어와 결제 처리',
+    cases: [
+      {
+        anchor: 'work-batch', title: '배치 중복 실행 제어와 누락 모니터링',
+        technology: 'Spring Scheduler · ShedLock · Redis · Slack',
+        context: '여러 서버의 스케줄러가 동일 배치를 실행했습니다. 실행 이력만으로는 처음부터 발행되지 않은 작업과 발행 후 결과가 없는 작업을 구분하기 어려웠습니다.',
+        steps: [
+          '배치별 락 이름과 유지 시간을 설정하고 ShedLock·Redis 분산락을 적용해 실행 주체를 제어했습니다.',
+          '별도 개선으로 고객사·배치별 실행 상태, 처리 건수와 실행 시간을 기록했습니다.',
+          '예정된 고객사·배치 목록과 실행 기록을 대조했습니다. 예정 시각 1시간 뒤 성공·실패·락 미획득·발행 누락·결과 미수신을 구분해 Slack 요약으로 알렸습니다.',
+        ],
+        contribution: '분산락 적용과 모니터링 구현을 담당했습니다. 실행 기록이 없는 배치도 예정 목록을 기준으로 찾고, 어느 고객사의 어떤 작업을 확인해야 하는지 식별하도록 구성했습니다.',
+      },
+      {
+        anchor: 'work-purchase', title: '주문·결제의 락 경합과 커밋 경계 조정',
+        technology: 'Spring Transaction · 분산락 · 제한 재시도',
+        context: '동시 요청의 주문 저장·갱신 과정에서 락 경합이 발생했습니다. 결제 트랜잭션을 분리한 뒤에는 앞 단계가 아직 커밋되지 않아 필요한 요청 상태를 읽지 못하는 문제가 QA에서 드러났습니다.',
+        steps: [
+          '주문 단위 분산락과 별도 결제 트랜잭션을 적용했습니다.',
+          '요청 상태 저장과 결제 호출을 한 트랜잭션으로 묶던 경계를 조정해, 요청 상태를 먼저 커밋한 뒤 결제가 실행되도록 수정했습니다.',
+          '락 관련 예외에만 제한적으로 재시도했습니다. 재처리 시 결제 완료 여부를 확인하고 실패는 별도로 기록하도록 보완했습니다.',
+        ],
+        contribution: 'QA에서 상태를 읽지 못한 원인을 트랜잭션 경계와 호출 순서에서 추적했습니다. 요청 상태의 선행 커밋과 결제 완료 상태 확인으로 후속 처리를 보완했습니다.',
+      },
+    ],
+  },
+  {
+    topic: '데이터 변경과 조회 기준 정리',
+    cases: [
+      {
+        anchor: 'work-policy', title: '저장 직전 상태 재검증과 후속 갱신 기준 통일',
+        technology: 'Spring Boot · JPA · 서버 상태 검증',
+        context: '설정 화면을 연 뒤 관련 작업이 시작되면, 저장 시점에는 유효하지 않은 이전 상태로 설정을 변경할 수 있었습니다. 설정 변경 허용 여부와 후속 데이터 갱신도 다른 기준을 사용했습니다.',
+        steps: [
+          '저장 요청에 화면 진입 시점의 상태 값이 있는지 검사하고, 변경 적용 전 현재 이력을 다시 조회했습니다.',
+          '진입 후 작업이 시작됐다면 변경을 차단하고, 이미 이력이 있는 경우와 없는 경우를 구분해 처리했습니다.',
+          '후속 데이터 갱신에도 같은 상태 조회 기준을 적용해 변경 허용 판단과 갱신 조건을 맞췄습니다.',
+        ],
+        contribution: '화면 진입과 저장 사이의 상태 변화가 누락되는 경로를 분석하고 저장 로직을 수정했습니다. 서버의 최종 저장 판단과 후속 갱신이 같은 기준을 사용하도록 정리했습니다.',
+      },
+      {
+        anchor: 'work-identity', title: '복합 식별자로 조회·삭제·페이지 집계 일치',
+        technology: 'QueryDSL · JPA · DTO 동등성 · 페이지 집계',
+        context: '한 사용자가 여러 그룹에 속할 수 있는데 사용자 ID만 비교해 서로 다른 행을 같은 대상으로 취급했습니다. 조회 후 필터링과 별도 합계 계산으로 페이지 내용과 총건수도 어긋났습니다.',
+        steps: [
+          '사용자 ID와 그룹 유형의 조합을 조회·삭제·DTO 동등성 기준으로 적용했습니다.',
+          '선택한 조합만 삭제하도록 대상을 구분하고, Set에서도 같은 사용자의 서로 다른 그룹을 보존하도록 수정했습니다.',
+          '조회 후 제외하던 조건을 QueryDSL 쿼리로 옮겼습니다. 페이지 내용과 총건수가 같은 조건을 사용하도록 집계 기준을 맞췄습니다.',
+        ],
+        contribution: '식별 기준이 달라 삭제 대상이 누락되던 원인을 추적하고 조회·삭제·컬렉션 처리를 함께 수정했습니다. 선택한 사용자·그룹 조합이 조회와 삭제에 일관되게 적용되도록 정리했습니다.',
+      },
+    ],
+  },
+].map(sheet => ({
+  ...sheet,
+  cases: sheet.cases.map(item => {
+    const source = careerCases.find(candidate => candidate.anchor === item.anchor);
+    if (!source) throw new Error(`Missing career case: ${item.anchor}`);
+    return { ...item, decision: source.decision };
+  }),
 }));
-export const careerPrintAdditional = {
-  problem: '설정 변경이 이전 상태를 기준으로 저장되거나, 같은 사용자의 여러 그룹이 하나로 취급돼 삭제 대상과 페이지 집계가 어긋났습니다.',
-  change: '저장 직전 현재 상태를 다시 조회해 변경 허용 여부와 후속 갱신 기준을 맞췄습니다. 또한 사용자 ID와 그룹 유형을 복합 식별자로 적용하고 제외 조건과 페이지 집계를 맞췄습니다.',
-} as const;
