@@ -7,7 +7,7 @@ const testRoutes: Record<string, string[]> = {
   'Korean interface labels use the text font rather than the code font': ['/projects/', '/projects/stockrush/'],
   'detail pages expose an explicit route back to the portfolio home': ['/projects/stockrush/', '/experience/'],
   'experience page unifies the résumé summary and career evidence': ['/experience/'],
-  'print résumé keeps page-two content above the footer': ['/resume/print/'],
+  'print résumé keeps professional history and personal projects distinct within two pages': ['/resume/print/'],
   'resume route redirects to the unified experience page': ['/experience/'],
   'home navigation prioritizes career and labels personal projects': ['/'],
   'projects page heading levels do not skip from h1 to h3': ['/projects/'],
@@ -145,20 +145,22 @@ test('experience page unifies the résumé summary and career evidence', async (
   await expect(page.getByRole('heading', { name: '학력' })).toBeVisible();
 });
 
-test('print résumé keeps company experience within two printable pages', async ({ page }) => {
+test('print résumé keeps professional history and personal projects distinct within two pages', async ({ page }) => {
   await page.goto('/resume/print/');
   await page.emulateMedia({ media: 'print' });
   const sheets = page.locator('main > .sheet');
   await expect(sheets).toHaveCount(2);
   await expect(sheets.first().getByRole('heading', { name: '이엠캐스트(주)' })).toBeVisible();
-  await expect(sheets.first().locator('.bullets li')).toHaveCount(6);
+  await expect(sheets.first().locator('.skills')).toBeVisible();
+  await expect(sheets.first().locator('.personal')).toHaveCount(0);
   await expect(sheets.nth(1).getByRole('heading', { name: '주식회사 화이트스캔' })).toBeVisible();
   await expect(sheets.nth(1).locator('.project')).toHaveCount(4);
-  await expect(page.locator('main')).not.toContainText(/대표 개인 프로젝트|StockRush|Member Event Consistency|Enterprise Policy RAG/);
-  // A4 at 96 CSS px/in minus the template's 13 mm top and bottom margins.
+  await expect(sheets.nth(1).getByRole('heading', { name: '개인 프로젝트', exact: true })).toBeVisible();
+  await expect(sheets.nth(1).locator('.personal')).toHaveCount(2);
+  // A4 at 96 CSS px/in minus the template's 14 mm top and bottom margins.
   for (const sheet of await sheets.all()) {
     const height = await sheet.evaluate(element => element.getBoundingClientRect().height);
-    expect(height).toBeLessThanOrEqual((297 - 26) * 96 / 25.4);
+    expect(height).toBeLessThanOrEqual((297 - 28) * 96 / 25.4);
   }
 });
 
