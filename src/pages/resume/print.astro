@@ -27,9 +27,9 @@ if (!current || !previous) throw new Error('두 회사의 경력이 필요합니
       <div class="company-heading"><h3>{current.company}</h3><time class="period">{current.period}</time></div>
       <p class="job-role">{current.role}</p><p class="company-context">{current.context}</p>
       {resumePrint.currentProjects.map(project => (
-        <article class="project" data-work-case={'anchor' in project ? project.anchor : undefined}>
+        <article class="project">
           <h4>{project.title}</h4>
-          <ul>{project.bullets.map((bullet, index) => <li data-work-case={'relatedAnchor' in project && index === 1 ? project.relatedAnchor : undefined}>{bullet}</li>)}</ul>
+          <ul>{project.bullets.map(bullet => <li>{bullet}</li>)}</ul>
         </article>
       ))}
       <p class="supporting">{resumePrint.supportingWork}</p>

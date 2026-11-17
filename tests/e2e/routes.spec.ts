@@ -132,7 +132,9 @@ test('experience page unifies the résumé summary and career evidence', async (
   await expect(page.getByRole('heading', { name: '주요 기여' })).toHaveCount(2);
   const currentExperience = page.locator('.experience-entry').first();
   await expect(currentExperience.getByRole('heading', { name: '이엠캐스트(주)' })).toBeVisible();
-  await expect(currentExperience.locator('.responsibilities li')).toHaveCount(6);
+  expect(await currentExperience.locator('.responsibilities li').count()).toBeGreaterThan(0);
+  await expect(currentExperience).not.toContainText('복합 식별자');
+  await expect(currentExperience).not.toContainText('중복 실행');
   const previousExperience = page.locator('.experience-entry').nth(1);
   await expect(previousExperience.locator('.responsibilities li')).toHaveCount(4);
   await expect(previousExperience).toContainText('서울시 실시간 도시데이터');

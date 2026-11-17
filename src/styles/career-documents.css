@@ -107,3 +107,15 @@
 .case-responsibility{margin-top:6px;font-size:12px;color:#464c52}
 .case-responsibility strong{margin-right:8px}
 @media print{.case-responsibility{font-size:9pt;line-height:1.6;margin-top:2mm}}
+
+.area-context{font-size:13px;color:#535b63;margin-top:8px;line-height:1.65}
+.contribution-list{padding-left:19px;margin:9px 0 0;line-height:1.7}
+.contribution-list li+li{margin-top:6px}
+.project-contribution{margin-top:8px;line-height:1.7}
+@media print{
+  .area-context{font-size:9.8pt;margin-top:2mm;line-height:1.6}
+  .contribution-list{font-size:10.7pt;margin-top:2mm;line-height:1.65;padding-left:4mm}
+  .contribution-list li+li{margin-top:1.7mm}
+  .project-contribution{font-size:10.5pt;margin-top:2mm;line-height:1.7}
+  .previous-career-project{margin-top:7mm}
+}

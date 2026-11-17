@@ -1,4 +1,4 @@
-const siteUpdatedAt = '2026-11-13';
+const siteUpdatedAt = '2026-11-17';
 
 const formatMonth = (value: string) => value.replace('-', '.');
 export const formatDate = (value: string | Date) => {
@@ -50,8 +50,7 @@ const experienceRecords = [
     responsibilities: [
       { title: '플랫폼 기능 개발', description: 'Java·Spring Boot로 REST API를 개발하고 JPA·QueryDSL·MySQL 기반 조회·저장 로직과 관리자 기능을 개선했습니다.' },
       { title: '플랫폼 2.0 → 3.0 전환', description: '플랫폼 2.0에서 3.0으로 전환하며 API·DB 변경의 영향을 점검했습니다. 레거시 코드와 데이터 접근 로직을 정리하고 변경 기능의 통합·회귀 테스트를 보완했습니다.' },
-      { title: '운영 오류와 데이터 정합성', description: '저장 전 상태 재조회, 사용자·그룹 조합의 식별 기준 통일과 조회 필터 수정으로 데이터 오류에 대응했습니다. 주문·결제에서는 분산락과 커밋 순서를 조정했습니다.' },
-      { title: '배치 운영', description: 'ShedLock·Redis 분산락으로 중복 실행을 제어했습니다. 별도 모니터링에서는 예정 목록과 실행 기록을 대조해 고객사·배치별 실패와 실행 누락을 Slack으로 알렸습니다.' },
+      { title: '서비스 운영 자동화', description: '작업 실행 현황과 처리 결과를 확인하는 모니터링 및 Slack 알림을 구현했습니다.' },
       { title: '메시징 처리', description: '발송 요청 접수와 후속 결과 기록을 분리하는 RabbitMQ 기반 비동기 처리 변경에 참여했습니다.' },
       { title: '인프라·협업', description: 'EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환, CI/CD 개선 및 코드리뷰에 참여했습니다.' },
     ],
@@ -69,7 +68,7 @@ const experienceRecords = [
   },
 ] as const;
 
-export const professionalSummary = 'Java·Spring Boot 기반 API와 데이터 처리 로직을 개발하고 운영 중 발생한 오류를 분석해 서비스 동작과 데이터 정합성을 개선했습니다.';
+export const professionalSummary = '기업용 교육 플랫폼과 공공·실시간 데이터 서비스에서 Java·Spring Boot API와 데이터 처리 기능을 개발하고 플랫폼 전환·배포·운영을 담당했습니다.';
 export const resumeWorkCases = [
   {
     anchor: 'work-policy',
@@ -106,14 +105,14 @@ export const resumeIntro = '2021년부터 기업용 교육 플랫폼과 공공·
 export const resumeHighlights = [
   'B2B 리테일 교육 플랫폼의 REST API 설계·개발과 관리자 기능 개편',
   '공공·실시간 데이터 수집·가공 파이프라인과 조회 API 구현',
-  '운영 장애·데이터 오류 재현, 원인 분석과 API·DB 로직 수정',
+  'RabbitMQ 기반 비동기 처리 변경과 서비스 운영 모니터링',
   'JPA·QueryDSL 데이터 접근 계층 개선과 통합·회귀 테스트',
   'B2B 교육 플랫폼 버전 전환의 영향 범위 점검과 레거시 코드 정리',
   'AWS 인프라 운영·CI/CD 개선 참여와 Docker 배포',
 ] as const;
 
 export const resumeClosing =
-  '서버 로그와 DB 기록으로 원인을 찾아 데이터 정합성 오류, 동시 요청의 락 경합, 배치 중복 실행 문제를 수정했습니다.';
+  'API 개발부터 플랫폼 버전 전환, 데이터 처리와 배포·운영까지 서비스에 필요한 백엔드 업무를 수행했습니다.';
 
 export const resumeSummary = [resumeIntro, resumeClosing] as const;
 

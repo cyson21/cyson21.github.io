@@ -1,46 +1,43 @@
 ---
 import { experiences, profile } from '../../data/site';
-import { careerPrintSheets } from '../../data/career-description';
+import { currentCareerAreas, previousCareerProjects } from '../../data/career-description';
 import '../../styles/career-documents.css';
-const current = experiences[0];
-if (!current) throw new Error('경력기술서에는 현재 회사 경력이 필요합니다.');
+const [current, previous] = experiences;
+if (!current || !previous) throw new Error('두 회사의 경력이 필요합니다.');
 ---
 <!doctype html>
 <html lang="ko-KR">
 <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex,nofollow" /><title>손찬양 | 경력기술서</title></head>
 <body class="career-document"><main>
-  {careerPrintSheets.map((sheet, index) => (
-    <section class="sheet" aria-label={`경력기술서 ${index + 1}페이지`}>
-      {index === 0 ? <>
-        <header>
-          <div class="document-heading"><h1>{profile.name}</h1><span class="document-kind">경력기술서</span></div>
-          <p class="role">{profile.role}</p>
-          <div class="contact"><a href={`mailto:${profile.email}`}>{profile.email}</a><a href={profile.github}>github.com/cyson21</a><a href={profile.portfolio}>cyson21.github.io</a></div>
-        </header>
-        <section class="career-company" aria-label="회사와 담당 범위">
-          <div class="company-heading"><h2>{current.company}</h2><time class="period">{current.period}</time></div>
-          <p class="job-role">{current.role} · B2B 리테일 교육 플랫폼</p>
-        </section>
-      </> : <header>
-        <p class="continuation">손찬양 · 경력기술서</p>
-        <h2 class="chapter-title">{sheet.topic}</h2>
-        <p class="chapter-meta">{current.company} · {current.period} · {current.role}</p>
-      </header>}
-      <div class="narratives">
-        {sheet.cases.map(item => (
-          <article class="narrative-case" data-career-case={item.anchor}>
-            <h3>{item.title}</h3><p class="technology">{item.technology}</p><p class="case-responsibility"><strong>담당</strong> {item.responsibility}</p>
-            <dl class="case-facts">
-              <dt>문제</dt><dd>{item.context}</dd>
-              <dt>해결 과정</dt><dd><ol>{item.steps.map(step => <li>{step}</li>)}</ol></dd>
-              <dt>변화</dt><dd>{item.result}</dd>
-            </dl>
-          </article>
-        ))}
-      </div>
-      {index === careerPrintSheets.length - 1 && <div class="document-links"><a href={new URL(profile.resumePath, profile.portfolio).href}>이력서 PDF</a><a href={new URL('/portfolio/cases.html', profile.portfolio).href}>실무 사례 웹 상세</a></div>}
-      <footer class="page-footer"><span>손찬양 · 경력기술서</span><span>{index + 1} / {careerPrintSheets.length}</span></footer>
+  <section class="sheet" aria-label="경력기술서 1페이지">
+    <header>
+      <div class="document-heading"><h1>{profile.name}</h1><span class="document-kind">경력기술서</span></div>
+      <p class="role">{profile.role}</p>
+      <div class="contact"><a href={`mailto:${profile.email}`}>{profile.email}</a><a href={profile.github}>github.com/cyson21</a><a href={profile.portfolio}>cyson21.github.io</a></div>
+    </header>
+    <section class="career-company" aria-label="현재 회사와 담당 범위">
+      <div class="company-heading"><h2>{current.company}</h2><time class="period">{current.period}</time></div>
+      <p class="job-role">{current.role} · B2B 리테일 교육 플랫폼</p>
     </section>
-  ))}
-</main></body>
-</html>
+    {currentCareerAreas.map(area => <article class="narrative-case" data-career-area>
+      <h3>{area.title}</h3><p class="area-context">{area.scope}</p>
+      <ul class="contribution-list">{area.contributions.map(item => <li>{item}</li>)}</ul>
+    </article>)}
+    <p class="supporting">주요 기술 · Java · Spring Boot · JPA · QueryDSL · MySQL · Redis · RabbitMQ · AWS · Docker</p>
+    <footer class="page-footer"><span>손찬양 · 경력기술서</span><span>1 / 2</span></footer>
+  </section>
+  <section class="sheet" aria-label="경력기술서 2페이지">
+    <header><p class="continuation">손찬양 · 경력기술서</p>
+      <div class="company-heading"><h2>{previous.company}</h2><time class="period">{previous.period}</time></div>
+      <p class="job-role">{previous.role}</p><p class="company-context">공공·실시간 데이터 서비스의 수집·가공, API 개발과 배포·운영을 담당했습니다.</p>
+    </header>
+    {previousCareerProjects.map(project => <article class="narrative-case previous-career-project" data-career-project>
+      <div class="project-heading"><h3>{project.title}</h3><span class="period">{project.period}</span></div>
+      <p class="area-context">{project.context}</p>
+      <p class="project-contribution">{project.contribution}</p>
+      {project.title === '인파관리 시스템 백엔드·알림 서비스' && <p class="project-contribution">프로젝트 일정 관리와 고객사 요구사항 확인·소통을 주도했습니다.</p>}
+    </article>)}
+    <div class="document-links"><a href={new URL(profile.resumePath, profile.portfolio).href}>이력서 PDF</a><a href={profile.portfolio}>웹 포트폴리오</a></div>
+    <footer class="page-footer"><span>손찬양 · 경력기술서</span><span>2 / 2</span></footer>
+  </section>
+</main></body></html>

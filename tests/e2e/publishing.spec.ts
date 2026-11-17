@@ -51,29 +51,30 @@ test('print resume exposes exactly two ready sheets and stays noindex', async ({
   await expect(page.getByRole('link', { name: 'cyson21@gmail.com', exact: true })).toHaveAttribute('href', 'mailto:cyson21@gmail.com');
 });
 
-test('first resume sheet presents core skills and professional problem solving', async ({ page }) => {
+test('first resume sheet presents core skills and sustained professional responsibilities', async ({ page }) => {
   await page.goto('/resume/print/');
   const first = page.locator('main > .sheet').first();
   await expect(first.locator('.skills')).toContainText('Java');
   await expect(first.locator('.company-heading')).toContainText('이엠캐스트');
-  expect(await first.locator('[data-work-case]').evaluateAll(elements => elements.map(element => element.getAttribute('data-work-case'))))
-    .toEqual(['work-batch', 'work-policy', 'work-identity', 'work-purchase']);
+  await expect(first.locator('.project')).toHaveCount(4);
+  await expect(first.locator('[data-work-case]')).toHaveCount(0);
+  await expect(first).not.toContainText('복합 식별자');
+  await expect(first).not.toContainText('중복 실행');
   await expect(first.locator('.personal')).toHaveCount(0);
   await expect(page.locator('main .personal')).toHaveCount(0);
   await expect(page.locator('main')).not.toContainText('StockRush');
   await expect(page.locator('main')).not.toContainText('Enterprise Policy RAG');
 });
 
-test('career description separates four contributions across two sheets', async ({ page }) => {
+test('career description covers both companies without incident case narratives', async ({ page }) => {
   await page.goto('/resume/career/');
   const sheets = page.locator('main > .sheet');
   await expect(sheets).toHaveCount(2);
-  for (const [index, anchors] of [['work-batch', 'work-purchase'], ['work-policy', 'work-identity']].entries()) {
-    expect(await sheets.nth(index).locator('[data-career-case]').evaluateAll(elements => elements.map(element => element.getAttribute('data-career-case')))).toEqual(anchors);
-  }
-  for (const item of await page.locator('[data-career-case]').all()) {
-    await expect(item.locator('dt')).toHaveText(['문제', '해결 과정', '변화']);
-    await expect(item.locator('ol > li')).toHaveCount(3);
-    await expect(item.locator('.case-responsibility')).toContainText('담당');
-  }
+  await expect(sheets.first()).toContainText('이엠캐스트');
+  await expect(sheets.last()).toContainText('화이트스캔');
+  await expect(page.locator('[data-career-area]')).toHaveCount(3);
+  await expect(page.locator('[data-career-project]')).toHaveCount(4);
+  await expect(page.locator('[data-career-case]')).toHaveCount(0);
+  await expect(page.locator('main')).not.toContainText('복합 식별자');
+  await expect(page.locator('main')).not.toContainText('중복 실행');
 });
