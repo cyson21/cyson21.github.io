@@ -3,46 +3,42 @@ import { previousCompanyProjects } from './site';
 // Print-specific selection of the established career facts in site.ts.
 // The resume covers professional experience; personal projects remain on the website.
 export const resumePrint = {
-  introduction: '기업용 교육 플랫폼과 공공·실시간 데이터 서비스를 개발해 온 Java·Spring Boot 백엔드 개발자입니다. API 개발·운영과 데이터 처리, 동시 요청과 상태 변경에서 발생하는 오류의 원인 분석·수정을 담당했습니다.',
+  introduction: '기업용 교육 플랫폼과 공공·실시간 데이터 서비스를 개발해 온 Java·Spring Boot 백엔드 개발자입니다. REST API와 데이터 처리 기능을 구현하고, 플랫폼 버전 전환과 서비스 배포·운영을 담당했습니다.',
   coreSkills: [
     'Java · Spring Boot · Spring Data JPA · QueryDSL · MySQL · Redis',
-    'RabbitMQ · AWS · Docker · JUnit · Testcontainers',
+    'RabbitMQ · AWS · Docker · Python · Pandas',
   ],
   currentProjects: [
     {
-      title: '플랫폼 기능 개발과 2.0 → 3.0 전환',
+      title: 'B2B 교육 플랫폼 백엔드 개발',
       bullets: [
-        '기업 고객 요구사항에 맞춰 REST API와 관리자 기능을 개발하고 조회·저장 로직을 개선했습니다.',
-        'API·DB 변경의 영향 범위를 점검하고 레거시 코드를 정리했습니다. 변경 기능의 통합·회귀 테스트를 보완했습니다.',
+        '기업 고객 요구사항에 맞춰 Java·Spring Boot REST API와 관리자 기능을 개발했습니다.',
+        'JPA·QueryDSL·MySQL을 사용해 서비스의 조회·저장 로직과 데이터 접근 계층을 개선했습니다.',
       ],
     },
     {
-      title: '배치 중복 실행 제어와 누락 모니터링',
-      anchor: 'work-batch',
+      title: '플랫폼 2.0 → 3.0 전환',
       bullets: [
-        '서버마다 스케줄러가 실행돼 같은 배치가 중복 처리되는 문제에 ShedLock·Redis 분산락을 적용했습니다.',
-        '예정 목록과 실행 기록을 대조하는 모니터링을 별도로 구현해, 고객사·배치별 실패와 실행 누락을 Slack으로 알렸습니다.',
+        '기능 개편에 따른 API·DB 변경의 영향 범위를 점검하고 전환 작업에 참여했습니다.',
+        '레거시 코드와 데이터 접근 로직을 정리하고, 변경 기능의 통합·회귀 테스트를 보완했습니다.',
       ],
     },
     {
-      title: '저장 상태 재검증과 복합 식별자 오류 수정',
-      anchor: 'work-policy',
-      relatedAnchor: 'work-identity',
+      title: '비동기 처리와 운영 자동화',
       bullets: [
-        '화면을 연 뒤 작업 상태가 바뀌어도 설정이 저장되던 오류를 수정했습니다. 저장 직전 상태를 재조회해 변경 허용 여부와 후속 갱신 기준을 맞췄습니다.',
-        '사용자 ID·그룹 유형을 함께 식별하도록 조회·삭제 로직을 수정하고, 페이지 목록과 총건수에 같은 필터 조건을 적용했습니다.',
+        'RabbitMQ 기반으로 발송 요청 접수와 후속 결과 기록을 분리하는 비동기 처리 변경에 참여했습니다.',
+        '서비스 운영에 필요한 작업 실행 현황과 처리 결과 모니터링, Slack 알림을 구현했습니다.',
       ],
     },
     {
-      title: '주문·결제 요청의 락 경합과 커밋 경계 조정',
-      anchor: 'work-purchase',
+      title: '배포·인프라 운영과 개발 협업',
       bullets: [
-        '주문 단위 분산락과 결제 트랜잭션 분리를 적용했습니다. QA에서 확인된 상태 조회 오류를 추적해 요청 상태를 먼저 커밋하도록 호출 순서를 수정했습니다.',
-        '락 관련 예외만 재시도하고, 이미 결제가 완료된 주문은 다시 처리하지 않도록 보완했습니다.',
+        'AWS EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환 작업에 참여했습니다.',
+        'CI/CD 개선과 코드리뷰에 참여하며 서비스 변경 사항을 함께 검토했습니다.',
       ],
     },
   ],
-  supportingWork: 'RabbitMQ 기반 비동기 요청·결과 처리 분리, AWS 운영과 Docker 배포·전환, CI/CD 개선 및 코드리뷰에도 참여했습니다.',
+  supportingWork: '담당 환경 · Java / Spring Boot / JPA / QueryDSL / MySQL / Redis / RabbitMQ / AWS / Docker',
   previousProjects: [
     {
       title: '인파관리 시스템 백엔드·알림 서비스',
