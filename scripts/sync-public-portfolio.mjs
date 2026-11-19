@@ -39,4 +39,5 @@ try {
   rmSync(temporaryOutput, { force: true });
 }
 
-writeFileSync(resolve(import.meta.dirname, '../public/portfolio/index.html'), applySiteChrome(renderProfessionalOverview(readFileSync(resolve(import.meta.dirname, '../src/portfolio/overview.html'), 'utf8')), '/portfolio/'));
+const overview = readFileSync(resolve(import.meta.dirname, '../src/portfolio/overview.html'), 'utf8').replace(/\r\n?/g, '\n');
+writeFileSync(resolve(import.meta.dirname, '../public/portfolio/index.html'), applySiteChrome(renderProfessionalOverview(overview), '/portfolio/'));

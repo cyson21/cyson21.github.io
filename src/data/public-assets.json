@@ -39,10 +39,10 @@
     "output": "public/portfolio/index.html",
     "sourceProject": "portfolio-web",
     "sourcePath": "public/portfolio/index.html",
-    "sha256": "3ae370d28bd293e21426f2c5fe12f072c50b705afd7b0bd0b9480a99a4a759f1",
+    "sha256": "916b2bc6f07f0daa0cf8ac030f03d6f7f57f34830d3204b07761d76399ddb929",
     "owner": "Son Chanyang",
     "usage": "Public backend problem-solving case studies",
-    "approvedAt": "2026-11-13"
+    "approvedAt": "2026-11-20"
   },
   {
     "output": "public/downloads/career-description.pdf",
@@ -93,10 +93,10 @@
     "output": "public/portfolio/cases.html",
     "sourceProject": "cyson21.github.io",
     "sourcePath": "src/portfolio/overview.html",
-    "sha256": "51d2496b7b6a4c2a32e7390c67b0757248ea0c23fe7dd748bb781919f41139a1",
+    "sha256": "ab5357d009d7eb25f326d29e9b86910c7ef54e89ae2276afd1bef4858b6abfd8",
     "owner": "Son Chanyang",
     "usage": "User-authorized portfolio overview, preserved evidence, and source diagram captures",
-    "approvedAt": "2026-11-13"
+    "approvedAt": "2026-11-20"
   },
   {
     "output": "public/portfolio/media/ai-gateway.png",

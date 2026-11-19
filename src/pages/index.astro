@@ -1,7 +1,7 @@
 ---
 import { ArrowRight } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { profile, resumeClosing, resumeHighlights } from '../data/site';
+import { profile, resumeHighlights } from '../data/site';
 ---
 
 <BaseLayout mainClass="home-main" title="손찬양" description="2021년부터 백엔드 개발·운영을 담당한 손찬양의 포트폴리오입니다. Java·Spring Boot 실무 경력과 개인 프로젝트의 구현·검증 경험을 정리했습니다.">
@@ -22,7 +22,6 @@ import { profile, resumeClosing, resumeHighlights } from '../data/site';
           <ul class="hero-highlights">
             {[resumeHighlights[0], resumeHighlights[1], resumeHighlights[4]].map((item) => <li>{item}</li>)}
           </ul>
-          <p class="hero-closing">{resumeClosing}</p>
         </div>
         <div class="button-row hero-actions">
           <a class="button button--secondary" href="/experience/">경력·이력서 <ArrowRight size={18} aria-hidden="true" /></a>
@@ -134,14 +133,6 @@ import { profile, resumeClosing, resumeHighlights } from '../data/site';
 
   .hero-highlights li + li {
     margin-top: 0.35em;
-  }
-
-  .hero-closing {
-    margin: 0;
-    color: var(--ink-soft);
-    font-size: var(--text-dense);
-    line-height: 1.55;
-    overflow-wrap: anywhere;
   }
 
   .hero-actions {
