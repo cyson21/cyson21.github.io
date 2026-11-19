@@ -35,10 +35,9 @@ if (!currentExperience) {
 
       <section class="career-summary" aria-labelledby="career-title">
         <div>
-          <span>전체 경력</span>
+          <span id="career-title">전체 경력</span>
           <strong>{careerPeriod}</strong>
         </div>
-        <p id="career-title">회사별 담당 범위와 직접 수행한 업무를 최근 경력부터 정리했습니다.</p>
       </section>
 
       <div class="experience-list" aria-label="경력 상세">
@@ -64,7 +63,7 @@ if (!currentExperience) {
                 ))}
               </ul>
             </section>
-            {experience === currentExperience && <div class="experience-case-next"><p>이 회사에서 맡은 문제의 원인과 수정 과정은 실무 사례에서 확인할 수 있습니다.</p><a class="button button--secondary" href="/portfolio/">실무 사례</a></div>}
+            {experience === currentExperience && <div class="experience-case-next"><a class="button button--secondary" href="/portfolio/">실무 사례</a></div>}
           </article>
         ))}
       </div>
@@ -96,7 +95,6 @@ if (!currentExperience) {
 
 <style>
   .experience-case-next{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);display:flex;align-items:center;flex-wrap:wrap;gap:16px}
-  .experience-case-next p{margin:0;color:var(--ink-soft);font-size:var(--text-dense)}
 
   .work-case-list { padding: 24px clamp(22px, 3vw, 34px); border-bottom: 1px solid var(--line-strong); }
   .work-case-list article { max-width: 820px; padding-block: 20px; }
@@ -162,10 +160,6 @@ if (!currentExperience) {
   }
 
   .career-summary {
-    display: grid;
-    grid-template-columns: 190px minmax(0, 1fr);
-    gap: 32px;
-    align-items: center;
     padding-block: 20px;
     border-block: 1px solid var(--line-strong);
   }
@@ -184,11 +178,6 @@ if (!currentExperience) {
   .career-summary strong {
     font-family: var(--mono);
     font-size: var(--text-body);
-  }
-
-  .career-summary p {
-    color: var(--ink-soft);
-    font-size: var(--text-dense);
   }
 
   .experience-list {
@@ -335,11 +324,6 @@ if (!currentExperience) {
     .overview-actions {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       align-content: start;
-    }
-
-    .career-summary {
-      grid-template-columns: 1fr;
-      gap: 12px;
     }
 
     .experience-entry header,

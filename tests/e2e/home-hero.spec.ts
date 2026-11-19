@@ -35,13 +35,11 @@ test('home omits the temporary career and project sections while keeping detail 
   await expect(page.getByRole('navigation', { name: '주 메뉴' }).getByRole('link', { name: '경력·이력서' })).toHaveAttribute('href', '/experience/');
 });
 
-test('home keeps supporting copy readable without the temporary sections', async ({ page }) => {
+test('home keeps the career introduction visible without a separate contact band', async ({ page }) => {
   await page.setViewportSize({ width: 1083, height: 1195 });
   await page.goto('/');
 
-  const closingColor = await page.locator('.hero-closing').evaluate((element) => getComputedStyle(element).color);
-  expect(closingColor).toBe('rgb(75, 91, 112)');
-
+  await expect(page.locator('.hero-statement')).toBeVisible();
   await expect(page.locator('.contact-band')).toHaveCount(0);
 });
 
