@@ -14,7 +14,9 @@ for (const width of [390, 994]) {
       const destinations = await header.locator('nav a').evaluateAll(links => links.map(link => link.getAttribute('href')));
       expect(destinations).toEqual(['/experience/', '/portfolio/', '/projects/']);
       await expect(footer.getByRole('heading')).toHaveText(['페이지', '제출 자료', '연락·외부 링크']);
-      for (const name of ['이력서 PDF 다운로드', '경력기술서 PDF 다운로드']) await expect(footer.getByRole('link', {name, exact: true})).toHaveAttribute('download', /\.pdf$/);
+      await expect(footer.locator('a[download]')).toHaveCount(1);
+      await expect(footer.getByRole('link', {name: '이력서 PDF 다운로드', exact: true})).toHaveAttribute('download', /\.pdf$/);
+      await expect(page.locator('a[href$="/career-description.pdf"]')).toHaveCount(0);
       if (width === 390) { await page.keyboard.press('Escape'); await expect(header.getByRole('button', {name: '주 메뉴 열기'})).toBeFocused(); }
       expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), path).toBeFalsy();
     }
