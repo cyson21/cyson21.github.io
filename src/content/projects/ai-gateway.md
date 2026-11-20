@@ -124,9 +124,10 @@ codeEvidence:
     testUrl: >-
       https://github.com/cyson21/ai-gateway/blob/68b73923e5ab4322d0807106d5747a644a62c6f8/backend/src/test/java/com/example/gateway/resilience/FallbackChainTest.java
 verification:
-  - layer: unit
+  - title: 할당량 차단·응답 캐시·재시도 제한
+    layer: unit
     method: 할당량 거절 대역, 캐시용 호출 카운터, 실패 provider와 소진된 재시도 예산을 각각 사용하는 단위 테스트입니다.
-    result: 거절 로그의 provider 없음, 동일 요청 두 번의 provider 호출 1회, 소진 후 대체 후보 호출 0회를 확인했습니다.
+    result: 할당량 거절 로그 1행에 선택된 provider가 없었습니다. 동일 요청 두 번 중 두 번째는 캐시로 응답해 provider 호출은 1회였습니다. 재시도 한도 소진 후 대체 후보 호출 없이 retry_budget_exhausted를 반환했습니다.
     sources:
       - label: RequestLogStoreTest.budgetExceededPathCreatesRow
         url: >-
@@ -138,7 +139,8 @@ verification:
         url: >-
           https://github.com/cyson21/ai-gateway/blob/68b73923e5ab4322d0807106d5747a644a62c6f8/backend/src/test/java/com/example/gateway/resilience/FallbackChainTest.java#L346
     evidenceStatus: ci-record
-  - layer: integration
+  - title: 채팅 응답·스트리밍 형식
+    layer: integration
     method: WebTestClient와 가짜 provider로 일반 채팅·SSE 형식과 tool 정의 전달·tool_calls 반환을 검사합니다.
     result: HTTP 응답·SSE 청크와 종료 표식·도구 호출 필드가 예상 형식입니다. 실제 모델의 토큰 스트리밍이나 도구 실행 결과는 아닙니다.
     sources:
@@ -149,7 +151,8 @@ verification:
         url: >-
           https://github.com/cyson21/ai-gateway/blob/68b73923e5ab4322d0807106d5747a644a62c6f8/backend/src/test/java/com/example/gateway/web/ToolCallPassthroughTest.java#L31
     evidenceStatus: ci-record
-  - layer: static-demo
+  - title: 관리 화면 정적 빌드
+    layer: static-demo
     method: 관리 화면을 정적 파일로 빌드합니다.
     result: 고정·모의 데이터로 흐름을 보여 주는 정적 화면의 빌드·smoke가 통과했습니다. 실제 모델 호출 결과 화면으로 검증한 것은 아닙니다.
     sources:

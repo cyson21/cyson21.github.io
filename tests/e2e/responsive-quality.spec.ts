@@ -310,6 +310,11 @@ for (const theme of ['b', 'c'] as const) {
       });
       expect(experienceBoundaries.listTop).toBe(0);
       expect(experienceBoundaries.entryTop).toBeGreaterThan(0);
+      const stack = await page.locator('[aria-labelledby="skills-title"]').boundingBox();
+      const education = await page.locator('[aria-labelledby="education-title"]').boundingBox();
+      expect(stack).not.toBeNull();
+      expect(education).not.toBeNull();
+      expect(education!.y).toBeGreaterThan(stack!.y + stack!.height);
       const support = await page.locator('.experience-support').evaluate((element) => getComputedStyle(element).borderTopWidth);
       expect(Number.parseFloat(support)).toBe(0);
     });

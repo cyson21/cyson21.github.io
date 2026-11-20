@@ -47,19 +47,15 @@ import { profile, resumeHighlights } from '../data/site';
 
   .hero-copy {
     display: grid;
-    max-width: 1080px;
+    max-width: 800px;
     min-width: 0;
-    grid-template-areas:
-      "intro statement"
-      ". actions";
-    grid-template-columns: minmax(270px, 0.72fr) minmax(0, 1.28fr);
-    gap: 16px 64px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
     align-items: start;
   }
 
   .hero-intro {
     display: grid;
-    grid-area: intro;
     gap: 16px;
     align-content: start;
     min-width: 0;
@@ -102,7 +98,6 @@ import { profile, resumeHighlights } from '../data/site';
   }
 
   .hero-lede {
-    grid-area: statement;
     display: grid;
     gap: 14px;
     max-width: min(760px, 42ic);
@@ -136,16 +131,13 @@ import { profile, resumeHighlights } from '../data/site';
   }
 
   .hero-actions {
-    grid-area: actions;
     margin-top: 4px;
     min-width: 0;
   }
 
   @media (max-width: 959px) {
     .hero-copy {
-      display: block;
-      max-width: 800px;
-      min-width: 0;
+      gap: 18px;
     }
 
     .hero-intro {

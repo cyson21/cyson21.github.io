@@ -132,25 +132,28 @@ codeEvidence:
     testUrl: >-
       https://github.com/cyson21/stockrush/blob/04027d3477e43e03e00e202b042dd210604dcb79/services/order-service/src/test/java/com/stockrush/order/infra/outbox/OutboxRelayServiceIntegrationTest.java
 verification:
-  - layer: integration
+  - title: 같은 재고 이벤트를 두 번 처리
+    layer: integration
     method: PostgreSQL에 이벤트를 넣은 뒤 같은 InventoryReserved 객체를 핸들러에 두 번 직접 전달합니다. Kafka 전달 테스트는 아닙니다.
-    result: processed_events 1행, 후속 Outbox 1행을 확인했습니다.
+    result: 후속 이벤트는 한 건만 기록됐습니다. 처리 이력과 후속 Outbox가 각각 한 행이었습니다.
     sources:
       - label: OrderSagaEventHandlerIntegrationTest.ignores_duplicate_inventory_event
         url: >-
           https://github.com/cyson21/stockrush/blob/04027d3477e43e03e00e202b042dd210604dcb79/services/order-service/src/test/java/com/stockrush/order/application/OrderSagaEventHandlerIntegrationTest.java#L169
     evidenceStatus: ci-record
-  - layer: integration
+  - title: 취소된 주문에 결제 승인 도착
+    layer: integration
     method: DB 주문을 CANCELLED로 바꾼 뒤 결제 승인 이벤트를 핸들러에 직접 전달합니다.
-    result: CANCELLED·FAILED 상태가 유지되고 OrderConfirmed Outbox가 생성되지 않았습니다.
+    result: 주문은 CANCELLED, Saga는 FAILED 상태를 유지했습니다. 주문 확정 이벤트는 생성되지 않았습니다.
     sources:
       - label: OrderSagaEventHandlerIntegrationTest.ignores_payment_authorized_for_cancelled_order
         url: >-
           https://github.com/cyson21/stockrush/blob/04027d3477e43e03e00e202b042dd210604dcb79/services/order-service/src/test/java/com/stockrush/order/application/OrderSagaEventHandlerIntegrationTest.java#L87
     evidenceStatus: ci-record
-  - layer: integration
+  - title: 발행 재시도 한도 도달
+    layer: integration
     method: retry_count=4, max_retry_count=5인 행을 준비하고 발행기 대역을 한 번 실패시킵니다.
-    result: retry_count=5와 FAILED 전환, 다음 재시도 시각 없음, 오류 메시지 보존을 확인했습니다. 다섯 번의 실제 Kafka 실패를 재현한 것은 아닙니다.
+    result: 재시도 횟수가 5에 도달해 FAILED로 기록됐습니다. 오류 메시지는 남았고 다음 재시도 시각은 비었습니다. 발행기 대역을 한 번 실패시킨 결과입니다.
     sources:
       - label: OutboxRelayServiceIntegrationTest.marks_failed_when_publish_retry_count_is_exhausted
         url: >-

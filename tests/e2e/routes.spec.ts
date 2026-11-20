@@ -106,12 +106,12 @@ test('Korean interface labels use the text font rather than the code font', asyn
 
   await page.goto('/projects/stockrush/');
   await expectTextFonts([
-    '.project-meta dt',
-    '.project-toc > p',
+    '.project-context',
+    '.project-toc a',
     '.decision-item dt',
     '.evidence-count',
     '.evidence-context h4',
-    '.verification-table thead th',
+    '.verification-details summary',
     '.pagination-grid a span',
   ]);
 });

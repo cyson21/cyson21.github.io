@@ -128,7 +128,8 @@ codeEvidence:
     testUrl: >-
       https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_postgres_repository_integration.py
 verification:
-  - layer: unit
+  - title: 문서 열람 권한 판별
+    layer: unit
     method: 메모리 저장소·가짜 임베딩과 공개·소유자·부서 권한이 다른 문서 5건을 사용합니다.
     result: 볼 수 있는 3건만 나옵니다.
     sources:
@@ -136,7 +137,8 @@ verification:
         url: >-
           https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_retrieval_permissions.py#L46
     evidenceStatus: local-rerun
-  - layer: integration
+  - title: 검색 근거가 없는 질문
+    layer: integration
     method: 메모리 저장소·가짜 모델을 사용한 답변 API에 검색 근거가 없는 질문을 보냅니다.
     result: insufficient_evidence로 거절합니다.
     sources:
@@ -144,7 +146,8 @@ verification:
         url: >-
           https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_answer_api.py#L63
     evidenceStatus: local-rerun
-  - layer: integration
+  - title: PostgreSQL 검색 권한 필터
+    layer: integration
     method: 선택 실행 PostgreSQL 테스트에서 권한이 다른 문서와 색인 대기 문서를 등록합니다.
     result: 기준 버전의 PostgreSQL CI에서 허용된 문서만 후보·검색 결과에 남는지 확인했습니다. 관리형 DB나 운영 OIDC·실제 OpenAI 검증은 아닙니다.
     sources:
@@ -152,7 +155,8 @@ verification:
         url: >-
           https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_postgres_repository_integration.py#L62
     evidenceStatus: ci-record
-  - layer: static-demo
+  - title: 관리 화면 정적 빌드
+    layer: static-demo
     method: 관리 화면을 정적 빌드로 띄워 봅니다.
     result: 고정 데이터로 검색 결과·출처·질문 이력을 보여 줍니다. 실제 백엔드 검색 결과는 아닙니다.
     sources:

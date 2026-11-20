@@ -129,9 +129,10 @@ codeEvidence:
     testUrl: >-
       https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_batch_workflow.py
 verification:
-  - layer: unit
+  - title: 이벤트 중복 처리와 실패 격리
+    layer: unit
     method: 같은 멱등 키로 두 번 호출하고, 별도 테스트에서 없는 상품의 이벤트를 최초 1회와 재시도 2회 처리합니다.
-    result: 이벤트 ID 재사용·처리 건수 1회 증가, 3회 시도 후 DEAD_LETTER를 확인했습니다. 실패 중 다른 이벤트의 지속 처리를 이 테스트가 직접 검사하지는 않습니다.
+    result: 이벤트 ID 재사용·처리 건수 1회 증가, 3회 시도 후 DEAD_LETTER 1건과 FAILED 0건을 확인했습니다. 실패 중 다른 이벤트의 지속 처리를 이 테스트가 직접 검사하지는 않습니다.
     sources:
       - label: test_event_ingestion_is_idempotent
         url: >-
@@ -140,7 +141,8 @@ verification:
         url: >-
           https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_event_processing.py#L67
     evidenceStatus: local-rerun
-  - layer: unit
+  - title: 개인화 추천 조건
+    layer: unit
     method: 고정 입력으로 선호 브랜드·사이즈·가격 이벤트 순서·재고 조건의 단위 테스트를 각각 실행합니다.
     result: 상위 상품과 추천 이유, 선택한 입력 순서에서의 가격 취향 일치, 품절 제외를 확인했습니다. 추천 품질·모든 이벤트 순서의 일반적 보장은 아닙니다.
     sources:
@@ -157,7 +159,8 @@ verification:
         url: >-
           https://github.com/cyson21/fashion-personalization-platform/blob/d08843005c864ab10dab6616b883e76d54de16f0/tests/test_recommendation_engine.py#L121
     evidenceStatus: local-rerun
-  - layer: integration
+  - title: 수동 추천 배치와 스냅샷
+    layer: integration
     method: 외부 서비스 없이 데모 서비스 메서드로 수동 배치를 호출하고 저장된 스냅샷을 조회합니다.
     result: 고정 데모에서 스냅샷 2개 이상과 기준 시각·반영 이벤트 수, stale_snapshot_users=0을 확인했습니다. 자동 스케줄러·HTTP 이벤트 워커의 결과는 아닙니다.
     sources:
