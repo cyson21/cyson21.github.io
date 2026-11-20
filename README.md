@@ -75,6 +75,6 @@ PDF 생성 순서와 릴리스·되돌리기 기준은 [`docs/release/runbook.md
 
 경력 근거를 검토한 뒤 이 저장소의 `src/data/site.ts`, `src/data/career-description.ts`, 프로젝트 콘텐츠와 `public/portfolio/index.html`에서 공개 문안을 수정합니다. PDF에 영향을 주는 변경이면 생성·페이지 검토·승인 자산 해시 갱신까지 수행하고, PR 검사와 Pages 배포 결과를 확인합니다. 배포 뒤 `/downloads/`와 `/portfolio/index.html`을 다시 확인해야 외부 제출 자료 갱신이 완료됩니다.
 
-[GitHub 프로필](https://github.com/cyson21/cyson21)과 [공개 자료 허브](https://github.com/cyson21/portfolio-hub)는 이 사이트와 공개 구현 저장소를 안내하는 진입점입니다. `portfolio-hub`의 과거 릴리스 첨부는 별도로 관리되므로 사이트 변경만으로 최신 파일과 같아지지 않습니다.
+[공개 웹사이트](https://cyson21.github.io/)에서 최신 제출 자료와 포트폴리오를 확인할 수 있습니다. [GitHub 프로필](https://github.com/cyson21/cyson21)은 웹사이트와 공개 구현 저장소를 안내합니다.
 
 개인 프로젝트의 코드 수정은 각 구현 저장소에서, 웹 사례 설명은 이 저장소에서 처리합니다. 사이트의 프로젝트 링크는 서비스 간 API 연결이나 통합 실행 체인을 뜻하지 않습니다. 생성·공개 검증·배포 순서의 상세 기준은 [릴리스 런북](docs/release/runbook.md)을 따릅니다.
