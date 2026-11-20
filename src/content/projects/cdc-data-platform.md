@@ -5,6 +5,7 @@ publicationState: public
 name: CDC Data Platform
 domain: Data
 eyebrow: CDC 이벤트 처리 프로토타입
+listSummary: 변경 캡처, 중복 방지, 적재 재처리를 독립 구성요소로 구현한 데이터 플랫폼 프로토타입입니다.
 summary: 원천 메타데이터 기반 중복 방지와 DB 재처리 상태를 구현한 프로토타입입니다. 변경 캡처 검사 스크립트·관리 API·로컬 적재는 독립 구성요소이며 전체 자동 연결은 구현하지 않았습니다.
 period: '2026.06'
 role: 개인 프로젝트 · CDC 관리 API·중복 처리·재처리 흐름 구현

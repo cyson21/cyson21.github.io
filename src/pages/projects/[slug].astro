@@ -38,7 +38,14 @@ const layerLabel: Record<string, string> = {
 };
 const evidenceLabels = { 'ci-record': '기준 버전 CI 실행 확인', 'local-rerun': '표시된 점검일에 재실행', 'test-definition': '검사 스크립트 정의 · 실행 결과 미확인' } as const;
 const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as const;
-const toc = [
+const isStockRush = project.id === 'stockrush';
+const toc = isStockRush ? [
+  ['overview', '개요'],
+  ['decisions', '설계'],
+  ['evidence', '코드'],
+  ['verification', '검증'],
+  ['scope', '범위'],
+] : [
   ['overview', '해결한 문제와 담당 역할'],
   ['decisions', '기술 선택과 이유'],
   ['evidence', '주요 구현과 관련 테스트'],
@@ -55,53 +62,67 @@ const toc = [
   article={true}
   updatedAt={data.updatedAt}
 >
-  <header class="project-hero">
+  <header class:list={['project-hero', { 'project-hero--compact': isStockRush }]}>
     <div class="container project-hero-grid">
       <div class="project-heading">
         <a class="back-link" href="/projects/"><ArrowLeft size={17} aria-hidden="true" /> 개인 프로젝트</a>
         <h1>{data.name}</h1>
-        <p class="project-lede">{data.summary}</p>
-        <p class="project-meta-compact">{data.role} · {data.period} · {domainLabels[data.domain]}</p>
+        <p class="project-lede">{isStockRush ? data.listSummary : data.summary}</p>
+        {!isStockRush && <p class="project-meta-compact">{data.role} · {data.period} · {domainLabels[data.domain]}</p>}
         <div class="button-row project-actions">
-          {data.links.github && <a class="button" href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}><CodeXml size={17} aria-hidden="true" /> GitHub 저장소 <ArrowUpRight size={15} aria-hidden="true" /></a>}
+          {isStockRush && <p class="stockrush-meta">{data.period} · {domainLabels[data.domain]}</p>}
+          {data.links.github && <a class={isStockRush ? 'stockrush-repository' : 'button'} href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}><CodeXml size={17} aria-hidden="true" /> GitHub 저장소 <ArrowUpRight size={15} aria-hidden="true" /></a>}
           {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer" aria-label={`${data.name} 데모 새 창에서 열기`}>데모 열기 <ArrowUpRight size={17} aria-hidden="true" /></a>}
           {data.publicationState === 'case-study-only' && <span class="scope-badge"><CircleAlert size={16} aria-hidden="true" /> 문서만 공개</span>}
         </div>
       </div>
-      <dl class="project-meta">
+      {!isStockRush && <dl class="project-meta">
         <div><dt>역할</dt><dd>{data.role}</dd></div>
         <div><dt>기간</dt><dd>{data.period}</dd></div>
         <div><dt>분야</dt><dd>{domainLabels[data.domain]}</dd></div>
         <div><dt>코드·테스트</dt><dd>주요 코드 {data.codeEvidence.length}개 · 관련 테스트 {data.codeEvidence.length}개</dd></div>
-      </dl>
+      </dl>}
     </div>
   </header>
 
-  <div class="container project-layout">
+  <div class:list={['container', 'project-layout', { 'project-layout--stockrush': isStockRush }]}>
     <aside class="project-toc no-print">
-      <p id="project-toc-title">목차</p>
-      <nav aria-labelledby="project-toc-title">
+      {!isStockRush && <p id="project-toc-title">목차</p>}
+      <nav aria-label={isStockRush ? "StockRush 목차" : undefined} aria-labelledby={isStockRush ? undefined : "project-toc-title"}>
         {toc.map(([id, label], index) => <a href={`#${id}`} aria-current={index === 0 ? 'location' : undefined}>{label}</a>)}
       </nav>
-      <div class="toc-stack">
+      {!isStockRush && <div class="toc-stack">
         <p>기술 스택</p>
         <ul class="tag-list">{data.stack.map((item) => <li class="tag">{item}</li>)}</ul>
-      </div>
+      </div>}
     </aside>
 
     <article class="project-content">
       <section id="overview" class="project-section" tabindex="-1">
-        <h2>해결한 문제와 담당 역할</h2>
-        <p class="section-lede">{data.problem}</p>
-        <div class="responsibility-list">
-          {data.responsibilities.map((item) => <p>{item}</p>)}
-        </div>
-        <div class="overview-rules">
-          <h3>핵심 요구사항</h3>
-          <ul class="protection-list">
-            {data.protectionRules.map((rule) => <li><strong>{rule}</strong></li>)}
-          </ul>
-        </div>
+        {isStockRush ? (
+          <>
+            <h2>재고를 예약한 뒤 결제가 실패하면 어떻게 복구할까?</h2>
+            <p class="section-lede">주문·재고·결제가 서로 다른 서비스에 있어 이미 완료된 단계를 한 번에 되돌릴 수 없습니다. 결제가 실패하면 주문 Saga가 재고 예약을 해제하고, 발행하지 못한 이벤트는 Outbox에 보관합니다.</p>
+            <div class="stockrush-role">
+              <h3>맡은 범위</h3>
+              <p>주문 Saga, 서비스별 Outbox 발행기, 실패 이벤트를 다시 보내는 관리자 API를 구현했습니다. 서비스별 PostgreSQL 스키마를 구성하고, 게이트웨이의 OIDC/JWT 인증과 주문 서비스의 소유권 검사를 분리했습니다.</p>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2>해결한 문제와 담당 역할</h2>
+            <p class="section-lede">{data.problem}</p>
+            <div class="responsibility-list">
+              {data.responsibilities.map((item) => <p>{item}</p>)}
+            </div>
+            <div class="overview-rules">
+              <h3>핵심 요구사항</h3>
+              <ul class="protection-list">
+                {data.protectionRules.map((rule) => <li><strong>{rule}</strong></li>)}
+              </ul>
+            </div>
+          </>
+        )}
       </section>
 
       <div class="visual-wrap">
@@ -111,6 +132,7 @@ const toc = [
       <section id="decisions" class="project-section project-section--wide" tabindex="-1">
         <h2>기술 선택과 이유</h2>
         <DecisionGrid items={data.decisions} />
+        {isStockRush && <ul class="tag-list stockrush-stack" aria-label="StockRush 기술 스택">{data.stack.map((item) => <li class="tag">{item}</li>)}</ul>}
       </section>
 
       <section id="evidence" class="project-section project-section--wide" tabindex="-1">
@@ -840,5 +862,114 @@ const toc = [
     .pagination-grid .next {
       padding-left: 0;
     }
+  }
+
+  .project-hero--compact {
+    padding-block: clamp(16px, 3vw, 38px) 18px;
+    border-bottom: 0;
+  }
+
+  .project-hero--compact .project-hero-grid {
+    display: block;
+  }
+
+  .project-hero--compact .back-link {
+    margin-bottom: 6px;
+  }
+
+  .project-hero--compact .project-lede {
+    max-width: 44ic;
+    margin-top: 10px;
+  }
+
+  .project-hero--compact .project-actions {
+    align-items: center;
+    gap: 4px 18px;
+    margin-top: 5px;
+  }
+
+  .stockrush-meta,
+  .stockrush-repository {
+    color: var(--ink-soft);
+    font-size: var(--text-dense);
+    font-weight: 700;
+  }
+
+  .stockrush-repository {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 6px;
+    text-underline-offset: 4px;
+  }
+
+  .project-layout--stockrush {
+    display: block;
+    padding-top: 0;
+  }
+
+  .project-layout--stockrush .project-toc {
+    position: static;
+    margin-bottom: clamp(22px, 4vw, 40px);
+    padding-block: 0;
+    border-block: 1px solid var(--line);
+    background: transparent;
+  }
+
+  .project-layout--stockrush .project-toc nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 clamp(12px, 4vw, 32px);
+    border: 0;
+  }
+
+  .project-layout--stockrush .project-toc nav a {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-bottom: 2px solid transparent;
+    text-decoration: none;
+  }
+
+  .project-layout--stockrush .project-toc nav a:hover,
+  .project-layout--stockrush .project-toc nav a[aria-current='location'] {
+    border-bottom-color: currentColor;
+    color: var(--blue);
+  }
+
+  .project-layout--stockrush #overview {
+    width: min(100%, 54ic);
+    padding-bottom: clamp(20px, 3vw, 32px);
+  }
+
+  .project-layout--stockrush #overview > h2 {
+    margin-bottom: 12px;
+  }
+
+  .project-layout--stockrush .section-lede {
+    max-width: none;
+    margin-bottom: 16px;
+    font-size: var(--text-body);
+  }
+
+  .stockrush-role {
+    padding-left: 14px;
+    border-left: 2px solid var(--line-strong);
+  }
+
+  .stockrush-role h3 {
+    margin-bottom: 4px;
+    font-size: var(--text-dense);
+  }
+
+  .stockrush-role p {
+    color: var(--ink-soft);
+  }
+
+  .stockrush-stack {
+    margin-top: 20px;
   }
 </style>

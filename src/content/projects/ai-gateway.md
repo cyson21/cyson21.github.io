@@ -5,6 +5,7 @@ publicationState: public
 name: AI Gateway
 domain: AI
 eyebrow: LLM API 게이트웨이
+listSummary: 채팅 API에서 요청 정책, 응답 캐시, 대체 모델 호출을 관리하는 Java WebFlux 게이트웨이입니다.
 summary: OpenAI 형식의 채팅 API에 공통 정책·캐시·대체 모델 경로를 구현한 Java WebFlux 프로젝트입니다. 가짜 provider로 요청 거절, 캐시 재사용과 대체 후보 호출 제한을 검사했습니다.
 period: '2026.06'
 role: 개인 프로젝트 · Java·WebFlux API와 정책 파이프라인 구현

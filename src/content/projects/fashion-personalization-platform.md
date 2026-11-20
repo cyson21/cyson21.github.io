@@ -5,6 +5,7 @@ publicationState: public
 name: Fashion Personalization Platform
 domain: Backend
 eyebrow: 이벤트 기반 추천 파이프라인
+listSummary: 사용자 행동 이벤트로 상품 점수와 추천 이유를 생성하는 Python 백엔드입니다.
 summary: 사용자 행동 이벤트를 반영해 상품 점수와 추천 이유를 생성하는 Python 백엔드입니다. 메모리 저장소에서 멱등 처리·실패 상태·재처리와 사용자별 추천 배치를 구현했습니다.
 period: '2026.07'
 role: 개인 프로젝트 · Python 도메인 로직·이벤트 처리·추천 배치 구현

@@ -5,6 +5,7 @@ publicationState: public
 name: Enterprise Policy RAG
 domain: AI
 eyebrow: 권한 기반 RAG
+listSummary: 열람 권한이 있는 사내 규정만 검색하고, 근거가 없으면 답변을 거절하는 RAG 백엔드입니다.
 summary: >-
   규정 문서를 검색하기 전에 사용자 권한을 확인하고, 근거가 없으면 답변을 거절하는 RAG 개인 프로젝트입니다. FastAPI 백엔드와 React 관리 화면을 구현했습니다.
 cardEvidence:
