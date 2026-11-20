@@ -78,7 +78,7 @@ export function applyProfessionalNarratives(html) {
 ${caseDiagrams[item.anchor] ? `      ${caseDiagrams[item.anchor]}\n` : ''}      <dl class="work-case-facts">
         <div><dt>담당 범위</dt><dd>${escape(item.responsibility)}</dd></div>
         <div><dt>해결 과정</dt><dd><ol>${item.steps.map(step => `<li>${escape(step)}</li>`).join('')}</ol></dd></div>
-        <div><dt>변화</dt><dd>${escape(item.result)}</dd></div>
+        <div><dt>수정 결과</dt><dd>${escape(item.result)}</dd></div>
       </dl>
     </article>`);
   html = html.replace(/(?:<article class="work-case"[\s\S]*?<\/article>\s*)+/, articles.join('\n')+'\n');
