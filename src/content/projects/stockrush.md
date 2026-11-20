@@ -5,6 +5,7 @@ publicationState: public
 name: StockRush
 domain: Backend
 eyebrow: 이벤트 기반 커머스
+listSummary: 결제 실패 시 재고를 되돌리고, 발행에 실패한 이벤트를 다시 처리하는 주문 백엔드입니다.
 summary: 주문·재고·결제를 분리한 커머스 백엔드입니다. Saga와 Transactional Outbox로 결제 실패 시 보상 처리, 중복 이벤트 처리 방지, 발행 실패 후 재처리 흐름을 구현했습니다.
 cardEvidence:
   implementation: 주문과 이벤트를 같은 DB 트랜잭션에 저장하고, 주문 서비스가 Saga 상태 전이와 보상 처리를 조정합니다.

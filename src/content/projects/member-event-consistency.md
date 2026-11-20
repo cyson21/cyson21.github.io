@@ -5,6 +5,7 @@ publicationState: public
 name: Member Event Consistency
 domain: Backend
 eyebrow: 동시 요청 제어
+listSummary: 보상·포인트·쿠폰에 동시 요청이 몰려도 중복 지급과 초과 차감을 막는 회원 백엔드입니다.
 summary: >-
   회원 보상·포인트·쿠폰의 동시 요청을 처리하는 백엔드입니다. PostgreSQL 제약·잠금·조건부 갱신으로 중복 지급과 초과 발급·차감을 막고, Redis 락과 RabbitMQ 처리 방식의 동시 요청
   결과를 비교했습니다.

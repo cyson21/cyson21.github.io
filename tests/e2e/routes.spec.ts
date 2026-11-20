@@ -197,6 +197,9 @@ test('home navigation prioritizes career and labels personal projects', async ({
 
 test('projects page heading levels do not skip from h1 to h3', async ({ page }) => {
   await page.goto('/projects/');
+  await expect(page.locator('.project-row h2 a')).toHaveCount(6);
+  await expect(page.getByRole('link', { name: 'StockRush', exact: true })).toHaveAttribute('href', '/projects/stockrush/');
+  await expect(page.locator('.project-row .project-proof, .project-row a[href*="github.com"]')).toHaveCount(0);
   const levels = await page.locator('main :is(h1, h2, h3, h4)').evaluateAll((headings) =>
     headings.map((heading) => Number(heading.tagName.slice(1))),
   );
@@ -213,11 +216,7 @@ test('navigation, document flow, and code evidence remain readable without JavaS
 
   await expect(page.getByRole('navigation', { name: '주 메뉴' })).toBeVisible();
   await expect(page.locator('.project-toc a')).toHaveText([
-    '해결한 문제와 담당 역할',
-    '기술 선택과 이유',
-    '주요 구현과 관련 테스트',
-    '테스트 결과',
-    '프로젝트 범위',
+    '개요', '설계', '코드', '검증', '범위',
   ]);
   await expect(page.locator('.visual-wrap')).toBeVisible();
   await expect(page.locator('.evidence').first().getByText('구현 내용')).toBeVisible();
