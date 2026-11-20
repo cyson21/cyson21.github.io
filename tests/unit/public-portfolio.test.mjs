@@ -112,12 +112,15 @@ test('web professional narratives retain the same contribution scope as career P
   }
 });
 
-test('professional content regeneration preserves case order and both batch sequences', async () => {
+test('professional content regeneration preserves case order and diagram placement', async () => {
   const { applyProfessionalNarratives } = await import('../../scripts/professional-case-content.mjs');
   const html = readIntegratedPortfolio();
   const once = applyProfessionalNarratives(html);
   assert.equal(applyProfessionalNarratives(once), once);
   const anchors = [...once.matchAll(/<article class="work-case" id="([^"]+)">/g)].map(match => match[1]);
   assert.deepEqual(anchors, ['work-batch', 'work-purchase', 'work-policy', 'work-identity', 'work-messaging']);
-  assert.equal((once.match(/class="batch-flow-steps"/g) ?? []).length, 2);
+  assert.deepEqual([...once.matchAll(/<figcaption id="([^"]+-diagram-title)">/g)].map(match => match[1]), [
+    'batch-diagram-title', 'purchase-diagram-title', 'policy-diagram-title',
+  ]);
+  assert.match(once, /<nav class="work-case-index"[^>]*><ul>\s*<li><a href="#work-batch">/);
 });

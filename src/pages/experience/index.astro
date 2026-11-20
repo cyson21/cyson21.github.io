@@ -1,11 +1,9 @@
 ---
-import { Download } from '@lucide/astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
 import {
   careerPeriod,
   experiences,
-  profile,
   skillGroups,
 } from '../../data/site';
 
@@ -19,27 +17,10 @@ if (!currentExperience) {
   title="경력·이력서"
   description="손찬양의 Java·Spring Boot 백엔드 실무 경력과 이력서입니다. 회사별 담당 업무와 실제 운영 문제 해결 사례를 정리했습니다."
 >
-  <PageIntro title="경력·이력서" description="회사별 재직 기간·담당 업무·실무 기술과 제출용 PDF를 정리했습니다." />
+  <PageIntro title="경력·이력서" description={`전체 경력 · ${careerPeriod}`} />
 
   <section class="section experience-section">
     <div class="container experience-layout">
-      <section class="resume-overview" aria-labelledby="overview-title">
-        <div>
-          <h2 id="overview-title">제출용 이력서·경력기술서</h2>
-        </div>
-        <div class="overview-actions">
-          <a class="button" href={profile.resumePath} download="손찬양_이력서.pdf"><Download size={17} aria-hidden="true" /> 이력서 PDF 다운로드</a>
-          <a class="button button--secondary" href={profile.careerDescriptionPath} download="손찬양_경력기술서.pdf"><Download size={17} aria-hidden="true" /> 경력기술서 PDF 다운로드</a>
-        </div>
-      </section>
-
-      <section class="career-summary" aria-labelledby="career-title">
-        <div>
-          <span id="career-title">전체 경력</span>
-          <strong>{careerPeriod}</strong>
-        </div>
-      </section>
-
       <div class="experience-list" aria-label="경력 상세">
         {experiences.map((experience) => (
           <article class="experience-entry">
@@ -109,75 +90,8 @@ if (!currentExperience) {
     align-items: start;
   }
 
-  .resume-overview {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 32px;
-    padding: clamp(22px, 3vw, 34px);
-    border-block: 1px solid var(--line-strong);
-    background: var(--surface);
-  }
-
-  .resume-overview h2 {
-    max-width: 760px;
-    font-size: var(--text-h2);
-  }
-
-  .summary-intro {
-    margin-top: 12px;
-    color: var(--ink);
-    font-size: var(--text-lede);
-    font-weight: 720;
-    line-height: 1.55;
-    overflow-wrap: anywhere;
-  }
-
-  .summary-highlights {
-    display: grid;
-    gap: 6px;
-    margin: 16px 0 0;
-    padding-left: 1.15em;
-    color: var(--ink-soft);
-    font-size: var(--text-dense);
-    line-height: 1.5;
-    overflow-wrap: anywhere;
-  }
-
-  .summary-closing {
-    max-width: 760px;
-    margin-top: 16px;
-    color: var(--ink-soft);
-    font-size: var(--text-dense);
-    line-height: 1.55;
-    overflow-wrap: anywhere;
-  }
-
-  .overview-actions {
-    display: grid;
-    align-content: end;
-    gap: 8px;
-    min-width: 164px;
-  }
-
-  .career-summary {
-    padding-block: 20px;
-    border-block: 1px solid var(--line-strong);
-  }
-
-  .career-summary > div {
-    display: grid;
-    gap: 4px;
-  }
-
-  .career-summary span {
-    color: var(--blue);
-    font-size: var(--text-label);
-    font-weight: 780;
-  }
-
-  .career-summary strong {
-    font-family: var(--mono);
-    font-size: var(--text-body);
+  .experience-section {
+    padding-top: clamp(28px, 4vw, 48px);
   }
 
   .experience-list {
@@ -316,14 +230,8 @@ if (!currentExperience) {
   }
 
   @media (max-width: 959px) {
-    .resume-overview,
     .experience-support {
       grid-template-columns: 1fr;
-    }
-
-    .overview-actions {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      align-content: start;
     }
 
     .experience-entry header,
@@ -346,20 +254,11 @@ if (!currentExperience) {
 
   @media (max-width: 639px) {
     .experience-section {
-      padding-block: 48px;
+      padding-bottom: 48px;
     }
 
     .experience-layout {
       gap: 28px;
-    }
-
-    .resume-overview {
-      gap: 22px;
-      padding: 20px;
-    }
-
-    .overview-actions {
-      grid-template-columns: 1fr;
     }
 
     .experience-list {

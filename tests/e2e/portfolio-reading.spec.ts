@@ -30,10 +30,10 @@ test('intermediate-width work overview keeps readable content-sized sections', a
 });
 
 for (const width of [390, 922]) {
-  test(`batch detail presents four ordered steps per flow at ${width}px`, async ({ page }) => {
+  test(`case diagrams keep their sequences and branch outcomes readable at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 921 });
     await page.goto('/portfolio/cases.html#work-batch');
-    const lists = page.locator('#work-batch .batch-flow-steps');
+    const lists = page.locator('#work-batch .case-diagram-track');
     await expect(lists).toHaveCount(2);
     for (const list of await lists.all()) {
       await expect(list.locator('li')).toHaveCount(4);
@@ -41,5 +41,13 @@ for (const width of [390, 922]) {
       expect(Math.max(...rects.map(r => r.x)) - Math.min(...rects.map(r => r.x))).toBeLessThan(2);
       for (let i = 1; i < rects.length; i++) expect(rects[i]!.y).toBeGreaterThanOrEqual(rects[i-1]!.bottom - 1);
     }
+    await expect(page.getByRole('navigation', { name: '실무 사례 바로가기' }).getByRole('listitem')).toHaveCount(5);
+    await expect(page.locator('#work-purchase .case-diagram-track').nth(1).locator('li')).toHaveText([
+      '요청 상태 저장', '요청 상태 커밋', '별도 트랜잭션에서 결제 호출',
+    ]);
+    await expect(page.locator('#work-policy .case-diagram-branches')).toContainText('변경 차단');
+    await expect(page.locator('#work-policy .case-diagram-branches')).toContainText('같은 이력 조회 기준으로 후속 데이터 갱신');
+    const diagramOverflow = await page.locator('.case-diagram').evaluateAll(figures => figures.some(figure => figure.scrollWidth > figure.clientWidth + 1));
+    expect(diagramOverflow).toBeFalsy();
   });
 }

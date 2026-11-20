@@ -243,32 +243,22 @@ for (const theme of ['b', 'c'] as const) {
             height: bounds.height,
           };
         };
-        const summary = document.querySelector<HTMLElement>('.resume-overview');
-        const firstButton = document.querySelector<HTMLElement>('.resume-overview .button');
-        const secondButton = document.querySelector<HTMLElement>('.resume-overview .button--secondary');
+        const period = document.querySelector<HTMLElement>('.page-intro .lede');
         const current = document.querySelector<HTMLElement>('.experience-entry');
         const support = document.querySelector<HTMLElement>('.experience-support');
         const context = document.querySelector<HTMLElement>('.experience-entry .context');
         const company = document.querySelector<HTMLElement>('.experience-entry h2');
-        if (!summary || !firstButton || !secondButton || !current || !support || !context || !company) {
+        if (!period || !current || !support || !context || !company) {
           throw new Error('Unified experience priority elements must all render');
         }
-        const summaryStyle = getComputedStyle(summary);
         const contextRect = context.getBoundingClientRect();
         const companyRect = company.getBoundingClientRect();
         const companyPseudo = getComputedStyle(company, '::after');
         return {
-          summary: rect('.resume-overview'),
           current: rect('.experience-entry'),
           support: rect('.experience-support'),
-          summaryPaddingInline: [
-            Number.parseFloat(summaryStyle.paddingLeft),
-            Number.parseFloat(summaryStyle.paddingRight),
-          ],
-          buttonHeights: [
-            firstButton.getBoundingClientRect().height,
-            secondButton.getBoundingClientRect().height,
-          ],
+          period: rect('.page-intro .lede'),
+          periodLineHeight: Number.parseFloat(getComputedStyle(period).lineHeight),
           contextLeft: contextRect.left,
           companyLeft: companyRect.left,
           companyGraphic: companyPseudo.display,
@@ -276,8 +266,8 @@ for (const theme of ['b', 'c'] as const) {
         };
       });
 
-      expect(layout.summaryPaddingInline.every((padding) => padding >= 18)).toBeTruthy();
-      expect(layout.buttonHeights.every((height) => height >= 44)).toBeTruthy();
+      expect(layout.period.height).toBeLessThanOrEqual(layout.periodLineHeight + 1);
+      expect(layout.current.top).toBeGreaterThan(layout.period.bottom);
       expect(Math.abs(layout.contextLeft - layout.companyLeft)).toBeLessThanOrEqual(1);
       expect(layout.companyGraphic).toBe('none');
       expect(layout.cardShadow).toBe('none');
