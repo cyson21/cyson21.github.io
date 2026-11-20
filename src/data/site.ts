@@ -52,7 +52,7 @@ const experienceRecords = [
       { title: '플랫폼 2.0 → 3.0 전환', description: '플랫폼 2.0에서 3.0으로 전환하며 API·DB 변경의 영향을 점검했습니다. 레거시 코드와 데이터 접근 로직을 정리하고 변경 기능의 통합·회귀 테스트를 보완했습니다.' },
       { title: '서비스 운영 자동화', description: '작업 실행 현황과 처리 결과를 확인하는 모니터링 및 Slack 알림을 구현했습니다.' },
       { title: '메시징 처리', description: '발송 요청 접수와 후속 결과 기록을 분리하는 RabbitMQ 기반 비동기 처리 변경에 참여했습니다.' },
-      { title: '인프라·협업', description: 'EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환, CI/CD 개선 및 코드리뷰에 참여했습니다.' },
+      { title: '인프라·협업', description: 'EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포, CI/CD 개선 및 코드리뷰에 참여했습니다.' },
     ],
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'MySQL', 'Redis', 'ShedLock', 'Redisson', 'RabbitMQ', 'AWS EC2', 'AWS RDS', 'AWS S3', 'AWS Lambda', 'CloudWatch', 'AWS WAF', 'AWS SDK v2', 'Docker', 'JUnit', 'Testcontainers', 'REST Docs', 'Git'],
   },

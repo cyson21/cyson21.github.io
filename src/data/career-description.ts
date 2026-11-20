@@ -24,7 +24,7 @@ export const currentCareerAreas = [
     scope: '백엔드 기능 개발과 함께 서비스 운영에 필요한 처리·관측·배포 작업을 수행했습니다.',
     contributions: [
       'RabbitMQ 기반으로 발송 요청 접수와 후속 결과 기록을 분리하는 비동기 처리 변경에 참여했습니다. 작업 실행 현황과 처리 결과를 확인하는 모니터링 및 Slack 알림을 구현했습니다.',
-      'AWS EC2·RDS·Lambda·CloudWatch·WAF 운영, Docker 배포·전환과 CI/CD 개선에 참여했습니다.',
+      'AWS EC2·RDS·Lambda·CloudWatch·WAF 운영, Docker 배포와 CI/CD 개선에 참여했습니다.',
     ],
   },
 ] as const;

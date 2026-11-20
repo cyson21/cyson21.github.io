@@ -33,7 +33,7 @@ export const resumePrint = {
     {
       title: '배포·인프라 운영과 개발 협업',
       bullets: [
-        'AWS EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포·전환 작업에 참여했습니다.',
+        'AWS EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포 작업에 참여했습니다.',
         'CI/CD 개선과 코드리뷰에 참여하며 서비스 변경 사항을 함께 검토했습니다.',
       ],
     },

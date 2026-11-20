@@ -21,11 +21,11 @@ stack:
   - pgvector
   - OpenAI 연동 어댑터
 problemTitle: 열람 권한과 답변 근거를 확인하는 사내 검색
-problem: 사내 문서 검색에서 권한 확인을 빠뜨리면 다른 부서의 문서가 노출될 수 있습니다. 검색 근거가 없을 때 모델이 답을 지어내는 문제도 막아야 합니다.
+problem: 사내 문서가 권한 밖에 노출되거나 검색 근거 없이 답변이 생성되는 문제를 막았습니다.
 responsibilities:
-  - 문서 등록·분할, 권한별 검색, 출처가 붙은 답변과 거절 응답 API를 구현했습니다.
-  - 저장소와 모델을 분리해 회귀 테스트를 구성했습니다. PostgreSQL·pgvector와 OpenAI 어댑터는 별도 설정으로 연결했습니다.
-  - 검색 결과·문서 관리·질문 이력을 볼 수 있는 관리 화면과 정적 데모를 만들었습니다.
+  - 문서 등록·분할, 권한별 검색, 답변·거절 API
+  - 저장소·모델 분리와 회귀 테스트, PostgreSQL·pgvector와 OpenAI 선택 연동
+  - 검색 결과·문서 관리·질문 이력을 보는 관리 화면과 정적 데모
 flow:
   normal:
     - 문서 등록·분할
@@ -77,9 +77,9 @@ decisions:
     alternative: OpenAI API와 pgvector를 서비스 코드에서 바로 호출
     reason: 테스트는 가짜 모델로 빠르게 돌리고, 실제 모델 연동은 따로 확인하고 싶었습니다.
 protectionRules:
-  - 워크스페이스·소유자·부서 권한 조건으로 검색 후보와 출처를 제한합니다.
-  - 근거가 하나도 없으면 답변을 만들지 않습니다.
-  - 기본 실행은 메모리 저장소와 가짜 모델을 쓰고, OpenAI 연동은 켜야 동작합니다.
+  - 워크스페이스·소유자·부서 권한으로 검색 후보와 출처 제한
+  - 검색 근거가 없으면 답변 거절
+  - 기본 실행은 메모리 저장소와 가짜 모델 사용
 codeEvidence:
   - symbol: RetrievalService.retrieve
     displayPath: app/retrieval.py
@@ -137,6 +137,15 @@ verification:
       - label: test_retrieval_allows_public_owner_and_department_documents_only
         url: >-
           https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_retrieval_permissions.py#L46
+    evidenceStatus: local-rerun
+  - title: 권한 없는 문서는 답변 출처에서 제외
+    layer: integration
+    method: 예제 데이터로 실행한 답변 API에 재무 부서 사용자로 보안 사고 대응 문서를 찾는 질문을 보냅니다.
+    result: 답변 API가 HTTP 200으로 응답했고, 출처 목록에 열람 권한이 없는 보안 사고 대응 문서가 포함되지 않았습니다.
+    sources:
+      - label: test_answer_api_keeps_retrieval_permission_filter_for_citations
+        url: >-
+          https://github.com/cyson21/enterprise-policy-rag/blob/d5f71c1501d3b9582d2e801eb5c656daf2c21fb4/tests/test_answer_api.py#L40
     evidenceStatus: local-rerun
   - title: 검색 근거가 없는 질문
     layer: integration
