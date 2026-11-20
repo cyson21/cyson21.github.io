@@ -127,8 +127,9 @@ test('detail pages expose an explicit route back to the portfolio home', async (
 test('experience page unifies the résumé summary and career evidence', async ({ page }) => {
   await page.goto('/experience/');
   await expect(page.getByRole('heading', { name: '경력·이력서' })).toBeVisible();
-  await expect(page.locator('.resume-overview').getByRole('link', {name: '이력서 PDF 다운로드', exact: true})).toHaveAttribute('href', '/downloads/resume.pdf');
-  await expect(page.locator('.resume-overview .summary-highlights li')).toHaveCount(0);
+  await expect(page.locator('.site-chrome-footer').getByRole('link', {name: '이력서 PDF 다운로드', exact: true})).toHaveAttribute('href', '/downloads/resume.pdf');
+  await expect(page.locator('.page-intro .lede')).toContainText('전체 경력');
+  await expect(page.locator('main').getByRole('link', {name: '이력서 PDF 다운로드', exact: true})).toHaveCount(0);
   await expect(page.getByRole('heading', { name: '주요 기여' })).toHaveCount(2);
   const currentExperience = page.locator('.experience-entry').first();
   await expect(currentExperience.getByRole('heading', { name: '이엠캐스트(주)' })).toBeVisible();

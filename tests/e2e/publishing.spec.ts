@@ -26,7 +26,7 @@ test('custom 404 renders useful content and remains noindex', async ({ page }) =
 for (const [filename, label] of [['resume.pdf', '이력서'], ['career-description.pdf', '경력기술서']]) {
   test(`experience page links to a valid two-page ${filename}`, async ({ page, request }) => {
     await page.goto('/experience/');
-    await expect(page.locator('.resume-overview').getByRole('link', { name: `${label} PDF 다운로드`, exact: true })).toHaveAttribute('href', `/downloads/${filename}`);
+    await expect(page.locator('.site-chrome-footer').getByRole('link', { name: `${label} PDF 다운로드`, exact: true })).toHaveAttribute('href', `/downloads/${filename}`);
     const response = await request.get(`/downloads/${filename}`);
     expect(response.ok()).toBeTruthy();
     expect(response.headers()['content-type']).toContain('application/pdf');
