@@ -16,6 +16,7 @@ stack:
   - Debezium (실행 설정)
   - Kafka
   - Apache Iceberg (독립 실험)
+problemTitle: 재전달된 변경 이벤트를 식별하고 재처리
 problem: Debezium이 재시작되거나 같은 변경을 다시 보내면 이벤트가 중복됩니다. 원본 위치(LSN, 오프셋)를 잃어버리면 같은 변경인지 알 수 없고, 적재가 실패했을 때 무엇을 다시 돌려야 하는지도 모릅니다.
 responsibilities:
   - PostgreSQL·Debezium·Kafka의 로컬 실행 설정과 Spring Boot 관리 API를 작성했습니다.

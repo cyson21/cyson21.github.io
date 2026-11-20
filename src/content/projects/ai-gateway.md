@@ -16,6 +16,7 @@ stack:
   - PostgreSQL
   - pgvector
   - Testcontainers
+problemTitle: 모델 호출 정책을 한곳에서 관리
 problem: LLM 기능을 여러 서비스에 붙이면 모델 연동, 장애 대응, 토큰 예산, 캐시, 호출 기록을 서비스마다 따로 만들게 됩니다.
 responsibilities:
   - OpenAI 호환 API를 만들고, 인증 뒤에 공통 정책이 정해진 순서대로 돌게 했습니다.

@@ -78,10 +78,10 @@ const toc = [
     </nav>
 
     <article class="project-content">
-      <section id="overview" class:list={['project-section', { 'overview--compact': isStockRush }]} tabindex="-1">
+      <section id="overview" class="project-section project-overview" tabindex="-1">
         {isStockRush ? (
           <>
-            <h2>재고를 예약한 뒤 결제가 실패하면 어떻게 복구할까?</h2>
+            <h2>{data.problemTitle}</h2>
             <p class="section-lede">주문·재고·결제가 서로 다른 서비스에 있어 이미 완료된 단계를 한 번에 되돌릴 수 없습니다. 결제가 실패하면 주문 Saga가 재고 예약을 해제하고, 발행하지 못한 이벤트는 Outbox에 보관합니다.</p>
             <div class="stockrush-role">
               <h3>맡은 범위</h3>
@@ -90,15 +90,18 @@ const toc = [
           </>
         ) : (
           <>
-            <h2>해결한 문제와 담당 역할</h2>
+            <h2>{data.problemTitle}</h2>
             <p class="section-lede">{data.problem}</p>
-            <div class="responsibility-list">
-              {data.responsibilities.map((item) => <p>{item}</p>)}
+            <div class="overview-group">
+              <h3>구현 범위</h3>
+              <ul class="overview-list">
+                {data.responsibilities.map((item) => <li>{item}</li>)}
+              </ul>
             </div>
-            <div class="overview-rules">
-              <h3>핵심 요구사항</h3>
-              <ul class="protection-list">
-                {data.protectionRules.map((rule) => <li><strong>{rule}</strong></li>)}
+            <div class="overview-group">
+              <h3>동작 범위</h3>
+              <ul class="overview-list">
+                {data.protectionRules.map((rule) => <li>{rule}</li>)}
               </ul>
             </div>
           </>
@@ -308,65 +311,26 @@ const toc = [
     line-height: 1.6;
   }
 
-  .responsibility-list {
+  .overview-group + .overview-group {
+    margin-top: 16px;
+  }
+
+  .overview-group h3 {
+    margin-bottom: 5px;
+  }
+
+  .overview-list {
     display: grid;
-    border-top: 1px solid var(--line-strong);
-  }
-
-  .responsibility-list > div {
-    padding-block: 16px;
-    border-bottom: 1px solid var(--line-strong);
-  }
-
-  .responsibility-list > p {
-    position: relative;
-    padding: 16px 0 16px 24px;
-    border-bottom: 1px solid var(--line-strong);
-  }
-
-  .responsibility-list > p::before {
-    position: absolute;
-    top: 1.85em;
-    left: 2px;
-    width: 8px;
-    height: 2px;
-    background: var(--blue);
-    content: "";
-  }
-
-  .overview-rules {
-    margin-top: 40px;
-  }
-
-  .overview-rules h3 {
-    margin-bottom: 16px;
-  }
-
-  .protection-list {
+    gap: 4px;
     margin: 0;
-    padding: 0;
-    border-top: 1px solid var(--ink);
-    list-style: none;
+    padding-inline-start: 1.2em;
+    color: var(--ink-soft);
+    list-style: disc;
+    overflow-wrap: anywhere;
   }
 
-  .protection-list li {
-    position: relative;
-    padding: 16px 0 16px 24px;
-    border-bottom: 1px solid var(--line-strong);
-  }
-
-  .protection-list li::before {
-    position: absolute;
-    top: 1.85em;
-    left: 2px;
-    width: 8px;
-    height: 2px;
-    background: var(--blue);
-    content: "";
-  }
-
-  .protection-list strong {
-    font-size: var(--text-body);
+  .overview-list li::marker {
+    color: var(--blue);
   }
 
   .scope-grid {
@@ -575,16 +539,16 @@ const toc = [
     color: var(--blue);
   }
 
-  .overview--compact {
+  .project-overview {
     width: min(100%, 54ic);
     padding-bottom: clamp(20px, 3vw, 32px);
   }
 
-  .overview--compact > h2 {
+  .project-overview > h2 {
     margin-bottom: 12px;
   }
 
-  .overview--compact .section-lede {
+  .project-overview .section-lede {
     max-width: none;
     margin-bottom: 16px;
     font-size: var(--text-body);
