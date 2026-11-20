@@ -112,7 +112,7 @@ test('Korean interface labels use the text font rather than the code font', asyn
     '.evidence-count',
     '.evidence-context h4',
     '.verification-details summary',
-    '.pagination-grid a span',
+    '.project-neighbors .neighbor-label',
   ]);
 });
 
