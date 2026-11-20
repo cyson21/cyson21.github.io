@@ -7,6 +7,8 @@ for (const width of [390, 768, 994, 1440]) {
     await page.locator('#work-batch > a').click();
     await expect(page).toHaveURL(/cases\.html#work-batch$/);
     await expect(page.locator('.work-case')).toHaveCount(5);
+    await expect(page.locator('#portfolio-intro').getByRole('link', { name: '실무 사례 목록' })).toHaveCount(0);
+    await expect(page.locator('.work-case-facts dt').filter({ hasText: /^수정 결과$/ })).toHaveCount(5);
     await expect(page.locator('.case-study-page')).toHaveCount(0);
     await page.goto('/portfolio/#stockrush');
     await expect(page).toHaveURL(/\/projects\/stockrush\/$/);
