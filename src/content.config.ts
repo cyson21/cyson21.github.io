@@ -61,6 +61,7 @@ const projectCollection = defineCollection({
     period: z.string(),
     role: z.string(),
     stack: z.array(z.string()).min(2),
+    problemTitle: z.string().min(1),
     problem: z.string(),
     responsibilities: z.array(z.string()).min(2),
     flow: z.object({

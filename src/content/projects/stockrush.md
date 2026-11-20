@@ -19,6 +19,7 @@ stack:
   - PostgreSQL
   - Keycloak
   - Docker Compose
+problemTitle: 재고를 예약한 뒤 결제가 실패하면 어떻게 복구할까?
 problem: >-
   주문 저장, 재고 예약, 결제 승인과 이벤트 발행은 서비스 경계 때문에 하나의 DB 트랜잭션으로 처리할 수 없습니다. 부분 실패와 이벤트 재전달에 대비해 상태 전이, 보상 처리와 재발행을 구분해야
   합니다.
