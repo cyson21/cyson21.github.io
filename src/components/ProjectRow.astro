@@ -20,7 +20,7 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
     <div class="project-copy">
       <div class="project-title-line">
         <Heading>
-          {compact ? data.name : <a href={detailHref}>{data.name} <ArrowRight size={19} aria-hidden="true" /></a>}
+          {compact ? data.name : <a href={detailHref}><span>{data.name}</span> <ArrowRight size={19} aria-hidden="true" /></a>}
         </Heading>
         <div class="project-status">
           <span class="domain">{domainLabels[data.domain]}</span>
@@ -73,6 +73,7 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
 
   .project-copy {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 14px;
   }
 
@@ -84,6 +85,8 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
   }
 
   .project-title-line h2 {
+    min-width: 0;
+    max-width: 100%;
     font-size: var(--text-h2);
   }
 
@@ -104,6 +107,11 @@ const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as co
   .project-title-line a:focus-visible {
     color: var(--blue);
     text-decoration: underline;
+  }
+
+  .project-title-line a span {
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   .project-title-line a svg {
