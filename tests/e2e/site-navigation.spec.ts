@@ -40,7 +40,7 @@ test('project results stay with the verification methods instead of positional c
     await page.goto(`/projects/${slug}/`);
     await expect(page.locator('#evidence .evidence')).toHaveCount(3);
     await expect(page.locator('#evidence .test-result')).toHaveCount(0);
-    await expect(page.locator('#verification .verification-result > .verification-outcome')).toHaveCount(slug === 'enterprise-policy-rag' ? 4 : 3);
+    await expect(page.locator('#verification .verification-result > .verification-outcome')).toHaveCount(slug === 'enterprise-policy-rag' ? 5 : 3);
   }
 });
 
@@ -57,6 +57,11 @@ for (const width of [390, 994]) {
       const sources = await page.locator('.verification-sources a').evaluateAll(links => links.map(link => link.getAttribute('href')));
       expect(sources.length).toBeGreaterThanOrEqual(3);
       for (const source of sources) expect(source).toMatch(new RegExp(`/cyson21/${slug}/blob/[a-f0-9]{40}/`));
+      if (slug === 'enterprise-policy-rag') {
+        const citationResult = page.locator('.verification-result').filter({hasText: '권한 없는 문서는 답변 출처에서 제외'});
+        await expect(citationResult.locator('.verification-outcome')).toContainText('보안 사고 대응 문서가 포함되지 않았습니다');
+        await expect(citationResult.locator('.verification-sources a')).toHaveAttribute('href', /test_answer_api\.py#L40$/);
+      }
       if (slug === 'cdc-data-platform') {
         await expect(page.locator('.evidence-status').filter({hasText: '실행 결과 미확인'})).toBeVisible();
         await expect(page.locator('.generated-diagram--independent ul li')).toHaveCount(3);

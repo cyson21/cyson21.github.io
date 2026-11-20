@@ -48,19 +48,19 @@
     "output": "public/downloads/career-description.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/career/",
-    "sha256": "12f334630e63154baf7915278c802c4e34f5e2d18de4dc977c8cc4e7643949e5",
+    "sha256": "7a8e58bb0c1a08d7629836e8ae89708589f75e2677b21a0250ec3578b0e059a8",
     "owner": "Son Chanyang",
     "usage": "Public two-page career description focused on four professional problem-solving contributions",
-    "approvedAt": "2026-11-13"
+    "approvedAt": "2026-11-20"
   },
   {
     "output": "public/downloads/resume.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/print/",
-    "sha256": "c9c1d2507aed331282cde7f61c8400c11f73e5a17bb930164ff416b0692f9141",
+    "sha256": "3b8907220196b50df13a677ef1b453bad0da37c7249bf73032bdf2dec69017a1",
     "owner": "Son Chanyang",
     "usage": "Public two-page resume with core skills and professional cases on the first page",
-    "approvedAt": "2026-11-13"
+    "approvedAt": "2026-11-20"
   },
   {
     "output": "public/icons/favicon.svg",

@@ -340,6 +340,10 @@ const toc = [
     gap: 24px;
   }
 
+  .scope-grid:has(+ .project-resources) {
+    padding-bottom: 16px;
+  }
+
   .scope-grid:last-child {
     padding-bottom: 0;
   }
@@ -372,11 +376,9 @@ const toc = [
 
   .project-resources {
     display: flex;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 20px;
-    border: 1px solid var(--line-strong);
-    background: var(--surface);
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 16px;
   }
 
   .project-resources > p {
@@ -389,7 +391,7 @@ const toc = [
   .project-resources > div {
     display: flex;
     flex-wrap: wrap;
-    gap: 18px;
+    gap: 0 16px;
   }
 
   .project-resources a {
@@ -464,9 +466,18 @@ const toc = [
       margin-bottom: 42px;
     }
 
-    .project-resources {
-      align-items: flex-start;
-      flex-direction: column;
+    .project-overview .section-lede {
+      line-height: 1.5;
+    }
+
+    .overview-group + .overview-group {
+      margin-top: 12px;
+    }
+
+    .overview-list {
+      gap: 3px;
+      font-size: var(--text-dense);
+      line-height: 1.5;
     }
   }
 
@@ -541,7 +552,7 @@ const toc = [
 
   .project-overview {
     width: min(100%, 54ic);
-    padding-bottom: clamp(20px, 3vw, 32px);
+    padding-bottom: clamp(16px, 3vw, 32px);
   }
 
   .project-overview > h2 {
@@ -550,7 +561,7 @@ const toc = [
 
   .project-overview .section-lede {
     max-width: none;
-    margin-bottom: 16px;
+    margin-bottom: clamp(10px, 2vw, 16px);
     font-size: var(--text-body);
   }
 
