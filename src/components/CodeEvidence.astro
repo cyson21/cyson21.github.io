@@ -164,7 +164,7 @@ const { items } = Astro.props;
 
   .evidence-body {
     display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+    grid-template-columns: minmax(0, 1fr);
     background: #101417;
     color: #f5f8f6;
   }
@@ -176,7 +176,7 @@ const { items } = Astro.props;
   }
 
   .code-panel {
-    border-right: 1px solid #46504b;
+    border-bottom: 1px solid #46504b;
   }
 
   .code-panel-header {
@@ -286,8 +286,7 @@ const { items } = Astro.props;
   }
 
   @media (max-width: 959px) {
-    .evidence-header,
-    .evidence-body {
+    .evidence-header {
       grid-template-columns: 1fr;
     }
 
@@ -299,11 +298,6 @@ const { items } = Astro.props;
     .evidence-path {
       justify-content: flex-start;
       text-align: left;
-    }
-
-    .code-panel {
-      border-right: 0;
-      border-bottom: 1px solid #46504b;
     }
 
     .code-panel,

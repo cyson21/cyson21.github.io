@@ -40,7 +40,7 @@ test('project results stay with the verification methods instead of positional c
     await page.goto(`/projects/${slug}/`);
     await expect(page.locator('#evidence .evidence')).toHaveCount(3);
     await expect(page.locator('#evidence .test-result')).toHaveCount(0);
-    await expect(page.locator('#verification .verification-table tbody tr')).toHaveCount(slug === 'enterprise-policy-rag' ? 4 : 3);
+    await expect(page.locator('#verification .verification-result > .verification-outcome')).toHaveCount(slug === 'enterprise-policy-rag' ? 4 : 3);
   }
 });
 
@@ -50,12 +50,15 @@ for (const width of [390, 994]) {
     for (const slug of ['stockrush', 'member-event-consistency', 'enterprise-policy-rag', 'ai-gateway', 'cdc-data-platform', 'fashion-personalization-platform']) {
       await page.goto(`/projects/${slug}/`);
       await expect(page.locator('.evidence-review a')).toHaveCount(2);
-      await page.getByText('테스트 방법·결과 보기', {exact: true}).click();
+      const outcomes = page.locator('.verification-outcome');
+      expect(await outcomes.count()).toBeGreaterThanOrEqual(3);
+      for (const outcome of await outcomes.all()) await expect(outcome).toBeVisible();
+      for (const method of await page.getByText('테스트 방법과 근거', {exact: true}).all()) await method.click();
       const sources = await page.locator('.verification-sources a').evaluateAll(links => links.map(link => link.getAttribute('href')));
       expect(sources.length).toBeGreaterThanOrEqual(3);
       for (const source of sources) expect(source).toMatch(new RegExp(`/cyson21/${slug}/blob/[a-f0-9]{40}/`));
       if (slug === 'cdc-data-platform') {
-        await expect(page.locator('.evidence-status').filter({hasText: '실행 결과 미확인'})).toHaveCount(1);
+        await expect(page.locator('.evidence-status').filter({hasText: '실행 결과 미확인'})).toBeVisible();
         await expect(page.locator('.generated-diagram--independent ul li')).toHaveCount(3);
         expect(await page.locator('.generated-diagram--independent li').first().evaluate(element => getComputedStyle(element, '::after').display)).toBe('none');
       }

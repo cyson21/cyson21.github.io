@@ -2,7 +2,6 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { ArrowLeft, ArrowRight, ArrowUpRight, CircleAlert, CodeXml } from '@lucide/astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import VerificationSignal from '../../components/VerificationSignal.astro';
 import DecisionGrid from '../../components/DecisionGrid.astro';
 import CodeEvidence from '../../components/CodeEvidence.astro';
 import ProjectVisual from '../../components/ProjectVisual.astro';
@@ -39,18 +38,12 @@ const layerLabel: Record<string, string> = {
 const evidenceLabels = { 'ci-record': '기준 버전 CI 실행 확인', 'local-rerun': '표시된 점검일에 재실행', 'test-definition': '검사 스크립트 정의 · 실행 결과 미확인' } as const;
 const domainLabels = { Backend: '백엔드', Data: '데이터', AI: 'AI' } as const;
 const isStockRush = project.id === 'stockrush';
-const toc = isStockRush ? [
+const toc = [
   ['overview', '개요'],
   ['decisions', '설계'],
   ['evidence', '코드'],
   ['verification', '검증'],
   ['scope', '범위'],
-] : [
-  ['overview', '해결한 문제와 담당 역할'],
-  ['decisions', '기술 선택과 이유'],
-  ['evidence', '주요 구현과 관련 테스트'],
-  ['verification', '테스트 결과'],
-  ['scope', '프로젝트 범위'],
 ];
 ---
 
@@ -62,43 +55,30 @@ const toc = isStockRush ? [
   article={true}
   updatedAt={data.updatedAt}
 >
-  <header class:list={['project-hero', { 'project-hero--compact': isStockRush }]}>
-    <div class="container project-hero-grid">
+  <header class="project-hero">
+    <div class="container">
       <div class="project-heading">
         <a class="back-link" href="/projects/"><ArrowLeft size={17} aria-hidden="true" /> 개인 프로젝트</a>
         <h1>{data.name}</h1>
         <p class="project-lede">{isStockRush ? data.listSummary : data.summary}</p>
-        {!isStockRush && <p class="project-meta-compact">{data.role} · {data.period} · {domainLabels[data.domain]}</p>}
         <div class="button-row project-actions">
-          {isStockRush && <p class="stockrush-meta">{data.period} · {domainLabels[data.domain]}</p>}
-          {data.links.github && <a class={isStockRush ? 'stockrush-repository' : 'button'} href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}><CodeXml size={17} aria-hidden="true" /> GitHub 저장소 <ArrowUpRight size={15} aria-hidden="true" /></a>}
+          <p class="project-context">{data.period} · {domainLabels[data.domain]}</p>
+          {!isStockRush && <p class="project-context">{data.role.replace('개인 프로젝트 · ', '')}</p>}
+          {data.links.github && <a class="project-repository" href={data.links.github} target="_blank" rel="noreferrer" aria-label={`${data.name} GitHub 저장소 새 창에서 열기`}><CodeXml size={17} aria-hidden="true" /> GitHub 저장소 <ArrowUpRight size={15} aria-hidden="true" /></a>}
           {data.links.demo && <a class="button button--secondary" href={data.links.demo} target="_blank" rel="noreferrer" aria-label={`${data.name} 데모 새 창에서 열기`}>데모 열기 <ArrowUpRight size={17} aria-hidden="true" /></a>}
           {data.publicationState === 'case-study-only' && <span class="scope-badge"><CircleAlert size={16} aria-hidden="true" /> 문서만 공개</span>}
         </div>
       </div>
-      {!isStockRush && <dl class="project-meta">
-        <div><dt>역할</dt><dd>{data.role}</dd></div>
-        <div><dt>기간</dt><dd>{data.period}</dd></div>
-        <div><dt>분야</dt><dd>{domainLabels[data.domain]}</dd></div>
-        <div><dt>코드·테스트</dt><dd>주요 코드 {data.codeEvidence.length}개 · 관련 테스트 {data.codeEvidence.length}개</dd></div>
-      </dl>}
     </div>
   </header>
 
-  <div class:list={['container', 'project-layout', { 'project-layout--stockrush': isStockRush }]}>
-    <aside class="project-toc no-print">
-      {!isStockRush && <p id="project-toc-title">목차</p>}
-      <nav aria-label={isStockRush ? "StockRush 목차" : undefined} aria-labelledby={isStockRush ? undefined : "project-toc-title"}>
-        {toc.map(([id, label], index) => <a href={`#${id}`} aria-current={index === 0 ? 'location' : undefined}>{label}</a>)}
-      </nav>
-      {!isStockRush && <div class="toc-stack">
-        <p>기술 스택</p>
-        <ul class="tag-list">{data.stack.map((item) => <li class="tag">{item}</li>)}</ul>
-      </div>}
-    </aside>
+  <div class="container project-layout">
+    <nav class="project-toc no-print" aria-label={`${data.name} 목차`}>
+      {toc.map(([id, label], index) => <a href={`#${id}`} aria-current={index === 0 ? 'location' : undefined}>{label}</a>)}
+    </nav>
 
     <article class="project-content">
-      <section id="overview" class="project-section" tabindex="-1">
+      <section id="overview" class:list={['project-section', { 'overview--compact': isStockRush }]} tabindex="-1">
         {isStockRush ? (
           <>
             <h2>재고를 예약한 뒤 결제가 실패하면 어떻게 복구할까?</h2>
@@ -132,7 +112,7 @@ const toc = isStockRush ? [
       <section id="decisions" class="project-section project-section--wide" tabindex="-1">
         <h2>기술 선택과 이유</h2>
         <DecisionGrid items={data.decisions} />
-        {isStockRush && <ul class="tag-list stockrush-stack" aria-label="StockRush 기술 스택">{data.stack.map((item) => <li class="tag">{item}</li>)}</ul>}
+        <ul class="tag-list project-stack" aria-label={`${data.name} 기술 스택`}>{data.stack.map((item) => <li class="tag">{item}</li>)}</ul>
       </section>
 
       <section id="evidence" class="project-section project-section--wide" tabindex="-1">
@@ -142,31 +122,35 @@ const toc = isStockRush ? [
 
       <section id="verification" class="project-section project-section--wide" tabindex="-1">
         <h2>테스트 결과</h2>
+        <p class="verification-scope">{data.evidenceReview.scope}</p>
+        <div class="verification-results">
+          {data.verification.map((item) => (
+            <article class="verification-result">
+              <h3>{item.title}</h3>
+              <p class="verification-outcome">{item.result}</p>
+              <details class="verification-details">
+                <summary>테스트 방법과 근거</summary>
+                <p class="evidence-status">{layerLabel[item.layer]} · {evidenceLabels[item.evidenceStatus]}</p>
+                <p>{item.method}</p>
+                <ul class="verification-sources" aria-label="이 결과의 근거">
+                  {item.sources.map((source) => (
+                    <li>
+                      <a href={source.url} target="_blank" rel="noreferrer" aria-label={`${source.label} 근거 새 창에서 열기`}>
+                        <span>{source.label}</span>
+                        <ArrowUpRight size={14} aria-hidden="true" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </article>
+          ))}
+        </div>
         <div class="evidence-review">
-          <p>근거 대조: <time>{data.evidenceReview.checkedAt}</time> · <a href={data.evidenceReview.sourceUrl} target="_blank" rel="noreferrer" aria-label="소스 기준 버전 새 창에서 열기">소스 기준 버전 <ArrowUpRight size={14} aria-hidden="true" /></a> · <a href={data.evidenceReview.ciUrl} target="_blank" rel="noreferrer" aria-label="CI 실행 기록 새 창에서 열기">CI 실행 기록 ({data.evidenceReview.ciRunDate}) <ArrowUpRight size={14} aria-hidden="true" /></a></p>
-          <p>{data.evidenceReview.scope}</p>
+          <p>근거 대조 <time>{data.evidenceReview.checkedAt}</time></p>
+          <a href={data.evidenceReview.sourceUrl} target="_blank" rel="noreferrer" aria-label="소스 기준 버전 새 창에서 열기">소스 기준 버전 <ArrowUpRight size={14} aria-hidden="true" /></a>
+          <a href={data.evidenceReview.ciUrl} target="_blank" rel="noreferrer" aria-label="CI 실행 기록 새 창에서 열기">CI 실행 기록 ({data.evidenceReview.ciRunDate}) <ArrowUpRight size={14} aria-hidden="true" /></a>
         </div>
-        <div class="signal-detail-grid">
-          {data.signals.map((signal) => <VerificationSignal {...signal} />)}
-        </div>
-        <details class="verification-details">
-          <summary>테스트 방법·결과 보기</summary>
-          <table class="verification-table">
-            <caption class="visually-hidden">{data.name} 테스트 결과</caption>
-            <thead>
-              <tr><th scope="col">구분</th><th scope="col">테스트 방법</th><th scope="col">결과</th></tr>
-            </thead>
-            <tbody>
-              {data.verification.map((item) => (
-                <tr>
-                  <th scope="row" class="level" data-label="구분">{layerLabel[item.layer]}<span class="evidence-status">{evidenceLabels[item.evidenceStatus]}</span></th>
-                  <td data-label="테스트 방법">{item.method}<ul class="verification-sources" aria-label="이 결과의 근거">{item.sources.map(source => <li><a href={source.url} target="_blank" rel="noreferrer" aria-label={`${source.label} 근거 새 창에서 열기`}>{source.label} <ArrowUpRight size={14} aria-hidden="true" /></a></li>)}</ul></td>
-                  <td data-label="결과">{item.result}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </details>
       </section>
 
       <section id="scope" class="project-section scope-grid" tabindex="-1">
@@ -241,37 +225,6 @@ const toc = isStockRush ? [
 </script>
 
 <style>
-  @media(max-width:639px){.verification-sources,.evidence-status{grid-column:2;min-width:0}}
-  .verification-table td{overflow-wrap:anywhere}
-  .evidence-review{margin-bottom:24px;color:var(--ink-soft);font-size:16px;line-height:1.6}
-  .evidence-review p+p{margin-top:8px}
-  .evidence-review a{color:var(--blue);text-underline-offset:4px}
-  .evidence-status{display:block;margin-top:8px;font-size:14px;font-weight:400;line-height:1.5;color:var(--ink-soft)}
-  .verification-sources{list-style:none;margin:12px 0 0;padding:0;font-size:14px;line-height:1.6}
-  .verification-sources a{display:inline-block;max-width:100%;overflow-wrap:anywhere;word-break:break-word;color:var(--blue);text-underline-offset:3px}
-
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  .project-hero {
-    padding-block: 48px 64px;
-    border-bottom: 1px solid var(--line-strong);
-  }
-
-  .project-hero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.42fr);
-    gap: 64px;
-    align-items: end;
-  }
-
   .back-link {
     display: inline-flex;
     min-height: 44px;
@@ -296,14 +249,6 @@ const toc = isStockRush ? [
     line-height: 1.6;
   }
 
-  .project-actions {
-    margin-top: 30px;
-  }
-
-  .project-meta-compact {
-    display: none;
-  }
-
   .scope-badge {
     display: inline-flex;
     min-height: 44px;
@@ -318,81 +263,7 @@ const toc = isStockRush ? [
     font-weight: 800;
   }
 
-  .project-meta {
-    margin: 0;
-    border-top: 1px solid var(--line-strong);
-  }
-
-  .project-meta div {
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 14px;
-    padding-block: 13px;
-    border-bottom: 1px solid var(--line-strong);
-  }
-
-  .project-meta dt {
-    color: var(--ink-faint);
-    font-family: var(--sans);
-    font-size: var(--text-label);
-    font-weight: 800;
-  }
-
-  .project-meta dd {
-    margin: 0;
-    color: var(--ink-soft);
-    font-size: var(--text-dense);
-  }
-
-  .project-layout {
-    display: grid;
-    grid-template-columns: 200px minmax(0, 1fr);
-    gap: 64px;
-    align-items: start;
-    padding-block: 64px;
-  }
-
-  .project-toc {
-    position: sticky;
-    top: calc(var(--header-height) + 28px);
-    grid-row: 1 / span 2;
-  }
-
-  .project-toc > p,
-  .toc-stack > p {
-    margin-bottom: 12px;
-    color: var(--ink-faint);
-    font-family: var(--sans);
-    font-size: var(--text-label);
-    font-weight: 800;
-  }
-
-  .project-toc nav {
-    display: grid;
-    border-top: 1px solid var(--line);
-  }
-
-  .project-toc nav a {
-    display: block;
-    padding-block: 9px;
-    border-bottom: 1px solid var(--line);
-    color: var(--ink-soft);
-    font-size: 16px;
-    font-weight: 750;
-    text-decoration: none;
-  }
-
-  .project-toc nav a[aria-current='location'] {
-    color: var(--blue);
-    font-weight: 850;
-  }
-
-  .toc-stack {
-    margin-top: 34px;
-  }
-
   .project-content {
-    grid-column: 2;
     min-width: 0;
   }
 
@@ -462,13 +333,6 @@ const toc = isStockRush ? [
     margin-bottom: 16px;
   }
 
-  .signal-detail-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
   .protection-list {
     margin: 0;
     padding: 0;
@@ -496,72 +360,11 @@ const toc = isStockRush ? [
     font-size: var(--text-body);
   }
 
-  .verification-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-top: 1px solid var(--line-strong);
-    border-left: 1px solid var(--line-strong);
-  }
-
-  .verification-details {
-    border-top: 1px solid var(--line-strong);
-  }
-
-  .verification-details summary {
-    min-height: 44px;
-    padding-block: 12px;
-    color: var(--blue);
-    font-size: 16px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-
-  .verification-table th,
-  .verification-table td {
-    padding: 14px;
-    border-right: 1px solid var(--line-strong);
-    border-bottom: 1px solid var(--line-strong);
-    text-align: left;
-    vertical-align: top;
-  }
-
-  .verification-table thead {
-    background: var(--ink);
-    color: white;
-  }
-
-  .verification-table thead th {
-    font-family: var(--sans);
-    font-size: var(--text-label);
-    font-weight: 800;
-  }
-
-  .verification-table tbody tr {
-    background: var(--surface);
-  }
-
-  .verification-table td {
-    color: var(--ink-soft);
-    font-size: var(--text-dense);
-  }
-
-  .verification-table .level {
-    width: 150px;
-    color: var(--green);
-    font-family: var(--sans);
-    font-size: var(--text-label);
-    font-weight: 800;
-  }
-
-  .verification-table [data-label]::before {
-    display: none;
-  }
-
   .scope-grid {
     display: grid;
     width: 100%;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
   }
 
   .scope-grid > h2 {
@@ -665,79 +468,8 @@ const toc = isStockRush ? [
   }
 
   @media (max-width: 959px) {
-    .project-hero-grid {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 40px;
-    }
-
-    .project-heading {
-      min-width: 0;
-    }
-
-    .project-meta {
-      max-width: 640px;
-    }
-
-    .project-layout {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 0;
-      padding-top: 0;
-    }
-
-    .project-toc {
-      position: static;
-      display: block;
-      margin-bottom: 40px;
-      padding-block: 20px;
-      border-top: 1px solid var(--line-strong);
-      border-bottom: 1px solid var(--line-strong);
-      background: var(--paper);
-    }
-
-    .project-toc,
-    .project-toc nav {
-      min-width: 0;
-      max-width: 100%;
-    }
-
-    .project-toc > p {
-      margin-bottom: 7px;
-    }
-
-    .project-toc nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 20px;
-      border: 0;
-    }
-
-    .project-toc nav a {
-      display: inline-flex;
-      flex: 0 0 auto;
-      align-items: center;
-      gap: 6px;
-      min-height: 44px;
-      padding: 4px 0;
-      border: 0;
-      background: transparent;
-      line-height: 1.35;
-    }
-
-    .project-toc nav a[aria-current='location'] {
-      color: var(--blue);
-      text-decoration: underline;
-    }
-
-    .toc-stack {
-      display: none;
-    }
-
     .project-section {
       scroll-margin-top: calc(var(--header-height) + 24px);
-    }
-
-    .project-content {
-      grid-column: 1;
     }
 
     .visual-wrap {
@@ -746,95 +478,12 @@ const toc = isStockRush ? [
   }
 
   @media (max-width: 639px) {
-    .project-hero {
-      padding-block: 24px 32px;
-    }
-
-    .project-hero-grid {
-      gap: 20px;
-    }
-
-    .back-link {
-      margin-bottom: 12px;
-    }
-
     .project-heading h1 {
       overflow-wrap: anywhere;
     }
 
-    .project-lede {
-      margin-top: 16px;
-      line-height: 1.6;
-    }
-
-    .project-actions {
-      margin-top: 20px;
-    }
-
-    .project-meta-compact {
-      display: block;
-      margin-top: 12px;
-      color: var(--project-meta-copy, var(--ink-faint));
-      font-family: var(--sans);
-      font-size: var(--text-dense);
-      font-weight: 700;
-      line-height: 1.5;
-    }
-
-    .project-meta {
-      display: none;
-    }
-
     .visual-wrap {
       margin-bottom: 42px;
-    }
-
-    .signal-detail-grid,
-    .scope-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .verification-table {
-      display: block;
-      border-left: 0;
-    }
-
-    .verification-table thead {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip: rect(0 0 0 0);
-      clip-path: inset(50%);
-    }
-
-    .verification-table tbody {
-      display: grid;
-      gap: 14px;
-    }
-
-    .verification-table tbody tr {
-      display: grid;
-      grid-template-columns: 1fr;
-      border: 1px solid var(--line-strong);
-    }
-
-    .verification-table th,
-    .verification-table td {
-      display: grid;
-      width: 100%;
-      grid-template-columns: 68px minmax(0, 1fr);
-      gap: 12px;
-      border-right: 0;
-    }
-
-    .verification-table [data-label]::before {
-      display: block;
-      color: var(--ink-faint);
-      content: attr(data-label);
-      font-family: var(--sans);
-      font-size: var(--text-label);
-      font-weight: 800;
     }
 
     .project-resources {
@@ -844,11 +493,6 @@ const toc = isStockRush ? [
   }
 
   @media (max-width: 639px) {
-    .project-meta div {
-      grid-template-columns: 72px minmax(0, 1fr);
-      gap: 10px;
-    }
-
     .pagination-grid {
       grid-template-columns: 1fr;
     }
@@ -864,38 +508,38 @@ const toc = isStockRush ? [
     }
   }
 
-  .project-hero--compact {
+  .project-hero {
     padding-block: clamp(16px, 3vw, 38px) 18px;
     border-bottom: 0;
   }
 
-  .project-hero--compact .project-hero-grid {
-    display: block;
-  }
-
-  .project-hero--compact .back-link {
+  .project-hero .back-link {
     margin-bottom: 6px;
   }
 
-  .project-hero--compact .project-lede {
+  .project-hero .project-lede {
     max-width: 44ic;
     margin-top: 10px;
   }
 
-  .project-hero--compact .project-actions {
+  .project-hero .project-actions {
     align-items: center;
     gap: 4px 18px;
     margin-top: 5px;
   }
 
-  .stockrush-meta,
-  .stockrush-repository {
+  .project-context,
+  .project-repository {
     color: var(--ink-soft);
     font-size: var(--text-dense);
     font-weight: 700;
   }
 
-  .stockrush-repository {
+  .project-context {
+    color: var(--project-meta-copy, var(--ink-faint));
+  }
+
+  .project-repository {
     display: inline-flex;
     min-height: 44px;
     align-items: center;
@@ -903,27 +547,20 @@ const toc = isStockRush ? [
     text-underline-offset: 4px;
   }
 
-  .project-layout--stockrush {
-    display: block;
-    padding-top: 0;
+  .project-layout {
+    padding-bottom: 64px;
   }
 
-  .project-layout--stockrush .project-toc {
-    position: static;
+  .project-toc {
     margin-bottom: clamp(22px, 4vw, 40px);
     padding-block: 0;
     border-block: 1px solid var(--line);
-    background: transparent;
-  }
-
-  .project-layout--stockrush .project-toc nav {
     display: flex;
     flex-wrap: wrap;
     gap: 0 clamp(12px, 4vw, 32px);
-    border: 0;
   }
 
-  .project-layout--stockrush .project-toc nav a {
+  .project-toc a {
     display: inline-flex;
     min-width: 44px;
     min-height: 44px;
@@ -934,22 +571,22 @@ const toc = isStockRush ? [
     text-decoration: none;
   }
 
-  .project-layout--stockrush .project-toc nav a:hover,
-  .project-layout--stockrush .project-toc nav a[aria-current='location'] {
+  .project-toc a:hover,
+  .project-toc a[aria-current='location'] {
     border-bottom-color: currentColor;
     color: var(--blue);
   }
 
-  .project-layout--stockrush #overview {
+  .overview--compact {
     width: min(100%, 54ic);
     padding-bottom: clamp(20px, 3vw, 32px);
   }
 
-  .project-layout--stockrush #overview > h2 {
+  .overview--compact > h2 {
     margin-bottom: 12px;
   }
 
-  .project-layout--stockrush .section-lede {
+  .overview--compact .section-lede {
     max-width: none;
     margin-bottom: 16px;
     font-size: var(--text-body);
@@ -968,7 +605,102 @@ const toc = isStockRush ? [
     color: var(--ink-soft);
   }
 
-  .stockrush-stack {
+  .project-stack {
     margin-top: 20px;
+  }
+
+  .verification-scope,
+  .verification-results,
+  .evidence-review {
+    max-width: min(100%, var(--reading));
+  }
+
+  .verification-scope {
+    margin-bottom: 14px;
+    color: var(--ink-soft);
+    font-size: var(--text-dense);
+  }
+
+  .verification-result {
+    padding-block: 18px 12px;
+    border-top: 1px solid var(--line);
+  }
+
+  .verification-result h3 {
+    margin-bottom: 6px;
+    font-size: var(--text-h3);
+    overflow-wrap: anywhere;
+  }
+
+  .verification-outcome {
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+
+  .verification-details {
+    color: var(--ink-soft);
+    font-size: var(--text-dense);
+  }
+
+  .verification-details summary {
+    width: fit-content;
+    min-height: 44px;
+    padding-block: 10px;
+    color: var(--blue);
+    font-weight: 750;
+    cursor: pointer;
+  }
+
+  .evidence-status {
+    margin-bottom: 5px;
+    color: var(--ink-faint);
+    font-size: var(--text-label);
+    font-weight: 750;
+  }
+
+  .evidence-review,
+  .verification-sources {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 16px;
+    color: var(--ink-soft);
+    font-size: var(--text-dense);
+  }
+
+  .evidence-review {
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+  }
+
+  .evidence-review a,
+  .verification-sources a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 6px;
+    color: var(--blue);
+    text-underline-offset: 4px;
+  }
+
+  .evidence-review svg,
+  .verification-sources svg {
+    flex: 0 0 auto;
+  }
+
+  .verification-sources a span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .verification-sources > li {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .verification-sources {
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
   }
 </style>

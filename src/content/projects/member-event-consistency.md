@@ -132,7 +132,8 @@ codeEvidence:
     testUrl: >-
       https://github.com/cyson21/member-event-consistency/blob/7a2dfc5d41817ec70e479a997277d8aba0af37f9/backend/src/test/java/com/example/consistency/integration/MvpLiveInfrastructureIT.java
 verification:
-  - layer: container-smoke
+  - title: 첫 로그인 보상 동시 등록
+    layer: container-smoke
     method: Testcontainers PostgreSQL에 테스트 전용 JDBC INSERT를 8개 트랜잭션으로 동시에 실행합니다. 보상 HTTP API 전체 경로는 아닙니다.
     result: 등록 1건·유니크 제약 거절 7건, reward_issue 행 1건을 확인했습니다.
     sources:
@@ -141,7 +142,8 @@ verification:
         url: >-
           https://github.com/cyson21/member-event-consistency/blob/7a2dfc5d41817ec70e479a997277d8aba0af37f9/backend/src/test/java/com/example/consistency/integration/FirstLoginRewardDbConcurrencyIT.java#L42
     evidenceStatus: ci-record
-  - layer: container-smoke
+  - title: 포인트 동시 차감
+    layer: container-smoke
     method: 테스트 전용 JDBC SELECT FOR UPDATE·차감 트랜잭션으로 잔액 100에서 60 차감을 두 번 요청합니다.
     result: 차감 1건만 반영되고 잔액은 40입니다. 운영 서비스의 모든 차감 경로·부하를 검증한 결과는 아닙니다.
     sources:
@@ -149,7 +151,8 @@ verification:
         url: >-
           https://github.com/cyson21/member-event-consistency/blob/7a2dfc5d41817ec70e479a997277d8aba0af37f9/backend/src/test/java/com/example/consistency/integration/PointSpendDbConcurrencyIT.java#L42
     evidenceStatus: ci-record
-  - layer: container-smoke
+  - title: 수량이 제한된 쿠폰 동시 발급
+    layer: container-smoke
     method: Redis·RabbitMQ·PostgreSQL 컨테이너와 Spring 인스턴스 1개에서 HTTP로 정원 3·요청 8건을 보냅니다.
     result: 완료 8건, 발급 3건·거절 5건, 소비자 lane 1개를 확인했습니다. 재시도는 입력 플래그로 유도한 시나리오입니다.
     sources:

@@ -90,6 +90,7 @@ const projectCollection = defineCollection({
     verification: z.array(
       z.object({
         layer: z.enum(['unit', 'integration', 'container-smoke', 'static-demo', 'live-demo', 'cloud']),
+        title: z.string().min(1),
         method: z.string(),
         result: z.string(),
         evidenceStatus: z.enum(['ci-record', 'local-rerun', 'test-definition']),

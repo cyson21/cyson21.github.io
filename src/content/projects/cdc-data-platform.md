@@ -129,7 +129,8 @@ codeEvidence:
     testUrl: >-
       https://github.com/cyson21/cdc-data-platform/blob/4523561b8ddac7ccd01f493952bd3e08018374ce/backend/src/test/java/com/example/cdcplatform/resilience/SinkFailureReplayFlowTest.java
 verification:
-  - layer: container-smoke
+  - title: 같은 원천 이벤트를 두 번 등록
+    layer: container-smoke
     method: PostgreSQL Testcontainers에서 같은 원천 이벤트를 처리 이력 저장소에 두 번 등록합니다.
     result: 첫 등록은 성공하고 두 번째는 거절되며 DB 행은 1건입니다.
     sources:
@@ -137,14 +138,16 @@ verification:
         url: >-
           https://github.com/cyson21/cdc-data-platform/blob/4523561b8ddac7ccd01f493952bd3e08018374ce/backend/src/test/java/com/example/cdcplatform/ledger/CdcEventLedgerRepositoryTest.java#L42
     evidenceStatus: ci-record
-  - layer: container-smoke
+  - title: Debezium 변경 캡처
+    layer: container-smoke
     method: cdc-smoke applicant-change-capture는 PostgreSQL 변경과 Kafka raw 이벤트의 종류·LSN·오프셋을 점검하도록 작성된 실행 스크립트입니다.
     result: 이번 대조에서는 실제 Debezium·Kafka 변경 캡처의 실행 증거를 확인하지 못했습니다. CI의 fixture 대역 테스트 출력은 실제 캡처 성공으로 세지 않았습니다.
     sources:
       - label: applicant_change_capture 실행 스크립트
         url: https://github.com/cyson21/cdc-data-platform/blob/4523561b8ddac7ccd01f493952bd3e08018374ce/tools/runner/cdc-smoke
     evidenceStatus: test-definition
-  - layer: integration
+  - title: DB 재처리와 Kafka 재발행
+    layer: integration
     method: DB 재처리 테스트는 처리 이력·DLQ 행을 직접 준비합니다. 별도 KafkaRetryEventPublisher 테스트는 PostgreSQL과 EmbeddedKafka로 재시도 이벤트를 발행·수신합니다.
     result: DB 테스트는 원천 메타데이터·반환 목록 1건·상태를 확인했습니다. 별도 Kafka 테스트는 브로커의 키·payload·오프셋과 DB PUBLISHED·시도 횟수 1을 확인했습니다. 실제 sink 장애부터 재적재까지 복구한 결과는 아닙니다.
     sources:
