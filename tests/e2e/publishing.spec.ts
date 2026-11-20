@@ -23,23 +23,22 @@ test('custom 404 renders useful content and remains noindex', async ({ page }) =
   await expect(page.getByRole('link', { name: 'cyson21@gmail.com' })).toHaveCount(0);
 });
 
-for (const [filename, label] of [['resume.pdf', '이력서'], ['career-description.pdf', '경력기술서']]) {
-  test(`experience page links to a valid two-page ${filename}`, async ({ page, request }) => {
-    await page.goto('/experience/');
-    await expect(page.locator('.site-chrome-footer').getByRole('link', { name: `${label} PDF 다운로드`, exact: true })).toHaveAttribute('href', `/downloads/${filename}`);
-    const response = await request.get(`/downloads/${filename}`);
-    expect(response.ok()).toBeTruthy();
-    expect(response.headers()['content-type']).toContain('application/pdf');
-    const bytes = await response.body();
-    expect(bytes.subarray(0, 5).toString('ascii')).toBe('%PDF-');
-    const pdfSource = bytes.toString('latin1');
-    expect(pdfSource.match(/\/Type\s*\/Page\b/g)).toHaveLength(2);
-    expect(pdfSource).toContain('/StructTreeRoot');
-    expect(pdfSource).toContain('/Lang (ko-KR)');
-    expect(pdfSource.match(/\/Subtype\s*\/Link\b/g)?.length ?? 0).toBeGreaterThanOrEqual(3);
-    expect(pdfSource).toContain('%%EOF');
-  });
-}
+test('experience page links to a valid two-page resume PDF', async ({ page, request }) => {
+  await page.goto('/experience/');
+  await expect(page.locator('.site-chrome-footer').getByRole('link', { name: '이력서 PDF 다운로드', exact: true })).toHaveAttribute('href', '/downloads/resume.pdf');
+  const response = await request.get('/downloads/resume.pdf');
+  expect(response.ok()).toBeTruthy();
+  expect(response.headers()['content-type']).toContain('application/pdf');
+  const bytes = await response.body();
+  expect(bytes.subarray(0, 5).toString('ascii')).toBe('%PDF-');
+  const pdfSource = bytes.toString('latin1');
+  expect(pdfSource.match(/\/Type\s*\/Page\b/g)).toHaveLength(2);
+  expect(pdfSource).toContain('/StructTreeRoot');
+  expect(pdfSource).toContain('/Lang (ko-KR)');
+  expect(pdfSource.match(/\/Subtype\s*\/Link\b/g)?.length ?? 0).toBeGreaterThanOrEqual(3);
+  expect(pdfSource).not.toContain('career-description.pdf');
+  expect(pdfSource).toContain('%%EOF');
+});
 
 test('print resume exposes exactly two ready sheets and stays noindex', async ({ page }) => {
   const response = await page.goto('/resume/print/', { waitUntil: 'networkidle' });

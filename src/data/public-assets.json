@@ -39,7 +39,7 @@
     "output": "public/portfolio/index.html",
     "sourceProject": "portfolio-web",
     "sourcePath": "public/portfolio/index.html",
-    "sha256": "916b2bc6f07f0daa0cf8ac030f03d6f7f57f34830d3204b07761d76399ddb929",
+    "sha256": "6726c63f02fe5f3ef03f59b4072215a7113bc371a1e73e98087dc92d66fda892",
     "owner": "Son Chanyang",
     "usage": "Public backend problem-solving case studies",
     "approvedAt": "2026-11-20"
@@ -57,7 +57,7 @@
     "output": "public/downloads/resume.pdf",
     "sourceProject": "portfolio-web",
     "sourcePath": "/resume/print/",
-    "sha256": "3b8907220196b50df13a677ef1b453bad0da37c7249bf73032bdf2dec69017a1",
+    "sha256": "95b528d412e22fc11a1e5012872db05ecf74834e2fc68736ff9097078fa10b2f",
     "owner": "Son Chanyang",
     "usage": "Public two-page resume with core skills and professional cases on the first page",
     "approvedAt": "2026-11-20"
@@ -93,7 +93,7 @@
     "output": "public/portfolio/cases.html",
     "sourceProject": "cyson21.github.io",
     "sourcePath": "src/portfolio/overview.html",
-    "sha256": "e8df755ba6dc1d740ca15a165e2339e3810999b7da2d2a149b08b620746ec3d6",
+    "sha256": "6fa5318428bc46c693f7070e14beb736ef1c7c6f3afd08470da8230e6bbfc7d5",
     "owner": "Son Chanyang",
     "usage": "User-authorized portfolio overview, preserved evidence, and source diagram captures",
     "approvedAt": "2026-11-20"
