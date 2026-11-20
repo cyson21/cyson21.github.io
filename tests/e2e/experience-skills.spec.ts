@@ -6,23 +6,14 @@ test('experience page presents professional skills without promoting personal pr
 
   const professionalSkills = page.locator('.skill-groups:not(.project-skill-groups)');
   const projectSkills = page.locator('.project-skill-groups');
-  await expect(professionalSkills.locator('.skill-label')).toHaveText([
-    'Java·Spring',
-    'DB·데이터',
-    '분산락·메시징',
-    'Python·웹',
-    'AWS·인프라',
-    '형상관리·검증',
-  ]);
+  await expect(professionalSkills.locator('dt')).toHaveText(['백엔드', '데이터·메시징', '배포·개발 도구']);
 
-  await expect(professionalSkills.locator(':scope > div')).toHaveText([
-    'Java·SpringJavaSpring BootSpring Data JPAQueryDSL',
-    'DB·데이터SQLMySQLPostgreSQLMongoDB',
-    '분산락·메시징RedisShedLockRedissonRabbitMQ',
-    'Python·웹PythonDjangoFastAPI',
-    'AWS·인프라AWSDocker',
-    '형상관리·검증GitJUnitTestcontainersREST Docs',
-  ]);
+  const renderedSkills = await professionalSkills.locator('dd').allTextContents();
+  expect(renderedSkills.flatMap((group) => group.split(', ')).sort()).toEqual([
+    'Java', 'Spring Boot', 'Spring Data JPA', 'QueryDSL', 'Python', 'Django', 'FastAPI',
+    'SQL', 'MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'ShedLock', 'Redisson', 'RabbitMQ',
+    'AWS', 'Docker', 'Git', 'JUnit', 'Testcontainers', 'REST Docs',
+  ].sort());
   await expect(projectSkills).toHaveCount(0);
   await expect(page.locator('.work-case-list article')).toHaveCount(0);
   await expect(professionalSkills).not.toContainText('Kafka');

@@ -52,14 +52,14 @@ if (!currentExperience) {
       <div class="experience-support">
         <section class="experience-support-panel" aria-labelledby="skills-title">
           <h2 id="skills-title">실무 기술 스택</h2>
-          <div class="skill-groups">
+          <dl class="skill-groups">
             {skillGroups.map((group) => (
               <div>
-                <p class="skill-label">{group.label}</p>
-                <ul class="tag-list">{group.items.map((item) => <li class="tag">{item}</li>)}</ul>
+                <dt>{group.label}</dt>
+                <dd>{group.items.join(', ')}</dd>
               </div>
             ))}
-          </div>
+          </dl>
         </section>
 
         <section class="experience-support-panel resume-education" aria-labelledby="education-title">
@@ -195,21 +195,19 @@ if (!currentExperience) {
 
   .skill-groups {
     display: grid;
-    gap: 14px;
+    gap: 16px;
+    max-width: var(--reading);
+    margin: 16px 0 0;
   }
 
-  .skill-groups > div {
-    display: grid;
-    grid-template-columns: 150px minmax(0, 1fr);
-    gap: 18px;
-    padding-block: 12px;
-    border-bottom: 1px solid var(--line);
-    min-width: 0;
-  }
-
-  .skill-label {
-    font-size: var(--text-dense);
+  .skill-groups dt {
     font-weight: 800;
+  }
+
+  .skill-groups dd {
+    margin: 3px 0 0;
+    color: var(--ink-soft);
+    overflow-wrap: anywhere;
   }
 
   .resume-education p {
@@ -227,8 +225,7 @@ if (!currentExperience) {
 
   @media (max-width: 959px) {
     .experience-entry header,
-    .experience-stack,
-    .skill-groups > div {
+    .experience-stack {
       grid-template-columns: 1fr;
     }
 
