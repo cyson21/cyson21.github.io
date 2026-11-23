@@ -3,7 +3,7 @@ import { previousCompanyProjects } from './site';
 // Print-specific selection of the established career facts in site.ts.
 // The resume covers professional experience; personal projects remain on the website.
 export const resumePrint = {
-  introduction: '기업용 교육 플랫폼과 공공·실시간 데이터 서비스를 개발해 온 Java·Spring Boot 백엔드 개발자입니다. REST API와 데이터 처리 기능을 구현하고, 플랫폼 버전 전환과 서비스 배포·운영을 담당했습니다.',
+  introduction: '기업용 교육 플랫폼과 공공·실시간 데이터 서비스의 백엔드를 개발하고 운영했습니다.',
   coreSkills: [
     'Java · Spring Boot · Spring Data JPA · QueryDSL · MySQL · Redis',
     'RabbitMQ · AWS · Docker · Python · Pandas',
@@ -12,33 +12,32 @@ export const resumePrint = {
     {
       title: 'B2B 교육 플랫폼 백엔드 개발',
       bullets: [
-        '기업 고객 요구사항에 맞춰 Java·Spring Boot REST API와 관리자 기능을 개발했습니다.',
-        'JPA·QueryDSL·MySQL을 사용해 서비스의 조회·저장 로직과 데이터 접근 계층을 개선했습니다.',
+        '기업 고객의 요구사항을 반영해 REST API와 관리자 기능을 개발했습니다.',
+        'JPA·QueryDSL·MySQL 기반 조회·저장 로직을 개선했습니다.',
       ],
     },
     {
       title: '플랫폼 2.0 → 3.0 전환',
       bullets: [
-        '기능 개편에 따른 API·DB 변경의 영향 범위를 점검하고 전환 작업에 참여했습니다.',
-        '레거시 코드와 데이터 접근 로직을 정리하고, 변경 기능의 통합·회귀 테스트를 보완했습니다.',
+        'API·DB 변경이 기존 기능에 미치는 영향을 점검하고, 레거시 코드와 데이터 접근 로직을 정리했습니다.',
+        '변경 기능의 통합·회귀 테스트를 보완했습니다.',
       ],
     },
     {
       title: '비동기 처리와 운영 자동화',
       bullets: [
-        'RabbitMQ 기반으로 발송 요청 접수와 후속 결과 기록을 분리하는 비동기 처리 변경에 참여했습니다.',
-        '서비스 운영에 필요한 작업 실행 현황과 처리 결과 모니터링, Slack 알림을 구현했습니다.',
+        'RabbitMQ 기반 발송 요청 접수와 후속 결과 기록을 분리하는 작업에 참여했습니다.',
+        '작업 실행 현황과 처리 결과를 모니터링하고 Slack으로 알리는 기능을 구현했습니다.',
       ],
     },
     {
       title: '배포·인프라 운영과 개발 협업',
       bullets: [
         'AWS EC2·RDS·Lambda·CloudWatch·WAF 운영과 Docker 배포 작업에 참여했습니다.',
-        'CI/CD 개선과 코드리뷰에 참여하며 서비스 변경 사항을 함께 검토했습니다.',
+        'CI/CD 개선과 코드리뷰에 참여했습니다.',
       ],
     },
   ],
-  supportingWork: '담당 환경 · Java / Spring Boot / JPA / QueryDSL / MySQL / Redis / RabbitMQ / AWS / Docker',
   previousProjects: [
     {
       title: '인파관리 시스템 백엔드·알림 서비스',
@@ -65,15 +64,16 @@ export const resumePrint = {
     },
     {
       title: '지자체 공공데이터·REST API',
+      period: '원주 2022.07–2022.10 · 용인 2021.07–2021.10',
       bullets: [
-        '원주시·용인특례시 프로젝트의 데이터 수집 에이전트와 Pandas 가공, PostgreSQL·MySQL 구축을 수행했습니다.',
-        'Spring·JPA·MyBatis 기반 REST API 개발과 Docker 배포를 담당했습니다.',
+        '원주시와 용인특례시의 공공데이터 수집 에이전트를 개발하고 Pandas로 데이터를 가공했습니다.',
+        '원주에서는 PostgreSQL을 구축하고 Spring·JPA로, 용인에서는 MySQL을 구축하고 Spring·MyBatis로 REST API를 개발했습니다. 두 서비스는 Docker로 배포했습니다.',
       ],
     },
   ].map(project => {
     const source = previousCompanyProjects.find(item => item.title === project.title);
     if (!source) throw new Error(`Missing resume project: ${project.title}`);
-    return { ...project, period: source.period };
+    return { period: source.period, ...project };
   }),
-  otherSkills: 'Python · Pandas · PostgreSQL · MongoDB · Django · FastAPI · Git · REST Docs',
+  otherSkills: 'MongoDB · Django · FastAPI · Git · REST Docs',
 } as const;
